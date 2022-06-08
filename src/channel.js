@@ -24,9 +24,4 @@ function channelDetailsV1(authUserId, channelId) {
     return 'authUserId' + 'channelId';
 }
 
-// Sample stub for a function 'channelDetailsV1', 
-// with arguments named 'authUserId', 'channelId'
-// Returns a string concatenating 'authUserId', 'channelId'
-function channelJoinV1(authUserId, channelId) {
-    return 'authUserId' + 'channelId';
-}
+

@@ -10,3 +10,4 @@ function channelsCreateV1(authUserId, name, isPublic) {
 // Returns a string concatenating 'authUserId'
 function channelsListV1(authUserId) {
     return 'authUserId';
+}

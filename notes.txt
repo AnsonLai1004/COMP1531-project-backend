@@ -1,0 +1,19 @@
+interface stub functions
+first two (auth) - abby
+next three (channels) - theo
+channel details & join - anson
+chanel invite & message - jj
+
+user structure
+- password
+- profile pic
+- status online/offline isOnline
+
+channel structure
+- channelId
+- array of members uIds that are authorised
+    - admin array and member array separate
+- channel description?
+- boolean isPublic
+- channel name
+- linked list(?) message log (start)

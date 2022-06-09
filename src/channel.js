@@ -23,3 +23,10 @@ function channelMessagesV1(authUserId, channelId, start) {
 function channelDetailsV1(authUserId, channelId) {
     return 'authUserId' + 'channelId';
 }
+
+// Sample stub for a function 'channelJoinV1', 
+// with arguments named 'authUserId', 'channelId'
+// Returns a string concatenating 'authUserId', 'channelId'
+function channelJoinV1(authUserId, channelId) {
+    return 'authUserId' + 'channelId';
+}

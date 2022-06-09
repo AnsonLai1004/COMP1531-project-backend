@@ -11,7 +11,7 @@
  *  5. password: string (use hashing to store?)
  *  6. handleStr: string
  *  7. ProfilePicUrl: string
- *  8. OnlineStatus: boolean
+ *  8. isOnline: boolean
 **/
 const users = [
     {
@@ -22,7 +22,7 @@ const users = [
         'password': '8743b52063cd84097a65d1633f5c74f5'
         'handleStr': 'haydensmith',
         'ProfilePicUrl': '/path/to/image',
-        'OnlineStatus': true,
+        'isOnline': true,
     }
 ]
 ```

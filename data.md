@@ -53,7 +53,7 @@ const channels = [
         'messageLog': [
             {
                 'messageContents': 'Hey, I submitted a merge request.',
-                'messageTime': 'June 9 2022 18:34',
+                'messageDate': 'June 9 2022 18:34',
                 'messageAuthor': 2,
                 'isMessageRead': true
             },

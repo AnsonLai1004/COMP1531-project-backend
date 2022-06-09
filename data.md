@@ -38,7 +38,7 @@ const users = [
  * 7. messageLog: list of message objects (analogous to a C struct)
  * *  message objects contain:
  * * * a. messageContents: string 
- * * * b. messageTime: Date
+ * * * b. messageDate: Date
  * * * c. messageAuthor: integer
  * * * d. isMessageRead: boolean
  **/
@@ -59,7 +59,7 @@ const channels = [
             },
             {
                 'messageContents': 'Approved it on GitLab',
-                'messageTime': 'June 9 2022 20:06',
+                'messageDate': 'June 9 2022 20:06',
                 'messageAuthor': 4,
                 'isMessageRead': false
             }

@@ -32,36 +32,36 @@ const users = [
  * 1. cId: integer
  * 2. channelName: string
  * 3. channelDesc: string
- * 4. usersMember: list of integers
- * 5. usersStaff: list of integers
+ * 4. memberIds: list of integers
+ * 5. staffIds: list of integers
  * 6. isPublic: boolean
  * 7. messageLog: list of message objects (analogous to a C struct)
  * *  message objects contain:
- * * * a. messageContents: string 
- * * * b. messageDate: Date
- * * * c. messageAuthor: integer
- * * * d. isMessageRead: boolean
+ * * * a. messageStr: string 
+ * * * b. sentDate: Date
+ * * * c. authorId: integer
+ * * * d. isRead: boolean
  **/
 const channels = [
     {
         'cId': 1,
         'channelName': 'COMP1531 Boost',
         'channelDesc': 'For discussing the group project',
-        'usersMember': [1, 2, 3, 4, 5],
-        'usersStaff': [1, 3],
+        'memberIds': [1, 2, 3, 4, 5],
+        'staffIds': [1, 3],
         'isPublic': false,
         'messageLog': [
             {
-                'messageContents': 'Hey, I submitted a merge request.',
-                'messageDate': 'June 9 2022 18:34',
-                'messageAuthor': 2,
-                'isMessageRead': true
+                'messageStr': 'Hey, I submitted a merge request.',
+                'sentDate': 'June 9 2022 18:34',
+                'authorId': 2,
+                'isRead': true
             },
             {
-                'messageContents': 'Approved it on GitLab',
-                'messageDate': 'June 9 2022 20:06',
-                'messageAuthor': 4,
-                'isMessageRead': false
+                'messageStr': 'Approved it on GitLab',
+                'sentDate': 'June 9 2022 20:06',
+                'authorId': 4,
+                'isRead': false
             }
         ]
     }

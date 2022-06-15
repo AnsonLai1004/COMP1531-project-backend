@@ -12,6 +12,7 @@
  *  6. handleStr: string
  *  7. profilePicUrl: string
  *  8. isOnline: boolean
+ *  9. isOwner: boolean
 **/
 const users = [
     {
@@ -23,6 +24,7 @@ const users = [
         'handleStr': 'haydensmith',
         'profilePicUrl': '/path/to/image',
         'isOnline': true,
+        'isOwner': true,
     }
 ]
 
@@ -33,7 +35,7 @@ const users = [
  * 2. channelName: string
  * 3. channelDesc: string
  * 4. memberIds: list of integers
- * 5. staffIds: list of integers
+ * 5. ownerIds: list of integers
  * 6. isPublic: boolean
  * 7. messageLog: list of message objects (analogous to a C struct)
  * *  message objects contain:
@@ -48,7 +50,7 @@ const channels = [
         'channelName': 'COMP1531 Boost',
         'channelDesc': 'For discussing the group project',
         'memberIds': [1, 2, 3, 4, 5],
-        'staffIds': [1, 3],
+        'ownerIds': [1, 3],
         'isPublic': false,
         'messageLog': [
             {

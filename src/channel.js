@@ -2,7 +2,7 @@
  * implementation of channel.js
 **/
 
-
+import { getData, setData } from './dataStore.js';
 // Sample stub for a function 'channelInviteV1', 
 // with arguments named 'authUserId', 'channelId', 'uId'
 // Returns empty object if no error
@@ -26,13 +26,33 @@ function channelMessagesV1(authUserId, channelId, start) {
 // Returns a object with types 'name', 'isPublic', 
 // ownerMembers', 'allMembers' if no error
 function channelDetailsV1(authUserId, channelId) {
-    return {
-        name: 'secret candy crush team', 
-        isPublic: true,
-        ownerMembers: [],
-        allMembers: [],
-    };
-    
+    // check if authUserId is valid
+    if (!isValidUserId(authUserId)) {
+        return { error: 'error' };
+    }
+    //
+    const data = getData();
+    for (let channel of data.channels) {
+        if (channel.cId === channelId) {
+            // check if authUserId is member
+            let isMember = false;
+            for (let userId of channel.allMembers) {
+                if (userId === authUserId) {
+                    isMember = true;
+                }
+            }
+            if (isMember === false) {
+                return { error: 'error' };
+            }
+            return {
+                name: channel.channelName, 
+                isPublic: channel.isPublic,
+                ownerMembers: channel.ownerIds,
+                allMembers: channel.memberIds,
+            };           
+        }
+    }
+    return { error: 'error' };   
 }
 
 // Sample stub for a function 'channelJoinV1', 
@@ -42,4 +62,15 @@ function channelJoinV1(authUserId, channelId) {
     return {};
 }
 
+// Helper function
+// return false if authUserId is not valid 
+function isValidUserId(authUserId) {
+    const data = getData;
+    for (let user of data.users) {
+        if (authUserId === user.uId) {
+            return true;
+        }
+    }
+    return false;
+}
 export { channelInviteV1, channelMessagesV1, channelDetailsV1, channelJoinV1 }

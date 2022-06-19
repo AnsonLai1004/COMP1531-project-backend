@@ -24,6 +24,15 @@ export function authRegisterV1(email, password, nameFirst, nameLast) {
     if (!isEmail(email) || checkEmailIsUsed(email)) {
         return errorObject;
     }
+    if (password.length < 6) {
+        return errorObject;
+    }
+    if (nameFirst.length < 1 || nameFirst.length > 50) {
+        return errorObject;
+    }
+    if (nameLast.length < 1 || nameLast.length > 50) {
+        return errorObject;
+    }
     return {
         authUserId: 1,
     }

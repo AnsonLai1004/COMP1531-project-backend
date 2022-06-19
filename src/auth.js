@@ -16,6 +16,7 @@ export function authLoginV1(email, password) {
     }
 }
 
+let lastUserId = 0;
 // sample stub for a function called authRegisterV1
 // takes arguments 'email' (string), 'password' (string),
 // 'nameFirst' (string), and 'nameLast' (string)
@@ -33,8 +34,28 @@ export function authRegisterV1(email, password, nameFirst, nameLast) {
     if (nameLast.length < 1 || nameLast.length > 50) {
         return errorObject;
     }
+    const newId = lastUserId + 1;
+    lastUserId = newId;
+
+    const newUser = {
+        'uId': newId,
+        'nameFirst': nameFirst,
+        'nameLast': nameLast,
+        'email': email,
+        'password': password,
+        'handleStr': 'placeholderhandle',
+        'profilePicUrl': '/path/to/image',
+        'isOnline': true,
+        'isOwner': true,
+    };
+    
+    
+    const data = getData();
+    data.users.push(newUser);
+    setData(data);
+
     return {
-        authUserId: 1,
+        authUserId: newId
     }
 }
 

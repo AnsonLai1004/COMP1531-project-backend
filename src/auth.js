@@ -2,6 +2,9 @@
  * implementation of auth.js
 **/
 
+import { getData, setData } from './dataStore'
+import { isEmail } from 'validator'
+
 // sample stub for a function called authLoginV1
 // takes arguments 'email' (string) and 'password' (string)
 // returns object containing type 'authUserId' (integer) if no error

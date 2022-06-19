@@ -1,7 +1,7 @@
-import { channelInviteV1, channelMessagesV1, channelDetailsV1, channelJoinV1 } from 'channel.js';
-import { channelsCreateV1 } from 'channels.js';
-import { authLoginV1 } from 'auth.js';
-import { clearV1 } from 'other.js';
+import { channelInviteV1, channelMessagesV1, channelDetailsV1, channelJoinV1 } from './channel.js';
+import { channelsCreateV1 } from './channels.js';
+import { authRegisterV1 } from './auth.js';
+import { clearV1 } from './other.js';
 
 describe('channelInviteV1', () => {
   expect().toBe();   

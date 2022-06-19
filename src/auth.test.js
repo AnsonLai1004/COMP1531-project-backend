@@ -28,13 +28,13 @@ describe('Testing authRegister function error cases', () => {
     });
     
     test('51 character first name', () => {
-        const char = a;
+        const char = 'a';
         const registered = authRegisterV1('valid@gmail.com', 'password', char.repeat(51), 'Potter');
         expect(registered).toStrictEqual({ error: 'error' });
     });
 
-    test('Empty last name', () => {
-        const char = a;
+    test('51 character last name', () => {
+        const char = 'a';
         const registered = authRegisterV1('valid@gmail.com', 'password', 'Harry', char.repeat(51));
         expect(registered).toStrictEqual({ error: 'error' });
     });

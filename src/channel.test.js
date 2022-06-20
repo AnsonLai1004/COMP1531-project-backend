@@ -56,10 +56,9 @@ describe('channelMessagesV1', () => {
     test('Cases for correct return on channelMessagesV1', () => {  
         const aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
         const newchannel = channelsCreateV1(aMember.authUserId, 'secret candy crush team', true);
-        // valid arguments assuming messages exist with 99 messages
+        // valid arguments assuming messages exist with 50 messages
         // messages is an array of messages from newchannel
         // return messages from newchannel
-        expect(channelMessagesV1(aMember, newchannel, 0)).toStrictEqual(messages, 0, 50);
-        expect(channelMessagesV1(aMember, newchannel, 50)).toStrictEqual(messages, 50, -1);
+        expect(channelMessagesV1(aMember, newchannel, 0)).toStrictEqual(messages, 0, -1);
     });
 });

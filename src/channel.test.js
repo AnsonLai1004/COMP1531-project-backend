@@ -59,6 +59,6 @@ describe('channelMessagesV1', () => {
         // valid arguments assuming messages exist with 50 messages
         // messages is an array of messages from newchannel
         // return messages from newchannel
-        expect(channelMessagesV1(aMember, newchannel, 0)).toStrictEqual(messages, 0, -1);
+        expect(channelMessagesV1(aMember, newchannel, 0)).toStrictEqual({messages: [], start: 0, end: -1});
     });
 });

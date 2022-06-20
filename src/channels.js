@@ -13,7 +13,7 @@ function channelsCreateV1(authUserId, name, isPublic) {
         allMembers: [userProfileV1(authUserId)],
         messages: []
     }
-    
+
     const dataStore = getData();
     dataStore.channels.push (channel);
     setData(dataStore);
@@ -26,7 +26,8 @@ function channelsCreateV1(authUserId, name, isPublic) {
 // Returns object with type 'channels' if no error
 function channelsListV1(authUserId) {
 
-    new channels = []
+    const channels = [];
+    const dataStore = getData();
     
     for (channel of dataStore.channels) {
         for (member of channel.allMembers) {
@@ -45,13 +46,23 @@ function channelsListV1(authUserId) {
 // Returns object with type 'channels' if no error
 function channelsListallV1(authUserId) {
     
-    new channels = []
-    
-    for (channel of dataStore.channels) {
-        if (member.authUserId === authUserId) {
-            channels.push(channel);
+    const channels = [];
+    let validId = false;
+    const dataStore = getData();
+
+    for (user of dataStore.users) {
+        if (user.authUserId === authUserId) {
+            validId = true;
             break;
         }
+    }
+
+    if (!(validId)) {
+        return {channels: []};
+    }
+    
+    for (channel of dataStore.channels) {
+        channels.push(channel);
     }
 
     return {channels: channels};

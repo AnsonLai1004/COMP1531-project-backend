@@ -5,17 +5,19 @@ import { getData, setData } from './dataStore.js'
 // Returns object with type 'channelId' if no error
 function channelsCreateV1(authUserId, name, isPublic) {
 
+    const dataStore = getData();
+
     const channel = {
-        channelId: generate(channelId),
+        channelId: dataStore.lastChannelId,
         name: name,
         isPublic: isPublic,
         ownerMember: [userProfileV1(authUserId)],
         allMembers: [userProfileV1(authUserId)],
         messages: []
     }
-
-    const dataStore = getData();
+    
     dataStore.channels.push (channel);
+    dataStore.lastChannelId++;
     setData(dataStore);
 
     return {channelId: channel.channelId};

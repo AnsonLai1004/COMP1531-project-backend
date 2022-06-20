@@ -34,8 +34,8 @@ const users = [
  * 1. name: string
  * 2. isPublic: boolean
  * 3. channelId: integer
- * 4. ownerMembers: <Array> user
- * 5. allMembers: <Array> user
+ * 4. ownerMembers: <Array> userIds
+ * 5. allMembers: <Array> userIds
  * 6. messages: <Array> messageObj (analogous to a C struct)
  * *  messageObj contain:
  * * * a. messageId: integer
@@ -50,22 +50,10 @@ const channels: [
         isPublic: true
         channelId: 1
         ownerMembers: [
-            {
-                authUserId: 1,
-                email: "sample@example.com",
-                firstName: "Sample"
-                lastName: "Name",
-                handleStr: "Sample_Name"
-            }
+            1, 2, 3
         ]
         allMembers: [
-            {
-                authUserId: 1,
-                email: "sample@example.com",
-                firstName: "Sample"
-                lastName: "Name",
-                handleStr: "Sample_Name"
-            }
+            1, 2, 3
         ]
         messages: [
             {

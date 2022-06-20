@@ -1,7 +1,9 @@
 // YOU SHOULD MODIFY THIS OBJECT BELOW
 let data = {
   users: [],
-  channels: []
+  channels: [],
+  lastAuthUserId: 0,
+  lastChannelId: 0,
 };
 
 // YOU SHOULDNT NEED TO MODIFY THE FUNCTIONS BELOW IN ITERATION 1

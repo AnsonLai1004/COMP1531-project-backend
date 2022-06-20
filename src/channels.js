@@ -1,18 +1,23 @@
+import { getData, setData } from './dataStore.js'
+
 // Sample stub for a function 'channelsCreateV1', 
 // with arguments named 'authUserId', 'name', 'isPublic'
 // Returns object with type 'channelId' if no error
 function channelsCreateV1(authUserId, name, isPublic) {
 
-    new channel = {
+    const channel = {
         channelId: generate(channelId),
         name: name,
         isPublic: isPublic,
-        ownerMember: [... userProfileV1(authUserId)],
-        allMembers: [... userProfileV1(authUserId)],
+        ownerMember: [userProfileV1(authUserId)],
+        allMembers: [userProfileV1(authUserId)],
         messages: []
     }
     
-    dataStore.channel_list.push (new channel);
+    const dataStore = getData();
+    dataStore.channels.push (channel);
+    setData(dataStore);
+
     return {channelId: channel.channelId};
 }
 

@@ -50,6 +50,11 @@ describe('Testing authRegister function valid cases', () => {
           })
         );
     });
+    test('Two users, check ids are different', () => {
+        const registered1 = authRegisterV1('valid@gmail.com', 'password', 'Harry', 'Potter');
+        const registered2 = authRegisterV1('different@gmail.com', 'password', 'Hermione', 'Granger');
+        expect(registered1.authUserId !== registered2.authUserId);
+    });
 });
 
 describe('Testing authLogin function error cases', () => {

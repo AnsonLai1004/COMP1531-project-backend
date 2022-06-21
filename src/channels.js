@@ -5,14 +5,18 @@ import { getData, setData } from './dataStore.js'
 // Returns object with type 'channelId' if no error
 function channelsCreateV1(authUserId, name, isPublic) {
 
+    if (name.length < 1 || name.length > 20) {
+        return {error: "error"};
+    }
+
     const dataStore = getData();
 
     const channel = {
-        channelId: dataStore.lastChannelId,
+        channelId: dataStore.lastChannelId + 1,
         name: name,
         isPublic: isPublic,
-        ownerMember: [userProfileV1(authUserId)],
-        allMembers: [userProfileV1(authUserId)],
+        ownerMember: [authUserId],
+        allMembers: [authUserId],
         messages: []
     }
     
@@ -69,3 +73,5 @@ function channelsListallV1(authUserId) {
 
     return {channels: channels};
 }
+
+export { channelsCreateV1, channelsListV1, channelsListallV1 }

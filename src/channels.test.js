@@ -1,48 +1,44 @@
 import { channelsCreateV1, channelsListV1, channelsListallV1 } from './channels.js'
 import { authLoginV1, authRegisterV1 } from './auth.js'
 import { channelJoinV1 } from './channel.js'
+import { clearV1 } from './other.js'
 
-describe("Channels Functions", () => {
-
-    beforeEach(() => clearV1())
+describe("Channels Functions Errors", () => {
 
     test('error channelsCreate', () => {  
         const validAuthUserId = authRegisterV1('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
         expect(channelsCreateV1(validAuthUserId, "", true)).toStrictEqual({error: "error"});
         expect(channelsCreateV1(validAuthUserId, "123456890712345678901", true)).toStrictEqual({error: "error"});
-        expect(channelsListV1(user5)).toStrictEqual({channels: []});
     })
 
     test('error channelsListV1 channelsListallV1', () => {  
         expect(channelsListV1("Not valid ID")).toStrictEqual({channels: []});
         expect(channelsListallV1("Not valid ID")).toStrictEqual({channels: []});
     })
+})
 
-    test('channelsListV1 and channelsListallV1 for different users', () => {
-        const user1 = authRegisterV1('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
-        const user2 = authRegisterV1('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
-        const user3 = authRegisterV1('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
-        const user4 = authRegisterV1('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
-        const user5 = authRegisterV1('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+describe("Correct Input", () => {
+    clearV1();
+    // DATA
+    const user1 = authRegisterV1('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = authRegisterV1('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const user3 = authRegisterV1('bill@gmail.com', 'samplePass', 'Bill', 'Benkins');
+    const user4 = authRegisterV1('charlie@gmail.com', 'samplePass', 'Charlie', 'Capman');
+    const user5 = authRegisterV1('dory@gmail.com', 'samplePass', 'Dory', 'Dean');
 
-        const channel1 = channelsCreateV1(user1, "BOOST", true);
-        channelJoin(user2, channel1);
-        channelJoin(user3, channel1);
-        channelJoin(user4, channel1);
+    const channel1 = channelsCreateV1(user1.authUserId, "BOOST", true);
+    channelJoinV1(user2, channel1);
+    channelJoinV1(user3, channel1);
+    channelJoinV1(user4, channel1);
 
-        const channel2 = channelsCreateV1(user2, "CRUNCHIE", true);
-        channelJoin(user3, channel1);
-        channelJoin(user4, channel1);
+    const channel2 = channelsCreateV1(user2.authUserId, "CRUNCHIE", true);
+    channelJoinV1(user3, channel1);
+    channelJoinV1(user4, channel1);
 
-        const channel3 = channelsCreateV1(user1, "EGGS", true);
-        channelJoin(user2, channel1);
+    const channel3 = channelsCreateV1(user1.authUserId, "EGGS", false);
+    channelJoinV1(user2, channel1);
 
-        // expected
-
-        // user1 - 1 and 3
-        // user2 - all
-        // user3 and 4 - 1 and 2
-        // user5 - none
+    test('channelsListV1 users 1-5', () => {
 
         expect(channelsListV1(user1)).toStrictEqual({
             channels: 
@@ -105,6 +101,9 @@ describe("Channels Functions", () => {
         });
 
         expect(channelsListV1(user5)).toStrictEqual({channels: []});
+    })
+
+    test('channelsListallV1 users 1-5', () => {
 
         expect(channelsListallV1(user1)).toStrictEqual({
             channels: 

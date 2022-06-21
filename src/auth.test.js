@@ -7,7 +7,7 @@ describe('Testing authRegister function error cases', () => {
     });
 
     test('Same email as another user', () => {
-        authRegisterV1('same.email@gmail.com', 'password', 'Harry', 'Potter');
+        authRegisterV1('same@gmail.com', 'password', 'Harry', 'Potter');
         const registered = authRegisterV1('same@gmail.com', 'password', 'Hermione', 'Granger');
         expect(registered).toStrictEqual({ error: 'error' });
     });

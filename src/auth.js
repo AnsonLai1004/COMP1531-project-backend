@@ -16,7 +16,6 @@ export function authLoginV1(email, password) {
     }
 }
 
-let lastUserId = 0;
 // sample stub for a function called authRegisterV1
 // takes arguments 'email' (string), 'password' (string),
 // 'nameFirst' (string), and 'nameLast' (string)
@@ -52,9 +51,7 @@ export function authRegisterV1(email, password, nameFirst, nameLast) {
         'isOnline': true,
         'isOwner': true,
     };
-    
-    
-    
+
     data.users.push(newUser);
     setData(data);
 

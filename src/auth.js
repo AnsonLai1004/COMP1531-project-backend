@@ -18,6 +18,7 @@ const errorObject = {error: 'error'};
  * @param {string} password 
  * @returns {{authUserId: number}}
  */
+
 export function authLoginV1(email, password) {
     return {
         authUserId: 1,
@@ -38,6 +39,7 @@ export function authLoginV1(email, password) {
  * @param {string} nameLast 
  * @returns {{authUserId: number}}
  */
+
 export function authRegisterV1(email, password, nameFirst, nameLast) {
     if (!isEmail(email) || checkDuplicateUserData(email, 'email')) {
         return errorObject;
@@ -115,6 +117,7 @@ const generateHandle = function(nameFirst, nameLast) {
         finalHandle = prelimHandle + `${i}`;
         i++;
     }
-
+    
     return finalHandle;
 }
+

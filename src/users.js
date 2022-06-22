@@ -1,10 +1,12 @@
 function userProfileV1(authUserId, uId) {
   return {
-    uId: 1, 
-    email: 'example@gmail.com',
-    nameFirst: 'Hayden', 
-    nameLast: 'Smith', 
-    handleStr: 'haydensmith'
+    user: {
+      uId: 2, 
+      email: 'different@gmail.com',
+      nameFirst: 'Hermione',
+      nameLast: 'Granger',
+      handleStr: 'hermionegranger'
+    }
   }
 }
 

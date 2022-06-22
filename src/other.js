@@ -8,6 +8,7 @@ function clearV1() {
   };
   setData(data);
   return {};
+
 }
 
 export { clearV1 };

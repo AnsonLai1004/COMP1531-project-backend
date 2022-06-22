@@ -35,9 +35,9 @@ function channelsListV1(authUserId) {
     const channels = [];
     const dataStore = getData();
     
-    for (channel of dataStore.channels) {
-        for (member of channel.allMembers) {
-            if (member.authUserId === authUserId) {
+    for (const channel of dataStore.channels) {
+        for (const member of channel.allMembers) {
+            if (member.uId === authUserId) {
                 channels.push(channel);
                 break;
             }

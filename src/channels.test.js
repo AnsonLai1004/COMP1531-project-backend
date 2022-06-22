@@ -7,8 +7,8 @@ import { getData, setData } from './dataStore.js'
 beforeEach(() => clearV1());
 
 describe("Channels Functions Errors", () => {
-
-    test('error channelsCreate', () => { 
+    
+    test('error channelsCreate', () => {  
         const validAuthUserId = authRegisterV1('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang').authUserId;
         expect(channelsCreateV1(validAuthUserId, "", true)).toStrictEqual({error: "error"});
         expect(channelsCreateV1(validAuthUserId, "123456890712345678901", true)).toStrictEqual({error: "error"});
@@ -27,8 +27,8 @@ let user1, user2, user3, user4, user5, channel1, channel2, channel3;
 
 describe("Correct Input", () => {
 
-    // DATA
     beforeEach(() => {
+        // DATA
         user1 = authRegisterV1('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang').authUserId;
         user2 = authRegisterV1('alex@gmail.com', 'samplePass', 'Alex', 'Avery').authUserId;
         user3 = authRegisterV1('bill@gmail.com', 'samplePass', 'Bill', 'Benkins').authUserId;
@@ -48,10 +48,11 @@ describe("Correct Input", () => {
         channelJoinV1(user2, channel1);
     })
 
+    
     test('channelsCreateV1 correct output', () => {
         
         const data = getData();
-
+        
         expect(new Set(data.channels)).toStrictEqual(
             new Set([
                 {
@@ -81,7 +82,6 @@ describe("Correct Input", () => {
             ])
         )
     })
-
 
     test('channelsListV1 users 1-5', () => {
         

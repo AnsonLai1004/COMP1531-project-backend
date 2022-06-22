@@ -38,8 +38,6 @@ function channelsCreateV1(authUserId, name, isPublic) {
     return {channelId: channel.channelId};
 }
 
-
-
 // Sample stub for a function 'channelsListV1', 
 // with arguments named 'authUserId'
 // Returns object with type 'channels' if no error
@@ -59,6 +57,7 @@ function channelsListV1(authUserId) {
 
     return {channels: channels};
 }
+
 
 // Sample stub for a function 'channelsListallV1', 
 // with arguments named 'authUserId'
@@ -99,3 +98,5 @@ function checkValidId(authUserId, dataStore) {
     }
     return false;
 }
+
+export { channelsCreateV1 };

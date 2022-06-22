@@ -1,4 +1,4 @@
-- assume for channelsListV1 and channelsListallV1 when authUserId parameter passed
-in is not a valid ID, return empty array in channels object
-
-{channels: []}
+Assume that authUserId is of type number
+Assume the structure of a valid email is of form 'string@string.domain', and can be accurately validated by the imported isEmail function from 'validator' package
+Assume that non-alphanumeric characters are permitted in user and channel names and passwords
+Assume that if authUserId passed into a function is invalid, return error

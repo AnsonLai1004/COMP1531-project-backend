@@ -7,19 +7,39 @@ import isEmail from 'validator/lib/isEmail.js';
 
 const errorObject = {error: 'error'};
 
-// sample stub for a function called authLoginV1
-// takes arguments 'email' (string) and 'password' (string)
-// returns object containing type 'authUserId' (integer) if no error
+/**
+ * Stub for a function called authLoginV1
+ * Given a correct email - password pair, returns an object with
+ * the matching user id
+ * Returns an errorObject if email does not belong to a user or
+ * password is incorrect
+ * 
+ * @param {string} email 
+ * @param {string} password 
+ * @returns {{authUserId: number}}
+ */
+
 export function authLoginV1(email, password) {
     return {
         authUserId: 1,
     }
 }
 
-// sample stub for a function called authRegisterV1
-// takes arguments 'email' (string), 'password' (string),
-// 'nameFirst' (string), and 'nameLast' (string)
-// returns object containing type 'authUserId' (integer) if no error
+/**
+ * Stub for a function called authRegisterV1
+ * Registers a new user to the dataStore and returns their
+ * unique user id
+ * Returns an errorObject if email is invalid, already used by another user,
+ * password is less than 6 characters, or nameFirst or nameLast are not
+ * between 1 and 50 characters inclusive.
+ * 
+ * @param {string} email 
+ * @param {string} password 
+ * @param {string} nameFirst 
+ * @param {string} nameLast 
+ * @returns {{authUserId: number}}
+ */
+
 export function authRegisterV1(email, password, nameFirst, nameLast) {
     if (!isEmail(email) || checkDuplicateUserData(email, 'email')) {
         return errorObject;

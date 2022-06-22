@@ -2,7 +2,9 @@ import { setData } from './dataStore.js';
 function clearV1() {
   const data = {
     users: [],
-    channels: []
+    channels: [],
+    lastAuthUserId: 0,
+    lastChannelId: 0,
   };
   setData(data);
   return {};

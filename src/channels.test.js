@@ -55,7 +55,7 @@ describe("Correct Input", () => {
         expect(new Set(data.channels)).toStrictEqual(
             new Set([
                 {
-                    channelId: expect.any(Number),
+                    channelId: channel1,
                     name: "BOOST",
                     isPublic: true,
                     ownerMember: expect.any(Array),
@@ -63,7 +63,7 @@ describe("Correct Input", () => {
                     messages: [],
                 },
                 {
-                    channelId: expect.any(Number),
+                    channelId: channel2,
                     name: "CRUNCHIE",
                     isPublic: true,
                     ownerMember: expect.any(Array),
@@ -71,7 +71,7 @@ describe("Correct Input", () => {
                     messages: [],
                 },
                 {
-                    channelId: expect.any(Number),
+                    channelId: channel3,
                     name: "EGGS",
                     isPublic: false,
                     ownerMember: expect.any(Array),

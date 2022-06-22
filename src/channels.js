@@ -14,22 +14,13 @@ function channelsCreateV1(authUserId, name, isPublic) {
         return {error: "error"};
     }
 
-    const dataStore = getData();
-
     // CHECK IF USERID VALID
-    let validId = false;
-
-    for (const user of dataStore.users) {
-        if (user.uId === authUserId) {
-            validId = true;
-            break;
-        }
-    }
+    const dataStore = getData();
+    const validId = checkValidId(authUserId, dataStore);
     
     if (!(validId)) {
         return {error: "error"};
     }
-
 
     const channel = {
         channelId: dataStore.lastChannelId + 1,
@@ -40,7 +31,7 @@ function channelsCreateV1(authUserId, name, isPublic) {
         messages: [],
     }
     
-    dataStore.channels.push (channel);
+    dataStore.channels.push(channel);
     dataStore.lastChannelId++;
     setData(dataStore);
     
@@ -97,3 +88,14 @@ function channelsListallV1(authUserId) {
 }
 
 export { channelsCreateV1, channelsListV1, channelsListallV1 }
+
+
+// Helper function to find out whether the uId is a valid user | returns bool
+function checkValidId(authUserId, dataStore) {
+    for (const user of dataStore.users) {
+        if (user.uId === authUserId) {
+            return true;
+        }
+    }
+    return false;
+}

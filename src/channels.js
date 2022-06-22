@@ -1,15 +1,35 @@
 import { getData, setData } from './dataStore.js'
 
-// Sample stub for a function 'channelsCreateV1', 
-// with arguments named 'authUserId', 'name', 'isPublic'
-// Returns object with type 'channelId' if no error
+//  Creates a new channel object and appends it to the channels section of the dataStore
+// Arguments - 
+//  @authUserId (integer)
+//  @name (string)
+//  @isPublic (boolean)
+// Returns -
+//  @channelId (integer)
 function channelsCreateV1(authUserId, name, isPublic) {
 
+    // INVALID NAME
     if (name.length < 1 || name.length > 20) {
         return {error: "error"};
     }
 
     const dataStore = getData();
+
+    // CHECK IF USERID VALID
+    let validId = false;
+
+    for (const user of dataStore.users) {
+        if (user.uId === authUserId) {
+            validId = true;
+            break;
+        }
+    }
+    
+    if (!(validId)) {
+        return {error: "error"};
+    }
+
 
     const channel = {
         channelId: dataStore.lastChannelId + 1,
@@ -23,9 +43,11 @@ function channelsCreateV1(authUserId, name, isPublic) {
     dataStore.channels.push (channel);
     dataStore.lastChannelId++;
     setData(dataStore);
-
+    
     return {channelId: channel.channelId};
 }
+
+
 
 // Sample stub for a function 'channelsListV1', 
 // with arguments named 'authUserId'
@@ -56,7 +78,7 @@ function channelsListallV1(authUserId) {
     let validId = false;
     const dataStore = getData();
 
-    for (user of dataStore.users) {
+    for (const user of dataStore.users) {
         if (user.authUserId === authUserId) {
             validId = true;
             break;
@@ -67,7 +89,7 @@ function channelsListallV1(authUserId) {
         return {channels: []};
     }
     
-    for (channel of dataStore.channels) {
+    for (const channel of dataStore.channels) {
         channels.push(channel);
     }
 

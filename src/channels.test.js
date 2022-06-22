@@ -5,43 +5,46 @@ import { clearV1 } from './other.js'
 import { getData, setData } from './dataStore.js'
 
 beforeEach(() => clearV1());
-let user1, user2, user3, user4, user5, channel1, channel2, channel3;
 
 describe("Channels Functions Errors", () => {
 
     test('error channelsCreate', () => { 
-        const validAuthUserId = authRegisterV1('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
-        expect(channelsCreateV1(validAuthUserId.authUserId, "", true)).toStrictEqual({error: "error"});
-        expect(channelsCreateV1(validAuthUserId.authUserId, "123456890712345678901", true)).toStrictEqual({error: "error"});
+        const validAuthUserId = authRegisterV1('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang').authUserId;
+        expect(channelsCreateV1(validAuthUserId, "", true)).toStrictEqual({error: "error"});
+        expect(channelsCreateV1(validAuthUserId, "123456890712345678901", true)).toStrictEqual({error: "error"});
+        // ASSUMPTION - invalid authUserId returns error
+        expect(channelsCreateV1("Invalid ID", "TheoAng", true)).toStrictEqual({error: "error"});
     })
 
     // ASSUMPTION - return object with empty array
     test('invalid ID channelsListV1 channelsListallV1', () => {  
-        expect(channelsListV1("Not valid ID")).toStrictEqual({channels: []});
-        expect(channelsListallV1("Not valid ID")).toStrictEqual({channels: []});
+        expect(channelsListV1("Invalid ID")).toStrictEqual({channels: []});
+        expect(channelsListallV1("Invalid ID")).toStrictEqual({channels: []});
     })
 })
+
+let user1, user2, user3, user4, user5, channel1, channel2, channel3;
 
 describe("Correct Input", () => {
 
     // DATA
     beforeEach(() => {
-        user1 = authRegisterV1('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
-        user2 = authRegisterV1('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
-        user3 = authRegisterV1('bill@gmail.com', 'samplePass', 'Bill', 'Benkins');
-        user4 = authRegisterV1('charlie@gmail.com', 'samplePass', 'Charlie', 'Capman');
-        user5 = authRegisterV1('dory@gmail.com', 'samplePass', 'Dory', 'Dean');
+        user1 = authRegisterV1('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang').authUserId;
+        user2 = authRegisterV1('alex@gmail.com', 'samplePass', 'Alex', 'Avery').authUserId;
+        user3 = authRegisterV1('bill@gmail.com', 'samplePass', 'Bill', 'Benkins').authUserId;
+        user4 = authRegisterV1('charlie@gmail.com', 'samplePass', 'Charlie', 'Capman').authUserId;
+        user5 = authRegisterV1('dory@gmail.com', 'samplePass', 'Dory', 'Dean').authUserId;
 
-        channel1 = channelsCreateV1(user1.authUserId, "BOOST", true);
+        channel1 = channelsCreateV1(user1, "BOOST", true).channelId;
         channelJoinV1(user2, channel1);
         channelJoinV1(user3, channel1);
         channelJoinV1(user4, channel1);
 
-        channel2 = channelsCreateV1(user2.authUserId, "CRUNCHIE", true);
+        channel2 = channelsCreateV1(user2, "CRUNCHIE", true).channelId;
         channelJoinV1(user3, channel1);
         channelJoinV1(user4, channel1);
 
-        channel3 = channelsCreateV1(user1.authUserId, "EGGS", false);
+        channel3 = channelsCreateV1(user1, "EGGS", false).channelId;
         channelJoinV1(user2, channel1);
     })
 

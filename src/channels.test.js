@@ -1,6 +1,6 @@
 import { channelsCreateV1, channelsListV1, channelsListallV1 } from './channels.js'
 import { authLoginV1, authRegisterV1 } from './auth.js'
-import { channelJoinV1 } from './channel.js'
+import { channelJoinV1, channelDetailsV1 } from './channel.js'
 import { clearV1 } from './other.js'
 import { getData, setData } from './dataStore.js'
 
@@ -41,11 +41,11 @@ describe("Correct Input", () => {
         channelJoinV1(user4, channel1);
 
         channel2 = channelsCreateV1(user2, "CRUNCHIE", true).channelId;
-        channelJoinV1(user3, channel1);
-        channelJoinV1(user4, channel1);
+        channelJoinV1(user3, channel2);
+        channelJoinV1(user4, channel2);
 
         channel3 = channelsCreateV1(user1, "EGGS", false).channelId;
-        channelJoinV1(user2, channel1);
+        channelJoinV1(user2, channel3);
     })
 
     
@@ -59,7 +59,7 @@ describe("Correct Input", () => {
                     channelId: channel1,
                     name: "BOOST",
                     isPublic: true,
-                    ownerMember: expect.any(Array),
+                    ownerMembers: expect.any(Array),
                     allMembers: expect.any(Array),
                     messages: [],
                 },
@@ -67,7 +67,7 @@ describe("Correct Input", () => {
                     channelId: channel2,
                     name: "CRUNCHIE",
                     isPublic: true,
-                    ownerMember: expect.any(Array),
+                    ownerMembers: expect.any(Array),
                     allMembers: expect.any(Array),
                     messages: [],
                 },
@@ -75,7 +75,7 @@ describe("Correct Input", () => {
                     channelId: channel3,
                     name: "EGGS",
                     isPublic: false,
-                    ownerMember: expect.any(Array),
+                    ownerMembers: expect.any(Array),
                     allMembers: expect.any(Array),
                     messages: [],
                 },

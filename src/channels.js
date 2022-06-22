@@ -27,7 +27,7 @@ function channelsCreateV1(authUserId, name, isPublic) {
         channelId: dataStore.lastChannelId + 1,
         name: name,
         isPublic: isPublic,
-        ownerMember: [authUserId],
+        ownerMembers: [authUserId],
         allMembers: [authUserId],
         messages: [],
     }

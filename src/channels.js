@@ -43,8 +43,15 @@ function channelsCreateV1(authUserId, name, isPublic) {
 // Returns object with type 'channels' if no error
 function channelsListV1(authUserId) {
 
-    const channels = [];
+    // CHECK IF USERID VALID
     const dataStore = getData();
+    const validId = checkValidId(authUserId, dataStore);
+    
+    if (!(validId)) {
+        return {error: "error"};
+    }
+
+    const channels = [];
     
     for (const channel of dataStore.channels) {
         for (const member of channel.allMembers) {
@@ -63,21 +70,16 @@ function channelsListV1(authUserId) {
 // with arguments named 'authUserId'
 // Returns object with type 'channels' if no error
 function channelsListallV1(authUserId) {
+
+    // CHECK IF USERID VALID
+    const dataStore = getData();
+    const validId = checkValidId(authUserId, dataStore);
+    
+    if (!(validId)) {
+        return {error: "error"};
+    }
     
     const channels = [];
-    let validId = false;
-    const dataStore = getData();
-
-    for (const user of dataStore.users) {
-        if (user.authUserId === authUserId) {
-            validId = true;
-            break;
-        }
-    }
-
-    if (!(validId)) {
-        return {channels: []};
-    }
     
     for (const channel of dataStore.channels) {
         channels.push(channel);
@@ -85,9 +87,6 @@ function channelsListallV1(authUserId) {
 
     return {channels: channels};
 }
-
-export { channelsCreateV1, channelsListV1, channelsListallV1 }
-
 
 // Helper function to find out whether the uId is a valid user | returns bool
 function checkValidId(authUserId, dataStore) {
@@ -99,4 +98,4 @@ function checkValidId(authUserId, dataStore) {
     return false;
 }
 
-export { channelsCreateV1 };
+export { channelsCreateV1, channelsListV1, channelsListallV1 };

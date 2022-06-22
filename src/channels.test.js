@@ -16,10 +16,10 @@ describe("Channels Functions Errors", () => {
         expect(channelsCreateV1("Invalid ID", "TheoAng", true)).toStrictEqual({error: "error"});
     })
 
-    // ASSUMPTION - return object with empty array
+    // ASSUMPTION - invalid authUserId returns error
     test('invalid ID channelsListV1 channelsListallV1', () => {  
-        expect(channelsListV1("Invalid ID")).toStrictEqual({channels: []});
-        expect(channelsListallV1("Invalid ID")).toStrictEqual({channels: []});
+        expect(channelsListV1("Invalid ID")).toStrictEqual({error: "error"});
+        expect(channelsListallV1("Invalid ID")).toStrictEqual({error: "error"});
     })
 })
 

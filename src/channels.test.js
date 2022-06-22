@@ -45,9 +45,8 @@ describe("Correct Input", () => {
 
         const data = getData();
 
-        // ASSUMED ORDERED BY CHANNEL ID / TIME CHANNEL CREATED (EARLIEST TO RECENT)
-        expect(data.channels).toStrictEqual(
-            [
+        expect(new Set(data.channels)).toStrictEqual(
+            new Set([
                 {
                     channelId: expect.any(Number),
                     name: "BOOST",
@@ -72,7 +71,7 @@ describe("Correct Input", () => {
                     allMembers: expect.any(Array),
                     messages: [],
                 },
-            ]
+            ])
         )
     })
 

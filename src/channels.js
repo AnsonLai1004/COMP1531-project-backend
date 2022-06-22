@@ -15,7 +15,7 @@ function channelsCreateV1(authUserId, name, isPublic) {
     }
 
     const dataStore = getData();
-
+    
     // CHECK IF USERID VALID
     let validId = false;
 

@@ -1,4 +1,4 @@
-import { getData } from './dataStore.js'
+import { setData } from './dataStore.js'
 
 function clearV1() {
   const data = {
@@ -8,6 +8,7 @@ function clearV1() {
     lastChannelId: 0,
   }
 
+  setData(data);
   return {};
 }
 

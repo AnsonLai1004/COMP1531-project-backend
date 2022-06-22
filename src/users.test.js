@@ -23,7 +23,7 @@ describe('Testing userProfile function error cases', () => {
 });
 
 describe('Testing userProfile function valid cases', () => {
-    test('Valid return', () => {
+    test('Viewing another user\'s information', () => {
         const registered1 = authRegisterV1('yet-another-valid@gmail.com', 'password', 'Harry', 'Potter');
         const registered2 = authRegisterV1('different@gmail.com', 'password', 'Hermione', 'Granger');
         const profile = userProfileV1(registered1.authUserId, registered2.authUserId);
@@ -34,6 +34,20 @@ describe('Testing userProfile function valid cases', () => {
                 nameFirst: 'Hermione',
                 nameLast: 'Granger',
                 handleStr: 'hermionegranger'
+            })
+        });
+    });
+
+    test('Viewing own information', () => {
+        const registered = authRegisterV1('chosen-one@gmail.com', 'password', 'Harry', 'Potter');
+        const profile = userProfileV1(registered.authUserId, registered.authUserId);
+        expect(profile).toStrictEqual({
+            user: expect.objectContaining({
+                uId: registered.authUserId,
+                email: 'chosen-one@gmail.com',
+                nameFirst: 'Harry',
+                nameLast: 'Potter',
+                handleStr: 'harrypotter'
             })
         });
     });

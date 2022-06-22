@@ -3,6 +3,7 @@
 **/
 
 import { getData, setData } from './dataStore.js';
+
 // Sample stub for a function 'channelInviteV1', 
 // with arguments named 'authUserId', 'channelId', 'uId'
 // Returns empty object if no error
@@ -21,22 +22,22 @@ function channelMessagesV1(authUserId, channelId, start) {
     };
 }
 
-
-// with arguments named 'authUserId', 'channelId'
-// Returns a object with types 'name', 'isPublic', 
-// ownerMembers', 'allMembers' if no error
-// Given a channel with ID channelId that the 
-// authorised user is a member of, provide basic 
-// details about the channel.
+/**
+ * Given a channel with ID channelId that the authorised user is a member of, 
+ * provide basic details about the channel.
+ * @param {integer} authUserId 
+ * @param {integer} channelId
+ * @returns {{name: string, isPublic: boolean, ownerMembers: integer[], allMembers: integer[]}}
+ */
 function channelDetailsV1(authUserId, channelId) {
     // check if authUserId is valid
     if (!isValidUserId(authUserId)) {
         return { error: 'error' };
     }
-    // 
+
     const data = getData();
     for (let channel of data.channels) {
-        if (channel.cId === channelId) {
+        if (channel.channelId === channelId) {
             // check if authUserId is member
             let isMember = false;
             for (let userId of channel.allMembers) {
@@ -48,29 +49,40 @@ function channelDetailsV1(authUserId, channelId) {
                 return { error: 'error' };
             }
             return {
-                name: channel.channelName, 
+                name: channel.name, 
                 isPublic: channel.isPublic,
-                ownerMembers: channel.ownerIds,
-                allMembers: channel.memberIds,
+                ownerMembers: channel.ownerMember,
+                allMembers: channel.allMembers,
             };           
         }
     }
     return { error: 'error' };   
 }
 
-// Sample stub for a function 'channelJoinV1', 
-// with arguments named 'authUserId', 'channelId'
-// Returns empty object if no error
-// Given a channelId of a channel that the authorised 
-// user can join, adds them to that channel.
-function channelJoinV1(authUserId, channelId) {
-    if (!isValidChannelId(channelId) || !isValidUserId(authUserId)) {
+/**
+ * Given a channelId of a channel that the authorised  
+ * user can join, adds them to that channel.
+ * @param {integer} authUserId 
+ * @param {integer} channelId
+ * @returns {{}}
+ */
+function channelJoinV1(authUserId, channelId) {    
+    if (!isValidUserId(authUserId)) {
+        return { error: 'error' };
+    }
+    // check if channel exist, if yes return channel detail
+    const data = getData();
+    let channelDetail = undefined;
+    for (let channel of data.channels) {
+        if (channelId === channel.channelId) {
+            channelDetail = channel;
+        }
+    }
+    if (channelDetail === undefined) {
         return { error: 'error' };
     }
     // check if channel is private, if yes check if user is global owner
-    const channel = channelDetailsV1(channelId);
-    const data = getData();
-    if (channel.isPublic === false) {        
+    if (channelDetail.isPublic === false) {        
         for (let user of data.users) {
             if (authUserId === user.uId) {
                 if (user.isOwner === false) {
@@ -79,34 +91,29 @@ function channelJoinV1(authUserId, channelId) {
             }
         }
     }
-    // need to check if user is already a member
-    for (let id of channel.allMembers) {
+    // check if user is already a member
+    for (let id of channelDetail.allMembers) {
         if (authUserId === id) {
             return { error: 'error' };
         }
     }
-    // 
+    // add memeber to channel
     for (let channel of data.channels) {
-        if (channelId === channel.cId) {
-            channel.memberIds.push(authUserId);
+        if (channelId === channel.channelId) {
+            channel.allMembers.push(authUserId);
             setData(data);
         }
     }
     return {};
 }
 
-// Helper functions
-// return false if channelId does not refer to a valid channel
-function isValidChannelId(channelId) {
-    const data = getData();
-    for (let channel of data.channels) {
-        if (channelId === channel.cId) {
-            return true;
-        }
-    }
-    return false;
-}
-// return false if authUserId is not valid 
+
+/**
+ * Helper function  
+ * return false if authUserId is not valid 
+ * @param {integer} authUserId 
+ * @returns {boolean}
+ */
 function isValidUserId(authUserId) {
     const data = getData();
     for (let user of data.users) {

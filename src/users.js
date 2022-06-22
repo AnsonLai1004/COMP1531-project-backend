@@ -1,5 +1,7 @@
 import { getData } from './dataStore.js';
 
+const errorObject = {error: 'error'};
+
 /**
  * Function which, given a valid authUserId and uId, returns the 
  * details of the user whose uId matches the argument uId
@@ -14,15 +16,25 @@ import { getData } from './dataStore.js';
  * }}
  */
 function userProfileV1(authUserId, uId) {
-  return {
-    user: {
-      uId: 2, 
-      email: 'different@gmail.com',
-      nameFirst: 'Hermione',
-      nameLast: 'Granger',
-      handleStr: 'hermionegranger'
+  if (!checkUserIdValid(authUserId)) {
+    return errorObject;
+  }
+  const data = getData();
+  for (const user of data.users) {
+    if (uId === user.uId) {
+      return {
+        user: {
+          uId: user.uId, 
+          email: user.email,
+          nameFirst: user.nameFirst,
+          nameLast: user.nameLast,
+          handleStr: user.handleStr
+        }
+      }
     }
   }
+
+  return errorObject;
 }
 
 /**

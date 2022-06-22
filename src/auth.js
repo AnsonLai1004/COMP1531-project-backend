@@ -81,7 +81,7 @@ export function authRegisterV1(email, password, nameFirst, nameLast) {
 /**
  * Function which checks if a particular piece of data is
  * already used by another user.
- * @param {string} toCheck
+ * @param {string | number} toCheck
  * @param {string} field
  * @returns {boolean}
  */

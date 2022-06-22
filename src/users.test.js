@@ -15,7 +15,7 @@ describe('Testing userProfile function error cases', () => {
     });
 
     test('Invalid authUserId', () => {
-        const registered = authRegisterV1('valid@gmail.com', 'password', 'Harry', 'Potter');
+        const registered = authRegisterV1('another-valid@gmail.com', 'password', 'Harry', 'Potter');
         const notAnId = registered.authUserId + 99;
         const profile = userProfileV1(notAnId, registered.authUserId);
         expect(profile).toStrictEqual({ error: 'error' });
@@ -24,7 +24,7 @@ describe('Testing userProfile function error cases', () => {
 
 describe('Testing userProfile function valid cases', () => {
     test('Valid return', () => {
-        const registered1 = authRegisterV1('valid@gmail.com', 'password', 'Harry', 'Potter');
+        const registered1 = authRegisterV1('yet-another-valid@gmail.com', 'password', 'Harry', 'Potter');
         const registered2 = authRegisterV1('different@gmail.com', 'password', 'Hermione', 'Granger');
         const profile = userProfileV1(registered1.authUserId, registered2.authUserId);
         expect(profile).toStrictEqual({

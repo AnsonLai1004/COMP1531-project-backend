@@ -117,6 +117,7 @@ const generateHandle = function(nameFirst, nameLast) {
         finalHandle = prelimHandle + `${i}`;
         i++;
     }
-
+    
     return finalHandle;
 }
+

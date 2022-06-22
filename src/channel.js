@@ -116,4 +116,5 @@ function isValidUserId(authUserId) {
     }
     return false;
 }
-export { channelInviteV1, channelMessagesV1, channelDetailsV1, channelJoinV1 }
+
+export { channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1 }

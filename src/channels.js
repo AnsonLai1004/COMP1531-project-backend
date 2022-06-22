@@ -59,8 +59,11 @@ function channelsListV1(authUserId) {
     
     for (const channel of dataStore.channels) {
         for (const member of channel.allMembers) {
-            if (member.uId === authUserId) {
-                channels.push(channel);
+            if (member === authUserId) {
+                channels.push({
+                    channelId: channel.channelId,
+                    name: channel.name,
+                });
                 break;
             }
         }
@@ -89,7 +92,10 @@ function channelsListallV1(authUserId) {
     const channels = [];
     
     for (const channel of dataStore.channels) {
-        channels.push(channel);
+        channels.push({
+            channelId: channel.channelId,
+            name: channel.name,
+        });
     }
 
     return {channels: channels};

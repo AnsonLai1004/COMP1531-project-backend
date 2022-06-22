@@ -5,11 +5,13 @@ import { clearV1 } from './other.js'
 import { getData, setData } from './dataStore.js'
 
 describe("Channels Functions Errors", () => {
-
+    
     test('error channelsCreate', () => {  
         const validAuthUserId = authRegisterV1('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
         expect(channelsCreateV1(validAuthUserId, "", true)).toStrictEqual({error: "error"});
         expect(channelsCreateV1(validAuthUserId, "123456890712345678901", true)).toStrictEqual({error: "error"});
+        // ASSUMPTION - invalid authUserId returns error
+        expect(channelsCreateV1("Invalid ID", "TheoAng", true)).toStrictEqual({error: "error"});
     })
 })
 

@@ -9,11 +9,27 @@ import { getData, setData } from './dataStore.js'
 //  @channelId (integer)
 function channelsCreateV1(authUserId, name, isPublic) {
 
+    // INVALID NAME
     if (name.length < 1 || name.length > 20) {
         return {error: "error"};
     }
 
     const dataStore = getData();
+
+    // CHECK IF USERID VALID
+    let validId = false;
+
+    for (const user of dataStore.users) {
+        if (user.uId === authUserId) {
+            validId = true;
+            break;
+        }
+    }
+    
+    if (!(validId)) {
+        return {error: "error"};
+    }
+
 
     const channel = {
         channelId: dataStore.lastChannelId + 1,
@@ -27,7 +43,7 @@ function channelsCreateV1(authUserId, name, isPublic) {
     dataStore.channels.push (channel);
     dataStore.lastChannelId++;
     setData(dataStore);
-
+    
     return {channelId: channel.channelId};
 }
 

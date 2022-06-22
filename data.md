@@ -31,39 +31,36 @@ const users = [
 /**
  * Data structure 'channels' to store channels data
  * Fields:
- * 1. cId: integer
- * 2. channelName: string
- * 3. channelDesc: string
- * 4. memberIds: list of integers
- * 5. ownerIds: list of integers
- * 6. isPublic: boolean
- * 7. messageLog: list of message objects (analogous to a C struct)
- * *  message objects contain:
- * * * a. messageStr: string 
- * * * b. sentDate: Date
- * * * c. authorId: integer
- * * * d. isRead: boolean
+ * 1. name: string
+ * 2. isPublic: boolean
+ * 3. channelId: integer
+ * 4. ownerMembers: <Array> userIds
+ * 5. allMembers: <Array> userIds
+ * 6. messages: <Array> messageObj (analogous to a C struct)
+ * *  messageObj contain:
+ * * * a. messageId: integer
+ * * * b. uId: integer
+ * * * c. message: string
+ * * * d. timeSent: time
  **/
-const channels = [
+
+const channels: [
     {
-        'cId': 1,
-        'channelName': 'COMP1531 Boost',
-        'channelDesc': 'For discussing the group project',
-        'memberIds': [1, 2, 3, 4, 5],
-        'ownerIds': [1, 3],
-        'isPublic': false,
-        'messageLog': [
+        name: "boost"
+        isPublic: true
+        channelId: 1
+        ownerMembers: [
+            1, 2, 3
+        ]
+        allMembers: [
+            1, 2, 3
+        ]
+        messages: [
             {
-                'messageStr': 'Hey, I submitted a merge request.',
-                'sentDate': 'June 9 2022 18:34',
-                'authorId': 2,
-                'isRead': true
-            },
-            {
-                'messageStr': 'Approved it on GitLab',
-                'sentDate': 'June 9 2022 20:06',
-                'authorId': 4,
-                'isRead': false
+                messageId: 1
+                uId: 1
+                message: "Hello"
+                timeSent: time
             }
         ]
     }

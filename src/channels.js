@@ -2,11 +2,12 @@ import { getData, setData } from './dataStore.js'
 
 //  Creates a new channel object and appends it to the channels section of the dataStore
 // Arguments - 
-//  @authUserId (integer)
-//  @name (string)
-//  @isPublic (boolean)
+//  @authUserId (integer) - user id
+//  @name (string) - channel name
+//  @isPublic (boolean) - determines whether channel wil be public/private
 // Returns -
-//  @channelId (integer)
+//  @{channelId (integer)} - if channel is newly made
+//  @ERROR - if invalid user id passed in || 1 > name length || name length > 20
 function channelsCreateV1(authUserId, name, isPublic) {
 
     // INVALID NAME
@@ -38,9 +39,12 @@ function channelsCreateV1(authUserId, name, isPublic) {
     return {channelId: channel.channelId};
 }
 
-// Sample stub for a function 'channelsListV1', 
-// with arguments named 'authUserId'
-// Returns object with type 'channels' if no error
+//  Returns a list of channels the user passed in is a part of
+// Arguments - 
+//  @authUserId (integer) - user id
+// Returns -
+//  @channels (<Array> { channelId (integer), name (string) }) - if valid id passed in
+//  @ERROR - if invalid user id passed in 
 function channelsListV1(authUserId) {
 
     // CHECK IF USERID VALID
@@ -66,9 +70,12 @@ function channelsListV1(authUserId) {
 }
 
 
-// Sample stub for a function 'channelsListallV1', 
-// with arguments named 'authUserId'
-// Returns object with type 'channels' if no error
+//  Returns a list of all existing channels
+// Arguments - 
+//  @authUserId (integer) - user id
+// Returns -
+//  @channels (<Array> { channelId (integer), name (string) }) - if valid id passed in
+//  @ERROR - if invalid user id passed in 
 function channelsListallV1(authUserId) {
 
     // CHECK IF USERID VALID

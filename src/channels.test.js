@@ -11,12 +11,6 @@ describe("Channels Functions Errors", () => {
         expect(channelsCreateV1(validAuthUserId, "", true)).toStrictEqual({error: "error"});
         expect(channelsCreateV1(validAuthUserId, "123456890712345678901", true)).toStrictEqual({error: "error"});
     })
-
-    // ASSUMPTION - return object with empty array
-    test('invalid ID channelsListV1 channelsListallV1', () => {  
-        expect(channelsListV1("Not valid ID")).toStrictEqual({channels: []});
-        expect(channelsListallV1("Not valid ID")).toStrictEqual({channels: []});
-    })
 })
 
 describe("Correct Input", () => {
@@ -30,17 +24,9 @@ describe("Correct Input", () => {
     const user5 = authRegisterV1('dory@gmail.com', 'samplePass', 'Dory', 'Dean');
 
     const channel1 = channelsCreateV1(user1.authUserId, "BOOST", true);
-    channelJoinV1(user2, channel1);
-    channelJoinV1(user3, channel1);
-    channelJoinV1(user4, channel1);
-
     const channel2 = channelsCreateV1(user2.authUserId, "CRUNCHIE", true);
-    channelJoinV1(user3, channel1);
-    channelJoinV1(user4, channel1);
-
     const channel3 = channelsCreateV1(user1.authUserId, "EGGS", false);
-    channelJoinV1(user2, channel1);
-
+    
     test('channelsCreateV1 correct output', () => {
 
         const data = getData();
@@ -73,98 +59,5 @@ describe("Correct Input", () => {
                 },
             ])
         )
-    })
-
-
-    test('channelsListV1 users 1-5', () => {
-
-        expect(channelsListV1(user1)).toStrictEqual({
-            channels: 
-                [
-                    {
-                        channelId: channel1,
-                        name: "BOOST",
-                    },
-                    {
-                        channelId: channel3,
-                        name: "EGGS",
-                    },
-                ]
-        })
-
-        expect(channelsListV1(user2)).toStrictEqual({
-            channels: 
-                [
-                    {
-                        channelId: channel1,
-                        name: "BOOST",
-                    },
-                    {
-                        channelId: channel2,
-                        name: "CRUNCHIE",
-                    },
-                    {
-                        channelId: channel3,
-                        name: "EGGS",
-                    },
-                ]
-        });
-
-        expect(channelsListV1(user3)).toStrictEqual({
-            channels: 
-                [
-                    {
-                        channelId: channel1,
-                        name: "BOOST",
-                    },
-                    {
-                        channelId: channel2,
-                        name: "CRUNCHIE",
-                    },
-                ]
-        });
-
-        expect(channelsListV1(user4)).toStrictEqual({
-            channels: 
-                [
-                    {
-                        channelId: channel1,
-                        name: "BOOST",
-                    },
-                    {
-                        channelId: channel2,
-                        name: "CRUNCHIE",
-                    },
-                ]
-        });
-
-        expect(channelsListV1(user5)).toStrictEqual({channels: []});
-    })
-
-    test('channelsListallV1 users 1-5', () => {
-
-        const listAll = {
-            channels: 
-                [
-                    {
-                        channelId: channel1,
-                        name: "BOOST",
-                    },
-                    {
-                        channelId: channel2,
-                        name: "CRUNCHIE",
-                    },
-                    {
-                        channelId: channel3,
-                        name: "EGGS",
-                    },
-                ]
-        }
-
-        expect(channelsListallV1(user1)).toStrictEqual(listAll);
-        expect(channelsListallV1(user2)).toStrictEqual(listAll);
-        expect(channelsListallV1(user3)).toStrictEqual(listAll);
-        expect(channelsListallV1(user4)).toStrictEqual(listAll);
-        expect(channelsListallV1(user5)).toStrictEqual(listAll);
     })
 })

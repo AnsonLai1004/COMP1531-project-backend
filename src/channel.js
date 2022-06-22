@@ -7,13 +7,13 @@ import { getData, setData } from './dataStore.js'
 // Sample stub for a function 'channelInviteV1', 
 // with arguments named 'authUserId', 'channelId', 'uId'
 // Returns empty object if no error
-function channelInviteV1(authUserId, channelId, uId) {
+export function channelInviteV1(authUserId, channelId, uId) {
     const dataStore = getData();
 
     // check uid and channel id exist
     const founduid = dataStore.users.some(el => el.uId === uId);
     const foundchannel = dataStore.channels.some(el => el.channelId === channelId);
-    if (!foundid) {
+    if (!founduid) {
         return { error: 'error' };
     }
     if (!foundchannel) {
@@ -47,7 +47,7 @@ function channelInviteV1(authUserId, channelId, uId) {
 // Sample stub for a function 'channelMessagesV1', 
 // with arguments named 'authUserId', 'channelId', 'start'
 // Returns object with types 'messages', 'start', 'end' if no error
-function channelMessagesV1(authUserId, channelId, start) {
+export function channelMessagesV1(authUserId, channelId, start) {
     const dataStore = getData();
 
     // check uid and channel id exist

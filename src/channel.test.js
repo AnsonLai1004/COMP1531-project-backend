@@ -7,9 +7,9 @@ describe('channelInviteV1', () => {
     beforeEach(() => clearV1());
     // error cases
     test('Cases for error on channelInviteV1', () => {  
-        const aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-        const notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
-        const newchannel = channelsCreateV1(aMember.authUserId, 'secret candy crush team', true);
+        let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+        let notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
+        let newchannel = channelsCreateV1(aMember.authUserId, 'secret candy crush team', true);
         // invalid channelid
         expect(channelInviteV1(aMember, -999, notMember.uId)).toStrictEqual({ error: 'error' });
         // invalid uid
@@ -20,10 +20,10 @@ describe('channelInviteV1', () => {
         expect(channelInviteV1(notMember, newchannel, notMember.uId)).toStrictEqual({error: 'error'});
     });
     // correct input output
-    test('Cases for correct return on channelInviteV1', () => {  
-        const owner = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-        const notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
-        const newchannel = channelsCreateV1(aMember.authUserId, 'secret candy crush team', true);
+    test('Cases for correct return on channelInviteV1', () => {
+        let owner = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+        let notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
+        let newchannel = channelsCreateV1(owner.authUserId, 'secret candy crush team', true);
         // valid invite
         expect(channelInviteV1(owner, newchannel, notMember.uId)).toStrictEqual({});
         expect(channelDetailsV1(owner, newchannel)).toMatchObject({ 
@@ -41,9 +41,9 @@ describe('channelMessagesV1', () => {
 
     // cases where error occur
     test('Cases for error on channelMessagesV1', () => {  
-        const aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-        const notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
-        const newchannel = channelsCreateV1(aMember.authUserId, 'secret candy crush team', true);
+        let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+        let notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
+        let newchannel = channelsCreateV1(aMember.authUserId, 'secret candy crush team', true);
         // invalid channelid
         expect(channelMessagesV1(aMember, -999, 0)).toStrictEqual({ error: 'error' });
         // start is greater than total number of messages in the channel
@@ -54,8 +54,8 @@ describe('channelMessagesV1', () => {
 
     // cases where return is correct
     test('Cases for correct return on channelMessagesV1', () => {  
-        const aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-        const newchannel = channelsCreateV1(aMember.authUserId, 'secret candy crush team', true);
+        let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+        let newchannel = channelsCreateV1(aMember.authUserId, 'secret candy crush team', true);
         // valid arguments assuming messages exist with 50 messages
         // messages is an array of messages from newchannel
         // return messages from newchannel

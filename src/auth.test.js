@@ -1,4 +1,10 @@
 import { authLoginV1, authRegisterV1 } from "./auth.js";
+import { clearV1 } from "./other.js";
+
+beforeEach(() => {
+    clearV1();
+});
+
 
 describe('Testing authRegister function error cases', () => {
     test('Invalid email', () => {
@@ -54,5 +60,30 @@ describe('Testing authRegister function valid cases', () => {
         const registered1 = authRegisterV1('valid@gmail.com', 'password', 'Harry', 'Potter');
         const registered2 = authRegisterV1('different@gmail.com', 'password', 'Hermione', 'Granger');
         expect(registered1.authUserId !== registered2.authUserId);
+    });
+});
+
+describe('Testing authLogin function error cases', () => {
+    test('Email does not belong to a user', () => {
+        const login = authLoginV1('invalid@gmail.com', 'password');
+        expect(login).toStrictEqual({ error: 'error' });
+    });
+
+    test('Wrong password', () => {
+        authRegisterV1('valid@gmail.com', 'password', 'Harry', 'Potter');
+        const login = authLoginV1('valid@gmail.com', 'wrongpassword');
+        expect(login).toStrictEqual({ error: 'error' });
+    });
+});
+
+describe('Testing authLogin function valid cases', () => {
+    test('Valid login', () => {
+        const registered = authRegisterV1('valid@gmail.com', 'password', 'Harry', 'Potter');
+        const login = authLoginV1('valid@gmail.com', 'password');
+        expect(login).toStrictEqual( 
+            expect.objectContaining({
+                authUserId: registered.authUserId
+          })
+        );
     });
 });

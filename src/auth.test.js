@@ -1,4 +1,10 @@
 import { authLoginV1, authRegisterV1 } from "./auth.js";
+import { clearV1 } from "./other.js";
+
+beforeEach(() => {
+    clearV1();
+});
+
 
 describe('Testing authRegister function error cases', () => {
     test('Invalid email', () => {

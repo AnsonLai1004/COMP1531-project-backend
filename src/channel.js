@@ -4,9 +4,14 @@ export { channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1 }
  * implementation of channel.js
 **/
 
-// Sample stub for a function 'channelInviteV1', 
-// with arguments named 'authUserId', 'channelId', 'uId'
-// Returns empty object if no error
+/** 
+ * Invites a user with ID uId to join a channel with ID channelId.
+ * returns empty if success, otherwise error
+ * @param {integer} authUserId 
+ * @param {integer} channelId
+ * @param {integer} uId
+ * @returns {{}}
+*/ 
 function channelInviteV1(authUserId, channelId, uId) {
     const dataStore = getData();
 
@@ -46,9 +51,16 @@ function channelInviteV1(authUserId, channelId, uId) {
     return {};
 }
 
-// Sample stub for a function 'channelMessagesV1', 
-// with arguments named 'authUserId', 'channelId', 'start'
-// Returns object with types 'messages', 'start', 'end' if no error
+/**
+ * Given a channel with ID channelId that the authorised user is a member of 
+ * return up to 50 messages between index "start" and "start + 50"
+ * return end = -1 if end of messages.
+ * otherwise return error.
+ * @param {integer} authUserId 
+ * @param {integer} channelId 
+ * @param {integer} start 
+ * @returns {{messages: Arr object of type message, start: integer, end: integer}} 
+ */
 function channelMessagesV1(authUserId, channelId, start) {
     const dataStore = getData();
 

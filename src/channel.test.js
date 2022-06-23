@@ -3,12 +3,12 @@ import { channelsCreateV1 } from './channels.js';
 import { authRegisterV1 } from './auth.js';
 import { clearV1 } from './other.js';
 import { getData } from './dataStore.js';
+
 beforeEach(() => {
     clearV1();
 });
 
 describe('channelInviteV1', () => {
-    beforeEach(() => clearV1());
     // error cases
     test('Cases for error on channelInviteV1', () => {  
         let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
@@ -40,7 +40,6 @@ describe('channelInviteV1', () => {
 })
 
 describe('channelMessagesV1', () => {
-    beforeEach(() => clearV1());
 
     // cases where error occur
     test('Cases for error on channelMessagesV1', () => {  
@@ -59,9 +58,10 @@ describe('channelMessagesV1', () => {
     test('Cases for correct return on channelMessagesV1', () => {  
         let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
         let newchannel = channelsCreateV1(aMember.authUserId, 'crush team', true);
-        // valid arguments assuming messages is empty
+        
         // messages is an array of messages from newchannel
         // return messages from newchannel
+        // valid arguments assuming messages is empty
         expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 0)).toStrictEqual({messages: [], start: 0, end: -1});
         
         // messages have 1 message in array

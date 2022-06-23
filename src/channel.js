@@ -35,9 +35,9 @@ function channelInviteV1(authUserId, channelId, uId) {
     // check authorized user who invited the member is not a member of the group
     const channel = dataStore.channels.filter(el => el.channelId === channelId);
     const exactchannel = channel[0];
-    const checkowners = exactchannel.ownerMember.includes(authUserId);
+    const checkowners = exactchannel.ownerMembers.includes(authUserId);
     const checkmembers = exactchannel.allMembers.includes(authUserId);
-
+    
     if (!checkowners && !checkmembers) {
         return { error: 'error' };
     }
@@ -54,34 +54,49 @@ function channelMessagesV1(authUserId, channelId, start) {
 
     // check uid and channel id exist
     // check authorized user who invited the member is not a member of the group
-    const checkowners = dataStore.channels.some(el => el.ownerMembers === authUserId);
-    const checkmembers = dataStore.channels.some(el => el.allMembers === authUserId);
     const foundchannel = dataStore.channels.some(el => el.channelId === channelId);
-    
-    if (!checkowners && !checkmembers) {
-        return {error: 'error'};
-    }
     if (!foundchannel) {
         return { error: 'error'};
     }
     
+    const channel = dataStore.channels.filter(el => el.channelId === channelId);
+    const exactchannel = channel[0];
+    const checkowners = exactchannel.ownerMembers.includes(authUserId);
+    const checkmembers = exactchannel.allMembers.includes(authUserId);
+    
+    if (!checkowners && !checkmembers) {
+        return {error: 'error'};
+    }
+    
     // find channel get length of messages
     let numofmessages = 0;
+    let messages = [];
     for (const element of dataStore.channels) {
         if (element.channelId === channelId) {
             numofmessages = element.messages.length;
+            messages = element.messages;
             break;
         }
     }
     if (start > numofmessages) {
         return { error: 'error'};
     }
-    return {
-        messages: [],
-        start: 0,
-        end: -1,
-    };
+    const end = start + 50;
+    if (end < numofmessages) {
+        return {
+            messages: messages,
+            start: start,
+            end: end,
+        };
+    } else {
+        return {
+            messages: messages,
+            start: start,
+            end: -1,
+        };
+    }
 }
+
 
 /**
  * Given a channel with ID channelId that the authorised user is a member of, 

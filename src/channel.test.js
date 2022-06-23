@@ -2,6 +2,7 @@ import { channelInviteV1, channelMessagesV1, channelDetailsV1, channelJoinV1 } f
 import { channelsCreateV1 } from './channels.js';
 import { authRegisterV1 } from './auth.js';
 import { clearV1 } from './other.js';
+import { getData } from './dataStore.js';
 beforeEach(() => {
     clearV1();
 });
@@ -58,10 +59,43 @@ describe('channelMessagesV1', () => {
     test('Cases for correct return on channelMessagesV1', () => {  
         let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
         let newchannel = channelsCreateV1(aMember.authUserId, 'crush team', true);
-        // valid arguments assuming messages exist with 50 messages
+        // valid arguments assuming messages is empty
         // messages is an array of messages from newchannel
         // return messages from newchannel
         expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 0)).toStrictEqual({messages: [], start: 0, end: -1});
+        
+        // messages have 1 message in array
+        const data = getData();
+        let newmessage = {
+            messageId: 1,
+            uId: 1,
+            message: "Hello",
+            timeSent: null
+        }
+        let messagearr = [];
+        for (const element of data.channels) {
+            if (element.channelId === newchannel.channelId) {
+                messagearr = element.messages
+                element.messages.push(newmessage);
+                break;
+            }
+        }
+        expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 0)).toStrictEqual({messages: messagearr, start: 0, end: -1});
+
+        // messages have more than 50 messages
+        for (const element of data.channels) {
+            if (element.channelId === newchannel.channelId) {
+                for (let i = 0; i < 51; i++) {
+                    element.messages.push(newmessage);
+                    messagearr.push(newmessage);
+                }
+                break;
+            }
+        }
+
+        expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 0)).toStrictEqual({messages: messagearr, start: 0, end: 50});
+        expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 50)).toStrictEqual({messages: messagearr, start: 50, end: 100});
+        expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 100)).toStrictEqual({messages: messagearr, start: 100, end: -1});
     });
 });
 

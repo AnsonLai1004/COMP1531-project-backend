@@ -8,7 +8,7 @@ import isEmail from 'validator/lib/isEmail.js';
 const errorObject = {error: 'error'};
 
 /**
- * Stub for a function called authLoginV1
+ * A function called authLoginV1
  * Given a correct email - password pair, returns an object with
  * the matching user id
  * Returns an errorObject if email does not belong to a user or
@@ -26,7 +26,7 @@ export function authLoginV1(email, password) {
 }
 
 /**
- * Stub for a function called authRegisterV1
+ * A function called authRegisterV1
  * Registers a new user to the dataStore and returns their
  * unique user id
  * Returns an errorObject if email is invalid, already used by another user,

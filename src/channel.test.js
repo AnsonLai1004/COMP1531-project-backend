@@ -40,7 +40,7 @@ describe('channelInviteV1', () => {
     });
 
     // correct input output
-    test('Cases for correct return on channelInviteV1', () => {
+    test('Correct return on channelInviteV1', () => {
 			let owner = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
 			let notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
       let newchannel = channelsCreateV1(owner.authUserId, 'crush team', true);

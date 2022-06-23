@@ -64,6 +64,12 @@ export function authRegisterV1(email, password, nameFirst, nameLast) {
     data.lastAuthUserId = newId;
 
     const handle = generateHandle(nameFirst, nameLast);
+    let isGlobalOwner = false;
+
+    if (newId === 1) {
+        // the first user who signs up
+        isGlobalOwner = true;
+    }
 
     const newUser = {
         'uId': newId,
@@ -74,7 +80,7 @@ export function authRegisterV1(email, password, nameFirst, nameLast) {
         'handleStr': handle,
         'profilePicUrl': '/path/to/image',
         'isOnline': true,
-        'isOwner': true,
+        'isOwner': isGlobalOwner,
     };
 
     data.users.push(newUser);

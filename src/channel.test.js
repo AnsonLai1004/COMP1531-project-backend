@@ -139,15 +139,28 @@ describe('channelMessagesV1', () => {
 });
 
 describe('channelDetailsV1', () => {
-  test('invalid input', () => {
+  test('invalid userId', () => {
     const user = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
     const channel = channelsCreateV1(user.authUserId, 'secret candy crush team', true);
     expect(channelDetailsV1(-999, channel.channelId)).toStrictEqual({ error: 'error' });   
+  })
+	test('invalid channelId', () => {
+    const user = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
+    const channel = channelsCreateV1(user.authUserId, 'secret candy crush team', true);
     expect(channelDetailsV1(user.authUserId, -999)).toStrictEqual({ error: 'error' });  
     expect(channelDetailsV1(notMember.authUserId, channel.channelId)).toStrictEqual({ error: 'error' }); 
   })
-  test('correct return', () => {
+
+	test('User not a member of channel', () => {
+    const user = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
+    const channel = channelsCreateV1(user.authUserId, 'secret candy crush team', true);
+    expect(channelDetailsV1(notMember.authUserId, channel.channelId)).toStrictEqual({ error: 'error' }); 
+  })
+  
+	test('correct return', () => {
     const user = authRegisterV1('abc@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const channel = channelsCreateV1(user.authUserId, "BOOST", true);
     expect(channelDetailsV1(user.authUserId, channel.channelId)).toMatchObject({ 

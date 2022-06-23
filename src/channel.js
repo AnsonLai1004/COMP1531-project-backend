@@ -51,7 +51,7 @@ function channelDetailsV1(authUserId, channelId) {
             return {
                 name: channel.name, 
                 isPublic: channel.isPublic,
-                ownerMembers: channel.ownerMember,
+                ownerMembers: channel.ownerMembers,
                 allMembers: channel.allMembers,
             };           
         }

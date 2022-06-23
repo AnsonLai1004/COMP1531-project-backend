@@ -1,26 +1,114 @@
+import { getData, setData } from './dataStore.js'
+export { channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1 }
 /**
  * implementation of channel.js
 **/
 
-import { getData, setData } from './dataStore.js';
-
-// Sample stub for a function 'channelInviteV1', 
-// with arguments named 'authUserId', 'channelId', 'uId'
-// Returns empty object if no error
+/** 
+ * Invites a user with ID uId to join a channel with ID channelId.
+ * returns empty if success, otherwise error
+ * @param {integer} authUserId 
+ * @param {integer} channelId
+ * @param {integer} uId
+ * @returns {{}}
+*/ 
 function channelInviteV1(authUserId, channelId, uId) {
+    const dataStore = getData();
+
+    // check uid and channel id exist
+    const founduid = dataStore.users.some(el => el.uId === uId);
+    const foundchannel = dataStore.channels.some(el => el.channelId === channelId);
+
+    if (!founduid) {
+        return { error: 'error' };
+    }
+    if (!foundchannel) {
+        return { error: 'error'};
+    }
+
+    // check uId already a member in channels or not
+    for (const element of dataStore.channels) {
+        if (element.channelId === channelId) {
+            for (const members of element.allMembers) {
+                if (members === uId) {
+                    return { error: 'error'};
+                }
+            }
+        }
+    }
+
+    // check authorized user who invited the member is not a member of the group
+    const channel = dataStore.channels.filter(el => el.channelId === channelId);
+    const exactchannel = channel[0];
+    const checkowners = exactchannel.ownerMembers.includes(authUserId);
+    const checkmembers = exactchannel.allMembers.includes(authUserId);
+    
+    if (!checkowners && !checkmembers) {
+        return { error: 'error' };
+    }
+    exactchannel.allMembers.push(uId);
+    setData(dataStore);
     return {};
 }
 
-// Sample stub for a function 'channelMessagesV1', 
-// with arguments named 'authUserId', 'channelId', 'start'
-// Returns object with types 'messages', 'start', 'end' if no error
+/**
+ * Given a channel with ID channelId that the authorised user is a member of 
+ * return up to 50 messages between index "start" and "start + 50"
+ * return end = -1 if end of messages.
+ * otherwise return error.
+ * @param {integer} authUserId 
+ * @param {integer} channelId 
+ * @param {integer} start 
+ * @returns {{messages: Arr object of type message, start: integer, end: integer}} 
+ */
 function channelMessagesV1(authUserId, channelId, start) {
-    return {
-        messages: [],
-        start: 0,
-        end: -1,
-    };
+    const dataStore = getData();
+
+    // check uid and channel id exist
+    // check authorized user who invited the member is not a member of the group
+    const foundchannel = dataStore.channels.some(el => el.channelId === channelId);
+    if (!foundchannel) {
+        return { error: 'error'};
+    }
+    
+    const channel = dataStore.channels.filter(el => el.channelId === channelId);
+    const exactchannel = channel[0];
+    const checkowners = exactchannel.ownerMembers.includes(authUserId);
+    const checkmembers = exactchannel.allMembers.includes(authUserId);
+    
+    if (!checkowners && !checkmembers) {
+        return {error: 'error'};
+    }
+    
+    // find channel get length of messages
+    let numofmessages = 0;
+    let messages = [];
+    for (const element of dataStore.channels) {
+        if (element.channelId === channelId) {
+            numofmessages = element.messages.length;
+            messages = element.messages;
+            break;
+        }
+    }
+    if (start > numofmessages) {
+        return { error: 'error'};
+    }
+    const end = start + 50;
+    if (end < numofmessages) {
+        return {
+            messages: messages,
+            start: start,
+            end: end,
+        };
+    } else {
+        return {
+            messages: messages,
+            start: start,
+            end: -1,
+        };
+    }
 }
+
 
 /**
  * Given a channel with ID channelId that the authorised user is a member of, 
@@ -107,7 +195,6 @@ function channelJoinV1(authUserId, channelId) {
     return {};
 }
 
-
 /**
  * Helper function  
  * return false if authUserId is not valid 
@@ -123,5 +210,3 @@ function isValidUserId(authUserId) {
     }
     return false;
 }
-
-export { channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1 }

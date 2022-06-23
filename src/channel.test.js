@@ -10,93 +10,132 @@ beforeEach(() => {
 
 describe('channelInviteV1', () => {
     // error cases
-    test('Cases for error on channelInviteV1', () => {  
-        let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-        let notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
-        let newchannel = channelsCreateV1(aMember.authUserId, 'crush team', true);
-        // invalid channelid
-        expect(channelInviteV1(aMember.authUserId, -999, notMember)).toStrictEqual({ error: 'error' });
-        // invalid uid
-        expect(channelInviteV1(aMember.authUserId, newchannel.channelId, -999)).toStrictEqual({ error: 'error' });  
-        // uid refers to a user that is already a member
-        expect(channelInviteV1(aMember.authUserId, newchannel.channelId, aMember.authUserId)).toStrictEqual({ error: 'error' }); 
-        // channelId valid but the authorized user who invites is not a member of the group
-        expect(channelInviteV1(notMember.authUserId, newchannel.channelId, notMember.authUserId)).toStrictEqual({error: 'error'});
+		test('Error case for Invalid channelId', () => {
+      let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+      let notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
+      // invalid channelid
+      expect(channelInviteV1(aMember.authUserId, -999, notMember)).toStrictEqual({ error: 'error' });
     });
+    
+    test('Error case for invalid uId', () => {
+			let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+      let newchannel = channelsCreateV1(aMember.authUserId, 'crush team', true);
+      // invalid uid
+      expect(channelInviteV1(aMember.authUserId, newchannel.channelId, -999)).toStrictEqual({ error: 'error' });  
+    });
+
+    test('Error case for adding uid that is already a member of channel', () => {
+      let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+      let newchannel = channelsCreateV1(aMember.authUserId, 'crush team', true);
+      // uid refers to a user that is already a member
+      expect(channelInviteV1(aMember.authUserId, newchannel.channelId, aMember.authUserId)).toStrictEqual({ error: 'error' }); 
+    });
+
+    test('Error case for authorized user who invites is not a member of the group', () => {
+      let notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
+      let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+      let newchannel = channelsCreateV1(aMember.authUserId, 'crush team', true);
+      // channelId valid but the authorized user who invites is not a member of the group
+      expect(channelInviteV1(notMember.authUserId, newchannel.channelId, notMember.authUserId)).toStrictEqual({error: 'error'});
+    });
+
     // correct input output
     test('Cases for correct return on channelInviteV1', () => {
-        let owner = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-        let notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
-        let newchannel = channelsCreateV1(owner.authUserId, 'crush team', true);
-        // valid invite
-        expect(channelInviteV1(owner.authUserId, newchannel.channelId, notMember.authUserId)).toStrictEqual({});
-        expect(channelDetailsV1(owner.authUserId, newchannel.channelId)).toMatchObject({ 
-            name: 'crush team', 
-            isPublic: true,
-            ownerMembers: [ owner.authUserId ],
-            allMembers: [ owner.authUserId, notMember.authUserId ],
-        }); 
+			let owner = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+			let notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
+      let newchannel = channelsCreateV1(owner.authUserId, 'crush team', true);
+			// valid invite
+			expect(channelInviteV1(owner.authUserId, newchannel.channelId, notMember.authUserId)).toStrictEqual({});
+			expect(channelDetailsV1(owner.authUserId, newchannel.channelId)).toMatchObject({ 
+				name: 'crush team', 
+				isPublic: true,
+        ownerMembers: [ owner.authUserId ],
+        allMembers: [ owner.authUserId, notMember.authUserId ],
+      }); 
     });
 })
 
 describe('channelMessagesV1', () => {
-
     // cases where error occur
-    test('Cases for error on channelMessagesV1', () => {  
-        let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-        let notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
-        let newchannel = channelsCreateV1(aMember.authUserId, 'crush team', true);
-        // invalid channelid
-        expect(channelMessagesV1(aMember.authUserId, -999, 0)).toStrictEqual({ error: 'error' });
-        // start is greater than total number of messages in the channel
-        expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 51)).toStrictEqual({ error: 'error'});
-        // channelid valid, authorised user not a member
-        expect(channelMessagesV1(notMember.authUserId, newchannel.channelId, 0)).toStrictEqual({ error: 'error' });
-    });
+  test('Error for invalid channelId', () => {  
+    let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    // invalid channelid
+    expect(channelMessagesV1(aMember.authUserId, -999, 0)).toStrictEqual({ error: 'error' });
+  });
 
-    // cases where return is correct
-    test('Cases for correct return on channelMessagesV1', () => {  
-        let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-        let newchannel = channelsCreateV1(aMember.authUserId, 'crush team', true);
+  test('Error start is greater than total number of messages in channel', () => {  
+    let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    let newchannel = channelsCreateV1(aMember.authUserId, 'crush team', true);
+    expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 51)).toStrictEqual({ error: 'error'});
+  });
+
+  test('Error user not a member of channel', () => {  
+  	let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    let notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
+    let newchannel = channelsCreateV1(aMember.authUserId, 'crush team', true);
+    // channelid valid, authorised user not a member
+    expect(channelMessagesV1(notMember.authUserId, newchannel.channelId, 0)).toStrictEqual({ error: 'error' });
+  });
+
+	// correct return for channelmessages
+	test('correct return for empty array message', () => {  
+		let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    let newchannel = channelsCreateV1(aMember.authUserId, 'crush team', true);
         
-        // messages is an array of messages from newchannel
-        // return messages from newchannel
-        // valid arguments assuming messages is empty
-        expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 0)).toStrictEqual({messages: [], start: 0, end: -1});
-        
-        // messages have 1 message in array
-        const data = getData();
-        let newmessage = {
-            messageId: 1,
-            uId: 1,
-            message: "Hello",
-            timeSent: null
-        }
-        let messagearr = [];
-        for (const element of data.channels) {
-            if (element.channelId === newchannel.channelId) {
-                messagearr = element.messages
-                element.messages.push(newmessage);
-                break;
-            }
-        }
-        expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 0)).toStrictEqual({messages: messagearr, start: 0, end: -1});
+    // messages is an array of messages from newchannel
+    // return messages from newchannel
+    // valid arguments assuming messages is empty
+    expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 0)).toStrictEqual({messages: [], start: 0, end: -1});
+  });
 
-        // messages have more than 50 messages
-        for (const element of data.channels) {
-            if (element.channelId === newchannel.channelId) {
-                for (let i = 0; i < 51; i++) {
-                    element.messages.push(newmessage);
-                    messagearr.push(newmessage);
-                }
-                break;
-            }
-        }
+	// cases where return is correct
+	test('Correct return on 1 message on array', () => {  
+		let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    let newchannel = channelsCreateV1(aMember.authUserId, 'crush team', true);
+  	// messages have 1 message in array
+  	const data = getData();
+  	let newmessage = {
+			messageId: 1,
+      uId: 1,
+      message: "Hello",
+			timeSent: null
+    }
+		let messagearr = [];
+		for (const element of data.channels) {
+			if (element.channelId === newchannel.channelId) {
+				messagearr = element.messages
+				element.messages.push(newmessage);
+				break;
+			}
+		}
+		expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 0)).toStrictEqual({messages: messagearr, start: 0, end: -1});
+  });
 
-        expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 0)).toStrictEqual({messages: messagearr, start: 0, end: 50});
-        expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 50)).toStrictEqual({messages: messagearr, start: 50, end: 100});
-        expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 100)).toStrictEqual({messages: messagearr, start: 100, end: -1});
-    });
+	test('correct return on length more than 50 on messages array', () => {  
+		let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    let newchannel = channelsCreateV1(aMember.authUserId, 'crush team', true);
+  	const data = getData();
+  	let newmessage = {
+			messageId: 1,
+      uId: 1,
+      message: "Hello",
+			timeSent: null
+    }
+		let messagearr = [];
+		// messages have more than 50 messages
+		for (const element of data.channels) {
+			if (element.channelId === newchannel.channelId) {
+				for (let i = 0; i < 101; i++) {
+					element.messages.push(newmessage);
+					messagearr.push(newmessage);
+				}
+				break;
+			}
+		}
+		expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 0)).toStrictEqual({messages: messagearr, start: 0, end: 50});
+		expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 50)).toStrictEqual({messages: messagearr, start: 50, end: 100});
+		expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 100)).toStrictEqual({messages: messagearr, start: 100, end: -1});
+  });
 });
 
 describe('channelDetailsV1', () => {

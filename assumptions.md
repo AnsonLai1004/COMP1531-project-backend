@@ -3,5 +3,6 @@ Assume the structure of a valid email is of form 'string@string.domain', and can
 Assume that non-alphanumeric characters are permitted in user and channel names and passwords
 Assume that the case where all characters of the user names are non-alphanumeric will result in an empty handle string (possibly with appended numbers)
 Assume that the return type of userProfile is of type {user: user} rather than simply a "user" object
-Assume all users are not global owner except user that created a channel
+Assume that normal Treats members are allowed to create channels
+Assume that "private" channels are equivalent to "DMs"
 Assume that authUserId is of type number

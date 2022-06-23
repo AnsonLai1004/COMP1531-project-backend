@@ -23,7 +23,7 @@ describe("Channels Functions Errors", () => {
     })
 })
 
-let user1, user2, user3, user4, user5, channel1, channel2, channel3;
+let user1, user2, user3, user4, user5, channel1, channel2, channel3, channel4;
 
 describe("Correct Input", () => {
 
@@ -44,39 +44,55 @@ describe("Correct Input", () => {
         channelJoinV1(user3, channel2);
         channelJoinV1(user4, channel2);
 
-        channel3 = channelsCreateV1(user1, "EGGS", false).channelId;
+        channel3 = channelsCreateV1(user1, "EGGS", true).channelId;
         channelJoinV1(user2, channel3);
+
+        channel4 = channelsCreateV1(user3, "AERO", false).channelId;
     })
 
     
     test('channelsCreateV1 correct output', () => {
         
         const data = getData();
+        const channels = data.channels;
+
+        // owner members not changed to set bcos only one owner in this test
+        for (const channel of channels) {
+            channel.allMembers = new Set(channel.allMembers);
+        }
         
-        expect(new Set(data.channels)).toStrictEqual(
+        expect(new Set(channels)).toStrictEqual(
             new Set([
                 {
                     channelId: channel1,
                     name: "BOOST",
                     isPublic: true,
-                    ownerMembers: expect.any(Array),
-                    allMembers: expect.any(Array),
+                    ownerMembers: [user1],
+                    allMembers: new Set([user1, user2, user3, user4]),
                     messages: [],
                 },
                 {
                     channelId: channel2,
                     name: "CRUNCHIE",
                     isPublic: true,
-                    ownerMembers: expect.any(Array),
-                    allMembers: expect.any(Array),
+                    ownerMembers: [user2],
+                    allMembers: new Set([user2, user3, user4]),
                     messages: [],
                 },
                 {
                     channelId: channel3,
                     name: "EGGS",
+                    isPublic: true,
+                    ownerMembers: [user1],
+                    allMembers: new Set([user1, user2]),
+                    messages: [],
+                },
+                {
+                    channelId: channel4,
+                    name: "AERO",
                     isPublic: false,
-                    ownerMembers: expect.any(Array),
-                    allMembers: expect.any(Array),
+                    ownerMembers: [user3],
+                    allMembers: new Set([user3]),
                     messages: [],
                 },
             ])
@@ -128,6 +144,10 @@ describe("Correct Input", () => {
                         channelId: channel2,
                         name: "CRUNCHIE",
                     },
+                    {
+                        channelId: channel4,
+                        name: "AERO",
+                    },
                 ]
         });
 
@@ -164,6 +184,10 @@ describe("Correct Input", () => {
                     {
                         channelId: channel3,
                         name: "EGGS",
+                    },
+                    {
+                        channelId: channel4,
+                        name: "AERO",
                     },
                 ]
         }

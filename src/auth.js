@@ -20,9 +20,14 @@ const errorObject = {error: 'error'};
  */
 
 export function authLoginV1(email, password) {
-    return {
-        authUserId: 1,
+    const data = getData();
+    for (const user of data.users) {
+        if (email === user.email && password === user.password) {
+            return { authUserId: user.uId};
+        }
     }
+
+    return errorObject;
 }
 
 /**

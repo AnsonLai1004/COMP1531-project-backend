@@ -5,3 +5,4 @@
 - Assume that the return type of userProfile is of type {user: user} rather than simply a "user" object
 - Assume that normal Treats members are allowed to create channels
 - Assume that "private" channels are equivalent to "DMs"
+- Assume that the behaviour of functions called with missing arguments (such as channelsCreateV1 without an isPublic boolean) is undefined

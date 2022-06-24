@@ -94,6 +94,7 @@ function channelMessagesV1(authUserId, channelId, start) {
         return { error: 'error'};
     }
     const end = start + 50;
+    
     if (end < numofmessages) {
         return {
             messages: messages,

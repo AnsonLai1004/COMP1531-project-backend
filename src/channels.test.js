@@ -2,7 +2,7 @@ import { channelsCreateV1, channelsListV1, channelsListallV1 } from './channels.
 import { authLoginV1, authRegisterV1 } from './auth.js'
 import { channelJoinV1, channelDetailsV1 } from './channel.js'
 import { clearV1 } from './other.js'
-import { getData, setData } from './dataStore.js'
+import { userProfileV1 } from './users.js'
 
 beforeEach(() => clearV1());
 
@@ -52,51 +52,40 @@ describe("Correct Input", () => {
 
     
     test('channelsCreateV1 correct output', () => {
-        
-        const data = getData();
-        const channels = data.channels;
 
-        // owner members not changed to set bcos only one owner in this test
-        for (const channel of channels) {
-            channel.allMembers = new Set(channel.allMembers);
-        }
-        
-        expect(new Set(channels)).toStrictEqual(
-            new Set([
-                {
-                    channelId: channel1,
-                    name: "BOOST",
-                    isPublic: true,
-                    ownerMembers: [user1],
-                    allMembers: new Set([user1, user2, user3, user4]),
-                    messages: [],
-                },
-                {
-                    channelId: channel2,
-                    name: "CRUNCHIE",
-                    isPublic: true,
-                    ownerMembers: [user2],
-                    allMembers: new Set([user2, user3, user4]),
-                    messages: [],
-                },
-                {
-                    channelId: channel3,
-                    name: "EGGS",
-                    isPublic: true,
-                    ownerMembers: [user1],
-                    allMembers: new Set([user1, user2]),
-                    messages: [],
-                },
-                {
-                    channelId: channel4,
-                    name: "AERO",
-                    isPublic: false,
-                    ownerMembers: [user3],
-                    allMembers: new Set([user3]),
-                    messages: [],
-                },
-            ])
-        )
+        const user1Profile = userProfileV1(user1, user1).user;
+        const user2Profile = userProfileV1(user2, user2).user;
+        const user3Profile = userProfileV1(user3, user3).user;
+        const user4Profile = userProfileV1(user4, user4).user;
+        const user5Profile = userProfileV1(user5, user5).user;
+        console.log(channelDetailsV1(user1, channel1));
+        expect(channelDetailsV1(user1, channel1)).toStrictEqual({
+            name: "BOOST",
+            isPublic: true,
+            ownerMembers: [user1Profile],
+            allMembers: new Set([user1Profile, user2Profile, user3Profile, user4Profile]),
+        })
+
+        expect(channelDetailsV1(user2, channel2)).toStrictEqual({
+            name: "CRUNCHIE",
+            isPublic: true,
+            ownerMembers: [user2Profile],
+            allMembers: new Set([user2Profile, user3Profile, user4Profile]),
+        })
+
+        expect(channelDetailsV1(user1, channel3)).toStrictEqual({
+            name: "EGGS",
+            isPublic: true,
+            ownerMembers: [user1Profile],
+            allMembers: new Set([user1Profile, user2Profile]),
+        })
+
+        expect(channelDetailsV1(user3, channel4)).toStrictEqual({
+            name: "AERO",
+            isPublic: false,
+            ownerMembers: [user3Profile],
+            allMembers: new Set([user3Profile]),
+        })
     })
 
     test('channelsListV1 users 1-5', () => {

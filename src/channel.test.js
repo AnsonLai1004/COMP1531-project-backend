@@ -2,7 +2,6 @@ import { channelInviteV1, channelMessagesV1, channelDetailsV1, channelJoinV1 } f
 import { channelsCreateV1 } from './channels.js';
 import { authRegisterV1 } from './auth.js';
 import { clearV1 } from './other.js';
-import { getData } from './dataStore.js';
 
 beforeEach(() => {
     clearV1();
@@ -119,7 +118,7 @@ describe('channelDetailsV1', () => {
     const channel = channelsCreateV1(user.authUserId, 'secret candy crush team', true);
     expect(channelDetailsV1(-999, channel.channelId)).toStrictEqual({ error: 'error' });   
   })
-  
+
 	test('invalid channelId', () => {
     const user = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
@@ -164,12 +163,17 @@ describe('channelDetailsV1', () => {
 })
 
 describe('channelJoinV1', () => {
-  test('invalid input', () => {
+  test('invalid authUserId and channelId', () => {
     const user = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const member = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
     const channel = channelsCreateV1(user.authUserId, 'BOOST', true);
     expect(channelJoinV1(user.authUserId, -999)).toStrictEqual({ error: 'error' });   
     expect(channelJoinV1(-999, channel.channelId)).toStrictEqual({ error: 'error' });  
+  });
+  test('Authorised user is already a member of the channel, channel is private and not global owner', () => {
+    const user = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const member = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
+    const channel = channelsCreateV1(user.authUserId, 'BOOST', true);
     // authorised user is already a member of the channel
     expect(channelJoinV1(member.authUserId, channel.channelId)).toStrictEqual({});
     expect(channelJoinV1(member.authUserId, channel.channelId)).toStrictEqual({ error: 'error' });
@@ -177,7 +181,7 @@ describe('channelJoinV1', () => {
     // assume member is not a global owner 
     const private_channel = channelsCreateV1(user.authUserId, 'Private', false);
     expect(channelJoinV1(member.authUserId, channel.channelId)).toStrictEqual({ error: 'error' });
-  }) 
+  });
   test('correct return', () => {
     const user = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const member = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');

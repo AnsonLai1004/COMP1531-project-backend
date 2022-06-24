@@ -1,5 +1,7 @@
-import { getData, setData } from './dataStore.js'
+import { getData, setData } from './dataStore.js';
+import { userProfileV1 } from './users.js';
 export { channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1 }
+
 /**
  * implementation of channel.js
 **/
@@ -94,6 +96,7 @@ function channelMessagesV1(authUserId, channelId, start) {
         return { error: 'error'};
     }
     const end = start + 50;
+    
     if (end < numofmessages) {
         return {
             messages: messages,
@@ -136,11 +139,13 @@ function channelDetailsV1(authUserId, channelId) {
             if (isMember === false) {
                 return { error: 'error' };
             }
+            const owners = membersobjCreate(channel.ownerMembers);
+            const members = membersobjCreate(channel.allMembers);
             return {
                 name: channel.name, 
                 isPublic: channel.isPublic,
-                ownerMembers: channel.ownerMembers,
-                allMembers: channel.allMembers,
+                ownerMembers: owners,
+                allMembers: members,
             };           
         }
     }
@@ -210,3 +215,26 @@ function isValidUserId(authUserId) {
     }
     return false;
 }
+/**
+ * Helper function  
+ * Given an array of uid, return array of user 
+ * @param {integer[]} MembersArr 
+ * @returns {user[]} 
+ */
+function membersobjCreate(MembersArr) {
+    const result = [];
+    const data = getData();
+    for (let memberid of MembersArr) {
+        let user = userProfileV1(memberid, memberid);
+        result.push({
+            uId: user.user.uId, 
+            email: user.user.email,
+            nameFirst: user.user.nameFirst,
+            nameLast: user.user.nameLast,
+            handleStr: user.user.handleStr,
+        });
+    }
+    return result;
+}
+
+ 

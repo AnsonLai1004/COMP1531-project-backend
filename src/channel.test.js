@@ -33,8 +33,31 @@ describe('channelInviteV1', () => {
         expect(channelDetailsV1(owner.authUserId, newchannel.channelId)).toMatchObject({ 
             name: 'crush team', 
             isPublic: true,
-            ownerMembers: [ owner.authUserId ],
-            allMembers: [ owner.authUserId, notMember.authUserId ],
+            ownerMembers: [ 
+              {
+                email: "validemail@gmail.com",
+                handleStr: "jakerenzella",
+                nameFirst: "Jake",
+                nameLast: "Renzella",
+                uId: 1, 
+              }  
+            ],
+            allMembers: [
+              {
+                email: "validemail@gmail.com",
+                handleStr: "jakerenzella",
+                nameFirst: "Jake",
+                nameLast: "Renzella",
+                uId: 1, 
+              }, 
+              {
+                email: "Bob@gmail.com",
+                handleStr: "bobrenzella",
+                nameFirst: "Bob",
+                nameLast: "Renzella",
+                uId: 2,
+              } 
+            ],
         }); 
     });
 })
@@ -114,8 +137,24 @@ describe('channelDetailsV1', () => {
     expect(channelDetailsV1(user.authUserId, channel.channelId)).toMatchObject({ 
       name: 'BOOST', 
       isPublic: true,
-      ownerMembers: [ user.authUserId ],
-      allMembers: [ user.authUserId ], 
+      ownerMembers: [ 
+        {
+          uId: 1,
+          email: "abc@gmail.com",
+          handleStr: "jakerenzella",
+          nameFirst: "Jake",
+          nameLast: "Renzella",          
+        },
+      ],
+      allMembers: [
+        {
+          uId: 1,
+          email: "abc@gmail.com",
+          handleStr: "jakerenzella",
+          nameFirst: "Jake",
+          nameLast: "Renzella",          
+        },
+      ], 
     }); 
   })
 })
@@ -143,8 +182,31 @@ describe('channelJoinV1', () => {
     expect(channelDetailsV1(user.authUserId, channel.channelId)).toMatchObject({ 
       name: 'BOOST', 
       isPublic: true,
-      ownerMembers: [ user.authUserId ],
-      allMembers: [ user.authUserId, member.authUserId ], 
+      ownerMembers: [ 
+        {
+          email: "validemail@gmail.com",
+          handleStr: "jakerenzella",
+          nameFirst: "Jake",
+          nameLast: "Renzella",
+          uId: 1, 
+        }    
+      ],
+      allMembers: [ 
+        {
+          email: "validemail@gmail.com",
+          handleStr: "jakerenzella",
+          nameFirst: "Jake",
+          nameLast: "Renzella",
+          uId: 1, 
+        },
+        {
+          email: "Bob@gmail.com",
+          handleStr: "bobrenzella",
+          nameFirst: "Bob",
+          nameLast: "Renzella",
+          uId: 2,
+        } 
+      ], 
     }); 
   })
 })

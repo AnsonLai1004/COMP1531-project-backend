@@ -1,46 +1,29 @@
 import { clearV1 } from './other.js';
 import { authRegisterV1 } from './auth.js';
-import { channelsCreateV1 } from './channels.js';
-import { getData } from './dataStore.js';
+import { channelsCreateV1, channelsListallV1 } from './channels.js';
+import { userProfileV1 } from './users.js';
 
 test('clearV1 test', () => {
     const userA = authRegisterV1('hayhay123@gmail.com', '8743b52063cd84097a65d1633f5c74f5', 'Hayden', 'Smith');
     const channelA = channelsCreateV1(userA.authUserId, 'BOOST', true);   
-    const data = getData();
-    expect(data).toMatchObject({
-        users:[
-            {
-                uId: 1,
-                nameFirst: 'Hayden',
-                nameLast: 'Smith',
-                email: 'hayhay123@gmail.com',
-                password: '8743b52063cd84097a65d1633f5c74f5',
-                handleStr: 'haydensmith',
-                profilePicUrl: '/path/to/image',
-                isOnline: true,
-                isOwner: true,
-            }
-        ],
+    expect(userProfileV1(userA.authUserId, userA.authUserId)).toMatchObject({
+        user: {
+            uId: userA.authUserId, 
+            email: 'hayhay123@gmail.com',
+            nameFirst: 'Hayden',
+            nameLast: 'Smith',
+            handleStr: 'haydensmith',
+        }
+    });
+    expect(channelsListallV1(userA.authUserId)).toMatchObject({
         channels:[
             {
                 name: "BOOST",
-                isPublic: true,
                 channelId: 1,
-                ownerMembers: [ userA.authUserId ],
-                allMembers: [ userA.authUserId ],
-                messages: [],
             }
         ],
-        lastAuthUserId: data.users.length,
-        lastChannelId: data.channels.length,
     });
     clearV1();
-    const dataA = getData();
-    expect(dataA).toMatchObject({
-        users:[],
-        channels:[],
-        lastAuthUserId: 0,
-        lastChannelId: 0,
-    })
-    
+    expect(userProfileV1(userA.authUserId, userA.authUserId)).toMatchObject({ error: 'error' });
+    expect(channelsListallV1(userA.authUserId)).toMatchObject({ error: 'error' });
   });

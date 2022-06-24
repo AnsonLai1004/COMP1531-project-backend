@@ -119,6 +119,7 @@ describe('channelDetailsV1', () => {
     const channel = channelsCreateV1(user.authUserId, 'secret candy crush team', true);
     expect(channelDetailsV1(-999, channel.channelId)).toStrictEqual({ error: 'error' });   
   })
+  
 	test('invalid channelId', () => {
     const user = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');

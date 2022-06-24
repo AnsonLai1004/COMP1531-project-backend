@@ -15,7 +15,6 @@ test('clearV1 test', () => {
             handleStr: 'haydensmith',
         }
     });
-    console.log(channelsListallV1(userA.authUserId))
     expect(channelsListallV1(userA.authUserId)).toMatchObject({
         channels:[
             {

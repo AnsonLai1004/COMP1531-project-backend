@@ -58,29 +58,41 @@ describe("Correct Input", () => {
         const user3Profile = userProfileV1(user3, user3).user;
         const user4Profile = userProfileV1(user4, user4).user;
         const user5Profile = userProfileV1(user5, user5).user;
-        console.log(channelDetailsV1(user1, channel1));
-        expect(channelDetailsV1(user1, channel1)).toStrictEqual({
+
+        const channel1Details = channelDetailsV1(user1, channel1);
+        channel1Details.allMembers = new Set(channel1Details.allMembers);
+
+        const channel2Details = channelDetailsV1(user2, channel2);
+        channel2Details.allMembers = new Set(channel2Details.allMembers);
+
+        const channel3Details = channelDetailsV1(user1, channel3);
+        channel3Details.allMembers = new Set(channel3Details.allMembers);
+
+        const channel4Details = channelDetailsV1(user3, channel4);
+        channel4Details.allMembers = new Set(channel4Details.allMembers);
+        
+        expect(channel1Details).toStrictEqual({
             name: "BOOST",
             isPublic: true,
             ownerMembers: [user1Profile],
             allMembers: new Set([user1Profile, user2Profile, user3Profile, user4Profile]),
         })
 
-        expect(channelDetailsV1(user2, channel2)).toStrictEqual({
+        expect(channel2Details).toStrictEqual({
             name: "CRUNCHIE",
             isPublic: true,
             ownerMembers: [user2Profile],
             allMembers: new Set([user2Profile, user3Profile, user4Profile]),
         })
 
-        expect(channelDetailsV1(user1, channel3)).toStrictEqual({
+        expect(channel3Details).toStrictEqual({
             name: "EGGS",
             isPublic: true,
             ownerMembers: [user1Profile],
             allMembers: new Set([user1Profile, user2Profile]),
         })
 
-        expect(channelDetailsV1(user3, channel4)).toStrictEqual({
+        expect(channel4Details).toStrictEqual({
             name: "AERO",
             isPublic: false,
             ownerMembers: [user3Profile],

@@ -8,7 +8,7 @@ import isEmail from 'validator/lib/isEmail.js';
 const errorObject = {error: 'error'};
 
 /**
- * Stub for a function called authLoginV1
+ * A function called authLoginV1
  * Given a correct email - password pair, returns an object with
  * the matching user id
  * Returns an errorObject if email does not belong to a user or
@@ -20,13 +20,18 @@ const errorObject = {error: 'error'};
  */
 
 export function authLoginV1(email, password) {
-    return {
-        authUserId: 1,
+    const data = getData();
+    for (const user of data.users) {
+        if (email === user.email && password === user.password) {
+            return { authUserId: user.uId};
+        }
     }
+
+    return errorObject;
 }
 
 /**
- * Stub for a function called authRegisterV1
+ * A function called authRegisterV1
  * Registers a new user to the dataStore and returns their
  * unique user id
  * Returns an errorObject if email is invalid, already used by another user,
@@ -59,6 +64,12 @@ export function authRegisterV1(email, password, nameFirst, nameLast) {
     data.lastAuthUserId = newId;
 
     const handle = generateHandle(nameFirst, nameLast);
+    let isGlobalOwner = false;
+
+    if (newId === 1) {
+        // the first user who signs up
+        isGlobalOwner = true;
+    }
 
     const newUser = {
         'uId': newId,
@@ -69,7 +80,7 @@ export function authRegisterV1(email, password, nameFirst, nameLast) {
         'handleStr': handle,
         'profilePicUrl': '/path/to/image',
         'isOnline': true,
-        'isOwner': true,
+        'isOwner': isGlobalOwner,
     };
 
     data.users.push(newUser);
@@ -83,7 +94,7 @@ export function authRegisterV1(email, password, nameFirst, nameLast) {
 /**
  * Function which checks if a particular piece of data is
  * already used by another user.
- * @param {string} toCheck
+ * @param {string | number} toCheck
  * @param {string} field
  * @returns {boolean}
  */

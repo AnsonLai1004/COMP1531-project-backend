@@ -40,18 +40,41 @@ describe('channelInviteV1', () => {
     });
 
     // correct input output
-    test('Correct return on channelInviteV1', () => {
-			let owner = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-			let notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
-      let newchannel = channelsCreateV1(owner.authUserId, 'crush team', true);
-			// valid invite
-			expect(channelInviteV1(owner.authUserId, newchannel.channelId, notMember.authUserId)).toStrictEqual({});
-			expect(channelDetailsV1(owner.authUserId, newchannel.channelId)).toMatchObject({ 
-				name: 'crush team', 
-				isPublic: true,
-        ownerMembers: [ owner.authUserId ],
-        allMembers: [ owner.authUserId, notMember.authUserId ],
-      }); 
+    test('Cases for correct return on channelInviteV1', () => {
+        let owner = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+        let notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
+        let newchannel = channelsCreateV1(owner.authUserId, 'crush team', true);
+        // valid invite
+        expect(channelInviteV1(owner.authUserId, newchannel.channelId, notMember.authUserId)).toStrictEqual({});
+        expect(channelDetailsV1(owner.authUserId, newchannel.channelId)).toMatchObject({ 
+            name: 'crush team', 
+            isPublic: true,
+            ownerMembers: [ 
+              {
+                email: "validemail@gmail.com",
+                handleStr: "jakerenzella",
+                nameFirst: "Jake",
+                nameLast: "Renzella",
+                uId: 1, 
+              }  
+            ],
+            allMembers: [
+              {
+                email: "validemail@gmail.com",
+                handleStr: "jakerenzella",
+                nameFirst: "Jake",
+                nameLast: "Renzella",
+                uId: 1, 
+              }, 
+              {
+                email: "Bob@gmail.com",
+                handleStr: "bobrenzella",
+                nameFirst: "Bob",
+                nameLast: "Renzella",
+                uId: 2,
+              } 
+            ],
+        }); 
     });
 })
 
@@ -87,55 +110,6 @@ describe('channelMessagesV1', () => {
     // valid arguments assuming messages is empty
     expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 0)).toStrictEqual({messages: [], start: 0, end: -1});
   });
-
-	// cases where return is correct
-	test('Correct return on 1 message on array', () => {  
-		let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-    let newchannel = channelsCreateV1(aMember.authUserId, 'crush team', true);
-  	// messages have 1 message in array
-  	const data = getData();
-  	let newmessage = {
-			messageId: 1,
-      uId: 1,
-      message: "Hello",
-			timeSent: null
-    }
-		let messagearr = [];
-		for (const element of data.channels) {
-			if (element.channelId === newchannel.channelId) {
-				messagearr = element.messages
-				element.messages.push(newmessage);
-				break;
-			}
-		}
-		expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 0)).toStrictEqual({messages: messagearr, start: 0, end: -1});
-  });
-
-	test('correct return on length more than 50 on messages array', () => {  
-		let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-    let newchannel = channelsCreateV1(aMember.authUserId, 'crush team', true);
-  	const data = getData();
-  	let newmessage = {
-			messageId: 1,
-      uId: 1,
-      message: "Hello",
-			timeSent: null
-    }
-		let messagearr = [];
-		// messages have more than 50 messages
-		for (const element of data.channels) {
-			if (element.channelId === newchannel.channelId) {
-				for (let i = 0; i < 101; i++) {
-					element.messages.push(newmessage);
-					messagearr.push(newmessage);
-				}
-				break;
-			}
-		}
-		expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 0)).toStrictEqual({messages: messagearr, start: 0, end: 50});
-		expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 50)).toStrictEqual({messages: messagearr, start: 50, end: 100});
-		expect(channelMessagesV1(aMember.authUserId, newchannel.channelId, 100)).toStrictEqual({messages: messagearr, start: 100, end: -1});
-  });
 });
 
 describe('channelDetailsV1', () => {
@@ -166,8 +140,24 @@ describe('channelDetailsV1', () => {
     expect(channelDetailsV1(user.authUserId, channel.channelId)).toMatchObject({ 
       name: 'BOOST', 
       isPublic: true,
-      ownerMembers: [ user.authUserId ],
-      allMembers: [ user.authUserId ], 
+      ownerMembers: [ 
+        {
+          uId: 1,
+          email: "abc@gmail.com",
+          handleStr: "jakerenzella",
+          nameFirst: "Jake",
+          nameLast: "Renzella",          
+        },
+      ],
+      allMembers: [
+        {
+          uId: 1,
+          email: "abc@gmail.com",
+          handleStr: "jakerenzella",
+          nameFirst: "Jake",
+          nameLast: "Renzella",          
+        },
+      ], 
     }); 
   })
 })
@@ -195,8 +185,31 @@ describe('channelJoinV1', () => {
     expect(channelDetailsV1(user.authUserId, channel.channelId)).toMatchObject({ 
       name: 'BOOST', 
       isPublic: true,
-      ownerMembers: [ user.authUserId ],
-      allMembers: [ user.authUserId, member.authUserId ], 
+      ownerMembers: [ 
+        {
+          email: "validemail@gmail.com",
+          handleStr: "jakerenzella",
+          nameFirst: "Jake",
+          nameLast: "Renzella",
+          uId: 1, 
+        }    
+      ],
+      allMembers: [ 
+        {
+          email: "validemail@gmail.com",
+          handleStr: "jakerenzella",
+          nameFirst: "Jake",
+          nameLast: "Renzella",
+          uId: 1, 
+        },
+        {
+          email: "Bob@gmail.com",
+          handleStr: "bobrenzella",
+          nameFirst: "Bob",
+          nameLast: "Renzella",
+          uId: 2,
+        } 
+      ], 
     }); 
   })
 })

@@ -1,5 +1,10 @@
 // YOU SHOULD MODIFY THIS OBJECT BELOW
-let data = {};
+let data = {
+  users: [],
+  channels: [],
+  lastAuthUserId: 0,
+  lastChannelId: 0,
+};
 
 // YOU SHOULDNT NEED TO MODIFY THE FUNCTIONS BELOW IN ITERATION 1
 

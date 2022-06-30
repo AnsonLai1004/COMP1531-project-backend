@@ -1,12 +1,12 @@
 import { getData } from './dataStore.js';
 
-const errorObject = {error: 'error'};
+const errorObject = { error: 'error' };
 
 /**
- * Function which, given a valid authUserId and uId, returns the 
+ * Function which, given a valid authUserId and uId, returns the
  * details of the user whose uId matches the argument uId
- * @param {number} authUserId 
- * @param {number} uId 
+ * @param {number} authUserId
+ * @param {number} uId
  * @returns {user: {
  *  uId: number,
  *  email: string,
@@ -15,7 +15,7 @@ const errorObject = {error: 'error'};
   * handleStr: string
  * }}
  */
-function userProfileV1(authUserId, uId) {
+function userProfileV1(authUserId: number, uId: number) {
   if (!checkUserIdValid(authUserId)) {
     return errorObject;
   }
@@ -24,13 +24,13 @@ function userProfileV1(authUserId, uId) {
     if (uId === user.uId) {
       return {
         user: {
-          uId: user.uId, 
+          uId: user.uId,
           email: user.email,
           nameFirst: user.nameFirst,
           nameLast: user.nameLast,
           handleStr: user.handleStr
         }
-      }
+      };
     }
   }
 
@@ -39,17 +39,17 @@ function userProfileV1(authUserId, uId) {
 
 /**
  * Checks if a userId is valid.
- * @param {number} toCheck 
+ * @param {number} toCheck
  * @returns {boolean}
  */
-function checkUserIdValid(toCheck) {
+function checkUserIdValid(toCheck: number) {
   const data = getData();
   for (const user of data.users) {
     if (toCheck === user.uId) {
-        return true;
+      return true;
     }
   }
   return false;
 }
 
-export { userProfileV1 }
+export { userProfileV1 };

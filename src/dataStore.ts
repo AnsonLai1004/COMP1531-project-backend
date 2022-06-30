@@ -1,10 +1,26 @@
-// YOU SHOULD MODIFY THIS OBJECT BELOW
+import { User, Channel, DM, TokenPair } from './interfaces';
+
 let data = {
-  users: [],
-  channels: [],
+  users: [] as User[],
+  channels: [] as Channel[],
+  dms: [] as DM[],
+  tokens: [] as TokenPair[],
   lastAuthUserId: 0,
   lastChannelId: 0,
+  lastDMId: 0,
+  lastMessageId: 0
 };
+
+interface DataStore {
+  users: User[];
+  channels: Channel[];
+  dms: DM[];
+  tokens: TokenPair[];
+  lastAuthUserId: number;
+  lastChannelId: number;
+  lastDMId: number;
+  lastMessageId: number;
+}
 
 // YOU SHOULDNT NEED TO MODIFY THE FUNCTIONS BELOW IN ITERATION 1
 
@@ -23,12 +39,12 @@ Example usage
 */
 
 // Use get() to access the data
-function getData() {
+function getData(): DataStore {
   return data;
 }
 
 // Use set(newData) to pass in the entire data object, with modifications made
-function setData(newData) {
+function setData(newData: DataStore) {
   data = newData;
 }
 

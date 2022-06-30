@@ -1,11 +1,11 @@
 /**
  * implementation of auth.js
 **/
-import { User } from './interfaces'
+import { User } from './interfaces';
 import { getData, setData } from './dataStore';
 import isEmail from 'validator/lib/isEmail.js';
 
-const errorObject = {error: 'error'};
+const errorObject = { error: 'error' };
 
 /**
  * A function called authLoginV1
@@ -13,21 +13,21 @@ const errorObject = {error: 'error'};
  * the matching user id
  * Returns an errorObject if email does not belong to a user or
  * password is incorrect
- * 
- * @param {string} email 
- * @param {string} password 
+ *
+ * @param {string} email
+ * @param {string} password
  * @returns {{authUserId: number}}
  */
 
 export function authLoginV1(email: string, password: string) {
-    const data = getData();
-    for (const user of data.users) {
-        if (email === user.email && password === user.password) {
-            return { authUserId: user.uId};
-        }
+  const data = getData();
+  for (const user of data.users) {
+    if (email === user.email && password === user.password) {
+      return { authUserId: user.uId };
     }
+  }
 
-    return errorObject;
+  return errorObject;
 }
 
 /**
@@ -37,56 +37,56 @@ export function authLoginV1(email: string, password: string) {
  * Returns an errorObject if email is invalid, already used by another user,
  * password is less than 6 characters, or nameFirst or nameLast are not
  * between 1 and 50 characters inclusive.
- * 
- * @param {string} email 
- * @param {string} password 
- * @param {string} nameFirst 
- * @param {string} nameLast 
+ *
+ * @param {string} email
+ * @param {string} password
+ * @param {string} nameFirst
+ * @param {string} nameLast
  * @returns {{authUserId: number}}
  */
 
 export function authRegisterV1(email: string, password: string, nameFirst: string, nameLast: string) {
-    if (!isEmail(email) || checkDuplicateUserData(email, 'email')) {
-        return errorObject;
-    }
-    if (password.length < 6) {
-        return errorObject;
-    }
-    if (nameFirst.length < 1 || nameFirst.length > 50) {
-        return errorObject;
-    }
-    if (nameLast.length < 1 || nameLast.length > 50) {
-        return errorObject;
-    }
+  if (!isEmail(email) || checkDuplicateUserData(email, 'email')) {
+    return errorObject;
+  }
+  if (password.length < 6) {
+    return errorObject;
+  }
+  if (nameFirst.length < 1 || nameFirst.length > 50) {
+    return errorObject;
+  }
+  if (nameLast.length < 1 || nameLast.length > 50) {
+    return errorObject;
+  }
 
-    const data = getData();
-    const newId = data.lastAuthUserId + 1;
-    data.lastAuthUserId = newId;
+  const data = getData();
+  const newId = data.lastAuthUserId + 1;
+  data.lastAuthUserId = newId;
 
-    const handle = generateHandle(nameFirst, nameLast);
-    let isGlobalOwner = false;
+  const handle = generateHandle(nameFirst, nameLast);
+  let isGlobalOwner = false;
 
-    if (newId === 1) {
-        // the first user who signs up
-        isGlobalOwner = true;
-    }
+  if (newId === 1) {
+    // the first user who signs up
+    isGlobalOwner = true;
+  }
 
-    const newUser = {
-        'uId': newId,
-        'nameFirst': nameFirst,
-        'nameLast': nameLast,
-        'email': email,
-        'password': password,
-        'handleStr': handle,
-        'isGlobalOwner': isGlobalOwner,
-    };
+  const newUser = {
+    uId: newId,
+    nameFirst: nameFirst,
+    nameLast: nameLast,
+    email: email,
+    password: password,
+    handleStr: handle,
+    isGlobalOwner: isGlobalOwner,
+  };
 
-    data.users.push(newUser);
-    setData(data);
+  data.users.push(newUser);
+  setData(data);
 
-    return {
-        authUserId: newId
-    }
+  return {
+    authUserId: newId
+  };
 }
 
 /**
@@ -97,13 +97,13 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
  * @returns {boolean}
  */
 function checkDuplicateUserData(toCheck: string | number, field: keyof User) {
-    const data = getData();
-    for (const user of data.users) {
-        if (toCheck === user[field]) {
-            return true;
-        }
+  const data = getData();
+  for (const user of data.users) {
+    if (toCheck === user[field]) {
+      return true;
     }
-    return false;
+  }
+  return false;
 }
 
 /**
@@ -111,22 +111,21 @@ function checkDuplicateUserData(toCheck: string | number, field: keyof User) {
  * first name and last name concatenated, casted to lowercase,
  * non-alphanumeric characters removed and truncated at 20 characters.
  * A number index is appended at the end if the handle already exists.
- * @param {string} nameFirst 
- * @param {string} nameLast 
+ * @param {string} nameFirst
+ * @param {string} nameLast
  * @returns {string}
  */
 const generateHandle = function(nameFirst: string, nameLast: string) {
-    let prelimHandle = (nameFirst + nameLast).toLowerCase();
-    prelimHandle = prelimHandle.replace(/[_\W]/g, '');
-    prelimHandle = prelimHandle.slice(0, 20);
+  let prelimHandle = (nameFirst + nameLast).toLowerCase();
+  prelimHandle = prelimHandle.replace(/[_\W]/g, '');
+  prelimHandle = prelimHandle.slice(0, 20);
 
-    let finalHandle = prelimHandle;
-    let i = 0;
-    while (checkDuplicateUserData(finalHandle, 'handleStr')) {
-        finalHandle = prelimHandle + `${i}`;
-        i++;
-    }
-    
-    return finalHandle;
-}
+  let finalHandle = prelimHandle;
+  let i = 0;
+  while (checkDuplicateUserData(finalHandle, 'handleStr')) {
+    finalHandle = prelimHandle + `${i}`;
+    i++;
+  }
 
+  return finalHandle;
+};

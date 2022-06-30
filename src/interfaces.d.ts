@@ -4,7 +4,7 @@
  */
 
 /**
- * User object: contains uId, nameFirst, nameLast, email, 
+ * User object: contains uId, nameFirst, nameLast, email,
  * password, handleStr, isGlobalOwner
  */
 export interface User {
@@ -44,4 +44,3 @@ export interface TokenPair {
     token: string;
     uId: number;
 }
-

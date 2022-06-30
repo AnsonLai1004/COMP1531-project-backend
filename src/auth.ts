@@ -19,7 +19,7 @@ const errorObject = {error: 'error'};
  * @returns {{authUserId: number}}
  */
 
-export function authLoginV1(email, password) {
+export function authLoginV1(email: string, password: string) {
     const data = getData();
     for (const user of data.users) {
         if (email === user.email && password === user.password) {
@@ -45,7 +45,7 @@ export function authLoginV1(email, password) {
  * @returns {{authUserId: number}}
  */
 
-export function authRegisterV1(email, password, nameFirst, nameLast) {
+export function authRegisterV1(email: string, password: string, nameFirst: string, nameLast: string) {
     if (!isEmail(email) || checkDuplicateUserData(email, 'email')) {
         return errorObject;
     }
@@ -98,7 +98,7 @@ export function authRegisterV1(email, password, nameFirst, nameLast) {
  * @param {string} field
  * @returns {boolean}
  */
-function checkDuplicateUserData(toCheck, field) {
+function checkDuplicateUserData(toCheck: string | number, field: string) {
     const data = getData();
     for (const user of data.users) {
         if (toCheck === user[field]) {
@@ -117,7 +117,7 @@ function checkDuplicateUserData(toCheck, field) {
  * @param {string} nameLast 
  * @returns {string}
  */
-const generateHandle = function(nameFirst, nameLast) {
+const generateHandle = function(nameFirst: string, nameLast: string) {
     let prelimHandle = (nameFirst + nameLast).toLowerCase();
     prelimHandle = prelimHandle.replace(/[_\W]/g, '');
     prelimHandle = prelimHandle.slice(0, 20);

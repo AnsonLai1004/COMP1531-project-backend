@@ -1,8 +1,8 @@
 /**
  * implementation of auth.js
 **/
-
-import { getData, setData } from './dataStore.js';
+import { User } from './interfaces'
+import { getData, setData } from './dataStore';
 import isEmail from 'validator/lib/isEmail.js';
 
 const errorObject = {error: 'error'};
@@ -78,9 +78,7 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
         'email': email,
         'password': password,
         'handleStr': handle,
-        'profilePicUrl': '/path/to/image',
-        'isOnline': true,
-        'isOwner': isGlobalOwner,
+        'isGlobalOwner': isGlobalOwner,
     };
 
     data.users.push(newUser);
@@ -98,7 +96,7 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
  * @param {string} field
  * @returns {boolean}
  */
-function checkDuplicateUserData(toCheck: string | number, field: string) {
+function checkDuplicateUserData(toCheck: string | number, field: keyof User) {
     const data = getData();
     for (const user of data.users) {
         if (toCheck === user[field]) {

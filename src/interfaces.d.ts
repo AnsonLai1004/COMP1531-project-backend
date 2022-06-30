@@ -3,6 +3,10 @@
  * storing data in dataStore.ts and accessed by other files.
  */
 
+/**
+ * User object: contains uId, nameFirst, nameLast, email, 
+ * password, handleStr, isGlobalOwner
+ */
 export interface User {
     uId: number;
     nameFirst: string;
@@ -13,7 +17,7 @@ export interface User {
     isGlobalOwner: boolean;
 }
 
-export interface Message {
+interface Message {
     messageId: number;
     uId: number;
     message: string;
@@ -41,13 +45,3 @@ export interface TokenPair {
     uId: number;
 }
 
-interface DataStore {
-    users: User[];
-    channels: Channel[];
-    dms: DM[];
-    tokens: TokenPair[];
-    lastAuthUserId: number;
-    lastChannelId: number;
-    lastDMId: number;
-    lastMessageId: number;
-}

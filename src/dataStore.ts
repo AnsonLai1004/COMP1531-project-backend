@@ -1,4 +1,5 @@
-// YOU SHOULD MODIFY THIS OBJECT BELOW
+import { User, Channel, DM, TokenPair } from './interfaces';
+
 let data = {
   users: [] as User[],
   channels: [] as Channel[],
@@ -9,44 +10,6 @@ let data = {
   lastDMId: 0,
   lastMessageId: 0
 };
-
-interface User {
-  uId: number;
-  nameFirst: string;
-  nameLast: string;
-  email: string;
-  password: string;
-  handleStr: string;
-  isGlobalOwner: boolean;
-}
-
-interface Message {
-  messageId: number;
-  uId: number;
-  message: string;
-  timeSent: number;
-}
-
-interface Channel {
-  channelId: number;
-  name: string;
-  ownerMembers: number[];
-  allMembers: number[];
-  messages: Message[];
-}
-
-interface DM {
-  dmId: number;
-  name: string;
-  ownerId:  number;
-  uIds: number[];
-  messages: Message[];
-}
-
-interface TokenPair {
-  token: string;
-  uId: number;
-}
 
 interface DataStore {
   users: User[];

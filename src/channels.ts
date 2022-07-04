@@ -8,7 +8,7 @@ import { getData, setData } from './dataStore.js'
 // Returns -
 //  @{channelId (integer)} - if channel is newly made
 //  @ERROR - if invalid user id passed in || 1 > name length || name length > 20
-function channelsCreateV1(authUserId, name, isPublic) {
+function channelsCreateV1(authUserId: number, name: string, isPublic: boolean) {
 
     // INVALID NAME
     if (name.length < 1 || name.length > 20) {
@@ -45,7 +45,7 @@ function channelsCreateV1(authUserId, name, isPublic) {
 // Returns -
 //  @channels (<Array> { channelId (integer), name (string) }) - if valid id passed in
 //  @ERROR - if invalid user id passed in 
-function channelsListV1(authUserId) {
+function channelsListV1(authUserId: number) {
 
     // CHECK IF USERID VALID
     const dataStore = getData();
@@ -79,7 +79,7 @@ function channelsListV1(authUserId) {
 // Returns -
 //  @channels (<Array> { channelId (integer), name (string) }) - if valid id passed in
 //  @ERROR - if invalid user id passed in 
-function channelsListallV1(authUserId) {
+function channelsListallV1(authUserId: number) {
 
     // CHECK IF USERID VALID
     const dataStore = getData();
@@ -102,7 +102,7 @@ function channelsListallV1(authUserId) {
 }
 
 // Helper function to find out whether the uId is a valid user | returns bool
-function checkValidId(authUserId, dataStore) {
+function checkValidId(authUserId: number, dataStore) {
     for (const user of dataStore.users) {
         if (user.uId === authUserId) {
             return true;

@@ -11,7 +11,7 @@ let data = {
   lastMessageId: 0
 };
 
-interface DataStore {
+export interface DataStore {
   users: User[];
   channels: Channel[];
   dms: DM[];

@@ -4,12 +4,12 @@
  */
 
 import request from 'sync-request';
-import { SERVER_URL } from './config';
+import { port, url } from './config.json';
 
 export function requestAuthLogin(email: string, password: string) {
   const res = request(
     'POST',
-    SERVER_URL + '/auth/login/v2',
+    `${url}:${port}` + '/auth/login/v2',
     {
       json: {
         email, password
@@ -22,7 +22,7 @@ export function requestAuthLogin(email: string, password: string) {
 export function requestAuthRegister(email: string, password: string, nameFirst: string, nameLast: string) {
   const res = request(
     'POST',
-    SERVER_URL + '/auth/register/v2',
+    `${url}:${port}` + '/auth/register/v2',
     {
       json: {
         email, password, nameFirst, nameLast
@@ -35,7 +35,7 @@ export function requestAuthRegister(email: string, password: string, nameFirst: 
 export function requestClear() {
   const res = request(
     'DELETE',
-    SERVER_URL + '/clear/v1',
+    `${url}:${port}` + '/clear/v1',
     {}
   );
   return JSON.parse(res.getBody() as string);

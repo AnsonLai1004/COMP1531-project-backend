@@ -6,7 +6,9 @@ export { channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1 };
 /**
  * implementation of channel.js
 **/
-
+interface error {
+  error: string;
+}
 /**
  * Invites a user with ID uId to join a channel with ID channelId.
  * returns empty if success, otherwise error
@@ -118,9 +120,16 @@ function channelMessagesV1(authUserId: number, channelId: number, start: number)
  * provide basic details about the channel.
  * @param {number} authUserId
  * @param {number} channelId
- * @returns {{name: string, isPublic: boolean, ownerMembers:  number[], allMembers:  number[]}}
+ * @returns {{name: string, isPublic: boolean, ownerMembers: membersobj[], allMembers: membersobj[]}}
  */
-function channelDetailsV1(authUserId: number, channelId: number) {
+interface detail {
+  name: string;
+  isPublic: boolean;
+  ownerMembers: membersobj[];
+  allMembers: membersobj[];
+}
+type DetailReturn = detail | error;
+function channelDetailsV1(authUserId: number, channelId: number): DetailReturn {
   // check if authUserId is valid
   if (!isValidUserId(authUserId)) {
     return { error: 'error' };
@@ -227,9 +236,6 @@ interface member {
     nameFirst: string;
     nameLast: string;
     handleStr: string;
-}
-interface error {
-    error: string;
 }
 type membersobj = member | error;
 function membersobjCreate(MembersArr: number[]): membersobj[] {

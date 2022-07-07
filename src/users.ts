@@ -1,5 +1,4 @@
 import { getData } from './dataStore.js';
-
 const errorObject = { error: 'error' };
 
 /**
@@ -28,7 +27,7 @@ function userProfileV1(authUserId: number, uId: number) {
           email: user.email,
           nameFirst: user.nameFirst,
           nameLast: user.nameLast,
-          handleStr: user.handleStr
+          handleStr: user.handleStr,
         }
       };
     }

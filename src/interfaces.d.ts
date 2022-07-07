@@ -30,6 +30,7 @@ export interface Channel {
     ownerMembers: number[];
     allMembers: number[];
     messages: Message[];
+    isPublic: boolean;
 }
 
 export interface DM {
@@ -44,3 +45,4 @@ export interface TokenPair {
     token: string;
     uId: number;
 }
+

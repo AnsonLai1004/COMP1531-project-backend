@@ -222,24 +222,22 @@ function isValidUserId(authUserId: number) {
  * @param {number[]} MembersArr 
  * @returns {user[]} 
  */
- interface user {
-    user: {
-        uId: number;
-        email: string;
-        nameFirst: string;
-        nameLast: string;
-        handleStr: string;
-    }
+interface member {
+    uId: number;
+    email: string;
+    nameFirst: string;
+    nameLast: string;
+    handleStr: string;
 }
 interface error {
     error: string;
 }
-type userProfile = user | error;
-function membersobjCreate(MembersArr: number[]) {
+type membersobj = member | error;
+function membersobjCreate(MembersArr: number[]): membersobj[] {
     const result = [];
     const data = getData();
     for (let memberid of MembersArr) {
-        let user: userProfile = userProfileV1(memberid, memberid);
+        let user = userProfileV1(memberid, memberid);
         result.push({
             uId: user.user.uId, 
             email: user.user.email,

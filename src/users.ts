@@ -1,6 +1,17 @@
 import { getData } from './dataStore.js';
 const errorObject = { error: 'error' };
 
+interface userProfileReturn {
+  user?: {
+    uId: number,
+    email: string,
+    nameFirst: string,
+    nameLast: string,
+    handleStr: string
+  };
+  error?: string;
+}
+
 /**
  * Function which, given a valid authUserId and uId, returns the
  * details of the user whose uId matches the argument uId
@@ -14,7 +25,7 @@ const errorObject = { error: 'error' };
   * handleStr: string
  * }}
  */
-function userProfileV1(authUserId: number, uId: number) {
+function userProfileV1(authUserId: number, uId: number): userProfileReturn {
   if (!checkUserIdValid(authUserId)) {
     return errorObject;
   }

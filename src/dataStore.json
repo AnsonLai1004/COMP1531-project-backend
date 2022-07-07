@@ -1,0 +1,10 @@
+{
+    "users": [],
+    "channels": [],
+    "dms": [],
+    "tokens": [],
+    "lastAuthUserId": 0,
+    "lastChannelId": 0,
+    "lastDMId": 0,
+    "lastMessageId": 0
+}

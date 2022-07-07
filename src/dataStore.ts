@@ -1,3 +1,8 @@
+/**
+ * stores data while program is running
+ * also contains helper functions to access and set the data
+ * @module dataStore
+**/
 import { User, Channel, DM, TokenPair } from './interfaces';
 
 let data = {
@@ -21,22 +26,6 @@ export interface DataStore {
   lastDMId: number;
   lastMessageId: number;
 }
-
-// YOU SHOULDNT NEED TO MODIFY THE FUNCTIONS BELOW IN ITERATION 1
-
-/*
-Example usage
-    let store = getData()
-    console.log(store) # Prints { 'names': ['Hayden', 'Tam', 'Rani', 'Giuliana', 'Rando'] }
-
-    names = store.names
-
-    names.pop()
-    names.push('Jake')
-
-    console.log(store) # Prints { 'names': ['Hayden', 'Tam', 'Rani', 'Giuliana', 'Jake'] }
-    setData(store)
-*/
 
 // Use get() to access the data
 function getData(): DataStore {

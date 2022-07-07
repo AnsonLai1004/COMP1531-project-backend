@@ -1,5 +1,6 @@
 /**
- * implementation of auth.js
+ * implementation of auth-related functions
+ * @module auth
 **/
 import { User } from './interfaces';
 import { getData, setData } from './dataStore';
@@ -30,6 +31,11 @@ export function authLoginV1(email: string, password: string) {
   return errorObject;
 }
 
+interface authRegisterReturn {
+  authUserId?: number;
+  error?: string;
+}
+
 /**
  * A function called authRegisterV1
  * Registers a new user to the dataStore and returns their
@@ -44,8 +50,7 @@ export function authLoginV1(email: string, password: string) {
  * @param {string} nameLast
  * @returns {{authUserId: number}}
  */
-
-export function authRegisterV1(email: string, password: string, nameFirst: string, nameLast: string) {
+export function authRegisterV1(email: string, password: string, nameFirst: string, nameLast: string): authRegisterReturn {
   if (!isEmail(email) || checkDuplicateUserData(email, 'email')) {
     return errorObject;
   }

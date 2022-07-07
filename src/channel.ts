@@ -1,5 +1,5 @@
-import { getData, setData } from './dataStore.js';
-import { userProfileV1 } from './users.js';
+import { getData, setData } from './dataStore';
+import { userProfileV1 } from './users';
 import { Message } from './interfaces';
 export { channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1 };
 

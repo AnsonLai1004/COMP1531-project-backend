@@ -1,7 +1,7 @@
-import { channelInviteV1, channelMessagesV1, channelDetailsV1, channelJoinV1 } from './channel.js';
-import { channelsCreateV1 } from './channels.js';
-import { authRegisterV1 } from './auth.js';
-import { clearV1 } from './other.js';
+import { channelInviteV1, channelMessagesV1, channelDetailsV1, channelJoinV1 } from './channel';
+import { channelsCreateV1 } from './channels';
+import { authRegisterV1 } from './auth';
+import { clearV1 } from './other';
 
 beforeEach(() => {
     clearV1();
@@ -13,7 +13,7 @@ describe('channelInviteV1', () => {
       let aMember = authRegisterV1('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
       let notMember = authRegisterV1('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
       // invalid channelid
-      expect(channelInviteV1(aMember.authUserId, -999, notMember)).toStrictEqual({ error: 'error' });
+      expect(channelInviteV1(aMember.authUserId, -999, notMember.authUserId)).toStrictEqual({ error: 'error' });
     });
     
     test('Error case for invalid uId', () => {

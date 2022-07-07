@@ -17,7 +17,7 @@ export interface User {
     isGlobalOwner: boolean;
 }
 
-interface Message {
+export interface Message {
     messageId: number;
     uId: number;
     message: string;

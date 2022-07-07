@@ -31,7 +31,7 @@ export function authLoginV1(email: string, password: string) {
   return errorObject;
 }
 
-interface authRegisterReturn {
+interface authRegisterV1Return {
   authUserId?: number;
   error?: string;
 }
@@ -50,7 +50,7 @@ interface authRegisterReturn {
  * @param {string} nameLast
  * @returns {{authUserId: number}}
  */
-export function authRegisterV1(email: string, password: string, nameFirst: string, nameLast: string): authRegisterReturn {
+export function authRegisterV1(email: string, password: string, nameFirst: string, nameLast: string): authRegisterV1Return {
   if (!isEmail(email) || checkDuplicateUserData(email, 'email')) {
     return errorObject;
   }
@@ -94,6 +94,34 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
   };
 }
 
+export function authRegisterV2(email: string, password: string, nameFirst: string, nameLast: string) {
+  const register = authRegisterV1(email, password, nameFirst, nameLast);
+  if ('error' in register) {
+    return errorObject;
+  }
+  const token = generateToken(register.authUserId);
+  return {
+    token: token,
+    authUserId: register.authUserId
+  };
+}
+
+/// //////////////////////// Helper Functions ////////////////////////////////
+
+/**
+ * Function which generates a new unique user token
+ * @returns {string}
+ */
+function generateToken(uId: number) {
+  const data = getData();
+  const tokenNum = data.lastToken + 1;
+  const tokenStr = tokenNum.toString();
+  data.lastToken = tokenNum;
+  data.tokens.push({ token: tokenStr, uId: uId });
+  setData(data);
+  return tokenStr;
+}
+
 /**
  * Function which checks if a particular piece of data is
  * already used by another user.
@@ -101,7 +129,7 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
  * @param {string} field
  * @returns {boolean}
  */
-function checkDuplicateUserData(toCheck: string | number, field: keyof User) {
+function checkDuplicateUserData(toCheck: string | number, field: keyof User): boolean {
   const data = getData();
   for (const user of data.users) {
     if (toCheck === user[field]) {

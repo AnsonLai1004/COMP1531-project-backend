@@ -14,7 +14,8 @@ function clearV1() {
     lastAuthUserId: 0,
     lastChannelId: 0,
     lastDMId: 0,
-    lastMessageId: 0
+    lastMessageId: 0,
+    lastToken: 0
   };
   setData(data);
   return {};

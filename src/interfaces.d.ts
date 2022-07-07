@@ -45,4 +45,3 @@ export interface TokenPair {
     token: string;
     uId: number;
 }
-

@@ -9,6 +9,24 @@ export { channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1 };
 interface error {
   error: string;
 }
+
+interface member {
+  uId: number;
+  email: string;
+  nameFirst: string;
+  nameLast: string;
+  handleStr: string;
+}
+type membersobj = member | error;
+
+interface detail {
+  name: string;
+  isPublic: boolean;
+  ownerMembers: membersobj[];
+  allMembers: membersobj[];
+}
+type DetailReturn = detail | error;
+
 /**
  * Invites a user with ID uId to join a channel with ID channelId.
  * returns empty if success, otherwise error
@@ -122,13 +140,7 @@ function channelMessagesV1(authUserId: number, channelId: number, start: number)
  * @param {number} channelId
  * @returns {{name: string, isPublic: boolean, ownerMembers: membersobj[], allMembers: membersobj[]}}
  */
-interface detail {
-  name: string;
-  isPublic: boolean;
-  ownerMembers: membersobj[];
-  allMembers: membersobj[];
-}
-type DetailReturn = detail | error;
+
 function channelDetailsV1(authUserId: number, channelId: number): DetailReturn {
   // check if authUserId is valid
   if (!isValidUserId(authUserId)) {
@@ -230,14 +242,7 @@ function isValidUserId(authUserId: number) {
  * @param {number[]} MembersArr
  * @returns {user[]}
  */
-interface member {
-    uId: number;
-    email: string;
-    nameFirst: string;
-    nameLast: string;
-    handleStr: string;
-}
-type membersobj = member | error;
+
 function membersobjCreate(MembersArr: number[]): membersobj[] {
   const result = [];
   for (const memberid of MembersArr) {

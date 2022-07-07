@@ -1,4 +1,9 @@
-import { getData } from './dataStore.js';
+/**
+ * implementation of user-related functions
+ * @module user
+**/
+import { getData } from './dataStore';
+
 const errorObject = { error: 'error' };
 
 interface userProfileReturn {
@@ -17,13 +22,7 @@ interface userProfileReturn {
  * details of the user whose uId matches the argument uId
  * @param {number} authUserId
  * @param {number} uId
- * @returns {user: {
- *  uId: number,
- *  email: string,
-  * nameFirst: string,
-  * nameFirst: string,
-  * handleStr: string
- * }}
+ * @returns {userProfileReturn}
  */
 function userProfileV1(authUserId: number, uId: number): userProfileReturn {
   if (!checkUserIdValid(authUserId)) {

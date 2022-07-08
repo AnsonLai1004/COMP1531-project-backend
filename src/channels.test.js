@@ -1,8 +1,8 @@
-import { channelsCreateV1, channelsListV1, channelsListallV1 } from './channels.js'
-import { authLoginV1, authRegisterV1 } from './auth.js'
-import { channelJoinV1, channelDetailsV1 } from './channel.js'
-import { clearV1 } from './other.js'
-import { userProfileV1 } from './users.js'
+import { channelsCreateV1, channelsListV1, channelsListallV1 } from './channels'
+import { authRegisterV1 } from './auth'
+import { channelJoinV1, channelDetailsV1 } from './channel'
+import { clearV1 } from './other'
+import { userProfileV1 } from './users'
 
 beforeEach(() => clearV1());
 
@@ -13,13 +13,13 @@ describe("Channels Functions Errors", () => {
         expect(channelsCreateV1(validAuthUserId, "", true)).toStrictEqual({error: "error"});
         expect(channelsCreateV1(validAuthUserId, "123456890712345678901", true)).toStrictEqual({error: "error"});
         // ASSUMPTION - invalid authUserId returns error
-        expect(channelsCreateV1("Invalid ID", "TheoAng", true)).toStrictEqual({error: "error"});
+        expect(channelsCreateV1(validAuthUserId + 42, "TheoAng", true)).toStrictEqual({error: "error"});
     })
 
     // ASSUMPTION - invalid authUserId returns error
     test('invalid ID channelsListV1 channelsListallV1', () => {  
-        expect(channelsListV1("Invalid ID")).toStrictEqual({error: "error"});
-        expect(channelsListallV1("Invalid ID")).toStrictEqual({error: "error"});
+        expect(channelsListV1(42)).toStrictEqual({error: "error"});
+        expect(channelsListallV1(42)).toStrictEqual({error: "error"});
     })
 })
 

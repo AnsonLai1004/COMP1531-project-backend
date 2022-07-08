@@ -1,10 +1,10 @@
-import { getData, setData } from './dataStore';
+import { getData, setData } from './data';
 import { userProfileV1 } from './users';
 import { Message } from './interfaces';
 export { channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1 };
 
 /**
- * implementation of channel.js
+ * implementation of channel related functions
 **/
 interface error {
   error: string;
@@ -19,13 +19,13 @@ interface member {
 }
 type membersobj = member | error;
 
-interface detail {
-  name: string;
-  isPublic: boolean;
-  ownerMembers: membersobj[];
-  allMembers: membersobj[];
+interface DetailReturn {
+  name?: string;
+  isPublic?: boolean;
+  ownerMembers?: membersobj[];
+  allMembers?: membersobj[];
+  error?: string;
 }
-type DetailReturn = detail | error;
 
 /**
  * Invites a user with ID uId to join a channel with ID channelId.

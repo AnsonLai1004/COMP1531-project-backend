@@ -2,7 +2,7 @@
  * implementation of user-related functions
  * @module user
 **/
-import { getData } from './dataStore';
+import { getData } from './data';
 
 const errorObject = { error: 'error' };
 

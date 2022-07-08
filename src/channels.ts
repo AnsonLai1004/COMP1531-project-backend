@@ -1,6 +1,6 @@
-import { getData, setData } from './dataStore';
+import { getData, setData } from './data';
 import { Message } from './interfaces';
-import { DataStore } from './dataStore';
+import { DataStore } from './data';
 
 //  Creates a new channel object and appends it to the channels section of the dataStore
 // Arguments -

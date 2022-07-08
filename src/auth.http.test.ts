@@ -2,7 +2,7 @@
  * Test file for auth routes endpoints and status codes.
  */
 
-import { requestAuthRegister, requestClear } from './requests';
+import { requestAuthRegister, requestAuthLogin, requestClear } from './requests';
 
 beforeEach(() => {
   requestClear();
@@ -61,5 +61,29 @@ describe('Testing authRegister function valid cases', () => {
     const registered2 = requestAuthRegister('different@gmail.com', 'password', 'Hermione', 'Granger');
     expect(registered1.token !== registered2.token);
     expect(registered1.authUserId !== registered2.authUserId);
+  });
+});
+
+describe('Testing authLogin function error cases', () => {
+  test('Email does not belong to a user', () => {
+    const login = requestAuthLogin('invalid@gmail.com', 'password');
+    expect(login).toStrictEqual({ error: 'error' });
+  });
+
+  test('Wrong password', () => {
+    requestAuthRegister('valid@gmail.com', 'password', 'Harry', 'Potter');
+    const login = requestAuthLogin('valid@gmail.com', 'wrongpassword');
+    expect(login).toStrictEqual({ error: 'error' });
+  });
+});
+
+describe('Testing authLogin function valid cases', () => {
+  test('Valid login', () => {
+    const registered = requestAuthRegister('valid@gmail.com', 'password', 'Harry', 'Potter');
+    const login = requestAuthLogin('valid@gmail.com', 'password');
+    expect(login).toStrictEqual({
+      token: expect.any(String),
+      authUserId: registered.authUserId
+    });
   });
 });

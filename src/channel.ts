@@ -136,17 +136,21 @@ function channelMessagesV1(authUserId: number, channelId: number, start: number)
 /**
  * Given a channel with ID channelId that the authorised user is a member of,
  * provide basic details about the channel.
- * @param {number} authUserId
+ * @param {string} token
  * @param {number} channelId
  * @returns {{name: string, isPublic: boolean, ownerMembers: membersobj[], allMembers: membersobj[]}}
  */
 
-function channelDetailsV1(authUserId: number, channelId: number): DetailReturn {
-  // check if authUserId is valid
-  if (!isValidUserId(authUserId)) {
+function channelDetailsV1(token: string, channelId: number): DetailReturn {
+  const authUserId = tokenToUId(token);
+  if (authUserId.error) {
     return { error: 'error' };
   }
-
+  // check if authUserId is valid
+  if (!isValidUserId(uId)) {
+    return { error: 'error' };
+  }
+  
   const data = getData();
   for (const channel of data.channels) {
     if (channel.channelId === channelId) {
@@ -176,11 +180,15 @@ function channelDetailsV1(authUserId: number, channelId: number): DetailReturn {
 /**
  * Given a channelId of a channel that the authorised
  * user can join, adds them to that channel.
- * @param {number} authUserId
+ * @param {string} token
  * @param {number} channelId
  * @returns {{}}
  */
-function channelJoinV1(authUserId: number, channelId: number) {
+function channelJoinV1(token: string, channelId: number) {
+  const authUserId = tokenToUId(token);
+  if (authUserId.error) {
+    return { error: 'error' };
+  }
   if (!isValidUserId(authUserId)) {
     return { error: 'error' };
   }
@@ -256,4 +264,20 @@ function membersobjCreate(MembersArr: number[]): membersobj[] {
     });
   }
   return result;
+}
+
+/**
+ * Helper function
+ * Given a token, return authUserId
+ * @param {string} token
+ * @returns {number}
+ */
+function tokenToUId(token: string) {
+  const data = getData();
+  for (let element of data.tokens) {
+    if (element.token === token) {
+      return element.authUserId;
+    }
+  }
+  return { error: 'error' };
 }

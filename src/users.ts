@@ -9,10 +9,10 @@ const errorObject = { error: 'error' };
 interface userProfileReturn {
   user?: {
     uId: number,
-   email: string,
-   nameFirst: string,
-   nameLast: string,
-   handleStr: string
+    email: string,
+    nameFirst: string,
+    nameLast: string,
+    handleStr: string
   };
   error?: string;
 }
@@ -37,7 +37,7 @@ function userProfileV1(authUserId: number, uId: number): userProfileReturn {
           email: user.email,
           nameFirst: user.nameFirst,
           nameLast: user.nameLast,
-          handleStr: user.handleStr
+          handleStr: user.handleStr,
         }
       };
     }

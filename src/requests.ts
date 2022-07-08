@@ -32,6 +32,19 @@ export function requestAuthRegister(email: string, password: string, nameFirst: 
   return JSON.parse(res.getBody() as string);
 }
 
+export function requestAuthLogout(token: string) {
+  const res = request(
+    'POST',
+      `${url}:${port}` + '/auth/logout/v1',
+      {
+        json: {
+          token
+        }
+      }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
 export function requestClear() {
   const res = request(
     'DELETE',

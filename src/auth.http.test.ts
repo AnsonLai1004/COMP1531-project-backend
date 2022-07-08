@@ -2,7 +2,7 @@
  * Test file for auth routes endpoints and status codes.
  */
 
-import { requestAuthRegister, requestAuthLogin, requestClear } from './requests';
+import { requestAuthRegister, requestAuthLogin, requestAuthLogout, requestClear } from './requests';
 
 beforeEach(() => {
   requestClear();
@@ -85,5 +85,18 @@ describe('auth/login/v2 function valid cases', () => {
       token: expect.any(String),
       authUserId: registered.authUserId
     });
+  });
+});
+
+describe('auth/logout/v1 function valid cases', () => {
+  test('Valid return type', () => {
+    const registered = requestAuthRegister('valid@gmail.com', 'password', 'Harry', 'Potter');
+    const login = requestAuthLogin('valid@gmail.com', 'password');
+    expect(login).toStrictEqual({
+      token: expect.any(String),
+      authUserId: registered.authUserId
+    });
+    const logout = requestAuthLogout(login.token);
+    expect(logout).toStrictEqual({});
   });
 });

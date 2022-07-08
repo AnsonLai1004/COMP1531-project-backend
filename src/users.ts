@@ -1,21 +1,30 @@
-import { getData } from './dataStore.js';
+/**
+ * implementation of user-related functions
+ * @module user
+**/
+import { getData } from './dataStore';
 
 const errorObject = { error: 'error' };
+
+interface userProfileReturn {
+  user?: {
+    uId: number,
+    email: string,
+    nameFirst: string,
+    nameLast: string,
+    handleStr: string
+  };
+  error?: string;
+}
 
 /**
  * Function which, given a valid authUserId and uId, returns the
  * details of the user whose uId matches the argument uId
  * @param {number} authUserId
  * @param {number} uId
- * @returns {user: {
- *  uId: number,
- *  email: string,
-  * nameFirst: string,
-  * nameFirst: string,
-  * handleStr: string
- * }}
+ * @returns {userProfileReturn}
  */
-function userProfileV1(authUserId: number, uId: number) {
+function userProfileV1(authUserId: number, uId: number): userProfileReturn {
   if (!checkUserIdValid(authUserId)) {
     return errorObject;
   }
@@ -28,7 +37,7 @@ function userProfileV1(authUserId: number, uId: number) {
           email: user.email,
           nameFirst: user.nameFirst,
           nameLast: user.nameLast,
-          handleStr: user.handleStr
+          handleStr: user.handleStr,
         }
       };
     }

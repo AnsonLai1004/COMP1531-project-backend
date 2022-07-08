@@ -3,10 +3,12 @@
  * @module auth
 **/
 import { User } from './interfaces';
-import { getData, setData } from './dataStore';
+import { getData, setData } from './data';
 import isEmail from 'validator/lib/isEmail.js';
 
 const errorObject = { error: 'error' };
+
+// console.log(getData());
 
 /**
  * A function called authLoginV1
@@ -122,6 +124,21 @@ function generateToken(uId: number) {
   return tokenStr;
 }
 
+
+// interface validateTokenReturn {
+//   authUserId?: number;
+//   error?: string;
+// }
+
+// /**
+//  * Function which takes in a token and validates it against 
+//  * the appropriate userId
+//  * @param token 
+//  */
+// export function validateToken(token: string): validateTokenReturn {
+//   const data = getData();
+// }
+
 /**
  * Function which checks if a particular piece of data is
  * already used by another user.
@@ -130,6 +147,7 @@ function generateToken(uId: number) {
  * @returns {boolean}
  */
 function checkDuplicateUserData(toCheck: string | number, field: keyof User): boolean {
+  // console.log(setData);
   const data = getData();
   for (const user of data.users) {
     if (toCheck === user[field]) {

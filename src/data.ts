@@ -30,13 +30,11 @@ export interface DataStore {
 }
 
 // Use get() to access the data
-function getData(): DataStore {
+export function getData(): DataStore {
   return data;
 }
 
 // Use set(newData) to pass in the entire data object, with modifications made
-function setData(newData: DataStore) {
+export function setData(newData: DataStore) {
   data = newData;
 }
-
-export { getData, setData };

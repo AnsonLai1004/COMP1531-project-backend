@@ -2,7 +2,7 @@
  * implementation of other functions
  * @module other
 **/
-import { setData } from './dataStore';
+import { setData } from './data';
 import { User, Channel, DM, TokenPair } from './interfaces';
 
 function clearV1() {

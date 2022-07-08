@@ -1,6 +1,7 @@
 {
     "scripts": {
         "test": "jest",
+        "ts-node": "ts-node",
         "tsc": "tsc --noImplicitAny",
         "lint": "eslint src/**.ts",
         "lint-fix": "eslint --fix src/**.ts",

@@ -3,7 +3,7 @@ import { echo } from './echo';
 import morgan from 'morgan';
 import config from './config.json';
 
-import { authRegisterV2, authLoginV2 } from './auth';
+import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { clearV1 } from './other';
 
 // Set up web app, use JSON
@@ -35,6 +35,11 @@ app.post('/auth/login/v2', (req, res) => {
 app.post('/auth/register/v2', (req, res) => {
   const { email, password, nameFirst, nameLast } = req.body;
   res.json(authRegisterV2(email, password, nameFirst, nameLast));
+});
+
+app.post('/auth/logout/v1', (req, res) => {
+  const { token } = req.body;
+  res.json(authLogoutV1(token));
 });
 
 // other routes

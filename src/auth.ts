@@ -108,6 +108,18 @@ export function authRegisterV2(email: string, password: string, nameFirst: strin
   };
 }
 
+export function authLoginV2(email: string, password: string) {
+  const login = authLoginV1(email, password);
+  if ('error' in login) {
+    return errorObject;
+  }
+  const token = generateToken(login.authUserId);
+  return {
+    token: token,
+    authUserId: login.authUserId
+  };
+}
+
 /// //////////////////////// Helper Functions ////////////////////////////////
 
 /**

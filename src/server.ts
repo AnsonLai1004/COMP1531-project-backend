@@ -3,7 +3,7 @@ import { echo } from './echo';
 import morgan from 'morgan';
 import config from './config.json';
 
-import { authRegisterV2 } from './auth';
+import { authRegisterV2, authLoginV2 } from './auth';
 import { clearV1 } from './other';
 
 // Set up web app, use JSON
@@ -27,6 +27,11 @@ app.get('/echo', (req, res, next) => {
 app.use(morgan('dev'));
 
 // auth routes
+app.post('/auth/login/v2', (req, res) => {
+  const { email, password } = req.body;
+  res.json(authLoginV2(email, password));
+});
+
 app.post('/auth/register/v2', (req, res) => {
   const { email, password, nameFirst, nameLast } = req.body;
   res.json(authRegisterV2(email, password, nameFirst, nameLast));

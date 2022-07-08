@@ -48,7 +48,7 @@ describe('auth/register/v2 error cases', () => {
   });
 });
 
-describe('Testing authRegister function valid cases', () => {
+describe('auth/register/v2 function valid cases', () => {
   test('Single user', () => {
     const registered = requestAuthRegister('valid@gmail.com', 'password', 'Harry', 'Potter');
     expect(registered).toStrictEqual({
@@ -64,7 +64,7 @@ describe('Testing authRegister function valid cases', () => {
   });
 });
 
-describe('Testing authLogin function error cases', () => {
+describe('auth/login/v2 function error cases', () => {
   test('Email does not belong to a user', () => {
     const login = requestAuthLogin('invalid@gmail.com', 'password');
     expect(login).toStrictEqual({ error: 'error' });
@@ -77,7 +77,7 @@ describe('Testing authLogin function error cases', () => {
   });
 });
 
-describe('Testing authLogin function valid cases', () => {
+describe('auth/login/v2 function valid cases', () => {
   test('Valid login', () => {
     const registered = requestAuthRegister('valid@gmail.com', 'password', 'Harry', 'Potter');
     const login = requestAuthLogin('valid@gmail.com', 'password');

@@ -3,10 +3,12 @@
  * @module auth
 **/
 import { User } from './interfaces';
-import { getData, setData } from './dataStore';
+import { getData, setData } from './data';
 import isEmail from 'validator/lib/isEmail.js';
 
 const errorObject = { error: 'error' };
+
+// console.log(getData());
 
 /**
  * A function called authLoginV1
@@ -31,7 +33,7 @@ export function authLoginV1(email: string, password: string) {
   return errorObject;
 }
 
-interface authRegisterReturn {
+interface authRegisterV1Return {
   authUserId?: number;
   error?: string;
 }
@@ -50,7 +52,7 @@ interface authRegisterReturn {
  * @param {string} nameLast
  * @returns {{authUserId: number}}
  */
-export function authRegisterV1(email: string, password: string, nameFirst: string, nameLast: string): authRegisterReturn {
+export function authRegisterV1(email: string, password: string, nameFirst: string, nameLast: string): authRegisterV1Return {
   if (!isEmail(email) || checkDuplicateUserData(email, 'email')) {
     return errorObject;
   }
@@ -95,13 +97,95 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
 }
 
 /**
+ * Wrapper function which calls authRegisterV1 and generates a token
+ * for the return object if successful.
+ * @param email
+ * @param password
+ * @param nameFirst
+ * @param nameLast
+ */
+export function authRegisterV2(email: string, password: string, nameFirst: string, nameLast: string) {
+  const register = authRegisterV1(email, password, nameFirst, nameLast);
+  if ('error' in register) {
+    return errorObject;
+  }
+  const token = generateToken(register.authUserId);
+  return {
+    token: token,
+    authUserId: register.authUserId
+  };
+}
+
+/**
+ * Wrapper function which calls authLoginV1 and generates a token
+ * for the return object if successful.
+ * @param email
+ * @param password
+ */
+export function authLoginV2(email: string, password: string) {
+  const login = authLoginV1(email, password);
+  if ('error' in login) {
+    return errorObject;
+  }
+  const token = generateToken(login.authUserId);
+  return {
+    token: token,
+    authUserId: login.authUserId
+  };
+}
+
+/**
+ * Function which invalidates the token given to it by removing
+ * the associated token-uId pair from the dataStore.
+ * @param token
+ * @returns
+ */
+export function authLogoutV1(token: string) {
+  const data = getData();
+  data.tokens = data.tokens.filter((pair) => pair.token !== token);
+  setData(data);
+  return {};
+}
+
+/// //////////////////////// Helper Functions ////////////////////////////////
+
+/**
+ * Function which generates a new unique user token
+ * @returns {string}
+ */
+function generateToken(uId: number) {
+  const data = getData();
+  const tokenNum = data.lastToken + 1;
+  const tokenStr = tokenNum.toString();
+  data.lastToken = tokenNum;
+  data.tokens.push({ token: tokenStr, uId: uId });
+  setData(data);
+  return tokenStr;
+}
+
+// interface validateTokenReturn {
+//   authUserId?: number;
+//   error?: string;
+// }
+
+// /**
+//  * Function which takes in a token and validates it against
+//  * the appropriate userId
+//  * @param token
+//  */
+// export function validateToken(token: string): validateTokenReturn {
+//   const data = getData();
+// }
+
+/**
  * Function which checks if a particular piece of data is
  * already used by another user.
  * @param {string | number} toCheck
  * @param {string} field
  * @returns {boolean}
  */
-function checkDuplicateUserData(toCheck: string | number, field: keyof User) {
+function checkDuplicateUserData(toCheck: string | number, field: keyof User): boolean {
+  // console.log(setData);
   const data = getData();
   for (const user of data.users) {
     if (toCheck === user[field]) {

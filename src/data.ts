@@ -13,7 +13,8 @@ let data = {
   lastAuthUserId: 0,
   lastChannelId: 0,
   lastDMId: 0,
-  lastMessageId: 0
+  lastMessageId: 0,
+  lastToken: 0
 };
 
 export interface DataStore {
@@ -25,16 +26,15 @@ export interface DataStore {
   lastChannelId: number;
   lastDMId: number;
   lastMessageId: number;
+  lastToken: number;
 }
 
 // Use get() to access the data
-function getData(): DataStore {
+export function getData(): DataStore {
   return data;
 }
 
 // Use set(newData) to pass in the entire data object, with modifications made
-function setData(newData: DataStore) {
+export function setData(newData: DataStore) {
   data = newData;
 }
-
-export { getData, setData };

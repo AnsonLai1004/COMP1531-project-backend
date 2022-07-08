@@ -124,16 +124,15 @@ function generateToken(uId: number) {
   return tokenStr;
 }
 
-
 // interface validateTokenReturn {
 //   authUserId?: number;
 //   error?: string;
 // }
 
 // /**
-//  * Function which takes in a token and validates it against 
+//  * Function which takes in a token and validates it against
 //  * the appropriate userId
-//  * @param token 
+//  * @param token
 //  */
 // export function validateToken(token: string): validateTokenReturn {
 //   const data = getData();

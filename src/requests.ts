@@ -53,3 +53,33 @@ export function requestClear() {
   );
   return JSON.parse(res.getBody() as string);
 }
+
+// channel functions
+export function reqChannelDetails(token: string, channelId: number) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/channel/details/v2',
+    {
+      qs: {
+        token,
+        channelId,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function reqChannelJoin(token: string, channelId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/channel/join/v2',
+    {
+      json: {
+        token,
+        channelId,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+

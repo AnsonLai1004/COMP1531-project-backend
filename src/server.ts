@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import config from './config.json';
 
 
-import { channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1 } from './channel'
+import { channelDetailsV2, channelInviteV1, channelJoinV2, channelMessagesV1 } from './channel'
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { clearV1 } from './other';
 
@@ -49,12 +49,12 @@ app.post('/auth/logout/v1', (req, res) => {
 app.get('channel/details/v2', (req, res) => {
   const channelId = parseInt((req.query.channelId) as string);
   const token = req.query.token as string;
-  res.json(channelDetailsV1(token, channelId));
+  res.json(channelDetailsV2(token, channelId));
 });
 
 app.post('channel/join/v2', (req, res) => {
   const { token, channelId } = req.body;
-  res.json(channelJoinV1(token, channelId));
+  res.json(channelJoinV2(token, channelId));
 });
 
 // other routes

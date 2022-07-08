@@ -1,7 +1,7 @@
 import { getData, setData } from './data';
 import { userProfileV1 } from './users';
 import { Message } from './interfaces';
-export { channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1 };
+export { channelDetailsV2, channelInviteV1, channelJoinV2, channelMessagesV1 };
 
 /**
  * implementation of channel related functions
@@ -26,6 +26,12 @@ interface DetailReturn {
   allMembers?: membersobj[];
   error?: string;
 }
+
+type tokenToUId = {
+  uId?: number;
+  error?: string;
+}
+
 
 /**
  * Invites a user with ID uId to join a channel with ID channelId.
@@ -141,13 +147,9 @@ function channelMessagesV1(authUserId: number, channelId: number, start: number)
  * @returns {{name: string, isPublic: boolean, ownerMembers: membersobj[], allMembers: membersobj[]}}
  */
 
-function channelDetailsV1(token: string, channelId: number): DetailReturn {
-  const authUserId = tokenToUId(token);
-  if (authUserId.error) {
-    return { error: 'error' };
-  }
+function channelDetailsV1(authUserId: number, channelId: number): DetailReturn {
   // check if authUserId is valid
-  if (!isValidUserId(uId)) {
+  if (!isValidUserId(authUserId)) {
     return { error: 'error' };
   }
   
@@ -184,11 +186,7 @@ function channelDetailsV1(token: string, channelId: number): DetailReturn {
  * @param {number} channelId
  * @returns {{}}
  */
-function channelJoinV1(token: string, channelId: number) {
-  const authUserId = tokenToUId(token);
-  if (authUserId.error) {
-    return { error: 'error' };
-  }
+function channelJoinV1(authUserId: number, channelId: number) {
   if (!isValidUserId(authUserId)) {
     return { error: 'error' };
   }
@@ -229,7 +227,24 @@ function channelJoinV1(token: string, channelId: number) {
   return {};
 }
 
-/**
+function channelDetailsV2(token: string, channelId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+  const result = channelDetailsV1(tokenId.uId as number, channelId);
+  return result;
+}
+
+function channelJoinV2(token: string, channelId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+  channelJoinV1(tokenId.uId as number, channelId);
+  return {};
+}
+/************************************************************************
  * Helper function
  * return false if authUserId is not valid
  * @param {number} authUserId
@@ -272,11 +287,11 @@ function membersobjCreate(MembersArr: number[]): membersobj[] {
  * @param {string} token
  * @returns {number}
  */
-function tokenToUId(token: string) {
+function tokenToUId(token: string): tokenToUId {
   const data = getData();
   for (let element of data.tokens) {
     if (element.token === token) {
-      return element.authUserId;
+      return { uId: element.uId };
     }
   }
   return { error: 'error' };

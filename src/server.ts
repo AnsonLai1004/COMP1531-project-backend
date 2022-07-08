@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import config from './config.json';
 
 import { authRegisterV2 } from './auth';
+import { clearV1 } from './other';
 
 // Set up web app, use JSON
 const app = express();
@@ -29,6 +30,12 @@ app.use(morgan('dev'));
 app.post('/auth/register/v2', (req, res) => {
   const { email, password, nameFirst, nameLast } = req.body;
   res.json(authRegisterV2(email, password, nameFirst, nameLast));
+});
+
+// other routes
+app.delete('/clear/v1', (req, res) => {
+  clearV1();
+  res.json({});
 });
 
 // start server

@@ -2,11 +2,11 @@
  * Test file for auth routes endpoints and status codes.
  */
 
-import { requestAuthRegister } from './requests';
+import { requestAuthRegister, requestClear } from './requests';
 
-// beforeEach(() => {
-//   requestClear();
-// });
+beforeEach(() => {
+  requestClear();
+});
 
 describe('auth/register/v2 error cases', () => {
   test('Invalid email', () => {

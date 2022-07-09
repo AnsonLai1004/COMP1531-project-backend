@@ -2,6 +2,111 @@ import { getData, setData } from './data';
 import { Message } from './interfaces';
 import { DataStore } from './data';
 
+/// ///////////// ADDITIONAL TYPES ///////////////////
+interface channel {
+  channelId: number;
+  name: string
+}
+
+interface channelsCreateRet {
+  channelId?: number;
+  error?: string;
+}
+
+interface channelsListRet {
+  channels?: channel[];
+  error?: string;
+}
+
+type tokenToUId = {
+  uId?: number;
+  error?: string;
+}
+
+/// ///////////// ITERATION 2 FUNCTIONS ///////////////////
+
+/**
+ * Creates a new channel object and appends it to the channels section of the dataStore
+ * Returns error if inactive token passed in || 1 > name length || name length > 20
+ * @param {string} token
+ * @param {string} name
+ * @param {boolean} isPublic
+ * @returns {channelsCreateRet}
+ */
+
+function channelsCreateV2(token: string, name: string, isPublic: boolean) {
+  // INVALID NAME
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+  const result = channelsCreateV1(tokenId.uId as number, name, isPublic);
+  return result;
+}
+
+/**
+ * Returns a list of channels the specified user is a part of
+ * Returns error if inactive token passed in
+ * @param {string} token
+ * @returns {channelsListRet}
+ */
+
+function channelsListV2(token: string): channelsListRet {
+  // CHECK IF USERID VALID
+  const dataStore = getData();
+  const validId = checkValidToken(token, dataStore);
+
+  if (validId === false) {
+    return { error: 'error' };
+  }
+
+  const channels = [];
+
+  for (const channel of dataStore.channels) {
+    for (const member of channel.allMembers) {
+      if (member === validId) {
+        channels.push({
+          channelId: channel.channelId,
+          name: channel.name,
+        });
+        break;
+      }
+    }
+  }
+
+  return { channels: channels };
+}
+
+/**
+ * Returns a list of all existing channels
+ * Returns error if inactive token passed in
+ * @param {string} token
+ * @returns {channelsListRet}
+ */
+
+function channelsListallV2(token: string): channelsListRet {
+  // CHECK IF USERID VALID
+  const dataStore = getData();
+  const validId = checkValidToken(token, dataStore);
+
+  if (validId === false) {
+    return { error: 'error' };
+  }
+
+  const channels = [];
+
+  for (const channel of dataStore.channels) {
+    channels.push({
+      channelId: channel.channelId,
+      name: channel.name,
+    });
+  }
+
+  return { channels: channels };
+}
+
+/// ///////////// ITERATION 1 FUNCTIONS ///////////////////
+
 //  Creates a new channel object and appends it to the channels section of the dataStore
 // Arguments -
 //  @authUserId (integer) - user id
@@ -99,7 +204,9 @@ function channelsListallV1(authUserId: number) {
   return { channels: channels };
 }
 
-// Helper function to find out whether the uId is a valid user | returns bool
+/// ///////////// HELPER FUNCTIONS ///////////////////
+
+// Find out whether the uId is a valid user (returns bool)
 function checkValidId(authUserId: number, dataStore: DataStore) {
   for (const user of dataStore.users) {
     if (user.uId === authUserId) {
@@ -109,4 +216,25 @@ function checkValidId(authUserId: number, dataStore: DataStore) {
   return false;
 }
 
-export { channelsCreateV1, channelsListV1, channelsListallV1 };
+// Find out whether the token is active (returns false if not active)
+// (returns corresponding userId if token is active)
+function checkValidToken(token: string, dataStore: DataStore) {
+  for (const tokenPair of dataStore.tokens) {
+    if (tokenPair.token === token) {
+      return tokenPair.uId;
+    }
+  }
+  return false;
+}
+
+function tokenToUId(token: string): tokenToUId {
+  const data = getData();
+  for (let element of data.tokens) {
+    if (element.token === token) {
+      return { uId: element.uId };
+    }
+  }
+  return { error: 'error' };
+}
+
+export { channelsCreateV1, channelsListV1, channelsListallV1, channelsCreateV2, channelsListV2, channelsListallV2 };

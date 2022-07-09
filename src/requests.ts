@@ -53,3 +53,77 @@ export function requestClear() {
   );
   return JSON.parse(res.getBody() as string);
 }
+
+// channel functions
+export function reqChannelDetails(token: string, channelId: number) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/channel/details/v2',
+    {
+      qs: {
+        token,
+        channelId,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function reqChannelJoin(token: string, channelId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/channel/join/v2',
+    {
+      json: {
+        token,
+        channelId,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function reqChannelInvite(token: string, channelId: number, uId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/channel/invite/v2',
+    {
+      json: {
+        token,
+        channelId,
+        uId,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function reqChannelMessages(token: string, channelId: number, start: number) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/channel/messages/v2',
+    {
+      qs: {
+        token,
+        channelId,
+        start,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function requestChannelsCreate(token: string, name: string, isPublic: boolean) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/channels/create/v2',
+    {
+      json: {
+        token, 
+        name, 
+        isPublic
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}

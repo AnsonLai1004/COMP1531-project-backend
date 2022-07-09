@@ -90,7 +90,6 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
 
   data.users.push(newUser);
   setData(data);
-
   return {
     authUserId: newId
   };
@@ -127,6 +126,7 @@ export function authLoginV2(email: string, password: string) {
   if ('error' in login) {
     return errorObject;
   }
+  
   const token = generateToken(login.authUserId);
   return {
     token: token,

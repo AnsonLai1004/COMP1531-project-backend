@@ -38,3 +38,13 @@ export function getData(): DataStore {
 export function setData(newData: DataStore) {
   data = newData;
 }
+
+// stub function to save data to a file
+function fileSaveData() {
+
+}
+
+// stub function to load data from a file
+export function fileLoadData() {
+
+}

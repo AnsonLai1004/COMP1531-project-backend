@@ -126,7 +126,7 @@ export function authLoginV2(email: string, password: string) {
   if ('error' in login) {
     return errorObject;
   }
-  
+
   const token = generateToken(login.authUserId);
   return {
     token: token,

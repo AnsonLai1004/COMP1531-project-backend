@@ -1,7 +1,3 @@
-import { channelJoinV1, channelDetailsV1 } from './channel';
-import { userProfileV1 } from './users';
-import { getData } from './data'
-
 import { requestChannelsCreate, requestChannelsList, requestChannelsListall, requestAuthRegister, requestClear } from './requests';
 
 /// //////////////// EXTRA INTERFACE /////////////////////////

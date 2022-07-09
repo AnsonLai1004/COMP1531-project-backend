@@ -18,7 +18,7 @@ interface channelsListRet {
   error?: string;
 }
 
-type tokenToUId = {
+type tokenToUIdInterface = {
   uId?: number;
   error?: string;
 }
@@ -34,7 +34,7 @@ type tokenToUId = {
  * @returns {channelsCreateRet}
  */
 
-function channelsCreateV2(token: string, name: string, isPublic: boolean) {
+function channelsCreateV2(token: string, name: string, isPublic: boolean): channelsCreateRet {
   // INVALID NAME
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -227,9 +227,9 @@ function checkValidToken(token: string, dataStore: DataStore) {
   return false;
 }
 
-function tokenToUId(token: string): tokenToUId {
+function tokenToUId(token: string): tokenToUIdInterface {
   const data = getData();
-  for (let element of data.tokens) {
+  for (const element of data.tokens) {
     if (element.token === token) {
       return { uId: element.uId };
     }

@@ -119,8 +119,8 @@ export function requestChannelsCreate(token: string, name: string, isPublic: boo
     `${url}:${port}` + '/channels/create/v2',
     {
       json: {
-        token, 
-        name, 
+        token,
+        name,
         isPublic
       }
     }

@@ -3,11 +3,10 @@ import { echo } from './echo';
 import morgan from 'morgan';
 import config from './config.json';
 
-
-import { channelDetailsV2, channelInviteV2, channelJoinV2, channelMessagesV2 } from './channel'
+import { channelDetailsV2, channelInviteV2, channelJoinV2, channelMessagesV2 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { clearV1 } from './other';
-import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
+import { channelsCreateV2 } from './channels';
 import { getData } from './data';
 
 // Set up web app, use JSON
@@ -34,7 +33,6 @@ app.use(morgan('dev'));
 app.get('/', (req, res) => {
   res.json(getData());
 });
-
 
 app.post('/auth/login/v2', (req, res) => {
   const { email, password } = req.body;
@@ -81,13 +79,11 @@ app.post('/channels/create/v2', (req, res) => {
   res.json(channelsCreateV2(token, name, isPublic));
 });
 
-
 // other routes
 app.delete('/clear/v1', (req, res) => {
   clearV1();
   res.json({});
 });
-
 
 // start server
 app.listen(PORT, HOST, () => {

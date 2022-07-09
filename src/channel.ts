@@ -2,6 +2,7 @@ import { getData, setData } from './data';
 import { userProfileV1 } from './users';
 import { Message } from './interfaces';
 export { channelDetailsV2, channelInviteV2, channelJoinV2, channelMessagesV2 };
+export { channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1 };
 
 /**
  * implementation of channel related functions
@@ -27,11 +28,10 @@ interface DetailReturn {
   error?: string;
 }
 
-type tokenToUId = {
+type tokenToUIdInterface = {
   uId?: number;
   error?: string;
 }
-
 
 /**
  * Invites a user with ID uId to join a channel with ID channelId.
@@ -173,12 +173,12 @@ function channelMessagesV2(token: string, channelId: number, start: number) {
  * @returns {{name: string, isPublic: boolean, ownerMembers: membersobj[], allMembers: membersobj[]}}
  */
 
- function channelDetailsV1(authUserId: number, channelId: number): DetailReturn {
+function channelDetailsV1(authUserId: number, channelId: number): DetailReturn {
   // check if authUserId is valid
   if (!isValidUserId(authUserId)) {
     return { error: 'error' };
   }
-  
+
   const data = getData();
   for (const channel of data.channels) {
     if (channel.channelId === channelId) {
@@ -313,9 +313,9 @@ function membersobjCreate(MembersArr: number[]): membersobj[] {
  * @param {string} token
  * @returns {number}
  */
-function tokenToUId(token: string): tokenToUId {
+function tokenToUId(token: string): tokenToUIdInterface {
   const data = getData();
-  for (let element of data.tokens) {
+  for (const element of data.tokens) {
     if (element.token === token) {
       return { uId: element.uId };
     }

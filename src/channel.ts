@@ -1,7 +1,10 @@
 import { getData, setData } from './data';
 import { userProfileV1 } from './users';
 import { Message } from './interfaces';
-export { channelDetailsV1, channelJoinV1, channelInviteV1, channelMessagesV1, channelDetailsV2, channelJoinV2 };
+export {
+  channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1,
+  channelLeaveV1, channelAddownerV1, channelRemoveownerV1, tokenToUId, membersobjCreate, channelDetailsV2, channelJoinV2
+};
 
 /**
  * implementation of channel related functions
@@ -26,12 +29,7 @@ interface DetailReturn {
   allMembers?: membersobj[];
   error?: string;
 }
-/*
-type tokenToUId = {
-  uId?: number;
-  error?: string;
-}
-*/
+
 /**
  * Invites a user with ID uId to join a channel with ID channelId.
  * returns empty if success, otherwise error
@@ -221,9 +219,9 @@ function channelJoinV1(authUserId: number, channelId: number) {
     if (channelId === channel.channelId) {
       channel.allMembers.push(authUserId);
       setData(data);
+      return {};
     }
   }
-  return {};
 }
 
 function channelDetailsV2(token: string, channelId: number) {
@@ -240,19 +238,106 @@ function channelJoinV2(token: string, channelId: number) {
   if (tokenId.error) {
     return { error: 'error' };
   }
-  /* let validChannel = false;
-  const data = getData();
-  for (const channel of data.channels) {
-    if (channel.channelId === channelId) {
-      validChannel = true;
-    }
-  }
-  if (!validChannel) {
-    return { error: 'error' };
-  } */
   const result = channelJoinV1(tokenId.uId as number, channelId);
   return result;
 }
+
+// channel /leave /addowner /removeowner V1
+function channelLeaveV1(token: string, channelId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+
+  const data = getData();
+  for (const channel of data.channels) {
+    if (channel.channelId === channelId) {
+      for (let i = 0; i < channel.allMembers.length; i++) {
+        if (channel.allMembers[i] === tokenId.uId) {
+          channel.allMembers.splice(i, 1);
+          return {};
+        }
+      }
+    }
+  }
+  return { error: 'error' };
+}
+
+function channelAddownerV1(token: string, channelId: number, uId: number) {
+  // channelId valid?
+  if (!isValidChannelId(channelId)) {
+    return { error: 'error' };
+  }
+  // auth user is owner?
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+  if (!userIsOwner(tokenId.uId as number, channelId)) {
+    return { error: 'error' };
+  }
+  // uId valid?
+  if (!isValidUserId(uId)) {
+    return { error: 'error' };
+  }
+  // uId is member?
+  if (!userIsMember(uId, channelId)) {
+    return { error: 'error' };
+  }
+  // uId is already owner?
+  if (userIsOwner(uId, channelId)) {
+    return { error: 'error' };
+  }
+  // add owner
+  const data = getData();
+  for (const channel of data.channels) {
+    if (channel.channelId === channelId) {
+      channel.ownerMembers.push(uId);
+      return {};
+    }
+  }
+}
+
+function channelRemoveownerV1(token: string, channelId: number, uId: number) {
+  // channelId valid?
+  if (!isValidChannelId(channelId)) {
+    return { error: 'error' };
+  }
+  // auth user is owner?
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+  if (!userIsOwner(tokenId.uId as number, channelId)) {
+    return { error: 'error' };
+  }
+  // uId valid?
+  if (!isValidUserId(uId)) {
+    return { error: 'error' };
+  }
+  // uId is not owner?
+  if (!userIsOwner(uId, channelId)) {
+    return { error: 'error' };
+  }
+
+  const data = getData();
+  for (const channel of data.channels) {
+    if (channel.channelId === channelId) {
+      // check if uId is only owner of the channel
+      if (channel.ownerMembers.length === 1) {
+        return { error: 'error' };
+      }
+      // remove owner
+      for (let i = 0; i < channel.ownerMembers.length; i++) {
+        if (channel.ownerMembers[i] === uId) {
+          channel.ownerMembers.splice(i, 1);
+          return {};
+        }
+      }
+    }
+  }
+}
+
 /************************************************************************
  * Helper function
  * return false if authUserId is not valid
@@ -270,11 +355,26 @@ function isValidUserId(authUserId: number) {
 }
 /**
  * Helper function
+ * return false if channelId is not valid
+ * @param {number} channelId
+ * @returns {boolean}
+ */
+function isValidChannelId(channelId: number) {
+  const data = getData();
+  for (const channel of data.channels) {
+    if (channel.channelId === channelId) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Helper function
  * Given an array of uid, return array of user
  * @param {number[]} MembersArr
  * @returns {user[]}
  */
-
 function membersobjCreate(MembersArr: number[]): membersobj[] {
   const result = [];
   for (const memberid of MembersArr) {
@@ -304,4 +404,46 @@ function tokenToUId(token: string)/*: tokenToUId */ {
     }
   }
   return { error: 'error' };
+}
+
+/**
+ * Helper function
+ * return false if user is not a member of the channel
+ * @param {number} uId
+ * @param {number} channelId
+ * @returns {boolean}
+ */
+function userIsMember(uId: number, channelId: number) {
+  const data = getData();
+  for (const channel of data.channels) {
+    if (channel.channelId === channelId) {
+      for (const member of channel.allMembers) {
+        if (member === uId) {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+/**
+ * Helper function
+ * return false if user is not an owner of the channel
+ * @param {number} uId
+ * @param {number} channelId
+ * @returns {boolean}
+ */
+function userIsOwner(uId: number, channelId: number) {
+  const data = getData();
+  for (const channel of data.channels) {
+    if (channel.channelId === channelId) {
+      for (const member of channel.ownerMembers) {
+        if (member === uId) {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
 }

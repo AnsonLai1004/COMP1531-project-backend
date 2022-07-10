@@ -3,7 +3,7 @@ import { echo } from './echo';
 import morgan from 'morgan';
 import config from './config.json';
 
-import { channelDetailsV2, channelInviteV1, channelJoinV2, channelMessagesV1 } from './channel';
+import { channelDetailsV2, channelJoinV2 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
 import { clearV1 } from './other';
@@ -61,13 +61,13 @@ app.get('/channels/listall/v2', (req, res) => {
 });
 
 // channel routes
-app.get('channel/details/v2', (req, res) => {
+app.get('/channel/details/v2', (req, res) => {
   const channelId = parseInt((req.query.channelId) as string);
   const token = req.query.token as string;
   res.json(channelDetailsV2(token, channelId));
 });
 
-app.post('channel/join/v2', (req, res) => {
+app.post('/channel/join/v2', (req, res) => {
   const { token, channelId } = req.body;
   res.json(channelJoinV2(token, channelId));
 });

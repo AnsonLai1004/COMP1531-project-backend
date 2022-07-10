@@ -240,8 +240,18 @@ function channelJoinV2(token: string, channelId: number) {
   if (tokenId.error) {
     return { error: 'error' };
   }
-  channelJoinV1(tokenId.uId as number, channelId);
-  return {};
+  /* let validChannel = false;
+  const data = getData();
+  for (const channel of data.channels) {
+    if (channel.channelId === channelId) {
+      validChannel = true;
+    }
+  }
+  if (!validChannel) {
+    return { error: 'error' };
+  } */
+  const result = channelJoinV1(tokenId.uId as number, channelId);
+  return result;
 }
 /************************************************************************
  * Helper function

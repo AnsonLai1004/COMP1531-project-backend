@@ -55,8 +55,8 @@ describe('channel/join/v2', () => {
   test('invalid token and channelId', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const channel = requestChannelsCreate(user.token, 'BOOST', true);
-    expect(reqChannelJoin(user.token, -999)).toStrictEqual({ error: 'error' });
     expect(reqChannelJoin('invalid token', channel.channelId)).toStrictEqual({ error: 'error' });
+    expect(reqChannelJoin(user.token, -999)).toStrictEqual({ error: 'error' });
   });
   test('Authorised user is already a member of the channel, channel is private member is not a global owner', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');

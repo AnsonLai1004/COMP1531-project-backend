@@ -149,3 +149,42 @@ export function requestUsersAll(token: string) {
   );
   return JSON.parse(res.getBody() as string);
 }
+
+export function requestUserSetName(token: string, nameFirst: string, nameLast: string) {
+  const res = request(
+    'PUT',
+      `${url}:${port}` + '/user/profile/setname/v1',
+      {
+        json: {
+          token, nameFirst, nameLast
+        }
+      }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function requestUserSetEmail(token: string, email: string) {
+  const res = request(
+    'PUT',
+      `${url}:${port}` + '/user/profile/setemail/v1',
+      {
+        json: {
+          token, email
+        }
+      }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function requestUserSetHandle(token: string, handle: string) {
+  const res = request(
+    'PUT',
+      `${url}:${port}` + '/user/profile/sethandle/v1',
+      {
+        json: {
+          token, handle
+        }
+      }
+  );
+  return JSON.parse(res.getBody() as string);
+}

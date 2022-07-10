@@ -1,7 +1,7 @@
 import { getData, setData } from './data';
 import { userProfileV1 } from './users';
 import { Message } from './interfaces';
-export { channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1 };
+export { channelDetailsV1, channelJoinV1, channelInviteV1, channelMessagesV1, channelDetailsV2, channelJoinV2 };
 
 /**
  * implementation of channel related functions
@@ -26,7 +26,12 @@ interface DetailReturn {
   allMembers?: membersobj[];
   error?: string;
 }
-
+/*
+type tokenToUId = {
+  uId?: number;
+  error?: string;
+}
+*/
 /**
  * Invites a user with ID uId to join a channel with ID channelId.
  * returns empty if success, otherwise error
@@ -136,7 +141,7 @@ function channelMessagesV1(authUserId: number, channelId: number, start: number)
 /**
  * Given a channel with ID channelId that the authorised user is a member of,
  * provide basic details about the channel.
- * @param {number} authUserId
+ * @param {string} token
  * @param {number} channelId
  * @returns {{name: string, isPublic: boolean, ownerMembers: membersobj[], allMembers: membersobj[]}}
  */
@@ -176,7 +181,7 @@ function channelDetailsV1(authUserId: number, channelId: number): DetailReturn {
 /**
  * Given a channelId of a channel that the authorised
  * user can join, adds them to that channel.
- * @param {number} authUserId
+ * @param {string} token
  * @param {number} channelId
  * @returns {{}}
  */
@@ -221,7 +226,34 @@ function channelJoinV1(authUserId: number, channelId: number) {
   return {};
 }
 
-/**
+function channelDetailsV2(token: string, channelId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+  const result = channelDetailsV1(tokenId.uId as number, channelId);
+  return result;
+}
+
+function channelJoinV2(token: string, channelId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+  /* let validChannel = false;
+  const data = getData();
+  for (const channel of data.channels) {
+    if (channel.channelId === channelId) {
+      validChannel = true;
+    }
+  }
+  if (!validChannel) {
+    return { error: 'error' };
+  } */
+  const result = channelJoinV1(tokenId.uId as number, channelId);
+  return result;
+}
+/************************************************************************
  * Helper function
  * return false if authUserId is not valid
  * @param {number} authUserId
@@ -256,4 +288,20 @@ function membersobjCreate(MembersArr: number[]): membersobj[] {
     });
   }
   return result;
+}
+
+/**
+ * Helper function
+ * Given a token, return authUserId
+ * @param {string} token
+ * @returns {number}
+ */
+function tokenToUId(token: string)/*: tokenToUId */ {
+  const data = getData();
+  for (const element of data.tokens) {
+    if (element.token === token) {
+      return { uId: element.uId };
+    }
+  }
+  return { error: 'error' };
 }

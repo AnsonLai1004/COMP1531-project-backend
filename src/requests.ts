@@ -5,7 +5,7 @@
 
 import request from 'sync-request';
 import { port, url } from './config.json';
-
+// auth
 export function requestAuthLogin(email: string, password: string) {
   const res = request(
     'POST',
@@ -54,6 +54,7 @@ export function requestClear() {
   return JSON.parse(res.getBody() as string);
 }
 
+// channels
 export function requestChannelsCreate(token: string, name: string, isPublic: boolean) {
   const res = request(
     'POST',
@@ -79,14 +80,42 @@ export function requestChannelsList(token: string) {
   );
   return JSON.parse(res.getBody() as string);
 }
-
 export function requestChannelsListall(token: string) {
   const res = request(
     'GET',
-    `${url}:${port}` + '/channels/listall/v2',
+      `${url}:${port}` + '/channels/listall/v2',
+      {
+        qs: {
+          token
+        }
+      }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+// channel
+export function reqChannelDetails(token: string, channelId: number) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/channel/details/v2',
     {
       qs: {
-        token
+        token,
+        channelId
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function reqChannelJoin(token: string, channelId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/channel/join/v2',
+    {
+      json: {
+        token,
+        channelId
       }
     }
   );

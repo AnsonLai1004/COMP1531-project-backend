@@ -5,6 +5,7 @@ import config from './config.json';
 
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { clearV1 } from './other';
+import { fileLoadData } from './data';
 
 // Set up web app, use JSON
 const app = express();
@@ -51,4 +52,6 @@ app.delete('/clear/v1', (req, res) => {
 // start server
 app.listen(PORT, HOST, () => {
   console.log(`⚡️ Server listening on port ${PORT} at ${HOST}`);
+  // auto-load saved data on server start
+  fileLoadData();
 });

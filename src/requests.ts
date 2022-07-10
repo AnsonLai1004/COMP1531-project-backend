@@ -169,6 +169,20 @@ export function reqChannelRemoveowner(token: string, channelId: number, uId: num
 }
 
 // dm/.../v1
+export function reqDmCreate(token: string, uIds: number[]) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/dm/create/v1',
+    {
+      json: {
+        token,
+        uIds,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
 export function reqDmDetails(token: string, dmId: number) {
   const res = request(
     'GET',

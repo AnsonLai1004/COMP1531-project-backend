@@ -96,7 +96,14 @@ app.post('/channel/removeowner/v1', (req, res) => {
   res.json(channelRemoveownerV1(token, channelId, uId));
 });
 
-// start server
+// dm routes
+app.get('/dm/details/v1', (req, res) => {
+  const token = req.query.token as string;
+  const dmId = req.query.dmId;
+  res.json(dmDetailsV1(token, dmId));
+});
+
+
 app.listen(PORT, HOST, () => {
   console.log(`⚡️ Server listening on port ${PORT} at ${HOST}`);
   // auto-load saved data on server start

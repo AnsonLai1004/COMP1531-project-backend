@@ -5,6 +5,7 @@ import config from './config.json';
 
 import { channelDetailsV2, channelInviteV1, channelJoinV2, channelMessagesV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
+import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
 import { clearV1 } from './other';
 
 // Set up web app, use JSON
@@ -41,6 +42,22 @@ app.post('/auth/register/v2', (req, res) => {
 app.post('/auth/logout/v1', (req, res) => {
   const { token } = req.body;
   res.json(authLogoutV1(token));
+});
+
+// channels routes
+app.post('/channels/create/v2', (req, res) => {
+  const { token, name, isPublic } = req.body;
+  res.json(channelsCreateV2(token, name, isPublic));
+});
+
+app.get('/channels/list/v2', (req, res) => {
+  const token = req.query.token as string;
+  res.json(channelsListV2(token));
+});
+
+app.get('/channels/listall/v2', (req, res) => {
+  const token = req.query.token as string;
+  res.json(channelsListallV2(token));
 });
 
 // channel routes

@@ -6,9 +6,9 @@ import config from './config.json';
 import { channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
-
+import { dmCreateV1, dmDetailsV1 } from './dm';
 import { clearV1 } from './other';
-import { fileLoadData } from './data';
+// import { fileLoadData } from './data';
 
 // Set up web app, use JSON
 const app = express();
@@ -97,15 +97,18 @@ app.post('/channel/removeowner/v1', (req, res) => {
 });
 
 // dm routes
-app.get('/dm/details/v1', (req, res) => {
-  const token = req.query.token as string;
-  const dmId = req.query.dmId;
-  res.json(dmDetailsV1(token, dmId));
+app.post('/dm/create/v1', (req, res) => {
+  const { token, uIds } = req.body;
+  res.json(dmCreateV1(token, uIds));
 });
 
+app.get('/dm/details/v1', (req, res) => {
+  const token = req.query.token as string;
+  const dmId = parseInt((req.query.dmId) as string);
+  res.json(dmDetailsV1(token, dmId));
+});
 
 app.listen(PORT, HOST, () => {
   console.log(`⚡️ Server listening on port ${PORT} at ${HOST}`);
   // auto-load saved data on server start
-  fileLoadData();
 });

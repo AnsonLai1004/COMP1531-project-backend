@@ -18,11 +18,6 @@ interface channelsListRet {
   error?: string;
 }
 
-type tokenToUIdInterface = {
-  uId?: number;
-  error?: string;
-}
-
 /// ///////////// ITERATION 2 FUNCTIONS ///////////////////
 
 /**
@@ -36,12 +31,30 @@ type tokenToUIdInterface = {
 
 function channelsCreateV2(token: string, name: string, isPublic: boolean): channelsCreateRet {
   // INVALID NAME
-  const tokenId = tokenToUId(token);
-  if (tokenId.error) {
+  if (name.length < 1 || name.length > 20) {
     return { error: 'error' };
   }
-  const result = channelsCreateV1(tokenId.uId as number, name, isPublic);
-  return result;
+
+  // CHECK IF TOKEN VALID
+  const dataStore = getData();
+  const validId = checkValidToken(token, dataStore);
+
+  if (validId === false) {
+    return { error: 'error' };
+  }
+
+  const channel = {
+    channelId: dataStore.lastChannelId + 1,
+    name: name,
+    isPublic: isPublic,
+    ownerMembers: [validId],
+    allMembers: [validId],
+    messages: [] as Message[],
+  };
+  dataStore.channels.push(channel);
+  dataStore.lastChannelId++;
+  setData(dataStore);
+  return { channelId: channel.channelId };
 }
 
 /**
@@ -225,16 +238,6 @@ function checkValidToken(token: string, dataStore: DataStore) {
     }
   }
   return false;
-}
-
-function tokenToUId(token: string): tokenToUIdInterface {
-  const data = getData();
-  for (const element of data.tokens) {
-    if (element.token === token) {
-      return { uId: element.uId };
-    }
-  }
-  return { error: 'error' };
 }
 
 export { channelsCreateV1, channelsListV1, channelsListallV1, channelsCreateV2, channelsListV2, channelsListallV2 };

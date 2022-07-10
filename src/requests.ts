@@ -5,7 +5,7 @@
 
 import request from 'sync-request';
 import { port, url } from './config.json';
-
+// auth
 export function requestAuthLogin(email: string, password: string) {
   const res = request(
     'POST',
@@ -93,7 +93,22 @@ export function reqChannelInvite(token: string, channelId: number, uId: number) 
         channelId,
         uId,
       }
-    }
+    });
+  return JSON.parse(res.getBody() as string);
+}
+
+// channel/.../v1
+export function reqChannelLeave(token: string, channelId: number) {
+  const res = request(
+    'POST',
+      `${url}:${port}` + '/channel/leave/v1',
+      {
+        json: {
+          token,
+          channelId,
+        }
+      }
+
   );
   return JSON.parse(res.getBody() as string);
 }
@@ -109,6 +124,21 @@ export function reqChannelMessages(token: string, channelId: number, start: numb
         start,
       }
     }
+    );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function reqChannelAddowner(token: string, channelId: number, uId: number) {
+  const res = request(
+    'POST',
+      `${url}:${port}` + '/channel/addowner/v1',
+      {
+        json: {
+          token,
+          channelId,
+          uId,
+        }
+      }
   );
   return JSON.parse(res.getBody() as string);
 }
@@ -122,6 +152,63 @@ export function requestChannelsCreate(token: string, name: string, isPublic: boo
         token,
         name,
         isPublic
+      }
+    }
+    );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function requestChannelsList(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/channels/list/v2',
+    {
+      qs: {
+        token
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function requestChannelsListall(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/channels/listall/v2',
+    {
+      qs: {
+        token
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+
+export function reqChannelRemoveowner(token: string, channelId: number, uId: number) {
+  const res = request(
+    'POST',
+      `${url}:${port}` + '/channel/removeowner/v1',
+      {
+        json: {
+          token,
+          channelId,
+          uId,
+        }
+      }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+// dm/.../v1
+export function reqDmDetails(token: string, dmId: number) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/dm/details/v1',
+    {
+      qs: {
+        token,
+        dmId,
       }
     }
   );

@@ -3,11 +3,12 @@ import { echo } from './echo';
 import morgan from 'morgan';
 import config from './config.json';
 
-import { channelDetailsV2, channelInviteV2, channelJoinV2, channelMessagesV2 } from './channel';
+import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
+import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
+
 import { clearV1 } from './other';
-import { channelsCreateV2 } from './channels';
-import { getData } from './data';
+import { fileLoadData } from './data';
 
 // Set up web app, use JSON
 const app = express();
@@ -49,14 +50,30 @@ app.post('/auth/logout/v1', (req, res) => {
   res.json(authLogoutV1(token));
 });
 
+// channels routes
+app.post('/channels/create/v2', (req, res) => {
+  const { token, name, isPublic } = req.body;
+  res.json(channelsCreateV2(token, name, isPublic));
+});
+
+app.get('/channels/list/v2', (req, res) => {
+  const token = req.query.token as string;
+  res.json(channelsListV2(token));
+});
+
+app.get('/channels/listall/v2', (req, res) => {
+  const token = req.query.token as string;
+  res.json(channelsListallV2(token));
+});
+
 // channel routes
-app.get('channel/details/v2', (req, res) => {
+app.get('/channel/details/v2', (req, res) => {
   const channelId = parseInt((req.query.channelId) as string);
   const token = req.query.token as string;
   res.json(channelDetailsV2(token, channelId));
 });
 
-app.post('channel/join/v2', (req, res) => {
+app.post('/channel/join/v2', (req, res) => {
   const { token, channelId } = req.body;
   res.json(channelJoinV2(token, channelId));
 });
@@ -73,11 +90,6 @@ app.get('/channel/messages/v2', (req, res) => {
   res.json(channelMessagesV2(token, channelId, start));
 });
 
-// channel routes
-app.post('/channels/create/v2', (req, res) => {
-  const { token, name, isPublic } = req.body;
-  res.json(channelsCreateV2(token, name, isPublic));
-});
 
 // other routes
 app.delete('/clear/v1', (req, res) => {
@@ -85,7 +97,25 @@ app.delete('/clear/v1', (req, res) => {
   res.json({});
 });
 
+// channel routes
+app.post('/channel/leave/v1', (req, res) => {
+  const { token, channelId } = req.body;
+  res.json(channelLeaveV1(token, channelId));
+});
+
+app.post('/channel/addowner/v1', (req, res) => {
+  const { token, channelId, uId } = req.body;
+  res.json(channelAddownerV1(token, channelId, uId));
+});
+
+app.post('/channel/removeowner/v1', (req, res) => {
+  const { token, channelId, uId } = req.body;
+  res.json(channelRemoveownerV1(token, channelId, uId));
+});
+
 // start server
 app.listen(PORT, HOST, () => {
   console.log(`⚡️ Server listening on port ${PORT} at ${HOST}`);
+  // auto-load saved data on server start
+  fileLoadData();
 });

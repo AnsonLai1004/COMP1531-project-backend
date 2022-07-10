@@ -4,6 +4,7 @@
  * @module dataStore
 **/
 import { User, Channel, DM, TokenPair } from './interfaces';
+import fs from 'fs';
 
 let data = {
   users: [] as User[],
@@ -37,4 +38,26 @@ export function getData(): DataStore {
 // Use set(newData) to pass in the entire data object, with modifications made
 export function setData(newData: DataStore) {
   data = newData;
+  // auto-save data every time it is modified
+  fileSaveData();
+}
+
+// Saves the data to a file dataStore.json
+function fileSaveData() {
+  // async method is used as the save function is called many times
+  fs.writeFile('dataStore.json', JSON.stringify(data), (err) => {
+    if (err) {
+      console.error(err);
+    }
+  });
+}
+
+// Updates the data based on the contents of dataStore.json
+export function fileLoadData() {
+  // sync method is used because the user expects next actions to have the loaded data
+  try {
+    data = JSON.parse(fs.readFileSync('dataStore.json', 'utf8'));
+  } catch (err) {
+    console.error(err);
+  }
 }

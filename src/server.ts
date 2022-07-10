@@ -6,7 +6,7 @@ import config from './config.json';
 import { channelDetailsV2, channelJoinV2 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
-import { userProfileV2 } from './users';
+import { userProfileV2, usersAllV1 } from './users';
 import { clearV1 } from './other';
 import { fileLoadData } from './data';
 
@@ -74,11 +74,16 @@ app.post('/channel/join/v2', (req, res) => {
   res.json(channelJoinV2(token, channelId));
 });
 
-// user routes
+// user(s) routes
 app.get('/user/profile/v2', (req, res) => {
   const uId = parseInt((req.query.uId) as string);
   const token = req.query.token as string;
   res.json(userProfileV2(token, uId));
+});
+
+app.get('/users/all/v1', (req, res) => {
+  const token = req.query.token as string;
+  res.json(usersAllV1(token));
 });
 
 // other routes

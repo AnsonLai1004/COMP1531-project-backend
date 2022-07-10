@@ -76,7 +76,7 @@ describe('Testing users/all/v1 valid cases', () => {
   });
 
   test('Multiple users information', () => {
-    const registered1 = requestAuthRegister('yet-another-valid@gmail.com', 'password', 'Harry', 'Potter');
+    const registered1 = requestAuthRegister('chosen-one@gmail.com', 'password', 'Harry', 'Potter');
     const registered2 = requestAuthRegister('different@gmail.com', 'password', 'Hermione', 'Granger');
     const registered3 = requestAuthRegister('golden-trio@gmail.com', 'password', 'Ron', 'Weasley');
     const users = requestUsersAll(registered1.token);

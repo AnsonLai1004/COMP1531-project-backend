@@ -7,12 +7,44 @@ import { tokenToUId } from './auth';
 
 const errorObject = { error: 'error' };
 
+/**
+ * Function which, when given a valid token, calls userProfileV1
+ * with the argument uId
+ * @param token
+ * @param uId
+ * @returns
+ */
 export function userProfileV2(token: string, uId: number) {
   const authUser = tokenToUId(token);
   if ('error' in authUser) {
     return errorObject;
   }
   return userProfileV1(authUser.uId, uId);
+}
+
+/**
+ * Function which, when given a valid token, returns an object with
+ * an array containing information on all users
+ * @param token
+ * @returns
+ */
+export function usersAllV1(token: string) {
+  const authUser = tokenToUId(token);
+  if ('error' in authUser) {
+    return errorObject;
+  }
+  const users = [];
+  const data = getData();
+  for (const user of data.users) {
+    users.push({
+      uId: user.uId,
+      email: user.email,
+      nameFirst: user.nameFirst,
+      nameLast: user.nameLast,
+      handleStr: user.handleStr,
+    });
+  }
+  return { users: users };
 }
 
 interface userProfileV1Return {

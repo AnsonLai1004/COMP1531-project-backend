@@ -3,8 +3,17 @@
  * @module user
 **/
 import { getData } from './data';
+import { tokenToUId } from './auth';
 
 const errorObject = { error: 'error' };
+
+export function userProfileV2(token: string, uId: number) {
+  const authUser = tokenToUId(token);
+  if ('error' in authUser) {
+    return errorObject;
+  }
+  return userProfileV1(authUser.uId, uId);
+}
 
 interface userProfileV1Return {
   user?: {

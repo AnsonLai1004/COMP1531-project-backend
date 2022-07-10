@@ -147,7 +147,7 @@ export function authLogoutV1(token: string) {
   return {};
 }
 
-/// //////////////////////// Helper Functions ////////////////////////////////
+/////////////////////////// Helper Functions ////////////////////////////////
 
 /**
  * Function which generates a new unique user token

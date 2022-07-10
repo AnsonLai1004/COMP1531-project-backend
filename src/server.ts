@@ -4,6 +4,8 @@ import morgan from 'morgan';
 import config from './config.json';
 
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
+import { channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
+import { dmDetailsV1 } from './dm';
 import { clearV1 } from './other';
 
 // Set up web app, use JSON
@@ -48,6 +50,28 @@ app.delete('/clear/v1', (req, res) => {
   res.json({});
 });
 
+// channel routes
+app.post('/channel/leave/v1', (req, res) => {
+  const { token, channelId } = req.body;
+  res.json(channelLeaveV1(token, channelId));
+});
+
+app.post('/channel/addowner/v1', (req, res) => {
+  const { token, channelId, uId } = req.body;
+  res.json(channelAddownerV1(token, channelId, uId));
+});
+
+app.post('/channel/removeowner/v1', (req, res) => {
+  const { token, channelId, uId } = req.body;
+  res.json(channelRemoveownerV1(token, channelId, uId));
+});
+
+// dm routes
+app.get('/dm/details/v1', (req, res) => {
+  const token = req.query.token as string;
+  const dmId = req.query.dmId
+  res.json(dmDetailsV1(token, dmId));
+});
 // start server
 app.listen(PORT, HOST, () => {
   console.log(`⚡️ Server listening on port ${PORT} at ${HOST}`);

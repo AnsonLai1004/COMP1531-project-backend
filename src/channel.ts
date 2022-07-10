@@ -1,7 +1,8 @@
 import { getData, setData } from './data';
 import { userProfileV1 } from './users';
-import { Message } from './interfaces';
-export { channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1 };
+import { Message, Channel } from './interfaces';
+export { channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1, 
+  channelLeaveV1, channelAddownerV1, channelRemoveownerV1, tokenToUId, membersobjCreate };
 
 /**
  * implementation of channel related functions
@@ -24,6 +25,11 @@ interface DetailReturn {
   isPublic?: boolean;
   ownerMembers?: membersobj[];
   allMembers?: membersobj[];
+  error?: string;
+}
+
+type tokenToUId = {
+  uId?: number;
   error?: string;
 }
 
@@ -221,6 +227,102 @@ function channelJoinV1(authUserId: number, channelId: number) {
   return {};
 }
 
+function channelLeaveV1(token: string, channelId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+
+  const data = getData();
+  for (const channel of data.channels) {
+    if (channel.channelId === channelId) {
+      for (let i = 0; i < channel.allMembers.length; i++) {
+        if (channel.allMembers[i] === tokenId.uId) {
+          channel.allMembers.splice(i, 1);
+          return {};
+        }
+      }
+    }
+  }
+  return { error: 'error' };
+}
+
+function channelAddownerV1(token: string, channelId: number, uId: number) {
+  // channelId valid?
+  if (!isValidChannelId(channelId)) {
+    return { error: 'error' };
+  }
+  // auth user is owner?
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+  if (!userIsOwner(tokenId.uId as number, channelId)) {
+    return { error: 'error' };
+  }
+  // uId valid?
+  if (!isValidUserId(uId)) {
+    return { error: 'error' };
+  }
+  // uId is member?
+  if (!userIsMember(uId, channelId)) {
+    return { error: 'error' };
+  }
+  // uId is already owner?
+  if (userIsOwner(uId, channelId)) {
+    return { error: 'error' };
+  }
+  // add owner
+  const data = getData();
+  for (const channel of data.channels) {
+    if (channel.channelId === channelId) {
+      channel.ownerMembers.push(uId);
+      return {};
+    }
+  }
+}
+
+function channelRemoveownerV1(token: string, channelId: number, uId: number) {
+  // channelId valid?
+  if (!isValidChannelId(channelId)) {
+    return { error: 'error' };
+  }
+  // auth user is owner?
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+  if (!userIsOwner(tokenId.uId as number, channelId)) {
+    return { error: 'error' };
+  }
+  // uId valid?
+  if (!isValidUserId(uId)) {
+    return { error: 'error' };
+  }
+  // uId is not owner?
+  if (!userIsOwner(uId, channelId)) {
+    return { error: 'error' };
+  }
+  
+  const data = getData();
+  for (const channel of data.channels) {
+    if (channel.channelId === channelId) {
+      // check if uId is only owner of the channel
+      if (channel.ownerMembers.length === 1) {
+        return { error: 'error' };
+      }
+      // remove owner
+      for (let i = 0; i < channel.ownerMembers.length; i++) {
+        if (channel.ownerMembers[i] === uId) {
+          channel.ownerMembers.splice(i, 1);
+          return {};
+        }
+      }
+    }
+  }
+}
+
+/////////////////////////// Helper Functions ////////////////////////////////
 /**
  * Helper function
  * return false if authUserId is not valid
@@ -231,6 +333,21 @@ function isValidUserId(authUserId: number) {
   const data = getData();
   for (const user of data.users) {
     if (authUserId === user.uId) {
+      return true;
+    }
+  }
+  return false;
+}
+/**
+ * Helper function
+ * return false if channelId is not valid
+ * @param {number} channelId
+ * @returns {boolean}
+ */
+ function isValidChannelId(channelId: number) {
+  const data = getData();
+  for (const channel of data.channels) {
+    if (channel.channelId === channelId) {
       return true;
     }
   }
@@ -256,4 +373,62 @@ function membersobjCreate(MembersArr: number[]): membersobj[] {
     });
   }
   return result;
+}
+
+/**
+ * Helper function
+ * Given a token, return authUserId
+ * @param {string} token
+ * @returns {number}
+ */
+ function tokenToUId(token: string): tokenToUId {
+  const data = getData();
+  for (let element of data.tokens) {
+    if (element.token === token) {
+      return { uId: element.uId };
+    }
+  }
+  return { error: 'error' };
+}
+
+/**
+ * Helper function
+ * return false if user is not a member of the channel
+ * @param {number} uId
+ * @param {number} channelId
+ * @returns {boolean}
+ */
+function userIsMember(uId: number, channelId: number) {
+  const data = getData();
+  for (const channel of data.channels) {
+    if (channel.channelId === channelId) {
+      for (const member of channel.allMembers) {
+        if (member === uId) {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+/**
+ * Helper function
+ * return false if user is not an owner of the channel
+ * @param {number} uId
+ * @param {number} channelId
+ * @returns {boolean}
+ */
+ function userIsOwner(uId: number, channelId: number) {
+  const data = getData();
+  for (const channel of data.channels) {
+    if (channel.channelId === channelId) {
+      for (const member of channel.ownerMembers) {
+        if (member === uId) {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
 }

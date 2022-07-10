@@ -3,7 +3,8 @@ import { userProfileV1 } from './users';
 import { Message } from './interfaces';
 export {
   channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1,
-  channelLeaveV1, channelAddownerV1, channelRemoveownerV1, tokenToUId, membersobjCreate, channelDetailsV2, channelJoinV2
+  channelLeaveV1, channelAddownerV1, channelRemoveownerV1, tokenToUId, membersobjCreate, channelDetailsV2, channelJoinV2,
+  channelMessagesV2, channelInviteV2
 };
 
 /**
@@ -77,6 +78,15 @@ function channelInviteV1(authUserId: number, channelId: number, uId: number) {
   return {};
 }
 
+function channelInviteV2(token: string, channelId: number, uId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+  const result = channelInviteV1(tokenId.uId as number, channelId, uId);
+  return result;
+}
+
 /**
  * Given a channel with ID channelId that the authorised user is a member of
  * return up to 50 messages between index "start" and "start + 50"
@@ -135,6 +145,23 @@ function channelMessagesV1(authUserId: number, channelId: number, start: number)
     };
   }
 }
+
+function channelMessagesV2(token: string, channelId: number, start: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+  const result = channelMessagesV1(tokenId.uId as number, channelId, start);
+  return result;
+}
+
+/**
+ * Given a channel with ID channelId that the authorised user is a member of,
+ * provide basic details about the channel.
+ * @param {string} token
+ * @param {number} channelId
+ * @returns {{name: string, isPublic: boolean, ownerMembers: membersobj[], allMembers: membersobj[]}}
+ */
 
 /**
  * Given a channel with ID channelId that the authorised user is a member of,

@@ -3,12 +3,11 @@ import { echo } from './echo';
 import morgan from 'morgan';
 import config from './config.json';
 
-import { channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
+import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
 
 import { clearV1 } from './other';
-import { fileLoadData } from './data';
 
 // Set up web app, use JSON
 const app = express();
@@ -31,6 +30,7 @@ app.get('/echo', (req, res, next) => {
 app.use(morgan('dev'));
 
 // auth routes
+
 app.post('/auth/login/v2', (req, res) => {
   const { email, password } = req.body;
   res.json(authLoginV2(email, password));
@@ -74,6 +74,18 @@ app.post('/channel/join/v2', (req, res) => {
   res.json(channelJoinV2(token, channelId));
 });
 
+app.post('/channel/invite/v2', (req, res) => {
+  const { uId, token, channelId } = req.body;
+  res.json(channelInviteV2(token, channelId, uId));
+});
+
+app.get('/channel/messages/v2', (req, res) => {
+  const start = parseInt((req.query.start) as string);
+  const channelId = parseInt((req.query.channelId) as string);
+  const token = req.query.token as string;
+  res.json(channelMessagesV2(token, channelId, start));
+});
+
 // other routes
 app.delete('/clear/v1', (req, res) => {
   clearV1();
@@ -100,5 +112,4 @@ app.post('/channel/removeowner/v1', (req, res) => {
 app.listen(PORT, HOST, () => {
   console.log(`⚡️ Server listening on port ${PORT} at ${HOST}`);
   // auto-load saved data on server start
-  fileLoadData();
 });

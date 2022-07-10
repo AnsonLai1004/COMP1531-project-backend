@@ -1,8 +1,10 @@
 import { getData, setData } from './data';
 import { userProfileV1 } from './users';
-import { Message, Channel } from './interfaces';
-export { channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1, 
-  channelLeaveV1, channelAddownerV1, channelRemoveownerV1, tokenToUId, membersobjCreate };
+import { Message } from './interfaces';
+export {
+  channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1,
+  channelLeaveV1, channelAddownerV1, channelRemoveownerV1, tokenToUId, membersobjCreate, channelDetailsV2, channelJoinV2
+};
 
 /**
  * implementation of channel related functions
@@ -25,11 +27,6 @@ interface DetailReturn {
   isPublic?: boolean;
   ownerMembers?: membersobj[];
   allMembers?: membersobj[];
-  error?: string;
-}
-
-type tokenToUId = {
-  uId?: number;
   error?: string;
 }
 
@@ -142,7 +139,7 @@ function channelMessagesV1(authUserId: number, channelId: number, start: number)
 /**
  * Given a channel with ID channelId that the authorised user is a member of,
  * provide basic details about the channel.
- * @param {number} authUserId
+ * @param {string} token
  * @param {number} channelId
  * @returns {{name: string, isPublic: boolean, ownerMembers: membersobj[], allMembers: membersobj[]}}
  */
@@ -182,7 +179,7 @@ function channelDetailsV1(authUserId: number, channelId: number): DetailReturn {
 /**
  * Given a channelId of a channel that the authorised
  * user can join, adds them to that channel.
- * @param {number} authUserId
+ * @param {string} token
  * @param {number} channelId
  * @returns {{}}
  */
@@ -222,11 +219,30 @@ function channelJoinV1(authUserId: number, channelId: number) {
     if (channelId === channel.channelId) {
       channel.allMembers.push(authUserId);
       setData(data);
+      return {};
     }
   }
-  return {};
 }
 
+function channelDetailsV2(token: string, channelId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+  const result = channelDetailsV1(tokenId.uId as number, channelId);
+  return result;
+}
+
+function channelJoinV2(token: string, channelId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+  const result = channelJoinV1(tokenId.uId as number, channelId);
+  return result;
+}
+
+// channel /leave /addowner /removeowner V1
 function channelLeaveV1(token: string, channelId: number) {
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -303,7 +319,7 @@ function channelRemoveownerV1(token: string, channelId: number, uId: number) {
   if (!userIsOwner(uId, channelId)) {
     return { error: 'error' };
   }
-  
+
   const data = getData();
   for (const channel of data.channels) {
     if (channel.channelId === channelId) {
@@ -322,8 +338,7 @@ function channelRemoveownerV1(token: string, channelId: number, uId: number) {
   }
 }
 
-/////////////////////////// Helper Functions ////////////////////////////////
-/**
+/************************************************************************
  * Helper function
  * return false if authUserId is not valid
  * @param {number} authUserId
@@ -344,7 +359,7 @@ function isValidUserId(authUserId: number) {
  * @param {number} channelId
  * @returns {boolean}
  */
- function isValidChannelId(channelId: number) {
+function isValidChannelId(channelId: number) {
   const data = getData();
   for (const channel of data.channels) {
     if (channel.channelId === channelId) {
@@ -353,13 +368,13 @@ function isValidUserId(authUserId: number) {
   }
   return false;
 }
+
 /**
  * Helper function
  * Given an array of uid, return array of user
  * @param {number[]} MembersArr
  * @returns {user[]}
  */
-
 function membersobjCreate(MembersArr: number[]): membersobj[] {
   const result = [];
   for (const memberid of MembersArr) {
@@ -381,9 +396,9 @@ function membersobjCreate(MembersArr: number[]): membersobj[] {
  * @param {string} token
  * @returns {number}
  */
- function tokenToUId(token: string): tokenToUId {
+function tokenToUId(token: string)/*: tokenToUId */ {
   const data = getData();
-  for (let element of data.tokens) {
+  for (const element of data.tokens) {
     if (element.token === token) {
       return { uId: element.uId };
     }
@@ -419,7 +434,7 @@ function userIsMember(uId: number, channelId: number) {
  * @param {number} channelId
  * @returns {boolean}
  */
- function userIsOwner(uId: number, channelId: number) {
+function userIsOwner(uId: number, channelId: number) {
   const data = getData();
   for (const channel of data.channels) {
     if (channel.channelId === channelId) {

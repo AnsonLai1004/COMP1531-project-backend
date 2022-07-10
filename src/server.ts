@@ -3,9 +3,10 @@ import { echo } from './echo';
 import morgan from 'morgan';
 import config from './config.json';
 
+import { channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
-import { channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
-import { dmDetailsV1 } from './dm';
+import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
+
 import { clearV1 } from './other';
 
 // Set up web app, use JSON
@@ -44,6 +45,34 @@ app.post('/auth/logout/v1', (req, res) => {
   res.json(authLogoutV1(token));
 });
 
+// channels routes
+app.post('/channels/create/v2', (req, res) => {
+  const { token, name, isPublic } = req.body;
+  res.json(channelsCreateV2(token, name, isPublic));
+});
+
+app.get('/channels/list/v2', (req, res) => {
+  const token = req.query.token as string;
+  res.json(channelsListV2(token));
+});
+
+app.get('/channels/listall/v2', (req, res) => {
+  const token = req.query.token as string;
+  res.json(channelsListallV2(token));
+});
+
+// channel routes
+app.get('/channel/details/v2', (req, res) => {
+  const channelId = parseInt((req.query.channelId) as string);
+  const token = req.query.token as string;
+  res.json(channelDetailsV2(token, channelId));
+});
+
+app.post('/channel/join/v2', (req, res) => {
+  const { token, channelId } = req.body;
+  res.json(channelJoinV2(token, channelId));
+});
+
 // other routes
 app.delete('/clear/v1', (req, res) => {
   clearV1();
@@ -66,12 +95,6 @@ app.post('/channel/removeowner/v1', (req, res) => {
   res.json(channelRemoveownerV1(token, channelId, uId));
 });
 
-// dm routes
-app.get('/dm/details/v1', (req, res) => {
-  const token = req.query.token as string;
-  const dmId = req.query.dmId
-  res.json(dmDetailsV1(token, dmId));
-});
 // start server
 app.listen(PORT, HOST, () => {
   console.log(`⚡️ Server listening on port ${PORT} at ${HOST}`);

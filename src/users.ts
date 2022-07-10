@@ -6,7 +6,7 @@ import { getData } from './data';
 
 const errorObject = { error: 'error' };
 
-interface userProfileReturn {
+interface userProfileV1Return {
   user?: {
     uId: number,
     email: string,
@@ -24,7 +24,7 @@ interface userProfileReturn {
  * @param {number} uId
  * @returns {userProfileReturn}
  */
-function userProfileV1(authUserId: number, uId: number): userProfileReturn {
+function userProfileV1(authUserId: number, uId: number): userProfileV1Return {
   if (!checkUserIdValid(authUserId)) {
     return errorObject;
   }

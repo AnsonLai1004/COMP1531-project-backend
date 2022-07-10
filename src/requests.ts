@@ -121,3 +121,17 @@ export function reqChannelJoin(token: string, channelId: number) {
   );
   return JSON.parse(res.getBody() as string);
 }
+
+export function requestUserProfile(token: string, uId: number) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/user/profile/v2',
+    {
+      qs: {
+        token,
+        uId
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}

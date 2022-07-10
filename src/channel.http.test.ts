@@ -10,7 +10,7 @@ beforeEach(() => {
   requestClear();
 });
 
-describe('channelInviteV1', () => {
+describe('/channel/invite/v2', () => {
 // error cases
   test('Error case for Invalid channelId', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
@@ -42,7 +42,7 @@ describe('channelInviteV1', () => {
   });
 
   // correct input output
-  test('Cases for correct return on channelInviteV1', () => {
+  test('Cases for correct return on /channel/invite/v2', () => {
     const owner = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const notMember = requestAuthRegister('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
     const newchannel = requestChannelsCreate(owner.token, 'crush team', true);
@@ -81,7 +81,7 @@ describe('channelInviteV1', () => {
   });
 });
 
-describe('channelMessagesV1', () => {
+describe('/channel/messages/v2', () => {
 // cases where error occur
   test('Error for invalid channelId', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');

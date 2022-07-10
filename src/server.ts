@@ -3,11 +3,9 @@ import { echo } from './echo';
 import morgan from 'morgan';
 import config from './config.json';
 
-
-import { channelDetailsV2, channelInviteV1, channelJoinV2, channelMessagesV1 } from './channel'
+import { channelDetailsV2, channelInviteV1, channelJoinV2, channelMessagesV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { clearV1 } from './other';
-
 
 // Set up web app, use JSON
 const app = express();
@@ -62,7 +60,6 @@ app.delete('/clear/v1', (req, res) => {
   clearV1();
   res.json({});
 });
-
 
 // start server
 app.listen(PORT, HOST, () => {

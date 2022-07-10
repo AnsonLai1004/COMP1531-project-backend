@@ -1,7 +1,7 @@
 import { getData, setData } from './data';
 import { userProfileV1 } from './users';
 import { Message } from './interfaces';
-export { channelDetailsV2, channelInviteV1, channelJoinV2, channelMessagesV1 };
+export { channelDetailsV1, channelJoinV1, channelInviteV1, channelMessagesV1, channelDetailsV2, channelJoinV2 };
 
 /**
  * implementation of channel related functions
@@ -26,13 +26,12 @@ interface DetailReturn {
   allMembers?: membersobj[];
   error?: string;
 }
-
+/*
 type tokenToUId = {
   uId?: number;
   error?: string;
 }
-
-
+*/
 /**
  * Invites a user with ID uId to join a channel with ID channelId.
  * returns empty if success, otherwise error
@@ -152,7 +151,7 @@ function channelDetailsV1(authUserId: number, channelId: number): DetailReturn {
   if (!isValidUserId(authUserId)) {
     return { error: 'error' };
   }
-  
+
   const data = getData();
   for (const channel of data.channels) {
     if (channel.channelId === channelId) {
@@ -287,9 +286,9 @@ function membersobjCreate(MembersArr: number[]): membersobj[] {
  * @param {string} token
  * @returns {number}
  */
-function tokenToUId(token: string): tokenToUId {
+function tokenToUId(token: string)/*: tokenToUId */ {
   const data = getData();
-  for (let element of data.tokens) {
+  for (const element of data.tokens) {
     if (element.token === token) {
       return { uId: element.uId };
     }

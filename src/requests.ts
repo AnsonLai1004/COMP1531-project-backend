@@ -82,4 +82,3 @@ export function reqChannelJoin(token: string, channelId: number) {
   );
   return JSON.parse(res.getBody() as string);
 }
-

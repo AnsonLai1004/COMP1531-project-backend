@@ -8,7 +8,6 @@ import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
 
 import { clearV1 } from './other';
-import { fileLoadData } from './data';
 
 // Set up web app, use JSON
 const app = express();
@@ -31,9 +30,6 @@ app.get('/echo', (req, res, next) => {
 app.use(morgan('dev'));
 
 // auth routes
-app.get('/', (req, res) => {
-  res.json(getData());
-});
 
 app.post('/auth/login/v2', (req, res) => {
   const { email, password } = req.body;
@@ -90,7 +86,6 @@ app.get('/channel/messages/v2', (req, res) => {
   res.json(channelMessagesV2(token, channelId, start));
 });
 
-
 // other routes
 app.delete('/clear/v1', (req, res) => {
   clearV1();
@@ -117,5 +112,4 @@ app.post('/channel/removeowner/v1', (req, res) => {
 app.listen(PORT, HOST, () => {
   console.log(`⚡️ Server listening on port ${PORT} at ${HOST}`);
   // auto-load saved data on server start
-  fileLoadData();
 });

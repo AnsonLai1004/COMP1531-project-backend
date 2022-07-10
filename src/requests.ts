@@ -124,7 +124,7 @@ export function reqChannelMessages(token: string, channelId: number, start: numb
         start,
       }
     }
-    );
+  );
   return JSON.parse(res.getBody() as string);
 }
 
@@ -154,7 +154,7 @@ export function requestChannelsCreate(token: string, name: string, isPublic: boo
         isPublic
       }
     }
-    );
+  );
   return JSON.parse(res.getBody() as string);
 }
 
@@ -183,7 +183,6 @@ export function requestChannelsListall(token: string) {
   );
   return JSON.parse(res.getBody() as string);
 }
-
 
 export function reqChannelRemoveowner(token: string, channelId: number, uId: number) {
   const res = request(

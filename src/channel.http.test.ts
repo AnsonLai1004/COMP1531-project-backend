@@ -2,10 +2,10 @@
  * Test file for auth routes endpoints and status codes.
  */
 import {
-    reqChannelInvite, reqChannelDetails, reqChannelJoin, reqChannelLeave, reqChannelAddowner, reqChannelRemoveowner,
-    requestClear, requestChannelsCreate, requestAuthRegister, reqChannelMessages
-  } from './requests';
-  
+  reqChannelInvite, reqChannelDetails, reqChannelJoin, reqChannelLeave, reqChannelAddowner, reqChannelRemoveowner,
+  requestClear, requestChannelsCreate, requestAuthRegister, reqChannelMessages
+} from './requests';
+
 beforeEach(() => {
   requestClear();
 });

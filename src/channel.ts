@@ -3,7 +3,7 @@ import { userProfileV1 } from './users';
 import { Message } from './interfaces';
 export {
   channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1,
-  channelLeaveV1, channelAddownerV1, channelRemoveownerV1, tokenToUId, membersobjCreate, channelDetailsV2, channelJoinV2, 
+  channelLeaveV1, channelAddownerV1, channelRemoveownerV1, tokenToUId, membersobjCreate, channelDetailsV2, channelJoinV2,
   channelMessagesV2, channelInviteV2
 };
 

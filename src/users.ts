@@ -3,7 +3,7 @@
  * @module user
 **/
 import { User } from './interfaces';
-import { getData } from './data';
+import { getData, setData } from './data';
 import { tokenToUId } from './auth';
 import isEmail from 'validator/lib/isEmail.js';
 
@@ -49,6 +49,95 @@ export function usersAllV1(token: string) {
   return { users: users };
 }
 
+/**
+ * Function which updates the name of the user associated with the token.
+ * Returns an error object if either the first or last name are
+ * not between 1 and 50 characters inclusive.
+ * @param token
+ * @param nameFirst
+ * @param nameLast
+ * @returns
+ */
+export function userSetNameV1(token: string, nameFirst: string, nameLast: string) {
+  const authUser = tokenToUId(token);
+  if ('error' in authUser) {
+    return errorObject;
+  }
+  if (nameFirst.length < 1 || nameFirst.length > 50) {
+    return errorObject;
+  }
+  if (nameLast.length < 1 || nameLast.length > 50) {
+    return errorObject;
+  }
+  const data = getData();
+  for (const user of data.users) {
+    if (authUser.uId === user.uId) {
+      user.nameFirst = nameFirst;
+      user.nameLast = nameLast;
+      setData(data);
+      return {};
+    }
+  }
+  return errorObject;
+}
+
+/**
+ * Function which updates the email of the user associated with the token.
+ * Returns an error object if the email is invalid or already in use by another user.
+ * @param token
+ * @param email
+ * @returns
+ */
+export function userSetEmailV1(token: string, email: string) {
+  const authUser = tokenToUId(token);
+  if ('error' in authUser) {
+    return errorObject;
+  }
+  if (!isEmail(email) || checkUserData(email, 'email')) {
+    return errorObject;
+  }
+
+  const data = getData();
+  for (const user of data.users) {
+    if (authUser.uId === user.uId) {
+      user.email = email;
+      setData(data);
+      return {};
+    }
+  }
+  return errorObject;
+}
+
+/**
+ * Function which updates the handle of the user associated with the token.
+ * Returns an error object if the handle has non-alphanumeric characters,
+ * is already in use by another user, or is not between 3 & 20 chars inclusive.
+ * @param token
+ * @param handleStr
+ * @returns
+ */
+export function userSetHandleV1(token: string, handleStr: string) {
+  const authUser = tokenToUId(token);
+  if ('error' in authUser) {
+    return errorObject;
+  }
+  if (checkUserData(handleStr, 'handleStr') || !(/^[0-9a-z]+$/i).test(handleStr)) {
+    return errorObject;
+  }
+  if (handleStr.length < 3 || handleStr.length > 20) {
+    return errorObject;
+  }
+  const data = getData();
+  for (const user of data.users) {
+    if (authUser.uId === user.uId) {
+      user.handleStr = handleStr;
+      setData(data);
+      return {};
+    }
+  }
+  return errorObject;
+}
+
 interface userProfileV1Return {
   user?: {
     uId: number,
@@ -89,8 +178,7 @@ export function userProfileV1(authUserId: number, uId: number): userProfileV1Ret
   return errorObject;
 }
 
-///// HELPER FUNCTIONS
-
+/// // HELPER FUNCTIONS
 
 /**
  * Function which checks if a particular piece of data is
@@ -99,7 +187,7 @@ export function userProfileV1(authUserId: number, uId: number): userProfileV1Ret
  * @param {string} field
  * @returns {boolean}
  */
- export function checkUserData(toCheck: string | number, field: keyof User): boolean {
+export function checkUserData(toCheck: string | number, field: keyof User): boolean {
   const data = getData();
   for (const user of data.users) {
     if (toCheck === user[field]) {
@@ -108,4 +196,3 @@ export function userProfileV1(authUserId: number, uId: number): userProfileV1Ret
   }
   return false;
 }
-

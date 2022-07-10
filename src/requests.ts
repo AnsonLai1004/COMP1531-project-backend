@@ -176,13 +176,13 @@ export function requestUserSetEmail(token: string, email: string) {
   return JSON.parse(res.getBody() as string);
 }
 
-export function requestUserSetHandle(token: string, handle: string) {
+export function requestUserSetHandle(token: string, handleStr: string) {
   const res = request(
     'PUT',
       `${url}:${port}` + '/user/profile/sethandle/v1',
       {
         json: {
-          token, handle
+          token, handleStr
         }
       }
   );

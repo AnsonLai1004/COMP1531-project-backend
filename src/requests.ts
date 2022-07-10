@@ -53,3 +53,42 @@ export function requestClear() {
   );
   return JSON.parse(res.getBody() as string);
 }
+
+export function requestChannelsCreate(token: string, name: string, isPublic: boolean) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/channels/create/v2',
+    {
+      json: {
+        token, name, isPublic
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function requestChannelsList(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/channels/list/v2',
+    {
+      qs: {
+        token
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function requestChannelsListall(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/channels/listall/v2',
+    {
+      qs: {
+        token
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}

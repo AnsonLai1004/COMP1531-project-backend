@@ -1,6 +1,7 @@
 import { getData, setData } from './data';
 import { userProfileV1 } from './users';
 import { Message } from './interfaces';
+import { tokenToUId } from './auth';
 export { channelDetailsV1, channelJoinV1, channelInviteV1, channelMessagesV1, channelDetailsV2, channelJoinV2 };
 
 /**
@@ -26,12 +27,7 @@ interface DetailReturn {
   allMembers?: membersobj[];
   error?: string;
 }
-/*
-type tokenToUId = {
-  uId?: number;
-  error?: string;
-}
-*/
+
 /**
  * Invites a user with ID uId to join a channel with ID channelId.
  * returns empty if success, otherwise error
@@ -290,18 +286,3 @@ function membersobjCreate(MembersArr: number[]): membersobj[] {
   return result;
 }
 
-/**
- * Helper function
- * Given a token, return authUserId
- * @param {string} token
- * @returns {number}
- */
-function tokenToUId(token: string)/*: tokenToUId */ {
-  const data = getData();
-  for (const element of data.tokens) {
-    if (element.token === token) {
-      return { uId: element.uId };
-    }
-  }
-  return { error: 'error' };
-}

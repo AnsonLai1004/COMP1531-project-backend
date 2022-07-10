@@ -163,19 +163,26 @@ function generateToken(uId: number) {
   return tokenStr;
 }
 
-// interface validateTokenReturn {
-//   authUserId?: number;
-//   error?: string;
-// }
 
-// /**
-//  * Function which takes in a token and validates it against
-//  * the appropriate userId
-//  * @param token
-//  */
-// export function validateToken(token: string): validateTokenReturn {
-//   const data = getData();
-// }
+type tokenToUIdReturn = {
+  uId?: number;
+  error?: string;
+}
+
+/**
+ * Given a token, return authUserId
+ * @param {string} token
+ * @returns {number}
+ */
+ export function tokenToUId(token: string): tokenToUIdReturn {
+  const data = getData();
+  for (const element of data.tokens) {
+    if (element.token === token) {
+      return { uId: element.uId };
+    }
+  }
+  return { error: 'error' };
+}
 
 /**
  * Function which checks if a particular piece of data is
@@ -204,7 +211,7 @@ function checkDuplicateUserData(toCheck: string | number, field: keyof User): bo
  * @param {string} nameLast
  * @returns {string}
  */
-const generateHandle = function(nameFirst: string, nameLast: string) {
+function generateHandle(nameFirst: string, nameLast: string) {
   let prelimHandle = (nameFirst + nameLast).toLowerCase();
   prelimHandle = prelimHandle.replace(/[_\W]/g, '');
   prelimHandle = prelimHandle.slice(0, 20);

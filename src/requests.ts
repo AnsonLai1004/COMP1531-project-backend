@@ -122,6 +122,67 @@ export function reqChannelJoin(token: string, channelId: number) {
   return JSON.parse(res.getBody() as string);
 }
 
+// channel/.../v1
+export function reqChannelLeave(token: string, channelId: number) {
+  const res = request(
+    'POST',
+      `${url}:${port}` + '/channel/leave/v1',
+      {
+        json: {
+          token,
+          channelId,
+        }
+      }
+
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function reqChannelAddowner(token: string, channelId: number, uId: number) {
+  const res = request(
+    'POST',
+      `${url}:${port}` + '/channel/addowner/v1',
+      {
+        json: {
+          token,
+          channelId,
+          uId,
+        }
+      }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function reqChannelRemoveowner(token: string, channelId: number, uId: number) {
+  const res = request(
+    'POST',
+      `${url}:${port}` + '/channel/removeowner/v1',
+      {
+        json: {
+          token,
+          channelId,
+          uId,
+        }
+      }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+// dm/.../v1
+export function reqDmDetails(token: string, dmId: number) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/dm/details/v1',
+    {
+      qs: {
+        token,
+        dmId,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
 // user & users
 export function requestUserProfile(token: string, uId: number) {
   const res = request(

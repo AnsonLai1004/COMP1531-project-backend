@@ -3,7 +3,7 @@ import { echo } from './echo';
 import morgan from 'morgan';
 import config from './config.json';
 
-import { channelDetailsV2, channelJoinV2 } from './channel';
+import { channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
 import { userProfileV2, usersAllV1, userSetNameV1, userSetEmailV1, userSetHandleV1 } from './users';
@@ -105,6 +105,22 @@ app.put('/user/profile/sethandle/v1', (req, res) => {
 app.delete('/clear/v1', (req, res) => {
   clearV1();
   res.json({});
+});
+
+// channel routes
+app.post('/channel/leave/v1', (req, res) => {
+  const { token, channelId } = req.body;
+  res.json(channelLeaveV1(token, channelId));
+});
+
+app.post('/channel/addowner/v1', (req, res) => {
+  const { token, channelId, uId } = req.body;
+  res.json(channelAddownerV1(token, channelId, uId));
+});
+
+app.post('/channel/removeowner/v1', (req, res) => {
+  const { token, channelId, uId } = req.body;
+  res.json(channelRemoveownerV1(token, channelId, uId));
 });
 
 // start server

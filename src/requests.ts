@@ -213,3 +213,70 @@ export function reqDmDetails(token: string, dmId: number) {
   );
   return JSON.parse(res.getBody() as string);
 }
+
+// user & users
+export function requestUserProfile(token: string, uId: number) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/user/profile/v2',
+    {
+      qs: {
+        token,
+        uId
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function requestUsersAll(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/users/all/v1',
+    {
+      qs: {
+        token
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function requestUserSetName(token: string, nameFirst: string, nameLast: string) {
+  const res = request(
+    'PUT',
+      `${url}:${port}` + '/user/profile/setname/v1',
+      {
+        json: {
+          token, nameFirst, nameLast
+        }
+      }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function requestUserSetEmail(token: string, email: string) {
+  const res = request(
+    'PUT',
+      `${url}:${port}` + '/user/profile/setemail/v1',
+      {
+        json: {
+          token, email
+        }
+      }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function requestUserSetHandle(token: string, handleStr: string) {
+  const res = request(
+    'PUT',
+      `${url}:${port}` + '/user/profile/sethandle/v1',
+      {
+        json: {
+          token, handleStr
+        }
+      }
+  );
+  return JSON.parse(res.getBody() as string);
+}

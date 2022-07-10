@@ -6,7 +6,7 @@ import config from './config.json';
 import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
-
+import { userProfileV2, usersAllV1, userSetNameV1, userSetEmailV1, userSetHandleV1 } from './users';
 import { clearV1 } from './other';
 
 // Set up web app, use JSON
@@ -84,6 +84,33 @@ app.get('/channel/messages/v2', (req, res) => {
   const channelId = parseInt((req.query.channelId) as string);
   const token = req.query.token as string;
   res.json(channelMessagesV2(token, channelId, start));
+});
+
+// user(s) routes
+app.get('/user/profile/v2', (req, res) => {
+  const uId = parseInt((req.query.uId) as string);
+  const token = req.query.token as string;
+  res.json(userProfileV2(token, uId));
+});
+
+app.get('/users/all/v1', (req, res) => {
+  const token = req.query.token as string;
+  res.json(usersAllV1(token));
+});
+
+app.put('/user/profile/setname/v1', (req, res) => {
+  const { token, nameFirst, nameLast } = req.body;
+  res.json(userSetNameV1(token, nameFirst, nameLast));
+});
+
+app.put('/user/profile/setemail/v1', (req, res) => {
+  const { token, email } = req.body;
+  res.json(userSetEmailV1(token, email));
+});
+
+app.put('/user/profile/sethandle/v1', (req, res) => {
+  const { token, handleStr } = req.body;
+  res.json(userSetHandleV1(token, handleStr));
 });
 
 // other routes

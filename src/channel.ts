@@ -1,6 +1,7 @@
 import { getData, setData } from './data';
 import { userProfileV1 } from './users';
 import { Message } from './interfaces';
+import { tokenToUId } from './auth';
 export {
   channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1,
   channelLeaveV1, channelAddownerV1, channelRemoveownerV1, tokenToUId, membersobjCreate, channelDetailsV2, channelJoinV2,
@@ -415,22 +416,6 @@ function membersobjCreate(MembersArr: number[]): membersobj[] {
     });
   }
   return result;
-}
-
-/**
- * Helper function
- * Given a token, return authUserId
- * @param {string} token
- * @returns {number}
- */
-function tokenToUId(token: string)/*: tokenToUId */ {
-  const data = getData();
-  for (const element of data.tokens) {
-    if (element.token === token) {
-      return { uId: element.uId };
-    }
-  }
-  return { error: 'error' };
 }
 
 /**

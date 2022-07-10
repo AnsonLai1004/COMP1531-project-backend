@@ -122,6 +122,7 @@ export function reqChannelJoin(token: string, channelId: number) {
   return JSON.parse(res.getBody() as string);
 }
 
+// user & users
 export function requestUserProfile(token: string, uId: number) {
   const res = request(
     'GET',
@@ -130,6 +131,19 @@ export function requestUserProfile(token: string, uId: number) {
       qs: {
         token,
         uId
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function requestUsersAll(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/users/all/v1',
+    {
+      qs: {
+        token
       }
     }
   );

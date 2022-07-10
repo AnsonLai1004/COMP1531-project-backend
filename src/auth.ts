@@ -163,7 +163,6 @@ function generateToken(uId: number) {
   return tokenStr;
 }
 
-
 type tokenToUIdReturn = {
   uId?: number;
   error?: string;
@@ -174,7 +173,7 @@ type tokenToUIdReturn = {
  * @param {string} token
  * @returns {number}
  */
- export function tokenToUId(token: string): tokenToUIdReturn {
+export function tokenToUId(token: string): tokenToUIdReturn {
   const data = getData();
   for (const element of data.tokens) {
     if (element.token === token) {
@@ -224,4 +223,4 @@ function generateHandle(nameFirst: string, nameLast: string) {
   }
 
   return finalHandle;
-};
+}

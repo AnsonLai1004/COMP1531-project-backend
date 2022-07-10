@@ -2,8 +2,8 @@
  * implementation of auth-related functions
  * @module auth
 **/
-import { User } from './interfaces';
 import { getData, setData } from './data';
+import { checkUserData } from './users';
 import isEmail from 'validator/lib/isEmail.js';
 
 const errorObject = { error: 'error' };
@@ -53,7 +53,7 @@ interface authRegisterV1Return {
  * @returns {{authUserId: number}}
  */
 export function authRegisterV1(email: string, password: string, nameFirst: string, nameLast: string): authRegisterV1Return {
-  if (!isEmail(email) || checkDuplicateUserData(email, 'email')) {
+  if (!isEmail(email) || checkUserData(email, 'email')) {
     return errorObject;
   }
   if (password.length < 6) {
@@ -184,24 +184,6 @@ export function tokenToUId(token: string): tokenToUIdReturn {
 }
 
 /**
- * Function which checks if a particular piece of data is
- * already used by another user.
- * @param {string | number} toCheck
- * @param {string} field
- * @returns {boolean}
- */
-function checkDuplicateUserData(toCheck: string | number, field: keyof User): boolean {
-  // console.log(setData);
-  const data = getData();
-  for (const user of data.users) {
-    if (toCheck === user[field]) {
-      return true;
-    }
-  }
-  return false;
-}
-
-/**
  * A function which generates a unique user handle based on
  * first name and last name concatenated, casted to lowercase,
  * non-alphanumeric characters removed and truncated at 20 characters.
@@ -217,7 +199,7 @@ function generateHandle(nameFirst: string, nameLast: string) {
 
   let finalHandle = prelimHandle;
   let i = 0;
-  while (checkDuplicateUserData(finalHandle, 'handleStr')) {
+  while (checkUserData(finalHandle, 'handleStr')) {
     finalHandle = prelimHandle + `${i}`;
     i++;
   }

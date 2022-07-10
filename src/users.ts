@@ -2,8 +2,10 @@
  * implementation of user-related functions
  * @module user
 **/
+import { User } from './interfaces';
 import { getData } from './data';
 import { tokenToUId } from './auth';
+import isEmail from 'validator/lib/isEmail.js';
 
 const errorObject = { error: 'error' };
 
@@ -65,8 +67,8 @@ interface userProfileV1Return {
  * @param {number} uId
  * @returns {userProfileReturn}
  */
-function userProfileV1(authUserId: number, uId: number): userProfileV1Return {
-  if (!checkUserIdValid(authUserId)) {
+export function userProfileV1(authUserId: number, uId: number): userProfileV1Return {
+  if (!checkUserData(authUserId, 'uId')) {
     return errorObject;
   }
   const data = getData();
@@ -87,19 +89,23 @@ function userProfileV1(authUserId: number, uId: number): userProfileV1Return {
   return errorObject;
 }
 
+///// HELPER FUNCTIONS
+
+
 /**
- * Checks if a userId is valid.
- * @param {number} toCheck
+ * Function which checks if a particular piece of data is
+ * already used by another user.
+ * @param {string | number} toCheck
+ * @param {string} field
  * @returns {boolean}
  */
-function checkUserIdValid(toCheck: number) {
+ export function checkUserData(toCheck: string | number, field: keyof User): boolean {
   const data = getData();
   for (const user of data.users) {
-    if (toCheck === user.uId) {
+    if (toCheck === user[field]) {
       return true;
     }
   }
   return false;
 }
 
-export { userProfileV1 };

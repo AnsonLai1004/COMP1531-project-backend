@@ -213,3 +213,19 @@ export function reqDmDetails(token: string, dmId: number) {
   );
   return JSON.parse(res.getBody() as string);
 }
+
+// /message/send/v1
+export function reqMessageSend(token: string, channelId: number, message: string) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/send/v1',
+    {
+      json: {
+        token,
+        channelId,
+        message,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}

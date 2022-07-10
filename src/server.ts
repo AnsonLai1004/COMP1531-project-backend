@@ -6,8 +6,10 @@ import config from './config.json';
 import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
+import { messageSendV1 } from './message'
 
 import { clearV1 } from './other';
+import { getData } from './data';
 
 // Set up web app, use JSON
 const app = express();
@@ -17,6 +19,10 @@ const PORT: number = parseInt(process.env.PORT || config.port);
 const HOST: string = process.env.IP || 'localhost';
 
 // Example get request
+app.get('/', (req, res, next) => {
+  res.json(getData());
+});
+
 app.get('/echo', (req, res, next) => {
   try {
     const data = req.query.echo as string;
@@ -106,6 +112,11 @@ app.post('/channel/addowner/v1', (req, res) => {
 app.post('/channel/removeowner/v1', (req, res) => {
   const { token, channelId, uId } = req.body;
   res.json(channelRemoveownerV1(token, channelId, uId));
+});
+
+app.post('/message/send/v1', (req, res) => {
+  const { token, channelId, message } = req.body;
+  res.json(messageSendV1(token, channelId, message));
 });
 
 // start server

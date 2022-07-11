@@ -237,7 +237,8 @@ export function reqMessageSend(token: string, channelId: number, message: string
       json: {
         token,
         channelId,
-        message,}
+        message
+      }
     }
   );
   return JSON.parse(res.getBody() as string);

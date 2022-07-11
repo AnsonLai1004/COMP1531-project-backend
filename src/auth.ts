@@ -2,8 +2,8 @@
  * implementation of auth-related functions
  * @module auth
 **/
-import { User } from './interfaces';
 import { getData, setData } from './data';
+import { checkUserData } from './users';
 import isEmail from 'validator/lib/isEmail.js';
 
 const errorObject = { error: 'error' };
@@ -53,7 +53,7 @@ interface authRegisterV1Return {
  * @returns {{authUserId: number}}
  */
 export function authRegisterV1(email: string, password: string, nameFirst: string, nameLast: string): authRegisterV1Return {
-  if (!isEmail(email) || checkDuplicateUserData(email, 'email')) {
+  if (!isEmail(email) || checkUserData(email, 'email')) {
     return errorObject;
   }
   if (password.length < 6) {
@@ -163,36 +163,24 @@ function generateToken(uId: number) {
   return tokenStr;
 }
 
-// interface validateTokenReturn {
-//   authUserId?: number;
-//   error?: string;
-// }
-
-// /**
-//  * Function which takes in a token and validates it against
-//  * the appropriate userId
-//  * @param token
-//  */
-// export function validateToken(token: string): validateTokenReturn {
-//   const data = getData();
-// }
+type tokenToUIdReturn = {
+  uId?: number;
+  error?: string;
+}
 
 /**
- * Function which checks if a particular piece of data is
- * already used by another user.
- * @param {string | number} toCheck
- * @param {string} field
- * @returns {boolean}
+ * Given a token, return authUserId
+ * @param {string} token
+ * @returns {number}
  */
-function checkDuplicateUserData(toCheck: string | number, field: keyof User): boolean {
-  // console.log(setData);
+export function tokenToUId(token: string): tokenToUIdReturn {
   const data = getData();
-  for (const user of data.users) {
-    if (toCheck === user[field]) {
-      return true;
+  for (const element of data.tokens) {
+    if (element.token === token) {
+      return { uId: element.uId };
     }
   }
-  return false;
+  return { error: 'error' };
 }
 
 /**
@@ -204,17 +192,17 @@ function checkDuplicateUserData(toCheck: string | number, field: keyof User): bo
  * @param {string} nameLast
  * @returns {string}
  */
-const generateHandle = function(nameFirst: string, nameLast: string) {
+function generateHandle(nameFirst: string, nameLast: string) {
   let prelimHandle = (nameFirst + nameLast).toLowerCase();
   prelimHandle = prelimHandle.replace(/[_\W]/g, '');
   prelimHandle = prelimHandle.slice(0, 20);
 
   let finalHandle = prelimHandle;
   let i = 0;
-  while (checkDuplicateUserData(finalHandle, 'handleStr')) {
+  while (checkUserData(finalHandle, 'handleStr')) {
     finalHandle = prelimHandle + `${i}`;
     i++;
   }
 
   return finalHandle;
-};
+}

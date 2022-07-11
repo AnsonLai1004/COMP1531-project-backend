@@ -49,7 +49,7 @@ describe('/channel/invite/v2', () => {
     // valid invite
     expect(reqChannelInvite(owner.token, newchannel.channelId, notMember.authUserId)).toStrictEqual({});
 
-    /** expect(channelDetailsV1(owner.token, newchannel.channelId)).toMatchObject({
+    expect(reqChannelDetails(owner.token, newchannel.channelId)).toMatchObject({
     name: 'crush team',
     isPublic: true,
     ownerMembers: [
@@ -77,7 +77,7 @@ describe('/channel/invite/v2', () => {
         uId: 2,
         }
     ],
-    });**/
+    });
   });
 });
 

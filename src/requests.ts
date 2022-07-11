@@ -229,3 +229,34 @@ export function reqMessageSend(token: string, channelId: number, message: string
   );
   return JSON.parse(res.getBody() as string);
 }
+
+// /message/edit/v1
+export function reqMessageEdit(token: string, messageId: number, message: string) {
+  const res = request(
+    'PUT',
+    `${url}:${port}` + '/message/edit/v1',
+    {
+      json: {
+        token,
+        messageId,
+        message,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+// /message/remove/v1
+export function reqMessageRemove(token: string, messageId: number) {
+  const res = request(
+    'DELETE',
+    `${url}:${port}` + '/message/remove/v1',
+    {
+      qs: {
+        token,
+        messageId,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}

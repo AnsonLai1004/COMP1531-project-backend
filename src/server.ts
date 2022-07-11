@@ -6,7 +6,7 @@ import config from './config.json';
 import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
-import { messageSendV1 } from './message'
+import { messageSendV1, messageRemoveV1, messageEditV1 } from './message'
 
 import { clearV1 } from './other';
 import { getData } from './data';
@@ -117,6 +117,17 @@ app.post('/channel/removeowner/v1', (req, res) => {
 app.post('/message/send/v1', (req, res) => {
   const { token, channelId, message } = req.body;
   res.json(messageSendV1(token, channelId, message));
+});
+
+app.put('/message/edit/v1', (req, res) => {
+  const { token, messageId, message } = req.body;
+  res.json(messageEditV1(token, messageId, message));
+});
+
+app.delete('/message/remove/v1', (req, res) => {
+  const messageId = parseInt((req.query.messageId) as string);
+  const token = req.query.token as string;
+  res.json(messageRemoveV1(token, messageId));
 });
 
 // start server

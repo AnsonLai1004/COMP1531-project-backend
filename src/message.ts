@@ -1,43 +1,18 @@
 import { getData, setData } from './data';
-import { userProfileV1 } from './users';
 import { Message } from './interfaces';
 export {
-    messageSendV1, messageRemoveV1, messageEditV1
+  messageSendV1, messageRemoveV1, messageEditV1
 };
 
 /**
- * implementation of channel related functions
-**/
-interface error {
-  error: string;
-}
-
-interface member {
-  uId: number;
-  email: string;
-  nameFirst: string;
-  nameLast: string;
-  handleStr: string;
-}
-type membersobj = member | error;
-
-interface DetailReturn {
-  name?: string;
-  isPublic?: boolean;
-  ownerMembers?: membersobj[];
-  allMembers?: membersobj[];
-  error?: string;
-}
-
-/** 
- * Send a message from the authorised user to the channel specified by channelId. 
- * Note: Each message should have its own unique ID, 
- * i.e. no messages should share an ID with another message, 
+ * Send a message from the authorised user to the channel specified by channelId.
+ * Note: Each message should have its own unique ID,
+ * i.e. no messages should share an ID with another message,
  * even if that other message is in a different channel.
  * @param {string} token
  * @param {number} channelId
  * @param {string} message
- * @returns {{messageId: number}} 
+ * @returns {{messageId: number}}
 */
 function messageSendV1(token: string, channelId: number, message: string) {
   // channel Id does not refer to valid channel Id
@@ -46,43 +21,43 @@ function messageSendV1(token: string, channelId: number, message: string) {
   }
   // if message lenght is less than 1 or greater than 100
   if (message.length < 1 || message.length > 1000) {
-      return { error: 'error' };
+    return { error: 'error' };
   }
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
-      return { error: 'error' };
+    return { error: 'error' };
   }
   // authorised user is not a member of the channel
   // uId is not owner?
   if (!userIsAuthorised(tokenId.uId, channelId)) {
-      return { error: 'error' };
+    return { error: 'error' };
   }
   const datastore = getData();
   // lastmessageid+1, uid, message, timesent
-  let newmessage: Message = {
-      messageId: (datastore.lastMessageId + 1) as number,
-      uId: tokenId.uId,
-      message: message,
-      timeSent: Math.round(Date.now() / 1000)
-  }
+  const newmessage: Message = {
+    messageId: (datastore.lastMessageId + 1) as number,
+    uId: tokenId.uId,
+    message: message,
+    timeSent: Math.round(Date.now() / 1000)
+  };
   for (const channel of datastore.channels) {
-      if (channel.channelId === channelId) {
-          channel.messages.push(newmessage);
-      }
+    if (channel.channelId === channelId) {
+      channel.messages.push(newmessage);
+    }
   }
   datastore.lastMessageId++;
   setData(datastore);
-  return { messageId: newmessage.messageId};
+  return { messageId: newmessage.messageId };
 }
 
-/** 
- * Given a message, update its text with new text. 
- * If the new message is an empty string, 
+/**
+ * Given a message, update its text with new text.
+ * If the new message is an empty string,
  * the message is deleted.
  * @param {string} token
  * @param {number} messageId
  * @param {string} message
- * @returns {{messageId: number}} 
+ * @returns {{messageId: number}}
 */
 function messageEditV1(token: string, messageId: number, message: string) {
   // if message length is less than 1 or greater than 1000
@@ -118,10 +93,10 @@ function messageEditV1(token: string, messageId: number, message: string) {
 
   // no message or found return error
   if (chosenMessage === null) {
-    return { error: 'error'};
+    return { error: 'error' };
   }
   // if chosen message uid not equal to token then return error
-  if (chosenMessage.uId != tokenId.uId) {
+  if (chosenMessage.uId !== tokenId.uId) {
     return { error: 'error' };
   }
   // check if user is owner in channel
@@ -138,7 +113,7 @@ function messageEditV1(token: string, messageId: number, message: string) {
   }
 
   // change message
-  if (message === "") {
+  if (message === '') {
     // remove message
     messageRemoveV1(token, messageId);
   } else {
@@ -148,13 +123,13 @@ function messageEditV1(token: string, messageId: number, message: string) {
   return {};
 }
 
-/** 
- * Given a messageId for a message, 
+/**
+ * Given a messageId for a message,
  * this message is removed from the channel/DM
  * @param {string} token
  * @param {number} messageId
  * @param {string} message
- * @returns {{messageId: number}} 
+ * @returns {{messageId: number}}
 */
 function messageRemoveV1(token: string, messageId: number) {
   // if message length is less than 1 or greater than 1000
@@ -187,20 +162,20 @@ function messageRemoveV1(token: string, messageId: number) {
 
   // no message or found return error
   if (chosenMessage === null) {
-    return { error: 'error'};
+    return { error: 'error' };
   }
   // if chosen message uid not equal to token then return error
-  if (chosenMessage.uId != tokenId.uId) {
+  if (chosenMessage.uId !== tokenId.uId) {
     return { error: 'error' };
   }
   // check if user is owner in channel
-  if (chosenChannel != null) {
+  if (chosenChannel !== null) {
     if (!userIsOwner(tokenId.uId, chosenChannel.channelId)) {
       return { error: 'error' };
     }
   }
   // check if userisowner in dm
-  if (chosenDm != null) {
+  if (chosenDm !== null) {
     if (!userIsOwnerInDm(tokenId.uId, chosenDm.dmId)) {
       return { error: 'error' };
     }
@@ -252,27 +227,6 @@ function isValidChannelId(channelId: number) {
 
 /**
  * Helper function
- * Given an array of uid, return array of user
- * @param {number[]} MembersArr
- * @returns {user[]}
- */
-function membersobjCreate(MembersArr: number[]): membersobj[] {
-  const result = [];
-  for (const memberid of MembersArr) {
-    const user = userProfileV1(memberid, memberid);
-    result.push({
-      uId: user.user.uId,
-      email: user.user.email,
-      nameFirst: user.user.nameFirst,
-      nameLast: user.user.nameLast,
-      handleStr: user.user.handleStr,
-    });
-  }
-  return result;
-}
-
-/**
- * Helper function
  * Given a token, return authUserId
  * @param {string} token
  * @returns {number}
@@ -315,15 +269,15 @@ function userIsOwner(uId: number, channelId: number) {
 * @returns {boolean}
 */
 function userIsOwnerInDm(uId: number, dmId: number) {
- const data = getData();
- for (const dms of data.dms) {
-   if (dms.dmId === dmId) {
-    if (dms.ownerId === uId) {
-      return true;
+  const data = getData();
+  for (const dms of data.dms) {
+    if (dms.dmId === dmId) {
+      if (dms.ownerId === uId) {
+        return true;
+      }
     }
-   }
- }
- return false;
+  }
+  return false;
 }
 
 /**

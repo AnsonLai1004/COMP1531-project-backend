@@ -6,7 +6,7 @@ import config from './config.json';
 import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
-import { messageSendV1, messageRemoveV1, messageEditV1 } from './message'
+import { messageSendV1, messageRemoveV1, messageEditV1 } from './message';
 
 import { clearV1 } from './other';
 import { getData } from './data';

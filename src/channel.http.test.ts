@@ -50,33 +50,33 @@ describe('/channel/invite/v2', () => {
     expect(reqChannelInvite(owner.token, newchannel.channelId, notMember.authUserId)).toStrictEqual({});
 
     expect(reqChannelDetails(owner.token, newchannel.channelId)).toMatchObject({
-    name: 'crush team',
-    isPublic: true,
-    ownerMembers: [
+      name: 'crush team',
+      isPublic: true,
+      ownerMembers: [
         {
-        email: 'validemail@gmail.com',
-        handleStr: 'jakerenzella',
-        nameFirst: 'Jake',
-        nameLast: 'Renzella',
-        uId: 1,
+          email: 'validemail@gmail.com',
+          handleStr: 'jakerenzella',
+          nameFirst: 'Jake',
+          nameLast: 'Renzella',
+          uId: 1,
         }
-    ],
-    allMembers: [
+      ],
+      allMembers: [
         {
-        email: 'validemail@gmail.com',
-        handleStr: 'jakerenzella',
-        nameFirst: 'Jake',
-        nameLast: 'Renzella',
-        uId: 1,
+          email: 'validemail@gmail.com',
+          handleStr: 'jakerenzella',
+          nameFirst: 'Jake',
+          nameLast: 'Renzella',
+          uId: 1,
         },
         {
-        email: 'Bob@gmail.com',
-        handleStr: 'bobrenzella',
-        nameFirst: 'Bob',
-        nameLast: 'Renzella',
-        uId: 2,
+          email: 'Bob@gmail.com',
+          handleStr: 'bobrenzella',
+          nameFirst: 'Bob',
+          nameLast: 'Renzella',
+          uId: 2,
         }
-    ],
+      ],
     });
   });
 });

@@ -1,7 +1,7 @@
 import { getData, setData } from './data';
 import { Message } from './interfaces';
 import { tokenToUId, membersobjCreate, isValidUserId } from './channel';
-export { dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 };
+export { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 };
 
 function dmCreateV1(token: string, uIds: number[]) {
   // any invalid uId in uIds
@@ -127,6 +127,40 @@ function dmRemoveV1(token: string, dmId: number) {
   return {};
 }
 
+function dmLeaveV1(token: string, dmId: number) {
+  // check if token passed in is valid
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+
+  // check if dmId passed in is valid
+  if (!isValidDmId(dmId)) {
+    return { error: 'error' };
+  }
+
+  // check if user is a member of dm
+  if (!userIsDMmember(tokenId.uId, dmId)) {
+    return { error: 'error' };
+  }
+
+  const data = getData();
+  for (const dm of data.dms) {
+    if (dm.dmId === dmId) {
+      // change ownerId to negative since in our implementation cannot be negative
+      if (dm.ownerId === tokenId.uId) {
+        dm.ownerId = -1;
+      } else { // remove member that is not owner
+        dm.uIds = dm.uIds.filter((uId) => uId !== tokenId.uId);
+      }
+      break;
+    }
+  }
+
+  setData(data);
+  return {};
+}
+
 /// //////////////////////// Helper Functions ////////////////////////////////
 /**
  * Helper function
@@ -146,7 +180,7 @@ function isValidDmId(dmId: number) {
 
 /**
  * Helper function
- * return false if user is not a member of the DM
+ * return false if user is not a member of the DM (checks owner as well)
  * @param {number} uId
  * @param {number} dmId
  * @returns {boolean}

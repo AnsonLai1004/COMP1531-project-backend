@@ -228,6 +228,22 @@ export function reqDmDetails(token: string, dmId: number) {
   return JSON.parse(res.getBody() as string);
 }
 
+// /message/send/v1
+export function reqMessageSend(token: string, channelId: number, message: string) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/send/v1',
+    {
+      json: {
+        token,
+        channelId,
+        message
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
 export function reqDmList(token: string) {
   const res = request(
     'GET',
@@ -284,6 +300,22 @@ export function requestUserProfile(token: string, uId: number) {
   return JSON.parse(res.getBody() as string);
 }
 
+// /message/edit/v1
+export function reqMessageEdit(token: string, messageId: number, message: string) {
+  const res = request(
+    'PUT',
+    `${url}:${port}` + '/message/edit/v1',
+    {
+      json: {
+        token,
+        messageId,
+        message,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
 export function requestUsersAll(token: string) {
   const res = request(
     'GET',
@@ -291,6 +323,21 @@ export function requestUsersAll(token: string) {
     {
       qs: {
         token
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+// /message/remove/v1
+export function reqMessageRemove(token: string, messageId: number) {
+  const res = request(
+    'DELETE',
+    `${url}:${port}` + '/message/remove/v1',
+    {
+      qs: {
+        token,
+        messageId,
       }
     }
   );
@@ -332,6 +379,38 @@ export function requestUserSetHandle(token: string, handleStr: string) {
           token, handleStr
         }
       }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+// message/senddm/v1
+export function reqSendMessageDm(token: string, dmId: number, message: string) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/senddm/v1',
+    {
+      json: {
+        token,
+        dmId,
+        message,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+// dm/messages/v1
+export function reqDmMessages(token: string, dmId: number, start: number) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/dm/messages/v1',
+    {
+      qs: {
+        token,
+        dmId,
+        start,
+      }
+    }
   );
   return JSON.parse(res.getBody() as string);
 }

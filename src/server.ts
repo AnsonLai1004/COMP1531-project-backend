@@ -6,8 +6,11 @@ import config from './config.json';
 import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
+import { messageSendV1, messageRemoveV1, messageEditV1, dmMessagesV1, messageSendDmV1 } from './message';
+
 import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 } from './dm';
 import { clearV1 } from './other';
+import { getData } from './data';
 // import { fileLoadData } from './data';
 
 import { userProfileV2, usersAllV1, userSetNameV1, userSetEmailV1, userSetHandleV1 } from './users';
@@ -20,6 +23,10 @@ const PORT: number = parseInt(process.env.PORT || config.port);
 const HOST: string = process.env.IP || 'localhost';
 
 // Example get request
+app.get('/', (req, res, next) => {
+  res.json(getData());
+});
+
 app.get('/echo', (req, res, next) => {
   try {
     const data = req.query.echo as string;
@@ -138,6 +145,22 @@ app.post('/channel/removeowner/v1', (req, res) => {
   res.json(channelRemoveownerV1(token, channelId, uId));
 });
 
+app.post('/message/send/v1', (req, res) => {
+  const { token, channelId, message } = req.body;
+  res.json(messageSendV1(token, channelId, message));
+});
+
+app.put('/message/edit/v1', (req, res) => {
+  const { token, messageId, message } = req.body;
+  res.json(messageEditV1(token, messageId, message));
+});
+
+app.delete('/message/remove/v1', (req, res) => {
+  const messageId = parseInt((req.query.messageId) as string);
+  const token = req.query.token as string;
+  res.json(messageRemoveV1(token, messageId));
+});
+
 // dm routes
 app.post('/dm/create/v1', (req, res) => {
   const { token, uIds } = req.body;
@@ -150,6 +173,18 @@ app.get('/dm/details/v1', (req, res) => {
   res.json(dmDetailsV1(token, dmId));
 });
 
+app.post('/message/senddm/v1', (req, res) => {
+  const { token, dmId, message } = req.body;
+  res.json(messageSendDmV1(token, dmId, message));
+});
+
+app.get('/dm/messages/v1', (req, res) => {
+  const token = req.query.token as string;
+  const dmId = parseInt((req.query.dmId) as string);
+  const start = parseInt((req.query.start) as string);
+  res.json(dmMessagesV1(token, dmId, start));
+});
+// start server
 app.get('/dm/list/v1', (req, res) => {
   const token = req.query.token as string;
   res.json(dmListV1(token));

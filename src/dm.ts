@@ -1,7 +1,7 @@
 import { getData, setData } from './data';
 import { Message } from './interfaces';
 import { tokenToUId, membersobjCreate, isValidUserId } from './channel';
-export { dmListV1, dmCreateV1, dmDetailsV1 };
+export { dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 };
 
 function dmCreateV1(token: string, uIds: number[]) {
   // any invalid uId in uIds
@@ -99,6 +99,36 @@ function dmListV1(token: string) {
   return { dms: dms }
 }
 
+function dmRemoveV1(token: string, dmId: number) {
+
+  // check if token passed in is valid
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+
+  // check if dmId passed in is valid
+  if (!isValidDmId(dmId)) {
+    return { error: 'error' };
+  }
+
+  // check if user is a member of dm
+  if (!userIsDMmember(tokenId.uId, dmId)) {
+    return { error: 'error' };
+  }
+
+  // check if user is dm creator
+  if (!userIsDMOwner(tokenId.uId, dmId)) {
+    return { error: 'error' };
+  }
+  
+  const data = getData();
+  data.dms = data.dms.filter((dm) => dm.dmId !== dmId);
+  setData(data);
+
+  return {};
+}
+
 /// //////////////////////// Helper Functions ////////////////////////////////
 /**
  * Helper function
@@ -120,13 +150,16 @@ function isValidDmId(dmId: number) {
  * Helper function
  * return false if user is not a member of the DM
  * @param {number} uId
- * @param {number} channelId
+ * @param {number} dmId
  * @returns {boolean}
  */
 function userIsDMmember(uId: number, dmId: number) {
   const data = getData();
   for (const dm of data.dms) {
     if (dm.dmId === dmId) {
+      if (dm.ownerId === uId) {
+        return true;
+      }
       for (const member of dm.uIds) {
         if (member === uId) {
           return true;
@@ -135,5 +168,24 @@ function userIsDMmember(uId: number, dmId: number) {
     }
   }
 
+  return false;
+}
+
+/**
+ * Helper function
+ * return false if user is not the DM owner
+ * @param {number} uId
+ * @param {number} dmId
+ * @returns {boolean}
+ */
+function userIsDMOwner(uId: number, dmId: number) {
+  const data = getData();
+  for (const dm of data.dms) {
+    if (dm.dmId === dmId) {
+      if (dm.ownerId === uId) {
+        return true;
+      }
+    }
+  }
   return false;
 }

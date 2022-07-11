@@ -231,7 +231,7 @@ export function reqDmDetails(token: string, dmId: number) {
 export function reqDmList(token: string) {
   const res = request(
     'GET',
-    `${url}:${port}` + '/dm/details/v1',
+    `${url}:${port}` + '/dm/list/v1',
     {
       qs: {
         token,

@@ -6,7 +6,7 @@ import config from './config.json';
 import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
-import { dmCreateV1, dmDetailsV1 } from './dm';
+import { dmListV1, dmCreateV1, dmDetailsV1 } from './dm';
 import { clearV1 } from './other';
 // import { fileLoadData } from './data';
 
@@ -152,7 +152,7 @@ app.get('/dm/details/v1', (req, res) => {
 
 app.get('/dm/list/v1', (req, res) => {
   const token = req.query.token as string;
-  res.json(dmListV1(token, dmId));
+  res.json(dmListV1(token));
 });
 
 app.listen(PORT, HOST, () => {

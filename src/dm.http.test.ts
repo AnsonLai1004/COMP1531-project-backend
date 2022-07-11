@@ -4,6 +4,10 @@ beforeEach(() => {
   requestClear();
 });
 
+afterEach(() => {
+  requestClear();
+});
+
 describe('dm/create/v1', () => {
   test('invalid uId in uIds, invalid token', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
@@ -143,7 +147,7 @@ describe('dm/list/v1', () => {
     })
 
     // member only
-    expect(reqDmList(user.token)).toStrictEqual({
+    expect(reqDmList(user2.token)).toStrictEqual({
       dms: [
         {
           dmId: dm.dmId,
@@ -153,6 +157,6 @@ describe('dm/list/v1', () => {
     })
 
     // none
-    expect(reqDmList(user.token)).toStrictEqual({ dms: [] })
+    expect(reqDmList(user3.token)).toStrictEqual({ dms: [] })
   });
 });

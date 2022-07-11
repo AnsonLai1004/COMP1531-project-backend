@@ -1,7 +1,7 @@
 import { getData, setData } from './data';
 import { Message } from './interfaces';
 import { tokenToUId, membersobjCreate, isValidUserId } from './channel';
-export { dmCreateV1, dmDetailsV1 };
+export { dmListV1, dmCreateV1, dmDetailsV1 };
 
 function dmCreateV1(token: string, uIds: number[]) {
   // any invalid uId in uIds
@@ -73,6 +73,30 @@ function dmDetailsV1(token: string, dmId: number) {
     }
   }
   return { error: 'error' };
+}
+
+function dmListV1(token: string) {
+
+  // check if token passed in is valid
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+  
+  const data = getData();
+  const dms = [];
+
+  for (const dm of data.dms) {
+    // check if user is owner / member of a dm
+    if (tokenId.uId === dm.ownerId || dm.uIds.includes(tokenId.uId)) {
+      dms.push({
+        dmId: dm.dmId,
+        name: dm.name,
+      })
+    }
+  }
+
+  return { dms: dms }
 }
 
 /// //////////////////////// Helper Functions ////////////////////////////////

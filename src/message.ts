@@ -72,7 +72,7 @@ function messageEditV1(token: string, messageId: number, message: string) {
 
   const datastore = getData();
   let chosenChannel = null;
-  let chosenMessage = null;
+  let chosenMessage: Message = null;
   // find message
   for (const channel of datastore.channels) {
     for (const message of channel.messages) {
@@ -141,7 +141,7 @@ function messageRemoveV1(token: string, messageId: number) {
 
   const datastore = getData();
   let chosenChannel = null;
-  let chosenMessage = null;
+  let chosenMessage: Message = null;
   // find message
   for (const channel of datastore.channels) {
     for (const message of channel.messages) {

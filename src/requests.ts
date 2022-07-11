@@ -341,3 +341,35 @@ export function requestUserSetHandle(token: string, handleStr: string) {
   );
   return JSON.parse(res.getBody() as string);
 }
+
+// message/senddm/v1
+export function reqSendMessageDm(token: string, dmId: number, message: string) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/senddm/v1',
+    {
+      json: {
+        token,
+        dmId,
+        message,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+// dm/messages/v1
+export function reqDmMessages(token: string, dmId: number, start: number) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/dm/messages/v1',
+    {
+      qs: {
+        token,
+        dmId,
+        start,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}

@@ -6,7 +6,7 @@ import config from './config.json';
 import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
-import { messageSendV1, messageRemoveV1, messageEditV1 } from './message';
+import { messageSendV1, messageRemoveV1, messageEditV1, dmMessagesV1, messageSendDmV1 } from './message';
 
 import { clearV1 } from './other';
 import { getData } from './data';
@@ -173,6 +173,17 @@ app.get('/dm/details/v1', (req, res) => {
   res.json(dmDetailsV1(token, dmId));
 });
 
+app.post('/message/senddm/v1', (req, res) => {
+  const { token, dmId, message } = req.body;
+  res.json(messageSendDmV1(token, dmId, message));
+});
+
+app.get('/dm/messages/v1', (req, res) => {
+  const token = req.query.token as string;
+  const dmId = parseInt((req.query.dmId) as string);
+  const start = parseInt((req.query.start) as string);
+  res.json(dmMessagesV1(token, dmId, start));
+});
 // start server
 app.listen(PORT, HOST, () => {
   console.log(`⚡️ Server listening on port ${PORT} at ${HOST}`);

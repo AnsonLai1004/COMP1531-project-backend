@@ -1,7 +1,8 @@
 import { getData, setData } from './data';
 import { Message } from './interfaces';
 export {
-  messageSendV1, messageRemoveV1, messageEditV1
+  messageSendV1, messageRemoveV1, messageEditV1, messageSendDmV1,
+  dmMessagesV1
 };
 
 /**
@@ -82,16 +83,16 @@ function messageEditV1(token: string, messageId: number, message: string) {
     }
   }
   let chosenDm = null;
-  for (const dms of datastore.dms) {
-    for (const message of dms.messages) {
+  for (const dm of datastore.dms) {
+    for (const message of dm.messages) {
       if (message.messageId === messageId) {
-        chosenDm = dms;
+        chosenDm = dm;
         chosenMessage = message;
       }
     }
   }
 
-  // no message or found return error
+  // no message return error
   if (chosenMessage === null) {
     return { error: 'error' };
   }
@@ -195,7 +196,7 @@ function messageRemoveV1(token: string, messageId: number) {
     // use chosendm since not found in channel
     for (const element of datastore.dms) {
       if (element.dmId === chosenDm.dmId) {
-        element.messages = element.messages.filter(item => item.messageId !== chosenDm.messageId);
+        element.messages = element.messages.filter(item => item.messageId !== chosenMessage.messageId);
       }
     }
     setData(datastore);
@@ -203,12 +204,118 @@ function messageRemoveV1(token: string, messageId: number) {
   return {};
 }
 
-/************************************************************************
- * Helper function
- * return false if authUserId is not valid
- * @param {number} authUserId
- * @returns {boolean}
+/**
+ * Send a message from authorisedUser to the DM specified by dmId.
+ * Note: Each message should have it's own unique ID,
+ * i.e. no messages should share an ID with another message,
+ * even if that other message is in a different channel or DM.
+ * @param {string} token
+ * @param {number} dmId
+ * @param {string} message
+ * @returns
  */
+function messageSendDmV1(token: string, dmId: number, message: string) {
+  // channel Id does not refer to valid channel Id
+  if (!isValidDmId(dmId)) {
+    return { error: 'error' };
+  }
+  // if message lenght is less than 1 or greater than 1000
+  if (message.length < 1 || message.length > 1000) {
+    return { error: 'error' };
+  }
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+  // authorised user is not a member of the dm
+  // uId is not owner?
+  if (!userIsAuthorisedInDm(tokenId.uId, dmId)) {
+    return { error: 'error' };
+  }
+  const datastore = getData();
+  // lastmessageid+1, uid, message, timesent
+  const newmessage: Message = {
+    messageId: (datastore.lastMessageId + 1) as number,
+    uId: tokenId.uId,
+    message: message,
+    timeSent: Math.round(Date.now() / 1000)
+  };
+  for (const dm of datastore.dms) {
+    if (dm.dmId === dmId) {
+      dm.messages.push(newmessage);
+    }
+  }
+  datastore.lastMessageId++;
+  setData(datastore);
+  return { messageId: newmessage.messageId };
+}
+
+/**
+ * Given a channel with ID channelId that the authorised user is a member of
+ * return up to 50 messages between index "start" and "start + 50"
+ * return end = -1 if end of messages.
+ * otherwise return error.
+ * @param {number} authUserId
+ * @param {number} dmId
+ * @param {number} start
+ * @returns {{messages: Arr object of type message, start:  number, end:  number}}
+ */
+function dmMessageV1helper(authUserId: number, dmId: number, start: number) {
+  const dataStore = getData();
+
+  // check uid and channel id exist
+  // check authorized user who invited the member is not a member of the group
+  const foundDm = dataStore.dms.some(el => el.dmId === dmId);
+  if (!foundDm) {
+    return { error: 'error' };
+  }
+
+  const getdm = dataStore.dms.filter(el => el.dmId === dmId);
+  const exactdm = getdm[0];
+  const checkmembers = exactdm.uIds.includes(authUserId);
+  if (!checkmembers && exactdm.ownerId !== authUserId) {
+    return { error: 'error' };
+  }
+
+  // find channel get length of messages
+  let numofmessages = 0;
+  let messages: Message[] = [];
+  for (const element of dataStore.dms) {
+    if (element.dmId === dmId) {
+      numofmessages = element.messages.length;
+      messages = element.messages;
+      break;
+    }
+  }
+  if (start > numofmessages) {
+    return { error: 'error' };
+  }
+  const end = start + 50;
+  if (end < numofmessages) {
+    return {
+      messages: messages,
+      start: start,
+      end: end,
+    };
+  } else {
+    return {
+      messages: messages,
+      start: start,
+      end: -1,
+    };
+  }
+}
+
+function dmMessagesV1(token: string, dmId: number, start: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+  const result = dmMessageV1helper(tokenId.uId as number, dmId, start);
+  return result;
+}
+
+/************************************************************************
 /**
  * Helper function
  * return false if channelId is not valid
@@ -219,6 +326,21 @@ function isValidChannelId(channelId: number) {
   const data = getData();
   for (const channel of data.channels) {
     if (channel.channelId === channelId) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ *
+ * @param {number} dmId
+ * @returns {boolean}
+ */
+function isValidDmId(dmId: number) {
+  const data = getData();
+  for (const dm of data.dms) {
+    if (dm.dmId === dmId) {
       return true;
     }
   }
@@ -292,6 +414,30 @@ function userIsAuthorised(uId: number, channelId: number) {
   for (const channel of data.channels) {
     if (channel.channelId === channelId) {
       for (const member of channel.allMembers) {
+        if (member === uId) {
+          return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+/**
+ * Helper function
+ * return false if user is not an owner of the channel
+ * @param {number} uId
+ * @param {number} channelId
+ * @returns {boolean}
+ */
+function userIsAuthorisedInDm(uId: number, dmId: number) {
+  const data = getData();
+  for (const dm of data.dms) {
+    if (dm.dmId === dmId) {
+      if (dm.ownerId === uId) {
+        return true;
+      }
+      for (const member of dm.uIds) {
         if (member === uId) {
           return true;
         }

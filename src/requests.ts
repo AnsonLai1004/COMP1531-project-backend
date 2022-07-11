@@ -228,6 +228,19 @@ export function reqDmDetails(token: string, dmId: number) {
   return JSON.parse(res.getBody() as string);
 }
 
+export function reqDmList(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/dm/details/v1',
+    {
+      qs: {
+        token,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
 // user & users
 export function requestUserProfile(token: string, uId: number) {
   const res = request(

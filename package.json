@@ -1,6 +1,6 @@
 {
     "scripts": {
-        "test": "jest src/message.test.ts",
+        "test": "jest",
         "ts-node": "ts-node",
         "tsc": "tsc --noImplicitAny",
         "lint": "eslint src/**.ts",

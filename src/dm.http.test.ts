@@ -1,4 +1,4 @@
-import { reqDmDetails, reqDmCreate, requestClear, requestAuthRegister } from './requests';
+import { reqDmList, reqDmDetails, reqDmCreate, requestClear, requestAuthRegister } from './requests';
 
 beforeEach(() => {
   requestClear();
@@ -99,5 +99,60 @@ describe('dm/details/v1', () => {
         },
       ],
     });
+  });
+});
+
+describe('dm/list/v1', () => {
+
+  test('invalid token', () => {
+    expect(reqDmList('invalid token')).toStrictEqual({ error: 'error' });
+  });
+  
+  test('correct return', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const user3 = requestAuthRegister('bill@gmail.com', 'samplePass', 'Bill', 'Benkins');
+
+    const uIds = [user1.authUserId, user2.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    const dm1 = reqDmCreate(user1.token, []);
+
+    // owner only
+    expect(reqDmList(user.token)).toStrictEqual({
+      dms: [
+        {
+          dmId: dm.dmId,
+          name: 'alexavery, jakerenzella, theoang',
+        }
+      ]
+    })
+
+    // owner and member
+    expect(reqDmList(user1.token)).toStrictEqual({
+      dms: [
+        {
+          dmId: dm.dmId,
+          name: 'alexavery, jakerenzella, theoang',
+        }, 
+        {
+          dmId: dm1.dmId,
+          name: 'theoang',
+        },
+      ]
+    })
+
+    // member only
+    expect(reqDmList(user.token)).toStrictEqual({
+      dms: [
+        {
+          dmId: dm.dmId,
+          name: 'alexavery, jakerenzella, theoang',
+        }
+      ]
+    })
+
+    // none
+    expect(reqDmList(user.token)).toStrictEqual({ dms: [] })
   });
 });

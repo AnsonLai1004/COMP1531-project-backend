@@ -241,6 +241,20 @@ export function reqDmList(token: string) {
   return JSON.parse(res.getBody() as string);
 }
 
+export function reqDmRemove(token: string, dmId: number) {
+  const res = request(
+    'DELETE',
+    `${url}:${port}` + '/dm/remove/v1',
+    {
+      qs: {
+        token,
+        dmId,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
 // user & users
 export function requestUserProfile(token: string, uId: number) {
   const res = request(

@@ -8,9 +8,9 @@ import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
 import { messageSendV1, messageRemoveV1, messageEditV1, dmMessagesV1, messageSendDmV1 } from './message';
 
+import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 } from './dm';
 import { clearV1 } from './other';
 import { getData } from './data';
-import { dmCreateV1, dmDetailsV1 } from './dm';
 // import { fileLoadData } from './data';
 
 import { userProfileV2, usersAllV1, userSetNameV1, userSetEmailV1, userSetHandleV1 } from './users';
@@ -185,6 +185,22 @@ app.get('/dm/messages/v1', (req, res) => {
   res.json(dmMessagesV1(token, dmId, start));
 });
 // start server
+app.get('/dm/list/v1', (req, res) => {
+  const token = req.query.token as string;
+  res.json(dmListV1(token));
+});
+
+app.delete('/dm/remove/v1', (req, res) => {
+  const token = req.query.token as string;
+  const dmId = parseInt(req.query.dmId as string);
+  res.json(dmRemoveV1(token, dmId));
+});
+
+app.post('/dm/leave/v1', (req, res) => {
+  const { token, dmId } = req.body;
+  res.json(dmLeaveV1(token, dmId));
+});
+
 app.listen(PORT, HOST, () => {
   console.log(`⚡️ Server listening on port ${PORT} at ${HOST}`);
   // auto-load saved data on server start

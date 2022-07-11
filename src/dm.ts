@@ -1,7 +1,7 @@
 import { getData, setData } from './data';
 import { Message } from './interfaces';
 import { tokenToUId, membersobjCreate, isValidUserId } from './channel';
-export { dmCreateV1, dmDetailsV1 };
+export { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 };
 
 function dmCreateV1(token: string, uIds: number[]) {
   // any invalid uId in uIds
@@ -75,6 +75,92 @@ function dmDetailsV1(token: string, dmId: number) {
   return { error: 'error' };
 }
 
+function dmListV1(token: string) {
+  // check if token passed in is valid
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+
+  const data = getData();
+  const dms = [];
+
+  for (const dm of data.dms) {
+    // check if user is owner / member of a dm
+    if (tokenId.uId === dm.ownerId || dm.uIds.includes(tokenId.uId)) {
+      dms.push({
+        dmId: dm.dmId,
+        name: dm.name,
+      });
+    }
+  }
+
+  return { dms: dms };
+}
+
+function dmRemoveV1(token: string, dmId: number) {
+  // check if token passed in is valid
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+
+  // check if dmId passed in is valid
+  if (!isValidDmId(dmId)) {
+    return { error: 'error' };
+  }
+
+  // check if user is a member of dm
+  if (!userIsDMmember(tokenId.uId, dmId)) {
+    return { error: 'error' };
+  }
+
+  // check if user is dm creator
+  if (!userIsDMOwner(tokenId.uId, dmId)) {
+    return { error: 'error' };
+  }
+
+  const data = getData();
+  data.dms = data.dms.filter((dm) => dm.dmId !== dmId);
+  setData(data);
+
+  return {};
+}
+
+function dmLeaveV1(token: string, dmId: number) {
+  // check if token passed in is valid
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
+
+  // check if dmId passed in is valid
+  if (!isValidDmId(dmId)) {
+    return { error: 'error' };
+  }
+
+  // check if user is a member of dm
+  if (!userIsDMmember(tokenId.uId, dmId)) {
+    return { error: 'error' };
+  }
+
+  const data = getData();
+  for (const dm of data.dms) {
+    if (dm.dmId === dmId) {
+      // change ownerId to negative since in our implementation cannot be negative
+      if (dm.ownerId === tokenId.uId) {
+        dm.ownerId = -1;
+      } else { // remove member that is not owner
+        dm.uIds = dm.uIds.filter((uId) => uId !== tokenId.uId);
+      }
+      break;
+    }
+  }
+
+  setData(data);
+  return {};
+}
+
 /// //////////////////////// Helper Functions ////////////////////////////////
 /**
  * Helper function
@@ -94,15 +180,18 @@ function isValidDmId(dmId: number) {
 
 /**
  * Helper function
- * return false if user is not a member of the DM
+ * return false if user is not a member of the DM (checks owner as well)
  * @param {number} uId
- * @param {number} channelId
+ * @param {number} dmId
  * @returns {boolean}
  */
 function userIsDMmember(uId: number, dmId: number) {
   const data = getData();
   for (const dm of data.dms) {
     if (dm.dmId === dmId) {
+      if (dm.ownerId === uId) {
+        return true;
+      }
       for (const member of dm.uIds) {
         if (member === uId) {
           return true;
@@ -111,5 +200,24 @@ function userIsDMmember(uId: number, dmId: number) {
     }
   }
 
+  return false;
+}
+
+/**
+ * Helper function
+ * return false if user is not the DM owner
+ * @param {number} uId
+ * @param {number} dmId
+ * @returns {boolean}
+ */
+function userIsDMOwner(uId: number, dmId: number) {
+  const data = getData();
+  for (const dm of data.dms) {
+    if (dm.dmId === dmId) {
+      if (dm.ownerId === uId) {
+        return true;
+      }
+    }
+  }
   return false;
 }

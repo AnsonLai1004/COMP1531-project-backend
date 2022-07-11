@@ -237,7 +237,47 @@ export function reqMessageSend(token: string, channelId: number, message: string
       json: {
         token,
         channelId,
-        message,
+        message,}
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function reqDmList(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/dm/list/v1',
+    {
+      qs: {
+        token,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function reqDmRemove(token: string, dmId: number) {
+  const res = request(
+    'DELETE',
+    `${url}:${port}` + '/dm/remove/v1',
+    {
+      qs: {
+        token,
+        dmId,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function reqDmLeave(token: string, dmId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/dm/leave/v1',
+    {
+      json: {
+        token,
+        dmId,
       }
     }
   );

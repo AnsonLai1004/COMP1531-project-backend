@@ -11,8 +11,6 @@ import { clearV1 } from './other';
 // import { fileLoadData } from './data';
 
 import { userProfileV2, usersAllV1, userSetNameV1, userSetEmailV1, userSetHandleV1 } from './users';
-import { clearV1 } from './other';
-
 
 // Set up web app, use JSON
 const app = express();

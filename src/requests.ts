@@ -200,6 +200,20 @@ export function reqChannelRemoveowner(token: string, channelId: number, uId: num
 }
 
 // dm/.../v1
+export function reqDmCreate(token: string, uIds: number[]) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/dm/create/v1',
+    {
+      json: {
+        token,
+        uIds,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
 export function reqDmDetails(token: string, dmId: number) {
   const res = request(
     'GET',
@@ -230,6 +244,21 @@ export function reqMessageSend(token: string, channelId: number, message: string
   return JSON.parse(res.getBody() as string);
 }
 
+// user & users
+export function requestUserProfile(token: string, uId: number) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/user/profile/v2',
+    {
+      qs: {
+        token,
+        uId
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
 // /message/edit/v1
 export function reqMessageEdit(token: string, messageId: number, message: string) {
   const res = request(
@@ -240,6 +269,19 @@ export function reqMessageEdit(token: string, messageId: number, message: string
         token,
         messageId,
         message,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function requestUsersAll(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/users/all/v1',
+    {
+      qs: {
+        token
       }
     }
   );
@@ -257,6 +299,45 @@ export function reqMessageRemove(token: string, messageId: number) {
         messageId,
       }
     }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function requestUserSetName(token: string, nameFirst: string, nameLast: string) {
+  const res = request(
+    'PUT',
+      `${url}:${port}` + '/user/profile/setname/v1',
+      {
+        json: {
+          token, nameFirst, nameLast
+        }
+      }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function requestUserSetEmail(token: string, email: string) {
+  const res = request(
+    'PUT',
+      `${url}:${port}` + '/user/profile/setemail/v1',
+      {
+        json: {
+          token, email
+        }
+      }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
+export function requestUserSetHandle(token: string, handleStr: string) {
+  const res = request(
+    'PUT',
+      `${url}:${port}` + '/user/profile/sethandle/v1',
+      {
+        json: {
+          token, handleStr
+        }
+      }
   );
   return JSON.parse(res.getBody() as string);
 }

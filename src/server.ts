@@ -10,6 +10,10 @@ import { messageSendV1, messageRemoveV1, messageEditV1 } from './message'
 
 import { clearV1 } from './other';
 import { getData } from './data';
+import { dmCreateV1, dmDetailsV1 } from './dm';
+// import { fileLoadData } from './data';
+
+import { userProfileV2, usersAllV1, userSetNameV1, userSetEmailV1, userSetHandleV1 } from './users';
 
 // Set up web app, use JSON
 const app = express();
@@ -92,6 +96,33 @@ app.get('/channel/messages/v2', (req, res) => {
   res.json(channelMessagesV2(token, channelId, start));
 });
 
+// user(s) routes
+app.get('/user/profile/v2', (req, res) => {
+  const uId = parseInt((req.query.uId) as string);
+  const token = req.query.token as string;
+  res.json(userProfileV2(token, uId));
+});
+
+app.get('/users/all/v1', (req, res) => {
+  const token = req.query.token as string;
+  res.json(usersAllV1(token));
+});
+
+app.put('/user/profile/setname/v1', (req, res) => {
+  const { token, nameFirst, nameLast } = req.body;
+  res.json(userSetNameV1(token, nameFirst, nameLast));
+});
+
+app.put('/user/profile/setemail/v1', (req, res) => {
+  const { token, email } = req.body;
+  res.json(userSetEmailV1(token, email));
+});
+
+app.put('/user/profile/sethandle/v1', (req, res) => {
+  const { token, handleStr } = req.body;
+  res.json(userSetHandleV1(token, handleStr));
+});
+
 // other routes
 app.delete('/clear/v1', (req, res) => {
   clearV1();
@@ -128,6 +159,18 @@ app.delete('/message/remove/v1', (req, res) => {
   const messageId = parseInt((req.query.messageId) as string);
   const token = req.query.token as string;
   res.json(messageRemoveV1(token, messageId));
+});
+
+// dm routes
+app.post('/dm/create/v1', (req, res) => {
+  const { token, uIds } = req.body;
+  res.json(dmCreateV1(token, uIds));
+});
+
+app.get('/dm/details/v1', (req, res) => {
+  const token = req.query.token as string;
+  const dmId = parseInt((req.query.dmId) as string);
+  res.json(dmDetailsV1(token, dmId));
 });
 
 // start server

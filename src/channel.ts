@@ -4,8 +4,9 @@ import { Message } from './interfaces';
 import { tokenToUId } from './auth';
 export {
   channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1,
-  channelLeaveV1, channelAddownerV1, channelRemoveownerV1, tokenToUId, membersobjCreate, channelDetailsV2, channelJoinV2,
-  channelMessagesV2, channelInviteV2
+  channelLeaveV1, channelAddownerV1, channelRemoveownerV1,
+  channelMessagesV2, channelInviteV2, channelDetailsV2, channelJoinV2,
+  membersobjCreate, isValidUserId, tokenToUId
 };
 
 /**

@@ -6,7 +6,7 @@ import config from './config.json';
 import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
-import { dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 } from './dm';
+import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 } from './dm';
 import { clearV1 } from './other';
 // import { fileLoadData } from './data';
 
@@ -159,6 +159,11 @@ app.delete('/dm/remove/v1', (req, res) => {
   const token = req.query.token as string;
   const dmId = parseInt(req.query.dmId as string);
   res.json(dmRemoveV1(token, dmId));
+});
+
+app.post('/dm/leave/v1', (req, res) => {
+  const { token, dmId } = req.body;
+  res.json(dmLeaveV1(token, dmId));
 });
 
 app.listen(PORT, HOST, () => {

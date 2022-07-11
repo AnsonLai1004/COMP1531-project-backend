@@ -255,6 +255,20 @@ export function reqDmRemove(token: string, dmId: number) {
   return JSON.parse(res.getBody() as string);
 }
 
+export function reqDmLeave(token: string, dmId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/dm/leave/v1',
+    {
+      json: {
+        token,
+        dmId,
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}
+
 // user & users
 export function requestUserProfile(token: string, uId: number) {
   const res = request(

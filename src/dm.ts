@@ -76,13 +76,12 @@ function dmDetailsV1(token: string, dmId: number) {
 }
 
 function dmListV1(token: string) {
-
   // check if token passed in is valid
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
     return { error: 'error' };
   }
-  
+
   const data = getData();
   const dms = [];
 
@@ -92,15 +91,14 @@ function dmListV1(token: string) {
       dms.push({
         dmId: dm.dmId,
         name: dm.name,
-      })
+      });
     }
   }
 
-  return { dms: dms }
+  return { dms: dms };
 }
 
 function dmRemoveV1(token: string, dmId: number) {
-
   // check if token passed in is valid
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -121,7 +119,7 @@ function dmRemoveV1(token: string, dmId: number) {
   if (!userIsDMOwner(tokenId.uId, dmId)) {
     return { error: 'error' };
   }
-  
+
   const data = getData();
   data.dms = data.dms.filter((dm) => dm.dmId !== dmId);
   setData(data);

@@ -157,7 +157,7 @@ app.get('/dm/list/v1', (req, res) => {
 
 app.delete('/dm/remove/v1', (req, res) => {
   const token = req.query.token as string;
-  const dmId = parseInt(req.query.dmId as string)
+  const dmId = parseInt(req.query.dmId as string);
   res.json(dmRemoveV1(token, dmId));
 });
 

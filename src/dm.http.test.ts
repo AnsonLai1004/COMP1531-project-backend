@@ -107,11 +107,10 @@ describe('dm/details/v1', () => {
 });
 
 describe('dm/list/v1', () => {
-
   test('invalid token', () => {
     expect(reqDmList('invalid token')).toStrictEqual({ error: 'error' });
   });
-  
+
   test('correct return', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
@@ -130,7 +129,7 @@ describe('dm/list/v1', () => {
           name: 'alexavery, jakerenzella, theoang',
         }
       ]
-    })
+    });
 
     // owner and member
     expect(reqDmList(user1.token)).toStrictEqual({
@@ -138,13 +137,13 @@ describe('dm/list/v1', () => {
         {
           dmId: dm.dmId,
           name: 'alexavery, jakerenzella, theoang',
-        }, 
+        },
         {
           dmId: dm1.dmId,
           name: 'theoang',
         },
       ]
-    })
+    });
 
     // member only
     expect(reqDmList(user2.token)).toStrictEqual({
@@ -154,7 +153,7 @@ describe('dm/list/v1', () => {
           name: 'alexavery, jakerenzella, theoang',
         }
       ]
-    })
+    });
 
     // none
     expect(reqDmList(user3.token)).toStrictEqual({ dms: [] });
@@ -162,7 +161,6 @@ describe('dm/list/v1', () => {
 });
 
 describe('dm/remove/v1', () => {
-
   test('invalid token / dmId', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const dm = reqDmCreate(user.token, []);
@@ -181,7 +179,7 @@ describe('dm/remove/v1', () => {
     expect(reqDmRemove(user2.tokem, dm.dmId)).toStrictEqual({ error: 'error' });
     expect(reqDmRemove(user1.token, -1)).toStrictEqual({ error: 'error' });
   });
-  
+
   test('correct return', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
@@ -196,25 +194,25 @@ describe('dm/remove/v1', () => {
           name: 'jakerenzella, theoang',
         }
       ]
-    })
+    });
 
     expect(reqDmList(user1.token)).toStrictEqual({
       dms: [
         {
           dmId: dm.dmId,
           name: 'jakerenzella, theoang',
-        }, 
+        },
         {
           dmId: dm1.dmId,
           name: 'theoang',
         },
       ]
-    })
+    });
 
     expect(reqDmRemove(user.token, dm.dmId)).toStrictEqual({});
 
     // AFTER
-    expect(reqDmList(user.token)).toStrictEqual({ dms: [] })
+    expect(reqDmList(user.token)).toStrictEqual({ dms: [] });
 
     expect(reqDmList(user1.token)).toStrictEqual({
       dms: [
@@ -223,6 +221,6 @@ describe('dm/remove/v1', () => {
           name: 'theoang',
         },
       ]
-    })
+    });
   });
 });

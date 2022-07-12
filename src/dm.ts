@@ -65,7 +65,9 @@ function dmDetailsV1(token: string, dmId: number) {
   const data = getData();
   for (const dm of data.dms) {
     if (dm.dmId === dmId) {
-      const members = membersobjCreate(dm.uIds);
+      const arrAll = dm.uIds.slice();
+      arrAll.push(dm.ownerId);
+      const members = membersobjCreate(arrAll);
       return {
         name: dm.name,
         members: members,

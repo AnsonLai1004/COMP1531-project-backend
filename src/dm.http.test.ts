@@ -44,23 +44,31 @@ describe('dm/create/v1', () => {
           nameLast: 'Avery',
           uId: user2.authUserId,
         },
+        {
+          email: 'validemail@gmail.com',
+          handleStr: 'jakerenzella',
+          nameFirst: 'Jake',
+          nameLast: 'Renzella',
+          uId: user.authUserId,
+        },
       ],
     });
-    /*
+
     const user3 = requestAuthRegister('bill@gmail.com', 'samplePass', 'Bill', 'Benkins');
     const uIds2 = [user1.authUserId];
     const dm2 = reqDmCreate(user3.token, uIds2);
-    expect(reqDmList(user1.token)).toMatchObject([
-      {
-        dmId: dm.dmId,
-        name: 'alexavery, jakerenzella, theoang',
-      },
-      {
-        dmId: dm2.dmId,
-        name: 'billbenkins, theoang',
-      },
-    ]);
-    */
+    expect(reqDmList(user1.token)).toMatchObject({
+      dms: [
+        {
+          dmId: dm.dmId,
+          name: 'alexavery, jakerenzella, theoang',
+        },
+        {
+          dmId: dm2.dmId,
+          name: 'billbenkins, theoang',
+        },
+      ]
+    });
   });
 });
 
@@ -100,6 +108,13 @@ describe('dm/details/v1', () => {
           nameFirst: 'Alex',
           nameLast: 'Avery',
           uId: user2.authUserId,
+        },
+        {
+          email: 'validemail@gmail.com',
+          handleStr: 'jakerenzella',
+          nameFirst: 'Jake',
+          nameLast: 'Renzella',
+          uId: user.authUserId,
         },
       ],
     });

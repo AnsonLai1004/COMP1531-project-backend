@@ -10,7 +10,7 @@ import { messageSendV1, messageRemoveV1, messageEditV1, dmMessagesV1, messageSen
 
 import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 } from './dm';
 import { clearV1 } from './other';
-import { getData } from './data';
+// import { getData } from './data';
 // import { fileLoadData } from './data';
 
 import { userProfileV2, usersAllV1, userSetNameV1, userSetEmailV1, userSetHandleV1 } from './users';
@@ -23,9 +23,10 @@ const PORT: number = parseInt(process.env.PORT || config.port);
 const HOST: string = process.env.IP || 'localhost';
 
 // Example get request
+/**
 app.get('/', (req, res, next) => {
   res.json(getData());
-});
+});**/
 
 app.get('/echo', (req, res, next) => {
   try {

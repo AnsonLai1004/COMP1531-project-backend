@@ -119,7 +119,6 @@ describe('/channel/messages/v2', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
 
-    
     for (let i = 0; i < 60; i++) {
       reqMessageSend(aMember.token, newchannel.channelId, `hello ${i}`);
     }
@@ -137,7 +136,6 @@ describe('/channel/messages/v2', () => {
     const uIds = [user1.authUserId, user2.authUserId];
     const dm = reqDmCreate(user.token, uIds);
 
-    
     for (let i = 0; i < 60; i++) {
       reqSendMessageDm(user.token, dm.dmId, `hello ${i}`);
     }

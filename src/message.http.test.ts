@@ -299,7 +299,7 @@ describe('message/edit/v1 on dm and channels', () => {
     expect(reqMessageEdit(aMember.token, 1, 'edit 2')).toStrictEqual({});
     expect(reqMessageEdit(aMember.token, 3, 'edit 3')).toStrictEqual({});
   });
-  
+
   test('remove multiple message from different channels, where new message is empty', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);

@@ -48,6 +48,8 @@ describe('message/send/v1', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
     const newchannel2 = requestChannelsCreate(aMember.token, 'crush team', true);
+
+    // messages are ordered in order from most recent message to oldest
     // first channel, first message
     expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ messageId: 1 });
     const channelmessages = reqChannelMessages(aMember.token, newchannel.channelId, 0);
@@ -61,13 +63,13 @@ describe('message/send/v1', () => {
     // first channel, third message
     expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World third!')).toStrictEqual({ messageId: 3 });
     const channelmessages3 = reqChannelMessages(aMember.token, newchannel.channelId, 0);
-    expect(channelmessages3.messages[1].messageId).toStrictEqual(3);
-    expect(channelmessages3.messages[1].message).toStrictEqual('Hello World third!');
+    expect(channelmessages3.messages[0].messageId).toStrictEqual(3);
+    expect(channelmessages3.messages[0].message).toStrictEqual('Hello World third!');
     // second channel, fourth message
     expect(reqMessageSend(aMember.token, newchannel2.channelId, 'Hello World second!')).toStrictEqual({ messageId: 4 });
     const channelmessages4 = reqChannelMessages(aMember.token, newchannel2.channelId, 0);
-    expect(channelmessages4.messages[1].messageId).toStrictEqual(4);
-    expect(channelmessages4.messages[1].message).toStrictEqual('Hello World second!');
+    expect(channelmessages4.messages[0].messageId).toStrictEqual(4);
+    expect(channelmessages4.messages[0].message).toStrictEqual('Hello World second!');
   });
 });
 
@@ -250,19 +252,19 @@ describe('/message/senddm/v1', () => {
     // first dm, second message
     expect(reqSendMessageDm(user2.token, dm.dmId, 'Hello World second!')).toStrictEqual({ messageId: 2 });
     const dmMessages2 = reqDmMessages(user1.token, dm.dmId, 0);
-    expect(dmMessages2.messages[1].messageId).toStrictEqual(2);
-    expect(dmMessages2.messages[1].message).toStrictEqual('Hello World second!');
+    expect(dmMessages2.messages[0].messageId).toStrictEqual(2);
+    expect(dmMessages2.messages[0].message).toStrictEqual('Hello World second!');
     // first dm, third message
     expect(reqSendMessageDm(user1.token, dm.dmId, 'Hello World third!')).toStrictEqual({ messageId: 3 });
     const dmMessages3 = reqDmMessages(user.token, dm.dmId, 0);
-    expect(dmMessages3.messages[2].messageId).toStrictEqual(3);
-    expect(dmMessages3.messages[2].message).toStrictEqual('Hello World third!');
+    expect(dmMessages3.messages[0].messageId).toStrictEqual(3);
+    expect(dmMessages3.messages[0].message).toStrictEqual('Hello World third!');
     // first dm, fourth message
     expect(reqSendMessageDm(user1.token, dm.dmId, 'Hello World second!')).toStrictEqual({ messageId: 4 });
     const dmMessages4 = reqDmMessages(user.token, dm.dmId, 0);
-    expect(dmMessages4.messages[3].messageId).toStrictEqual(4);
-    expect(dmMessages4.messages[3].message).toStrictEqual('Hello World second!');
-    // first dm, fourth message
+    expect(dmMessages4.messages[0].messageId).toStrictEqual(4);
+    expect(dmMessages4.messages[0].message).toStrictEqual('Hello World second!');
+    // second dm, fourth message
     expect(reqSendMessageDm(user1.token, dm2.dmId, 'Hello World second!')).toStrictEqual({ messageId: 5 });
     const dmMessages5 = reqDmMessages(user.token, dm2.dmId, 0);
     expect(dmMessages5.messages[0].messageId).toStrictEqual(5);

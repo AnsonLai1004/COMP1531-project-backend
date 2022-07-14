@@ -3,7 +3,7 @@
  */
 import {
   reqChannelInvite, reqChannelDetails, reqChannelJoin, reqChannelLeave, reqChannelAddowner, reqChannelRemoveowner,
-  requestClear, requestChannelsCreate, requestAuthRegister, reqChannelMessages
+  requestClear, requestChannelsCreate, requestAuthRegister, reqChannelMessages, reqMessageSend, reqSendMessageDm, reqDmCreate, reqDmMessages
 } from './requests';
 
 beforeEach(() => {
@@ -112,6 +112,37 @@ describe('/channel/messages/v2', () => {
     // return messages from newchannel
     // valid arguments assuming messages is empty
     expect(reqChannelMessages(aMember.token, newchannel.channelId, 0)).toStrictEqual({ messages: [], start: 0, end: -1 });
+  });
+
+  // correct return for channelmessages length more than 50
+  test('correct return for array message of length greater than 50', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
+
+    for (let i = 0; i < 60; i++) {
+      reqMessageSend(aMember.token, newchannel.channelId, `hello ${i}`);
+    }
+    const el = reqChannelMessages(aMember.token, newchannel.channelId, 0);
+    const el2 = reqChannelMessages(aMember.token, newchannel.channelId, 50);
+    expect(reqChannelMessages(aMember.token, newchannel.channelId, 0)).toStrictEqual({ messages: el.messages, start: 0, end: 50 });
+    expect(reqChannelMessages(aMember.token, newchannel.channelId, 50)).toStrictEqual({ messages: el2.messages, start: 50, end: -1 });
+  });
+
+  // correct return for dmMessages length more than 50
+  test('correct return for array message of length greater than 50', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId, user2.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+
+    for (let i = 0; i < 60; i++) {
+      reqSendMessageDm(user.token, dm.dmId, `hello ${i}`);
+    }
+    const el = reqDmMessages(user.token, dm.dmId, 0);
+    const el2 = reqDmMessages(user.token, dm.dmId, 50);
+    expect(reqDmMessages(user.token, dm.dmId, 0)).toStrictEqual({ messages: el.messages, start: 0, end: 50 });
+    expect(reqDmMessages(user.token, dm.dmId, 50)).toStrictEqual({ messages: el2.messages, start: 50, end: -1 });
   });
 });
 

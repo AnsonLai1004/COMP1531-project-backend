@@ -1,6 +1,6 @@
 {
     "scripts": {
-        "test": "jest",
+        "test": "jest --coverage --collectCoverageFrom=src/*.ts",
         "ts-node": "ts-node",
         "tsc": "tsc --noImplicitAny",
         "lint": "eslint src/**.ts",

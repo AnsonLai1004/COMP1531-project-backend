@@ -60,6 +60,7 @@ export function usersAllV1(token: string) {
  */
 export function userSetNameV1(token: string, nameFirst: string, nameLast: string) {
   const authUser = tokenToUId(token);
+  // check if token is invalid
   if ('error' in authUser) {
     return errorObject;
   }
@@ -90,13 +91,14 @@ export function userSetNameV1(token: string, nameFirst: string, nameLast: string
  */
 export function userSetEmailV1(token: string, email: string) {
   const authUser = tokenToUId(token);
+  // check if token is invalid
   if ('error' in authUser) {
     return errorObject;
   }
-  if (!isEmail(email) || checkUserData(email, 'email')) {
+  // check if email is invalid or used by another user
+  if (!isEmail(email) || checkUserData(email, 'email', authUser.uId)) {
     return errorObject;
   }
-
   const data = getData();
   for (const user of data.users) {
     if (authUser.uId === user.uId) {
@@ -118,12 +120,15 @@ export function userSetEmailV1(token: string, email: string) {
  */
 export function userSetHandleV1(token: string, handleStr: string) {
   const authUser = tokenToUId(token);
+  // check if token is invalid
   if ('error' in authUser) {
     return errorObject;
   }
-  if (checkUserData(handleStr, 'handleStr') || !(/^[0-9a-z]+$/i).test(handleStr)) {
+  // check if handle is used by another user or has non-alphanumeric characters
+  if (checkUserData(handleStr, 'handleStr', authUser.uId) || !(/^[0-9a-z]+$/i).test(handleStr)) {
     return errorObject;
   }
+  // check handle length
   if (handleStr.length < 3 || handleStr.length > 20) {
     return errorObject;
   }
@@ -183,13 +188,17 @@ export function userProfileV1(authUserId: number, uId: number): userProfileV1Ret
 /**
  * Function which checks if a particular piece of data is
  * already used by another user.
+ * Optional parameter "excludeId" to remove from the search
  * @param {string | number} toCheck
  * @param {string} field
  * @returns {boolean}
  */
-export function checkUserData(toCheck: string | number, field: keyof User): boolean {
+export function checkUserData(toCheck: string | number, field: keyof User, excludeId?: number): boolean {
   const data = getData();
   for (const user of data.users) {
+    if (excludeId !== undefined && excludeId === user.uId) {
+      continue;
+    }
     if (toCheck === user[field]) {
       return true;
     }

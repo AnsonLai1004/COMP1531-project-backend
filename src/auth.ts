@@ -8,7 +8,59 @@ import isEmail from 'validator/lib/isEmail.js';
 
 const errorObject = { error: 'error' };
 
-// console.log(getData());
+/**
+ * Wrapper function which calls authRegisterV1 and generates a token
+ * for the return object if successful.
+ * @param email
+ * @param password
+ * @param nameFirst
+ * @param nameLast
+ * @returns {{token: string, authUserId: number}}
+ */
+export function authRegisterV2(email: string, password: string, nameFirst: string, nameLast: string) {
+  const register = authRegisterV1(email, password, nameFirst, nameLast);
+  if ('error' in register) {
+    return errorObject;
+  }
+  const token = generateToken(register.authUserId);
+  return {
+    token: token,
+    authUserId: register.authUserId
+  };
+}
+
+/**
+ * Wrapper function which calls authLoginV1 and generates a token
+ * for the return object if successful.
+ * @param email
+ * @param password
+ * @returns {{token: string, authUserId: number}}
+ */
+export function authLoginV2(email: string, password: string) {
+  const login = authLoginV1(email, password);
+  if ('error' in login) {
+    return errorObject;
+  }
+
+  const token = generateToken(login.authUserId);
+  return {
+    token: token,
+    authUserId: login.authUserId
+  };
+}
+
+/**
+ * Function which invalidates the token given to it by removing
+ * the associated token-uId pair from the dataStore.
+ * @param token
+ * @returns {{}}
+ */
+export function authLogoutV1(token: string) {
+  const data = getData();
+  data.tokens = data.tokens.filter((pair) => pair.token !== token);
+  setData(data);
+  return {};
+}
 
 /**
  * A function called authLoginV1
@@ -95,58 +147,6 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
   };
 }
 
-/**
- * Wrapper function which calls authRegisterV1 and generates a token
- * for the return object if successful.
- * @param email
- * @param password
- * @param nameFirst
- * @param nameLast
- */
-export function authRegisterV2(email: string, password: string, nameFirst: string, nameLast: string) {
-  const register = authRegisterV1(email, password, nameFirst, nameLast);
-  if ('error' in register) {
-    return errorObject;
-  }
-  const token = generateToken(register.authUserId);
-  return {
-    token: token,
-    authUserId: register.authUserId
-  };
-}
-
-/**
- * Wrapper function which calls authLoginV1 and generates a token
- * for the return object if successful.
- * @param email
- * @param password
- */
-export function authLoginV2(email: string, password: string) {
-  const login = authLoginV1(email, password);
-  if ('error' in login) {
-    return errorObject;
-  }
-
-  const token = generateToken(login.authUserId);
-  return {
-    token: token,
-    authUserId: login.authUserId
-  };
-}
-
-/**
- * Function which invalidates the token given to it by removing
- * the associated token-uId pair from the dataStore.
- * @param token
- * @returns
- */
-export function authLogoutV1(token: string) {
-  const data = getData();
-  data.tokens = data.tokens.filter((pair) => pair.token !== token);
-  setData(data);
-  return {};
-}
-
 /// //////////////////////// Helper Functions ////////////////////////////////
 
 /**
@@ -171,7 +171,7 @@ type tokenToUIdReturn = {
 /**
  * Given a token, return authUserId
  * @param {string} token
- * @returns {number}
+ * @returns {tokenToUIdReturn}
  */
 export function tokenToUId(token: string): tokenToUIdReturn {
   const data = getData();

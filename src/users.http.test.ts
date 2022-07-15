@@ -86,7 +86,7 @@ describe('Testing users/all/v1 valid cases', () => {
     const registered3 = requestAuthRegister('golden-trio@gmail.com', 'password', 'Ron', 'Weasley');
     const users = requestUsersAll(registered1.token);
     expect(users).toStrictEqual({
-      users: [
+      users: expect.arrayContaining([
         {
           uId: registered1.authUserId,
           email: 'chosen-one@gmail.com',
@@ -108,7 +108,7 @@ describe('Testing users/all/v1 valid cases', () => {
           nameLast: 'Weasley',
           handleStr: 'ronweasley'
         }
-      ]
+      ])
     });
   });
 });

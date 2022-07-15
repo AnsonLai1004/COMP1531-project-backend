@@ -1,6 +1,8 @@
 import { getData, setData } from './data';
 import { Message } from './interfaces';
 import { DataStore } from './data';
+import { tokenToUId } from './auth';
+import { checkUserData } from './users';
 
 /// ///////////// ADDITIONAL TYPES ///////////////////
 interface channel {
@@ -36,19 +38,18 @@ function channelsCreateV2(token: string, name: string, isPublic: boolean): chann
   }
 
   // CHECK IF TOKEN VALID
-  const dataStore = getData();
-  const validId = checkValidToken(token, dataStore);
-
-  if (validId === false) {
+  const authUser = tokenToUId(token);
+  if ('error' in authUser) {
     return { error: 'error' };
   }
 
+  const dataStore = getData();
   const channel = {
     channelId: dataStore.lastChannelId + 1,
     name: name,
     isPublic: isPublic,
-    ownerMembers: [validId],
-    allMembers: [validId],
+    ownerMembers: [authUser.uId],
+    allMembers: [authUser.uId],
     messages: [] as Message[],
   };
   dataStore.channels.push(channel);
@@ -66,18 +67,18 @@ function channelsCreateV2(token: string, name: string, isPublic: boolean): chann
 
 function channelsListV2(token: string): channelsListRet {
   // CHECK IF USERID VALID
-  const dataStore = getData();
-  const validId = checkValidToken(token, dataStore);
+  const authUser = tokenToUId(token);
 
-  if (validId === false) {
+  if ('error' in authUser) {
     return { error: 'error' };
   }
 
+  const dataStore = getData();
   const channels = [];
 
   for (const channel of dataStore.channels) {
     for (const member of channel.allMembers) {
-      if (member === validId) {
+      if (member === authUser.uId) {
         channels.push({
           channelId: channel.channelId,
           name: channel.name,
@@ -99,13 +100,13 @@ function channelsListV2(token: string): channelsListRet {
 
 function channelsListallV2(token: string): channelsListRet {
   // CHECK IF USERID VALID
-  const dataStore = getData();
-  const validId = checkValidToken(token, dataStore);
+  const authUser = tokenToUId(token);
 
-  if (validId === false) {
+  if ('error' in authUser) {
     return { error: 'error' };
   }
 
+  const dataStore = getData();
   const channels = [];
 
   for (const channel of dataStore.channels) {
@@ -136,7 +137,7 @@ function channelsCreateV1(authUserId: number, name: string, isPublic: boolean) {
 
   // CHECK IF USERID VALID
   const dataStore = getData();
-  const validId = checkValidId(authUserId, dataStore);
+  const validId = checkUserData(authUserId, 'uId');
 
   if (!(validId)) {
     return { error: 'error' };
@@ -167,7 +168,7 @@ function channelsCreateV1(authUserId: number, name: string, isPublic: boolean) {
 function channelsListV1(authUserId: number) {
   // CHECK IF USERID VALID
   const dataStore = getData();
-  const validId = checkValidId(authUserId, dataStore);
+  const validId = checkUserData(authUserId, 'uId');
 
   if (!(validId)) {
     return { error: 'error' };
@@ -199,7 +200,7 @@ function channelsListV1(authUserId: number) {
 function channelsListallV1(authUserId: number) {
   // CHECK IF USERID VALID
   const dataStore = getData();
-  const validId = checkValidId(authUserId, dataStore);
+  const validId = checkUserData(authUserId, 'uId');
 
   if (!(validId)) {
     return { error: 'error' };
@@ -215,29 +216,6 @@ function channelsListallV1(authUserId: number) {
   }
 
   return { channels: channels };
-}
-
-/// ///////////// HELPER FUNCTIONS ///////////////////
-
-// Find out whether the uId is a valid user (returns bool)
-function checkValidId(authUserId: number, dataStore: DataStore) {
-  for (const user of dataStore.users) {
-    if (user.uId === authUserId) {
-      return true;
-    }
-  }
-  return false;
-}
-
-// Find out whether the token is active (returns false if not active)
-// (returns corresponding userId if token is active)
-function checkValidToken(token: string, dataStore: DataStore) {
-  for (const tokenPair of dataStore.tokens) {
-    if (tokenPair.token === token) {
-      return tokenPair.uId;
-    }
-  }
-  return false;
 }
 
 export { channelsCreateV1, channelsListV1, channelsListallV1, channelsCreateV2, channelsListV2, channelsListallV2 };

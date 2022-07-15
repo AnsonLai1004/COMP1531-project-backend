@@ -1,3 +1,7 @@
+/**
+ * implementation of channel related functions
+ * @module channel
+**/
 import { getData, setData } from './data';
 import { userProfileV1 } from './users';
 import { Message } from './interfaces';
@@ -9,9 +13,6 @@ export {
   membersobjCreate, isValidUserId, tokenToUId
 };
 
-/**
- * implementation of channel related functions
-**/
 interface error {
   error: string;
 }
@@ -148,6 +149,13 @@ function channelMessagesV1(authUserId: number, channelId: number, start: number)
   }
 }
 
+/**
+ * Wrapper function which calls channelMessagesV1 if the given token is valid.
+ * @param token
+ * @param channelId
+ * @param start
+ * @returns {{messages: Arr object of type message, start:  number, end:  number}}
+ */
 function channelMessagesV2(token: string, channelId: number, start: number) {
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -253,6 +261,12 @@ function channelJoinV1(authUserId: number, channelId: number) {
   }
 }
 
+/**
+ * Wrapper function which calls channelDetailsV1 if the given token is valid.
+ * @param token
+ * @param channelId
+ * @returns {{name: string, isPublic: boolean, ownerMembers: membersobj[], allMembers: membersobj[]}}
+ */
 function channelDetailsV2(token: string, channelId: number) {
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -262,6 +276,12 @@ function channelDetailsV2(token: string, channelId: number) {
   return result;
 }
 
+/**
+ * Wrapper function which calls channelJoinV1 if the given token is valid.
+ * @param token
+ * @param channelId
+ * @returns {{}}
+ */
 function channelJoinV2(token: string, channelId: number) {
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -272,6 +292,13 @@ function channelJoinV2(token: string, channelId: number) {
 }
 
 // channel /leave /addowner /removeowner V1
+
+/**
+ * Given a valid token, remove the user from a channel they are currently in
+ * @param token
+ * @param channelId
+ * @returns
+ */
 function channelLeaveV1(token: string, channelId: number) {
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -292,6 +319,14 @@ function channelLeaveV1(token: string, channelId: number) {
   return { error: 'error' };
 }
 
+/**
+ * Given a valid token for a user who has owner permissions in the given channel,
+ * give another member of the channel owner permissions.
+ * @param token
+ * @param channelId
+ * @param uId
+ * @returns
+ */
 function channelAddownerV1(token: string, channelId: number, uId: number) {
   // channelId valid?
   if (!isValidChannelId(channelId)) {
@@ -327,6 +362,14 @@ function channelAddownerV1(token: string, channelId: number, uId: number) {
   }
 }
 
+/**
+ * Given a valid token for a user who has owner permissions in the given channel,
+ * remove another owner of the channel's owner permissions.
+ * @param token
+ * @param channelId
+ * @param uId
+ * @returns
+ */
 function channelRemoveownerV1(token: string, channelId: number, uId: number) {
   // channelId valid?
   if (!isValidChannelId(channelId)) {
@@ -382,6 +425,7 @@ function isValidUserId(authUserId: number) {
   }
   return false;
 }
+
 /**
  * Helper function
  * return false if channelId is not valid

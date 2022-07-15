@@ -43,7 +43,7 @@ function messageSendV1(token: string, channelId: number, message: string) {
   };
   for (const channel of datastore.channels) {
     if (channel.channelId === channelId) {
-      channel.messages.push(newmessage);
+      channel.messages.unshift(newmessage);
     }
   }
   datastore.lastMessageId++;
@@ -242,7 +242,7 @@ function messageSendDmV1(token: string, dmId: number, message: string) {
   };
   for (const dm of datastore.dms) {
     if (dm.dmId === dmId) {
-      dm.messages.push(newmessage);
+      dm.messages.unshift(newmessage);
     }
   }
   datastore.lastMessageId++;

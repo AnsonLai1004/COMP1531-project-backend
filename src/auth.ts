@@ -15,6 +15,7 @@ const errorObject = { error: 'error' };
  * @param password
  * @param nameFirst
  * @param nameLast
+ * @returns {{token: string, authUserId: number}}
  */
 export function authRegisterV2(email: string, password: string, nameFirst: string, nameLast: string) {
   const register = authRegisterV1(email, password, nameFirst, nameLast);
@@ -33,6 +34,7 @@ export function authRegisterV2(email: string, password: string, nameFirst: strin
  * for the return object if successful.
  * @param email
  * @param password
+ * @returns {{token: string, authUserId: number}}
  */
 export function authLoginV2(email: string, password: string) {
   const login = authLoginV1(email, password);
@@ -51,7 +53,7 @@ export function authLoginV2(email: string, password: string) {
  * Function which invalidates the token given to it by removing
  * the associated token-uId pair from the dataStore.
  * @param token
- * @returns
+ * @returns {{}}
  */
 export function authLogoutV1(token: string) {
   const data = getData();
@@ -169,7 +171,7 @@ type tokenToUIdReturn = {
 /**
  * Given a token, return authUserId
  * @param {string} token
- * @returns {number}
+ * @returns {tokenToUIdReturn}
  */
 export function tokenToUId(token: string): tokenToUIdReturn {
   const data = getData();

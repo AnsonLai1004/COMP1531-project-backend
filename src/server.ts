@@ -10,8 +10,7 @@ import { messageSendV1, messageRemoveV1, messageEditV1, dmMessagesV1, messageSen
 
 import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 } from './dm';
 import { clearV1 } from './other';
-import { getData } from './data';
-// import { fileLoadData } from './data';
+import { getData, fileLoadData } from './data';
 
 import { userProfileV2, usersAllV1, userSetNameV1, userSetEmailV1, userSetHandleV1 } from './users';
 
@@ -40,7 +39,6 @@ app.get('/echo', (req, res, next) => {
 app.use(morgan('dev'));
 
 // auth routes
-
 app.post('/auth/login/v2', (req, res) => {
   const { email, password } = req.body;
   res.json(authLoginV2(email, password));
@@ -96,6 +94,21 @@ app.get('/channel/messages/v2', (req, res) => {
   res.json(channelMessagesV2(token, channelId, start));
 });
 
+app.post('/channel/leave/v1', (req, res) => {
+  const { token, channelId } = req.body;
+  res.json(channelLeaveV1(token, channelId));
+});
+
+app.post('/channel/addowner/v1', (req, res) => {
+  const { token, channelId, uId } = req.body;
+  res.json(channelAddownerV1(token, channelId, uId));
+});
+
+app.post('/channel/removeowner/v1', (req, res) => {
+  const { token, channelId, uId } = req.body;
+  res.json(channelRemoveownerV1(token, channelId, uId));
+});
+
 // user(s) routes
 app.get('/user/profile/v2', (req, res) => {
   const uId = parseInt((req.query.uId) as string);
@@ -123,27 +136,7 @@ app.put('/user/profile/sethandle/v1', (req, res) => {
   res.json(userSetHandleV1(token, handleStr));
 });
 
-// other routes
-app.delete('/clear/v1', (req, res) => {
-  clearV1();
-  res.json({});
-});
-
-// channel routes
-app.post('/channel/leave/v1', (req, res) => {
-  const { token, channelId } = req.body;
-  res.json(channelLeaveV1(token, channelId));
-});
-
-app.post('/channel/addowner/v1', (req, res) => {
-  const { token, channelId, uId } = req.body;
-  res.json(channelAddownerV1(token, channelId, uId));
-});
-
-app.post('/channel/removeowner/v1', (req, res) => {
-  const { token, channelId, uId } = req.body;
-  res.json(channelRemoveownerV1(token, channelId, uId));
-});
+// message routes
 
 app.post('/message/send/v1', (req, res) => {
   const { token, channelId, message } = req.body;
@@ -184,7 +177,7 @@ app.get('/dm/messages/v1', (req, res) => {
   const start = parseInt((req.query.start) as string);
   res.json(dmMessagesV1(token, dmId, start));
 });
-// start server
+
 app.get('/dm/list/v1', (req, res) => {
   const token = req.query.token as string;
   res.json(dmListV1(token));
@@ -201,7 +194,15 @@ app.post('/dm/leave/v1', (req, res) => {
   res.json(dmLeaveV1(token, dmId));
 });
 
+// other routes
+app.delete('/clear/v1', (req, res) => {
+  clearV1();
+  res.json({});
+});
+
+// start server
 app.listen(PORT, HOST, () => {
   console.log(`⚡️ Server listening on port ${PORT} at ${HOST}`);
   // auto-load saved data on server start
+  fileLoadData();
 });

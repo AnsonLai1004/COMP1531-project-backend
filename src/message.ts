@@ -1,5 +1,6 @@
 import { getData, setData } from './data';
 import { Message } from './interfaces';
+import { tokenToUId } from './auth';
 export {
   messageSendV1, messageRemoveV1, messageEditV1, messageSendDmV1,
   dmMessagesV1
@@ -219,7 +220,7 @@ function messageSendDmV1(token: string, dmId: number, message: string) {
   if (!isValidDmId(dmId)) {
     return { error: 'error' };
   }
-  // if message lenght is less than 1 or greater than 1000
+  // if message length is less than 1 or greater than 1000
   if (message.length < 1 || message.length > 1000) {
     return { error: 'error' };
   }
@@ -333,7 +334,8 @@ function isValidChannelId(channelId: number) {
 }
 
 /**
- *
+ * Helper function
+ * return false if dmId is not valid
  * @param {number} dmId
  * @returns {boolean}
  */
@@ -345,22 +347,6 @@ function isValidDmId(dmId: number) {
     }
   }
   return false;
-}
-
-/**
- * Helper function
- * Given a token, return authUserId
- * @param {string} token
- * @returns {number}
- */
-function tokenToUId(token: string)/*: tokenToUId */ {
-  const data = getData();
-  for (const element of data.tokens) {
-    if (element.token === token) {
-      return { uId: element.uId };
-    }
-  }
-  return { error: 'error' };
 }
 
 /**
@@ -404,7 +390,7 @@ function userIsOwnerInDm(uId: number, dmId: number) {
 
 /**
  * Helper function
- * return false if user is not an owner of the channel
+ * return false if user is not a member of the channel
  * @param {number} uId
  * @param {number} channelId
  * @returns {boolean}
@@ -425,7 +411,7 @@ function userIsAuthorised(uId: number, channelId: number) {
 
 /**
  * Helper function
- * return false if user is not an owner of the channel
+ * return false if user is not a member of the dm
  * @param {number} uId
  * @param {number} channelId
  * @returns {boolean}

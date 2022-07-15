@@ -1,6 +1,5 @@
 import { getData, setData } from './data';
 import { Message } from './interfaces';
-import { DataStore } from './data';
 import { tokenToUId } from './auth';
 import { checkUserData } from './users';
 

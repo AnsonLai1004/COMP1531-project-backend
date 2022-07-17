@@ -1,0 +1,81 @@
+npm verb cli [
+npm verb cli   '/import/kamen/3/cs1531/.nvm/versions/node/v16.14.2/bin/node',
+npm verb cli   '/import/kamen/3/cs1531/.nvm/versions/node/v16.14.2/bin/npm',
+npm verb cli   'run',
+npm verb cli   'test',
+npm verb cli   '--verbose',
+npm verb cli   '--testMatch',
+npm verb cli   '**/?(*.)+(test).ts'
+npm verb cli ]
+npm info using npm@8.5.0
+npm info using node@v16.14.2
+npm timing npm:load:whichnode Completed in 0ms
+npm timing config:load:defaults Completed in 4ms
+npm timing config:load:file:/import/kamen/3/cs1531/.nvm/versions/node/v16.14.2/lib/node_modules/npm/npmrc Completed in 8ms
+npm timing config:load:builtin Completed in 8ms
+npm timing config:load:cli Completed in 5ms
+npm timing config:load:env Completed in 1ms
+npm timing config:load:file:/import/kamen/3/cs1531/project-automarking/tempstore/.npmrc Completed in 0ms
+npm timing config:load:project Completed in 13ms
+npm timing config:load:file:/import/kamen/3/cs1531/.npmrc Completed in 1ms
+npm timing config:load:user Completed in 1ms
+npm timing config:load:file:/import/kamen/3/cs1531/.nvm/versions/node/v16.14.2/etc/npmrc Completed in 1ms
+npm timing config:load:global Completed in 1ms
+npm timing config:load:validate Completed in 0ms
+npm timing config:load:credentials Completed in 2ms
+npm timing config:load:setEnvs Completed in 2ms
+npm timing config:load Completed in 41ms
+npm timing npm:load:configload Completed in 41ms
+npm timing npm:load:setTitle Completed in 1ms
+npm timing config:load:flatten Completed in 7ms
+npm timing npm:load:display Completed in 14ms
+npm verb logfile /import/kamen/3/cs1531/.npm/_logs/2022-07-16T04_28_53_579Z-debug-0.log
+npm timing npm:load:logFile Completed in 12ms
+npm timing npm:load:timers Completed in 0ms
+npm timing npm:load:configScope Completed in 0ms
+npm timing npm:load Completed in 71ms
+
+> test
+> jest --coverage --collectCoverageFrom=src/*.ts "**/?(*.)+(test).ts"
+
+  Invalid testPattern **/?(*.)+(test).ts supplied. Running all tests instead.
+  Invalid testPattern **/?(*.)+(test).ts supplied. Running all tests instead.
+PASS src/channel.http.test.ts (13.581 s)
+PASS src/dm.http.test.ts
+PASS src/users.http.test.ts
+PASS src/channels.http.test.ts
+PASS src/auth.http.test.ts
+PASS src/auth.test.ts
+PASS src/echo.test.ts
+PASS src/other.http.test.ts
+PASS src/users.test.ts
+PASS src/other.test.ts
+PASS src/channel.test.ts
+PASS src/message.http.test.ts (8.261 s)
+-----------------|---------|----------|---------|---------|-------------------------------------------------------
+File             | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                     
+-----------------|---------|----------|---------|---------|-------------------------------------------------------
+All files        |   32.19 |    21.63 |   37.22 |   31.27 |                                                       
+ auth.ts         |   61.42 |    82.35 |   33.33 |   62.31 | 21-26,40-46,59-62,157-163,177-183                     
+ channel.ts      |   52.47 |    41.81 |      50 |   49.18 | 85-90,138,160-165,201,240-243,271-406,436-442,474-505 
+ channels.ts     |   39.13 |    28.57 |   33.33 |   34.37 | 35-118,142,169-190                                    
+ data.ts         |   64.28 |        0 |      60 |   64.28 | 49-50,58-61                                           
+ dm.ts           |       0 |        0 |       0 |       0 | 1-224                                                 
+ echo.ts         |       0 |        0 |       0 |       0 | 2-8                                                   
+ interfaces.d.ts |       0 |        0 |       0 |       0 |                                                       
+ message.ts      |       0 |        0 |       0 |       0 | 1-433                                                 
+ other.ts        |     100 |      100 |     100 |     100 |                                                       
+ requests.ts     |     100 |      100 |     100 |     100 |                                                       
+ server.ts       |       0 |        0 |       0 |       0 | 1-202                                                 
+ users.ts        |   30.76 |    13.79 |   28.57 |   30.76 | 20-24,34-49,62-82,93-110,122-143,200                  
+-----------------|---------|----------|---------|---------|-------------------------------------------------------
+
+Test Suites: 12 passed, 12 total
+Tests:       149 passed, 149 total
+Snapshots:   0 total
+Time:        42.353 s, estimated 62 s
+Ran all test suites.
+npm timing command:run Completed in 44829ms
+npm verb exit 0
+npm timing npm Completed in 45275ms
+npm info ok 

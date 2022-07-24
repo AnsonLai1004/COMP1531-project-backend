@@ -167,6 +167,7 @@ describe('Testing user/profile/set**/v1 error cases', () => {
 
 describe('Testing user/profile/set**/v1 valid cases', () => {
   test('All changes', () => {
+    requestAuthRegister('not-to-edit@gmail.com', 'password', 'Different', 'Person');
     const registered = requestAuthRegister('chosen-one@gmail.com', 'password', 'Harry', 'Potter');
     expect(requestUserSetName(registered.token, 'First', 'Last')).toStrictEqual({});
     expect(requestUserProfile(registered.token, registered.authUserId)).toStrictEqual({

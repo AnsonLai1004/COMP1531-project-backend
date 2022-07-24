@@ -4,7 +4,6 @@
 
 import { requestAuthRegister, requestAuthLogin, requestAuthLogout, requestUserProfile, requestClear } from './requests';
 
-
 beforeEach(() => {
   requestClear();
 });

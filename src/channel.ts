@@ -182,12 +182,12 @@ function channelMessagesV2(token: string, channelId: number, start: number) {
  */
 
 function channelDetailsV1(authUserId: number, channelId: number): DetailReturn {
-  // Not checking Id in detailV1 because V2 
+  // Not checking Id in detailV1 because V2
   // checked token is valid before calling this funtion
   // check if authUserId is valid
-  /*if (!isValidUserId(authUserId)) {
+  /* if (!isValidUserId(authUserId)) {
     return { error: 'error' };
-  }*/
+  } */
 
   const data = getData();
   for (const channel of data.channels) {
@@ -223,11 +223,11 @@ function channelDetailsV1(authUserId: number, channelId: number): DetailReturn {
  * @returns {{}}
  */
 function channelJoinV1(authUserId: number, channelId: number) {
-  // Not checking Id in JoinV1 because V2 
+  // Not checking Id in JoinV1 because V2
   // checked token is valid before calling this funtion
-  /*if (!isValidUserId(authUserId)) {
-    return { error: 'error' }; 
-  }*/
+  /* if (!isValidUserId(authUserId)) {
+    return { error: 'error' };
+  } */
   // check if channel exist, if yes return channel detail
   const data = getData();
   let channelDetail;
@@ -383,6 +383,7 @@ function channelRemoveownerV1(token: string, channelId: number, uId: number) {
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
     return { error: 'error' };
+  }
   if (!userIsOwner(tokenId.uId as number, channelId)) {
     return { error: 'error' };
   }

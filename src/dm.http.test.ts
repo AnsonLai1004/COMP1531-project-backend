@@ -73,6 +73,10 @@ describe('dm/create/v1', () => {
 });
 
 describe('dm/details/v1', () => {
+  test('invalid token', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    expect(reqDmDetails('invalid', -999)).toStrictEqual({ error: 'error' });
+  });
   test('invalid dmId', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     expect(reqDmDetails(user.token, -999)).toStrictEqual({ error: 'error' });

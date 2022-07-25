@@ -4,6 +4,11 @@ import { tokenToUId, membersobjCreate, isValidUserId } from './channel';
 export { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 };
 
 function dmCreateV1(token: string, uIds: number[]) {
+  //
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    return { error: 'error' };
+  }
   // any invalid uId in uIds
   for (const id of uIds) {
     if (!isValidUserId(id)) {
@@ -13,11 +18,6 @@ function dmCreateV1(token: string, uIds: number[]) {
   // any duplicate uId's in uIds
   const unique = Array.from(new Set(uIds));
   if (uIds.length !== unique.length) {
-    return { error: 'error' };
-  }
-  //
-  const tokenId = tokenToUId(token);
-  if (tokenId.error) {
     return { error: 'error' };
   }
   // create dmId
@@ -74,7 +74,6 @@ function dmDetailsV1(token: string, dmId: number) {
       };
     }
   }
-  return { error: 'error' };
 }
 
 function dmListV1(token: string) {

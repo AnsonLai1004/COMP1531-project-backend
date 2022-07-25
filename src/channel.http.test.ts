@@ -252,6 +252,11 @@ describe('channel/join/v2', () => {
 
 // channel /leave /addowner /removeowner V1 tests
 describe('channel/leave/v1', () => {
+  test('invalid token', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const channel = requestChannelsCreate(user.token, 'BOOST', true);
+    expect(reqChannelLeave('invalid token', channel.channelId)).toStrictEqual({ error: 'error' });
+  });
   test('invalid channelId', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     expect(reqChannelLeave(user.token, -999)).toStrictEqual({ error: 'error' });
@@ -296,6 +301,12 @@ describe('channel/leave/v1', () => {
 });
 
 describe('channel/addowner/v1', () => {
+  test('invalid token', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const user2 = requestAuthRegister('valid@gmail.com', '123abc!@#', 'Bob', 'Renzella');
+    const channel = requestChannelsCreate(user.token, 'BOOST', true);
+    expect(reqChannelAddowner('invalid token', channel.channelId, user2.authUserId)).toStrictEqual({ error: 'error' });
+  });
   test('invalid channelId', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const notMember = requestAuthRegister('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
@@ -373,6 +384,12 @@ describe('channel/addowner/v1', () => {
 });
 
 describe('channel/removeowner/v1', () => {
+  test('invalid token', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const user2 = requestAuthRegister('valid@gmail.com', '123abc!@#', 'Bob', 'Renzella');
+    const channel = requestChannelsCreate(user.token, 'BOOST', true);
+    expect(reqChannelRemoveowner('invalid token', channel.channelId, user2.authUserId)).toStrictEqual({ error: 'error' });
+  });
   test('invalid channelId', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const notMember = requestAuthRegister('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');

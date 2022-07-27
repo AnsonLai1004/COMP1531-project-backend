@@ -79,25 +79,59 @@ describe('auth/login/v2 function error cases', () => {
 
 describe('auth/login/v2 function valid cases', () => {
   test('Valid login', () => {
+    const registered1 = requestAuthRegister('valid@gmail.com', 'password', 'Harry', 'Potter');
+    const login1 = requestAuthLogin('valid@gmail.com', 'password');
+    expect(login1).toStrictEqual({
+      token: expect.any(String),
+      authUserId: registered1.authUserId
+    });
+    const registered2 = requestAuthRegister('another-valid@gmail.com', 'password', 'Harry', 'Potter');
+    const login2 = requestAuthLogin('another-valid@gmail.com', 'password');
+    expect(login2).toStrictEqual({
+      token: expect.any(String),
+      authUserId: registered2.authUserId
+    });
+  });
+  test('Same user can create unique sessions', () => {
     const registered = requestAuthRegister('valid@gmail.com', 'password', 'Harry', 'Potter');
-    const login = requestAuthLogin('valid@gmail.com', 'password');
-    expect(login).toStrictEqual({
+    const login1 = requestAuthLogin('valid@gmail.com', 'password');
+    const login2 = requestAuthLogin('valid@gmail.com', 'password');
+    expect(login1).toStrictEqual({
       token: expect.any(String),
       authUserId: registered.authUserId
     });
+    expect(login2).toStrictEqual({
+      token: expect.any(String),
+      authUserId: registered.authUserId
+    });
+    expect(login1.token).not.toEqual(login2.token);
+    expect(login1.authUserId).toEqual(login2.authUserId);
   });
 });
 
 describe('auth/logout/v1 function valid cases', () => {
-  test('Valid return type', () => {
+  test('Check with user/profile functionality', () => {
     const registered = requestAuthRegister('valid@gmail.com', 'password', 'Harry', 'Potter');
+    const expectDetails = {
+      uId: registered.authUserId,
+      email: 'valid@gmail.com',
+      nameFirst: 'Harry',
+      nameLast: 'Potter',
+      handleStr: 'harrypotter'
+    };
     const login = requestAuthLogin('valid@gmail.com', 'password');
-    expect(login).toStrictEqual({
-      token: expect.any(String),
-      authUserId: registered.authUserId
-    });
-    const logout = requestAuthLogout(login.token);
-    expect(logout).toStrictEqual({});
+    expect(requestUserProfile(registered.token, registered.authUserId)).toEqual({ user: expectDetails });
+    expect(requestUserProfile(login.token, registered.authUserId)).toEqual({ user: expectDetails });
+
+    const logout1 = requestAuthLogout(login.token);
+    expect(logout1).toStrictEqual({});
+    expect(requestUserProfile(registered.token, registered.authUserId)).toEqual({ user: expectDetails });
+    expect(requestUserProfile(login.token, registered.authUserId)).toEqual({ error: 'error' });
+
+    const logout2 = requestAuthLogout(registered.token);
+    expect(logout2).toStrictEqual({});
+    expect(requestUserProfile(registered.token, registered.authUserId)).toEqual({ error: 'error' });
+    expect(requestUserProfile(login.token, registered.authUserId)).toEqual({ error: 'error' });
   });
 });
 

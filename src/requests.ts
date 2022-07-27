@@ -29,7 +29,13 @@ export function requestAuthRegister(email: string, password: string, nameFirst: 
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return {
+      body: JSON.parse(res.getBody() as string),
+      statusCode: res.statusCode
+    }
+  }
+  return { statusCode: res.statusCode };
 }
 
 export function requestAuthLogout(token: string) {
@@ -297,10 +303,16 @@ export function requestUserProfile(token: string, uId: number) {
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return {
+      body: JSON.parse(res.getBody() as string),
+      statusCode: res.statusCode
+    }
+  }
+  return { statusCode: res.statusCode };
 }
 
-// /message/edit/v1
+// message/edit/v1
 export function reqMessageEdit(token: string, messageId: number, message: string) {
   const res = request(
     'PUT',
@@ -326,7 +338,10 @@ export function requestUsersAll(token: string) {
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  return {
+    body: JSON.parse(res.getBody() as string),
+    statusCode: res.statusCode
+  }
 }
 
 // /message/remove/v1
@@ -354,7 +369,13 @@ export function requestUserSetName(token: string, nameFirst: string, nameLast: s
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return {
+      body: JSON.parse(res.getBody() as string),
+      statusCode: res.statusCode
+    }
+  }
+  return { statusCode: res.statusCode };
 }
 
 export function requestUserSetEmail(token: string, email: string) {
@@ -367,7 +388,13 @@ export function requestUserSetEmail(token: string, email: string) {
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return {
+      body: JSON.parse(res.getBody() as string),
+      statusCode: res.statusCode
+    }
+  }
+  return { statusCode: res.statusCode };
 }
 
 export function requestUserSetHandle(token: string, handleStr: string) {
@@ -380,7 +407,13 @@ export function requestUserSetHandle(token: string, handleStr: string) {
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return {
+      body: JSON.parse(res.getBody() as string),
+      statusCode: res.statusCode
+    }
+  }
+  return { statusCode: res.statusCode };
 }
 
 // message/senddm/v1

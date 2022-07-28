@@ -1,7 +1,6 @@
 import { getData, setData } from './data';
 import { Message } from './interfaces';
 import { tokenToUId } from './auth';
-import { checkUserData } from './users';
 
 /// ///////////// ADDITIONAL TYPES ///////////////////
 interface channel {
@@ -117,6 +116,5 @@ function channelsListallV2(token: string): channelsListRet {
 
   return { channels: channels };
 }
-
 
 export { channelsCreateV2, channelsListV2, channelsListallV2 };

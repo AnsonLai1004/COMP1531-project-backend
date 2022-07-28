@@ -125,7 +125,7 @@ describe('dm/details/v1', () => {
 describe('dm/list/v2', () => {
   test('invalid token', () => {
     const invalid = reqDmListV3('invalid token');
-    expect(invalid.statusCode).toStrictEqual(400);
+    expect(invalid.statusCode).toStrictEqual(403);
     expect(invalid.body.error).toStrictEqual({ message: 'Invalid token' });
   });
 
@@ -192,7 +192,7 @@ describe('dm/remove/v2', () => {
     const dm = reqDmCreate(user.token, []);
 
     let invalid = reqDmRemoveV3('invalid token', dm.dmId);
-    expect(invalid.statusCode).toStrictEqual(400);
+    expect(invalid.statusCode).toStrictEqual(403);
     expect(invalid.body.error).toStrictEqual({ message: 'Invalid token' });
 
     invalid = reqDmRemoveV3(user.token, -1);

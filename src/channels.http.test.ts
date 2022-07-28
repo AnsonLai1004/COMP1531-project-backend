@@ -20,17 +20,17 @@ describe('Channels Functions Errors', () => {
     expect(invalid.body.error).toStrictEqual({ message: 'Invalid channel name' });
     // ASSUMPTION - invalid token returns error
     invalid = requestChannelsCreateV3('invalid token', 'TheoAng', true);
-    expect(invalid.statusCode).toStrictEqual(400);
+    expect(invalid.statusCode).toStrictEqual(403);
     expect(invalid.body.error).toStrictEqual({ message: 'Invalid token' });
   });
 
   // ASSUMPTION - invalid token returns error
   test('invalid ID channelsListV1 channelsListallV1', () => {
     let invalid = requestChannelsListV3('invalid token');
-    expect(invalid.statusCode).toStrictEqual(400);
+    expect(invalid.statusCode).toStrictEqual(403);
     expect(invalid.body.error).toStrictEqual({ message: 'Invalid token' });
     invalid = requestChannelsListallV3('invalid token');
-    expect(invalid.statusCode).toStrictEqual(400);
+    expect(invalid.statusCode).toStrictEqual(403);
     expect(invalid.body.error).toStrictEqual({ message: 'Invalid token' });
   });
 });

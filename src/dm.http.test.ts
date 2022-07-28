@@ -124,7 +124,9 @@ describe('dm/details/v1', () => {
 
 describe('dm/list/v1', () => {
   test('invalid token', () => {
-    expect(reqDmList('invalid token')).toStrictEqual({ error: 'error' });
+    const invalid = reqDmList('invalid token');
+    expect(invalid.statusCode).toStrictEqual(400);
+    expect(invalid.body.error).toStrictEqual({ message: 'Invalid token' });
   });
 
   test('correct return', () => {
@@ -138,7 +140,9 @@ describe('dm/list/v1', () => {
     const dm1 = reqDmCreate(user1.token, []);
 
     // owner only
-    expect(reqDmList(user.token)).toStrictEqual({
+    const list = reqDmList(user.token);
+    expect(list.statusCode).toStrictEqual(200)
+    expect(list.body).toStrictEqual({
       dms: [
         {
           dmId: dm.dmId,
@@ -148,7 +152,9 @@ describe('dm/list/v1', () => {
     });
 
     // owner and member
-    expect(reqDmList(user1.token)).toStrictEqual({
+    const list1 = reqDmList(user1.token);
+    expect(list1.statusCode).toStrictEqual(200)
+    expect(list1.body).toStrictEqual({
       dms: [
         {
           dmId: dm.dmId,
@@ -162,7 +168,9 @@ describe('dm/list/v1', () => {
     });
 
     // member only
-    expect(reqDmList(user2.token)).toStrictEqual({
+    const list2 = reqDmList(user2.token);
+    expect(list2.statusCode).toStrictEqual(200)
+    expect(list2.body).toStrictEqual({
       dms: [
         {
           dmId: dm.dmId,
@@ -172,7 +180,9 @@ describe('dm/list/v1', () => {
     });
 
     // none
-    expect(reqDmList(user3.token)).toStrictEqual({ dms: [] });
+    const list3 = reqDmList(user3.token);
+    expect(list3.statusCode).toStrictEqual(200)
+    expect(list3.body).toStrictEqual({ dms: [] });
   });
 });
 
@@ -181,9 +191,13 @@ describe('dm/remove/v1', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const dm = reqDmCreate(user.token, []);
 
-    expect(reqDmRemove('invalid token', dm.dmId)).toStrictEqual({ error: 'error' });
-    expect(reqDmRemove(user.token, -1)).toStrictEqual({ error: 'error' });
-    expect(reqDmRemove('invalid token', -1)).toStrictEqual({ error: 'error' });
+    let invalid = reqDmRemove('invalid token', dm.dmId);
+    expect(invalid.statusCode).toStrictEqual(400)
+    expect(invalid.body.error).toStrictEqual({ message: 'Invalid token' });
+
+    invalid = reqDmRemove(user.token, -1);
+    expect(invalid.statusCode).toStrictEqual(400)
+    expect(invalid.body.error).toStrictEqual({ message: 'Invalid dm' });
   });
 
   test('user not owner / member of DM', () => {
@@ -192,8 +206,13 @@ describe('dm/remove/v1', () => {
     const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
     const dm = reqDmCreate(user.token, [user1.authUserId]);
 
-    expect(reqDmRemove(user2.token, dm.dmId)).toStrictEqual({ error: 'error' });
-    expect(reqDmRemove(user1.token, dm.dmId)).toStrictEqual({ error: 'error' });
+    let invalid = reqDmRemove(user2.token, dm.dmId);
+    expect(invalid.statusCode).toStrictEqual(403)
+    expect(invalid.body.error).toStrictEqual({ message: 'User not in dm' });
+
+    invalid = reqDmRemove(user1.token, dm.dmId);
+    expect(invalid.statusCode).toStrictEqual(403)
+    expect(invalid.body.error).toStrictEqual({ message: 'User is not dm creator' });
   });
 
   test('correct return', () => {
@@ -203,7 +222,7 @@ describe('dm/remove/v1', () => {
     const dm1 = reqDmCreate(user1.token, []);
 
     // BEFORE
-    expect(reqDmList(user.token)).toStrictEqual({
+    expect(reqDmList(user.token).body).toStrictEqual({
       dms: [
         {
           dmId: dm.dmId,
@@ -212,7 +231,7 @@ describe('dm/remove/v1', () => {
       ]
     });
 
-    expect(reqDmList(user1.token)).toStrictEqual({
+    expect(reqDmList(user1.token).body).toStrictEqual({
       dms: [
         {
           dmId: dm.dmId,
@@ -225,12 +244,14 @@ describe('dm/remove/v1', () => {
       ]
     });
 
-    expect(reqDmRemove(user.token, dm.dmId)).toStrictEqual({});
+    const remove = reqDmRemove(user.token, dm.dmId);
+    expect(remove.statusCode).toStrictEqual(200);
+    expect(remove.body).toStrictEqual({});
 
     // AFTER
-    expect(reqDmList(user.token)).toStrictEqual({ dms: [] });
+    expect(reqDmList(user.token).body).toStrictEqual({ dms: [] });
 
-    expect(reqDmList(user1.token)).toStrictEqual({
+    expect(reqDmList(user1.token).body).toStrictEqual({
       dms: [
         {
           dmId: dm1.dmId,

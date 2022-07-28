@@ -38,22 +38,22 @@ app.get('/echo', (req, res, next) => {
 app.use(morgan('dev'));
 
 /// /////////////////////////// ITERATION 3 /////////////////////////////////////
-app.get('/dm/list/v2', (req, res) => {
+app.get('/dm/list/v2', (req, res, next) => {
   try {
     const token = req.query.token as string;
     res.json(dmListV2(token));
   } catch (err) {
-    throw err;
+    next(err);
   }
 });
 
-app.delete('/dm/remove/v2', (req, res) => {
+app.delete('/dm/remove/v2', (req, res, next) => {
   try {
     const token = req.query.token as string;
     const dmId = parseInt(req.query.dmId as string);
     res.json(dmRemoveV2(token, dmId));
   } catch (err) {
-    throw err;
+    next(err);
   }
 });
 
@@ -62,25 +62,25 @@ app.post('/channels/create/v3', (req, res, next) => {
     const { token, name, isPublic } = req.body;
     res.json(channelsCreateV3(token, name, isPublic));
   } catch (err) {
-    throw err;
+    next(err);
   }
 });
 
-app.get('/channels/list/v3', (req, res) => {
+app.get('/channels/list/v3', (req, res, next) => {
   try {
     const token = req.query.token as string;
     res.json(channelsListV3(token));
   } catch (err) {
-    throw err;
+    next(err);
   }
 });
 
-app.get('/channels/listall/v3', (req, res) => {
+app.get('/channels/listall/v3', (req, res, next) => {
   try {
     const token = req.query.token as string;
     res.json(channelsListallV3(token));
   } catch (err) {
-    throw err;
+    next(err);
   }
 });
 /// /////////////////////////////////////////////////////////////////////////////

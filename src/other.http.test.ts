@@ -1,4 +1,4 @@
-import { requestAuthRegister, requestClear } from './requests';
+import { requestAuthRegister, requestChannelsCreate, requestChannelsList, requestUserProfile, requestClear } from './requests';
 
 beforeEach(() => {
   requestClear();
@@ -18,4 +18,29 @@ test('clearV1 test: can reuse email', () => {
     token: expect.any(String),
     authUserId: expect.any(Number)
   });
+});
+
+test('clearV1 test: viewing details', () => {
+  const userA = requestAuthRegister('hayhay123@gmail.com', '8743b52063cd84097a65d1633f5c74f5', 'Hayden', 'Smith');
+  const channelA = requestChannelsCreate(userA.token, 'BOOST', true);
+  expect(requestUserProfile(userA.token, userA.authUserId)).toMatchObject({
+    user: {
+      uId: userA.authUserId,
+      email: 'hayhay123@gmail.com',
+      nameFirst: 'Hayden',
+      nameLast: 'Smith',
+      handleStr: 'haydensmith',
+    }
+  });
+  expect(requestChannelsList(userA.token)).toMatchObject({
+    channels: [
+      {
+        name: 'BOOST',
+        channelId: channelA.channelId,
+      }
+    ],
+  });
+  requestClear();
+  expect(requestUserProfile(userA.token, userA.authUserId)).toMatchObject({ error: 'error' });
+  expect(requestChannelsList(userA.token)).toMatchObject({ error: 'error' });
 });

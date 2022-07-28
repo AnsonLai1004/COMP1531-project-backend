@@ -2,7 +2,7 @@
  * Test file for auth routes endpoints and status codes.
  */
 
-import { requestAuthRegister, requestAuthLogin, requestAuthLogout, requestClear } from './requests';
+import { requestAuthRegister, requestAuthLogin, requestAuthLogout, requestUserProfile, requestClear } from './requests';
 
 beforeEach(() => {
   requestClear();
@@ -79,24 +79,102 @@ describe('auth/login/v2 function error cases', () => {
 
 describe('auth/login/v2 function valid cases', () => {
   test('Valid login', () => {
+    const registered1 = requestAuthRegister('valid@gmail.com', 'password', 'Harry', 'Potter');
+    const login1 = requestAuthLogin('valid@gmail.com', 'password');
+    expect(login1).toStrictEqual({
+      token: expect.any(String),
+      authUserId: registered1.authUserId
+    });
+    const registered2 = requestAuthRegister('another-valid@gmail.com', 'password', 'Harry', 'Potter');
+    const login2 = requestAuthLogin('another-valid@gmail.com', 'password');
+    expect(login2).toStrictEqual({
+      token: expect.any(String),
+      authUserId: registered2.authUserId
+    });
+  });
+  test('Same user can create unique sessions', () => {
     const registered = requestAuthRegister('valid@gmail.com', 'password', 'Harry', 'Potter');
-    const login = requestAuthLogin('valid@gmail.com', 'password');
-    expect(login).toStrictEqual({
+    const login1 = requestAuthLogin('valid@gmail.com', 'password');
+    const login2 = requestAuthLogin('valid@gmail.com', 'password');
+    expect(login1).toStrictEqual({
       token: expect.any(String),
       authUserId: registered.authUserId
     });
+    expect(login2).toStrictEqual({
+      token: expect.any(String),
+      authUserId: registered.authUserId
+    });
+    expect(login1.token).not.toEqual(login2.token);
+    expect(login1.authUserId).toEqual(login2.authUserId);
   });
 });
 
 describe('auth/logout/v1 function valid cases', () => {
-  test('Valid return type', () => {
+  test('Check with user/profile functionality', () => {
     const registered = requestAuthRegister('valid@gmail.com', 'password', 'Harry', 'Potter');
+    const expectDetails = {
+      uId: registered.authUserId,
+      email: 'valid@gmail.com',
+      nameFirst: 'Harry',
+      nameLast: 'Potter',
+      handleStr: 'harrypotter'
+    };
     const login = requestAuthLogin('valid@gmail.com', 'password');
-    expect(login).toStrictEqual({
-      token: expect.any(String),
-      authUserId: registered.authUserId
-    });
-    const logout = requestAuthLogout(login.token);
-    expect(logout).toStrictEqual({});
+    expect(requestUserProfile(registered.token, registered.authUserId)).toEqual({ user: expectDetails });
+    expect(requestUserProfile(login.token, registered.authUserId)).toEqual({ user: expectDetails });
+
+    const logout1 = requestAuthLogout(login.token);
+    expect(logout1).toStrictEqual({});
+    expect(requestUserProfile(registered.token, registered.authUserId)).toEqual({ user: expectDetails });
+    expect(requestUserProfile(login.token, registered.authUserId)).toEqual({ error: 'error' });
+
+    const logout2 = requestAuthLogout(registered.token);
+    expect(logout2).toStrictEqual({});
+    expect(requestUserProfile(registered.token, registered.authUserId)).toEqual({ error: 'error' });
+    expect(requestUserProfile(login.token, registered.authUserId)).toEqual({ error: 'error' });
+  });
+});
+
+describe('Testing auth/register handle generation with user/profile', () => {
+  test('Three users with same name, check that id appends numbers', () => {
+    const registered1 = requestAuthRegister('valid@gmail.com', 'password', 'Harry', 'Potter');
+    const registered2 = requestAuthRegister('another-valid@gmail.com', 'password', 'Harry', 'Potter');
+    const registered3 = requestAuthRegister('different-valid@gmail.com', 'password', 'Harry', 'Potter');
+
+    const profile1 = requestUserProfile(registered1.token, registered1.authUserId);
+    const profile2 = requestUserProfile(registered2.token, registered2.authUserId);
+    const profile3 = requestUserProfile(registered3.token, registered3.authUserId);
+
+    expect(profile1.user.handleStr === 'harrypotter');
+    expect(profile2.user.handleStr === 'harrypotter0');
+    expect(profile3.user.handleStr === 'harrypotter1');
+  });
+  test('Casting uppercase to lowercase', () => {
+    const registered = requestAuthRegister('valid@gmail.com', 'password', 'HARRY', 'POTTER');
+    const profile = requestUserProfile(registered.token, registered.authUserId);
+    expect(profile.user.handleStr === 'harrypotter');
+  });
+  test('Removing non-alphanumeric characters', () => {
+    const registered = requestAuthRegister('valid@gmail.com', 'password', 'harry#@*)(#', 'potter_+_#@');
+    const profile = requestUserProfile(registered.token, registered.authUserId);
+    expect(profile.user.handleStr === 'harrypotter');
+  });
+  test('Keeping numbers passed into name', () => {
+    const registered = requestAuthRegister('valid@gmail.com', 'password', '123Harry', '456Potter');
+    const profile = requestUserProfile(registered.token, registered.authUserId);
+    expect(profile.user.handleStr === '123harry456potter');
+  });
+  test('Cut off 21 character name to 20 characters', () => {
+    const registered = requestAuthRegister('valid@gmail.com', 'password', '1234567890', '12345678901');
+    const profile = requestUserProfile(registered.token, registered.authUserId);
+    expect(profile.user.handleStr === '12345678901234567890');
+  });
+  test('Handle may exceed 20 characters when appending numbers', () => {
+    const registered1 = requestAuthRegister('valid@gmail.com', 'password', '1234567890', '12345678901');
+    const registered2 = requestAuthRegister('another-valid@gmail.com', 'password', '1234567890', '12345678901');
+    const profile1 = requestUserProfile(registered1.token, registered1.authUserId);
+    const profile2 = requestUserProfile(registered2.token, registered2.authUserId);
+    expect(profile1.user.handleStr === '12345678901234567890');
+    expect(profile2.user.handleStr === '123456789012345678900');
   });
 });

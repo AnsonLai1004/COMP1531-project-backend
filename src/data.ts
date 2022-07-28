@@ -44,17 +44,15 @@ export function setData(newData: DataStore) {
 
 // Saves the data to a file dataStore.json
 function fileSaveData() {
-  // async method is used as the save function is called many times
-  fs.writeFile('dataStore.json', JSON.stringify(data), (err) => {
-    if (err) {
-      console.error(err);
-    }
-  });
+  try {
+    fs.writeFileSync('dataStore.json', JSON.stringify(data));
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 // Updates the data based on the contents of dataStore.json
 export function fileLoadData() {
-  // sync method is used because the user expects next actions to have the loaded data
   try {
     data = JSON.parse(fs.readFileSync('dataStore.json', 'utf8'));
   } catch (err) {

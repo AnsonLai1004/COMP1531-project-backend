@@ -79,7 +79,6 @@ export function userSetNameV1(token: string, nameFirst: string, nameLast: string
       return {};
     }
   }
-  return errorObject;
 }
 
 /**
@@ -107,7 +106,6 @@ export function userSetEmailV1(token: string, email: string) {
       return {};
     }
   }
-  return errorObject;
 }
 
 /**
@@ -140,7 +138,6 @@ export function userSetHandleV1(token: string, handleStr: string) {
       return {};
     }
   }
-  return errorObject;
 }
 
 interface userProfileV1Return {
@@ -155,16 +152,13 @@ interface userProfileV1Return {
 }
 
 /**
- * Function which, given a valid authUserId and uId, returns the
- * details of the user whose uId matches the argument uId
+ * Function which returns the details of the user whose uId matches the argument uId
+ * Assumes that the given authUserId is valid
  * @param {number} authUserId
  * @param {number} uId
  * @returns {userProfileReturn}
  */
 export function userProfileV1(authUserId: number, uId: number): userProfileV1Return {
-  if (!checkUserData(authUserId, 'uId')) {
-    return errorObject;
-  }
   const data = getData();
   for (const user of data.users) {
     if (uId === user.uId) {

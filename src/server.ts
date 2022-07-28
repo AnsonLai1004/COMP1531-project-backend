@@ -8,10 +8,10 @@ import errorHandler from 'middleware-http-errors';
 
 import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
-import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
+import { channelsCreateV2, channelsListV2, channelsListallV2, channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
 import { messageSendV1, messageRemoveV1, messageEditV1, dmMessagesV1, messageSendDmV1 } from './message';
 
-import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 } from './dm';
+import { dmListV2, dmRemoveV2, dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 } from './dm';
 import { clearV1 } from './other';
 import { fileLoadData } from './data';
 
@@ -38,6 +38,57 @@ app.get('/echo', (req, res, next) => {
 // for logging errors
 app.use(morgan('dev'));
 
+////////////////////////////// ITERATION 3 /////////////////////////////////////
+app.get('/dm/list/v2', (req, res) => {
+  try {
+    const token = req.query.token as string;
+    res.json(dmListV1(token));
+  } catch(err) {
+    throw err;
+  }
+  
+});
+
+app.delete('/dm/remove/v2', (req, res) => {
+  try {
+    const token = req.query.token as string;
+    const dmId = parseInt(req.query.dmId as string);
+    res.json(dmRemoveV1(token, dmId));
+  } catch(err) {
+    throw err;
+  }
+});
+
+app.post('/channels/create/v3', (req, res, next) => {
+  try {
+    const { token, name, isPublic } = req.body;
+    const ret = channelsCreateV3(token, name, isPublic);
+    res.json(ret)
+  } catch(err) {
+    console.log(err)
+    throw err;
+  }
+});
+
+app.get('/channels/list/v3', (req, res) => {
+  try {
+    const token = req.query.token as string;
+    res.json(channelsListV3(token));
+  } catch(err) {
+    throw err;
+  }
+});
+
+app.get('/channels/listall/v3', (req, res) => {
+  try {
+    const token = req.query.token as string;
+    res.json(channelsListallV3(token));
+  } catch(err) {
+    throw err;
+  }
+});
+////////////////////////////////////////////////////////////////////////////////
+
 // auth routes
 app.post('/auth/login/v2', (req, res) => {
   const { email, password } = req.body;
@@ -55,34 +106,21 @@ app.post('/auth/logout/v1', (req, res) => {
 });
 
 // channels routes
-app.post('/channels/create/v2', (req, res, next) => {
-  try {
-    const { token, name, isPublic } = req.body;
-    const ret = channelsCreateV2(token, name, isPublic);
-    res.json(ret)
-  } catch(err) {
-    console.log(err)
-    throw err;
-  }
+app.post('/channels/create/v2', (req, res) => {
+  const { token, name, isPublic } = req.body;
+  res.json(channelsCreateV2(token, name, isPublic));
 });
 
 app.get('/channels/list/v2', (req, res) => {
-  try {
-    const token = req.query.token as string;
-    res.json(channelsListV2(token));
-  } catch(err) {
-    throw err;
-  }
+  const token = req.query.token as string;
+  res.json(channelsListV2(token));
 });
 
 app.get('/channels/listall/v2', (req, res) => {
-  try {
-    const token = req.query.token as string;
-    res.json(channelsListallV2(token));
-  } catch(err) {
-    throw err;
-  }
+  const token = req.query.token as string;
+  res.json(channelsListallV2(token));
 });
+
 
 // channel routes
 app.get('/channel/details/v2', (req, res) => {
@@ -193,24 +231,16 @@ app.get('/dm/messages/v1', (req, res) => {
 });
 
 app.get('/dm/list/v1', (req, res) => {
-  try {
-    const token = req.query.token as string;
-    res.json(dmListV1(token));
-  } catch(err) {
-    throw err;
-  }
-  
+  const token = req.query.token as string;
+  res.json(dmListV1(token));
 });
 
 app.delete('/dm/remove/v1', (req, res) => {
-  try {
-    const token = req.query.token as string;
-    const dmId = parseInt(req.query.dmId as string);
-    res.json(dmRemoveV1(token, dmId));
-  } catch(err) {
-    throw err;
-  }
+  const token = req.query.token as string;
+  const dmId = parseInt(req.query.dmId as string);
+  res.json(dmRemoveV1(token, dmId));
 });
+
 
 app.post('/dm/leave/v1', (req, res) => {
   const { token, dmId } = req.body;

@@ -19,8 +19,7 @@ interface channelsListRet {
   error?: string;
 }
 
-/// ///////////// ITERATION 2 FUNCTIONS ///////////////////
-
+///////////////// ITERATION 3 FUNCTIONS ////////////////////////////////////////
 /**
  * Creates a new channel object and appends it to the channels section of the dataStore
  * Returns error if inactive token passed in || 1 > name length || name length > 20
@@ -30,7 +29,7 @@ interface channelsListRet {
  * @returns {channelsCreateRet}
  */
 
-function channelsCreateV2(token: string, name: string, isPublic: boolean): channelsCreateRet {
+function channelsCreateV3(token: string, name: string, isPublic: boolean): channelsCreateRet {
   // INVALID NAME
   if (name.length < 1 || name.length > 20) {
     throw HTTPError(400, 'Invalid channel name');
@@ -64,7 +63,7 @@ function channelsCreateV2(token: string, name: string, isPublic: boolean): chann
  * @returns {channelsListRet}
  */
 
-function channelsListV2(token: string): channelsListRet {
+function channelsListV3(token: string): channelsListRet {
   // CHECK IF USERID VALID
   const authUser = tokenToUId(token);
 
@@ -97,7 +96,7 @@ function channelsListV2(token: string): channelsListRet {
  * @returns {channelsListRet}
  */
 
-function channelsListallV2(token: string): channelsListRet {
+function channelsListallV3(token: string): channelsListRet {
   // CHECK IF USERID VALID
   const authUser = tokenToUId(token);
 
@@ -117,5 +116,94 @@ function channelsListallV2(token: string): channelsListRet {
 
   return { channels: channels };
 }
+////////////////////////////////////////////////////////////////////////////////
+function channelsCreateV2(token: string, name: string, isPublic: boolean): channelsCreateRet {
+  // INVALID NAME
+  if (name.length < 1 || name.length > 20) {
+    return { error: 'error' };
+  }
 
-export { channelsCreateV2, channelsListV2, channelsListallV2 };
+  // CHECK IF TOKEN VALID
+  const authUser = tokenToUId(token);
+  if ('error' in authUser) {
+    return { error: 'error' };
+  }
+
+  const dataStore = getData();
+  const channel = {
+    channelId: dataStore.lastChannelId + 1,
+    name: name,
+    isPublic: isPublic,
+    ownerMembers: [authUser.uId],
+    allMembers: [authUser.uId],
+    messages: [] as Message[],
+  };
+  dataStore.channels.push(channel);
+  dataStore.lastChannelId++;
+  setData(dataStore);
+  return { channelId: channel.channelId };
+}
+
+/**
+ * Returns a list of channels the specified user is a part of
+ * Returns error if inactive token passed in
+ * @param {string} token
+ * @returns {channelsListRet}
+ */
+
+function channelsListV2(token: string): channelsListRet {
+  // CHECK IF USERID VALID
+  const authUser = tokenToUId(token);
+
+  if ('error' in authUser) {
+    return { error: 'error' };
+  }
+
+  const dataStore = getData();
+  const channels = [];
+
+  for (const channel of dataStore.channels) {
+    for (const member of channel.allMembers) {
+      if (member === authUser.uId) {
+        channels.push({
+          channelId: channel.channelId,
+          name: channel.name,
+        });
+        break;
+      }
+    }
+  }
+
+  return { channels: channels };
+}
+
+/**
+ * Returns a list of all existing channels
+ * Returns error if inactive token passed in
+ * @param {string} token
+ * @returns {channelsListRet}
+ */
+
+function channelsListallV2(token: string): channelsListRet {
+  // CHECK IF USERID VALID
+  const authUser = tokenToUId(token);
+
+  if ('error' in authUser) {
+    return { error: 'error' };
+  }
+
+  const dataStore = getData();
+  const channels = [];
+
+  for (const channel of dataStore.channels) {
+    channels.push({
+      channelId: channel.channelId,
+      name: channel.name,
+    });
+  }
+
+  return { channels: channels };
+}
+
+
+export { channelsCreateV2, channelsListV2, channelsListallV2, channelsCreateV3, channelsListallV3, channelsListV3 };

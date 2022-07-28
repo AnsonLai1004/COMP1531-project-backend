@@ -5,6 +5,92 @@
 
 import request from 'sync-request';
 import { port, url } from './config.json';
+
+/////////////////////////////// ITERATION 3 ////////////////////////////////////
+export function requestChannelsCreateV3(token: string, name: string, isPublic: boolean) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/channels/create/v3',
+    {
+      json: {
+        token,
+        name,
+        isPublic
+      }
+    }
+  );
+  return {
+    body: JSON.parse(res.body as string),
+    statusCode: res.statusCode,
+  };
+}
+
+export function requestChannelsListV3(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/channels/list/v3',
+    {
+      qs: {
+        token
+      }
+    }
+  );
+  return {
+    body: JSON.parse(res.body as string),
+    statusCode: res.statusCode,
+  };
+}
+
+export function requestChannelsListallV3(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/channels/listall/v3',
+    {
+      qs: {
+        token
+      }
+    }
+  );
+  return {
+    body: JSON.parse(res.body as string),
+    statusCode: res.statusCode,
+  };
+}
+
+export function reqDmListV3(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/dm/list/v2',
+    {
+      qs: {
+        token,
+      }
+    }
+  );
+  return {
+    body: JSON.parse(res.body as string),
+    statusCode: res.statusCode,
+  };
+}
+
+export function reqDmRemoveV3(token: string, dmId: number) {
+  const res = request(
+    'DELETE',
+    `${url}:${port}` + '/dm/remove/v2',
+    {
+      qs: {
+        token,
+        dmId,
+      }
+    }
+  );
+  return {
+    body: JSON.parse(res.body as string),
+    statusCode: res.statusCode,
+  };
+}
+////////////////////////////////////////////////////////////////////////////////
+
 // auth
 export function requestAuthLogin(email: string, password: string) {
   const res = request(
@@ -155,10 +241,7 @@ export function requestChannelsCreate(token: string, name: string, isPublic: boo
       }
     }
   );
-  return {
-    body: JSON.parse(res.body as string),
-    statusCode: res.statusCode,
-  };
+  return JSON.parse(res.getBody() as string);
 }
 
 export function requestChannelsList(token: string) {
@@ -171,10 +254,7 @@ export function requestChannelsList(token: string) {
       }
     }
   );
-  return {
-    body: JSON.parse(res.body as string),
-    statusCode: res.statusCode,
-  };
+  return JSON.parse(res.getBody() as string);
 }
 
 export function requestChannelsListall(token: string) {
@@ -187,11 +267,9 @@ export function requestChannelsListall(token: string) {
       }
     }
   );
-  return {
-    body: JSON.parse(res.body as string),
-    statusCode: res.statusCode,
-  };
+  return JSON.parse(res.getBody() as string);
 }
+
 
 export function reqChannelRemoveowner(token: string, channelId: number, uId: number) {
   const res = request(
@@ -263,10 +341,7 @@ export function reqDmList(token: string) {
       }
     }
   );
-  return {
-    body: JSON.parse(res.body as string),
-    statusCode: res.statusCode,
-  };
+  return JSON.parse(res.getBody() as string);
 }
 
 export function reqDmRemove(token: string, dmId: number) {
@@ -280,11 +355,9 @@ export function reqDmRemove(token: string, dmId: number) {
       }
     }
   );
-  return {
-    body: JSON.parse(res.body as string),
-    statusCode: res.statusCode,
-  };
+  return JSON.parse(res.getBody() as string);
 }
+
 
 export function reqDmLeave(token: string, dmId: number) {
   const res = request(

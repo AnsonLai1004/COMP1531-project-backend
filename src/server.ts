@@ -3,7 +3,6 @@ import { echo } from './echo';
 import morgan from 'morgan';
 import config from './config.json';
 import cors from 'cors';
-import HTTPError from 'http-errors';
 import errorHandler from 'middleware-http-errors';
 
 import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
@@ -38,23 +37,22 @@ app.get('/echo', (req, res, next) => {
 // for logging errors
 app.use(morgan('dev'));
 
-////////////////////////////// ITERATION 3 /////////////////////////////////////
+/// /////////////////////////// ITERATION 3 /////////////////////////////////////
 app.get('/dm/list/v2', (req, res) => {
   try {
     const token = req.query.token as string;
-    res.json(dmListV1(token));
-  } catch(err) {
+    res.json(dmListV2(token));
+  } catch (err) {
     throw err;
   }
-  
 });
 
 app.delete('/dm/remove/v2', (req, res) => {
   try {
     const token = req.query.token as string;
     const dmId = parseInt(req.query.dmId as string);
-    res.json(dmRemoveV1(token, dmId));
-  } catch(err) {
+    res.json(dmRemoveV2(token, dmId));
+  } catch (err) {
     throw err;
   }
 });
@@ -62,10 +60,8 @@ app.delete('/dm/remove/v2', (req, res) => {
 app.post('/channels/create/v3', (req, res, next) => {
   try {
     const { token, name, isPublic } = req.body;
-    const ret = channelsCreateV3(token, name, isPublic);
-    res.json(ret)
-  } catch(err) {
-    console.log(err)
+    res.json(channelsCreateV3(token, name, isPublic));
+  } catch (err) {
     throw err;
   }
 });
@@ -74,7 +70,7 @@ app.get('/channels/list/v3', (req, res) => {
   try {
     const token = req.query.token as string;
     res.json(channelsListV3(token));
-  } catch(err) {
+  } catch (err) {
     throw err;
   }
 });
@@ -83,11 +79,11 @@ app.get('/channels/listall/v3', (req, res) => {
   try {
     const token = req.query.token as string;
     res.json(channelsListallV3(token));
-  } catch(err) {
+  } catch (err) {
     throw err;
   }
 });
-////////////////////////////////////////////////////////////////////////////////
+/// /////////////////////////////////////////////////////////////////////////////
 
 // auth routes
 app.post('/auth/login/v2', (req, res) => {
@@ -120,7 +116,6 @@ app.get('/channels/listall/v2', (req, res) => {
   const token = req.query.token as string;
   res.json(channelsListallV2(token));
 });
-
 
 // channel routes
 app.get('/channel/details/v2', (req, res) => {
@@ -240,7 +235,6 @@ app.delete('/dm/remove/v1', (req, res) => {
   const dmId = parseInt(req.query.dmId as string);
   res.json(dmRemoveV1(token, dmId));
 });
-
 
 app.post('/dm/leave/v1', (req, res) => {
   const { token, dmId } = req.body;

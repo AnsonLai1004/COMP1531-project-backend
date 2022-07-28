@@ -1,7 +1,7 @@
 import { getData, setData } from './data';
 import { Message } from './interfaces';
 import { tokenToUId } from './auth';
-import HTTPError from 'http-errors'
+import HTTPError from 'http-errors';
 
 /// ///////////// ADDITIONAL TYPES ///////////////////
 interface channel {
@@ -19,7 +19,7 @@ interface channelsListRet {
   error?: string;
 }
 
-///////////////// ITERATION 3 FUNCTIONS ////////////////////////////////////////
+/// ////////////// ITERATION 3 FUNCTIONS ////////////////////////////////////////
 /**
  * Creates a new channel object and appends it to the channels section of the dataStore
  * Returns error if inactive token passed in || 1 > name length || name length > 20
@@ -116,7 +116,7 @@ function channelsListallV3(token: string): channelsListRet {
 
   return { channels: channels };
 }
-////////////////////////////////////////////////////////////////////////////////
+/// /////////////////////////////////////////////////////////////////////////////
 function channelsCreateV2(token: string, name: string, isPublic: boolean): channelsCreateRet {
   // INVALID NAME
   if (name.length < 1 || name.length > 20) {
@@ -204,6 +204,5 @@ function channelsListallV2(token: string): channelsListRet {
 
   return { channels: channels };
 }
-
 
 export { channelsCreateV2, channelsListV2, channelsListallV2, channelsCreateV3, channelsListallV3, channelsListV3 };

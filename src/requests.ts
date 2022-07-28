@@ -6,7 +6,7 @@
 import request from 'sync-request';
 import { port, url } from './config.json';
 
-/////////////////////////////// ITERATION 3 ////////////////////////////////////
+/// //////////////////////////// ITERATION 3 ////////////////////////////////////
 export function requestChannelsCreateV3(token: string, name: string, isPublic: boolean) {
   const res = request(
     'POST',
@@ -89,7 +89,7 @@ export function reqDmRemoveV3(token: string, dmId: number) {
     statusCode: res.statusCode,
   };
 }
-////////////////////////////////////////////////////////////////////////////////
+/// /////////////////////////////////////////////////////////////////////////////
 
 // auth
 export function requestAuthLogin(email: string, password: string) {
@@ -270,7 +270,6 @@ export function requestChannelsListall(token: string) {
   return JSON.parse(res.getBody() as string);
 }
 
-
 export function reqChannelRemoveowner(token: string, channelId: number, uId: number) {
   const res = request(
     'POST',
@@ -357,7 +356,6 @@ export function reqDmRemove(token: string, dmId: number) {
   );
   return JSON.parse(res.getBody() as string);
 }
-
 
 export function reqDmLeave(token: string, dmId: number) {
   const res = request(

@@ -2,9 +2,9 @@ import { getData, setData } from './data';
 import { Message } from './interfaces';
 import { tokenToUId, membersobjCreate, isValidUserId } from './channel';
 export { dmListV2, dmRemoveV2, dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 };
-import HTTPError from 'http-errors'
+import HTTPError from 'http-errors';
 
-///////////////////////////// ITERATION 3 //////////////////////////////////////
+/// ////////////////////////// ITERATION 3 //////////////////////////////////////
 function dmListV2(token: string) {
   // check if token passed in is valid
   const tokenId = tokenToUId(token);
@@ -56,7 +56,7 @@ function dmRemoveV2(token: string, dmId: number) {
 
   return {};
 }
-////////////////////////////////////////////////////////////////////////////////
+/// /////////////////////////////////////////////////////////////////////////////
 
 function dmCreateV1(token: string, uIds: number[]) {
   // any invalid uId in uIds

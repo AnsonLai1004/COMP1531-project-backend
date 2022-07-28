@@ -3,6 +3,7 @@ import { echo } from './echo';
 import morgan from 'morgan';
 import config from './config.json';
 import cors from 'cors';
+import HTTPError from 'http-errors';
 import errorHandler from 'middleware-http-errors';
 
 import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
@@ -34,9 +35,6 @@ app.get('/echo', (req, res, next) => {
   }
 });
 
-// handles errors nicely
-app.use(errorHandler());
-
 // for logging errors
 app.use(morgan('dev'));
 
@@ -57,9 +55,15 @@ app.post('/auth/logout/v1', (req, res) => {
 });
 
 // channels routes
-app.post('/channels/create/v2', (req, res) => {
-  const { token, name, isPublic } = req.body;
-  res.json(channelsCreateV2(token, name, isPublic));
+app.post('/channels/create/v2', (req, res, next) => {
+  try{
+    const { token, name, isPublic } = req.body;
+    const ret = channelsCreateV2(token, name, isPublic);
+    res.json(ret)
+  } catch(err) {
+    console.log(err)
+    throw err;
+  }
 });
 
 app.get('/channels/list/v2', (req, res) => {
@@ -201,6 +205,9 @@ app.delete('/clear/v1', (req, res) => {
   clearV1();
   res.json({});
 });
+
+// handles errors nicely
+app.use(errorHandler());
 
 // start server
 const server = app.listen(PORT, HOST, () => {

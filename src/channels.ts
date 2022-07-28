@@ -1,6 +1,7 @@
 import { getData, setData } from './data';
 import { Message } from './interfaces';
 import { tokenToUId } from './auth';
+import HTTPError from 'http-errors'
 
 /// ///////////// ADDITIONAL TYPES ///////////////////
 interface channel {
@@ -32,13 +33,13 @@ interface channelsListRet {
 function channelsCreateV2(token: string, name: string, isPublic: boolean): channelsCreateRet {
   // INVALID NAME
   if (name.length < 1 || name.length > 20) {
-    return { error: 'error' };
+    throw HTTPError(400, 'Invalid channel name');
   }
 
   // CHECK IF TOKEN VALID
   const authUser = tokenToUId(token);
   if ('error' in authUser) {
-    return { error: 'error' };
+    throw HTTPError(400, 'Invalid token');
   }
 
   const dataStore = getData();
@@ -68,7 +69,7 @@ function channelsListV2(token: string): channelsListRet {
   const authUser = tokenToUId(token);
 
   if ('error' in authUser) {
-    return { error: 'error' };
+    throw HTTPError(400, 'Invalid token');
   }
 
   const dataStore = getData();
@@ -101,7 +102,7 @@ function channelsListallV2(token: string): channelsListRet {
   const authUser = tokenToUId(token);
 
   if ('error' in authUser) {
-    return { error: 'error' };
+    throw HTTPError(400, 'Invalid token');
   }
 
   const dataStore = getData();

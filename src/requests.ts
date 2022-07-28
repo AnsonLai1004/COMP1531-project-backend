@@ -155,7 +155,10 @@ export function requestChannelsCreate(token: string, name: string, isPublic: boo
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  return {
+    body: JSON.parse(res.body as string),
+    statusCode: res.statusCode,
+  };
 }
 
 export function requestChannelsList(token: string) {
@@ -168,7 +171,10 @@ export function requestChannelsList(token: string) {
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  return {
+    body: JSON.parse(res.body as string),
+    statusCode: res.statusCode,
+  };
 }
 
 export function requestChannelsListall(token: string) {
@@ -181,7 +187,10 @@ export function requestChannelsListall(token: string) {
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  return {
+    body: JSON.parse(res.body as string),
+    statusCode: res.statusCode,
+  };
 }
 
 export function reqChannelRemoveowner(token: string, channelId: number, uId: number) {

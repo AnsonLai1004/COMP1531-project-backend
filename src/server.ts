@@ -56,7 +56,7 @@ app.post('/auth/logout/v1', (req, res) => {
 
 // channels routes
 app.post('/channels/create/v2', (req, res, next) => {
-  try{
+  try {
     const { token, name, isPublic } = req.body;
     const ret = channelsCreateV2(token, name, isPublic);
     res.json(ret)
@@ -67,13 +67,21 @@ app.post('/channels/create/v2', (req, res, next) => {
 });
 
 app.get('/channels/list/v2', (req, res) => {
-  const token = req.query.token as string;
-  res.json(channelsListV2(token));
+  try {
+    const token = req.query.token as string;
+    res.json(channelsListV2(token));
+  } catch(err) {
+    throw err;
+  }
 });
 
 app.get('/channels/listall/v2', (req, res) => {
-  const token = req.query.token as string;
-  res.json(channelsListallV2(token));
+  try {
+    const token = req.query.token as string;
+    res.json(channelsListallV2(token));
+  } catch(err) {
+    throw err;
+  }
 });
 
 // channel routes
@@ -185,14 +193,23 @@ app.get('/dm/messages/v1', (req, res) => {
 });
 
 app.get('/dm/list/v1', (req, res) => {
-  const token = req.query.token as string;
-  res.json(dmListV1(token));
+  try {
+    const token = req.query.token as string;
+    res.json(dmListV1(token));
+  } catch(err) {
+    throw err;
+  }
+  
 });
 
 app.delete('/dm/remove/v1', (req, res) => {
-  const token = req.query.token as string;
-  const dmId = parseInt(req.query.dmId as string);
-  res.json(dmRemoveV1(token, dmId));
+  try {
+    const token = req.query.token as string;
+    const dmId = parseInt(req.query.dmId as string);
+    res.json(dmRemoveV1(token, dmId));
+  } catch(err) {
+    throw err;
+  }
 });
 
 app.post('/dm/leave/v1', (req, res) => {

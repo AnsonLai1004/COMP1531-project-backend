@@ -263,7 +263,10 @@ export function reqDmList(token: string) {
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  return {
+    body: JSON.parse(res.body as string),
+    statusCode: res.statusCode,
+  };
 }
 
 export function reqDmRemove(token: string, dmId: number) {
@@ -277,7 +280,10 @@ export function reqDmRemove(token: string, dmId: number) {
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  return {
+    body: JSON.parse(res.body as string),
+    statusCode: res.statusCode,
+  };
 }
 
 export function reqDmLeave(token: string, dmId: number) {

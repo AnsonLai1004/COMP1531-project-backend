@@ -2,6 +2,7 @@ import { getData, setData } from './data';
 import { Message } from './interfaces';
 import { tokenToUId, membersobjCreate, isValidUserId } from './channel';
 export { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 };
+import HTTPError from 'http-errors'
 
 function dmCreateV1(token: string, uIds: number[]) {
   // any invalid uId in uIds
@@ -81,7 +82,7 @@ function dmListV1(token: string) {
   // check if token passed in is valid
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
-    return { error: 'error' };
+    throw HTTPError(400, 'Invalid token');
   }
 
   const data = getData();
@@ -104,22 +105,22 @@ function dmRemoveV1(token: string, dmId: number) {
   // check if token passed in is valid
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
-    return { error: 'error' };
+    throw HTTPError(400, 'Invalid token');
   }
 
   // check if dmId passed in is valid
   if (!isValidDmId(dmId)) {
-    return { error: 'error' };
+    throw HTTPError(400, 'Invalid dm');
   }
 
   // check if user is a member of dm
   if (!userIsDMmember(tokenId.uId, dmId)) {
-    return { error: 'error' };
+    throw HTTPError(403, 'User not in dm');
   }
 
   // check if user is dm creator
   if (!userIsDMOwner(tokenId.uId, dmId)) {
-    return { error: 'error' };
+    throw HTTPError(403, 'User is not dm creator');
   }
 
   const data = getData();

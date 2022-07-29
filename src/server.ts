@@ -114,27 +114,30 @@ app.post('/channel/removeowner/v1', (req, res) => {
 // user(s) routes
 app.get('/user/profile/v3', (req, res) => {
   const uId = parseInt((req.query.uId) as string);
-  const token = req.query.token as string;
+  const token = req.headers.token as string;
   res.json(userProfileV3(token, uId));
 });
 
 app.get('/users/all/v2', (req, res) => {
-  const token = req.query.token as string;
+  const token = req.headers.token as string;
   res.json(usersAllV2(token));
 });
 
 app.put('/user/profile/setname/v2', (req, res) => {
-  const { token, nameFirst, nameLast } = req.body;
+  const { nameFirst, nameLast } = req.body;
+  const token = req.headers.token as string;
   res.json(userSetNameV2(token, nameFirst, nameLast));
 });
 
 app.put('/user/profile/setemail/v2', (req, res) => {
-  const { token, email } = req.body;
+  const { email } = req.body;
+  const token = req.headers.token as string;
   res.json(userSetEmailV2(token, email));
 });
 
 app.put('/user/profile/sethandle/v2', (req, res) => {
-  const { token, handleStr } = req.body;
+  const { handleStr } = req.body;
+  const token = req.headers.token as string;
   res.json(userSetHandleV2(token, handleStr));
 });
 

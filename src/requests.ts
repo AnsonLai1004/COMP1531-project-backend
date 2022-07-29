@@ -297,8 +297,10 @@ export function requestUserProfile(token: string, uId: number) {
     'GET',
     `${url}:${port}` + '/user/profile/v3',
     {
+      headers: {
+        token
+      },
       qs: {
-        token,
         uId
       }
     }
@@ -333,7 +335,7 @@ export function requestUsersAll(token: string) {
     'GET',
     `${url}:${port}` + '/users/all/v2',
     {
-      qs: {
+      headers: {
         token
       }
     }
@@ -367,8 +369,11 @@ export function requestUserSetName(token: string, nameFirst: string, nameLast: s
     'PUT',
       `${url}:${port}` + '/user/profile/setname/v2',
       {
+        headers: {
+          token
+        },
         json: {
-          token, nameFirst, nameLast
+          nameFirst, nameLast
         }
       }
   );
@@ -386,8 +391,11 @@ export function requestUserSetEmail(token: string, email: string) {
     'PUT',
       `${url}:${port}` + '/user/profile/setemail/v2',
       {
+        headers: {
+          token
+        },
         json: {
-          token, email
+          email
         }
       }
   );
@@ -405,8 +413,11 @@ export function requestUserSetHandle(token: string, handleStr: string) {
     'PUT',
       `${url}:${port}` + '/user/profile/sethandle/v2',
       {
+        headers: {
+          token
+        },
         json: {
-          token, handleStr
+          handleStr
         }
       }
   );

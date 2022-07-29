@@ -292,7 +292,7 @@ function channelJoinV3(token: string, channelId: number) {
  * @param channelId
  * @returns
  */
-//FIXME: standup error???
+// FIXME: standup error???
 function channelLeaveV2(token: string, channelId: number) {
   const tokenId = tokenToUId(token);
   if (tokenId.error) {

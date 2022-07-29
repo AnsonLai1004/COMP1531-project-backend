@@ -52,7 +52,7 @@ function dmCreateV2(token: string, uIds: number[]) {
   return { dmId: dm.dmId };
 }
 
-function dmDetails2(token: string, dmId: number) {
+function dmDetailsV2(token: string, dmId: number) {
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
     throw HTTPError(400, 'Invalid token');

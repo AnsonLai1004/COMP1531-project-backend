@@ -5,7 +5,7 @@ import config from './config.json';
 import cors from 'cors';
 import errorHandler from 'middleware-http-errors';
 
-import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
+import { channelInviteV2, channelMessagesV2, channelDetailsV3, channelJoinV3, channelLeaveV2, channelAddownerV2, channelRemoveownerV2 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
 import { messageSendV1, messageRemoveV1, messageEditV1, dmMessagesV1, messageSendDmV1 } from './message';
@@ -98,17 +98,17 @@ app.get('/channel/messages/v2', (req, res) => {
 
 app.post('/channel/leave/v2', (req, res) => {
   const { token, channelId } = req.body;
-  res.json(channelLeaveV1(token, channelId));
+  res.json(channelLeaveV2(token, channelId));
 });
 
 app.post('/channel/addowner/v2', (req, res) => {
   const { token, channelId, uId } = req.body;
-  res.json(channelAddownerV1(token, channelId, uId));
+  res.json(channelAddownerV2(token, channelId, uId));
 });
 
 app.post('/channel/removeowner/v2', (req, res) => {
   const { token, channelId, uId } = req.body;
-  res.json(channelRemoveownerV1(token, channelId, uId));
+  res.json(channelRemoveownerV2(token, channelId, uId));
 });
 
 // user(s) routes

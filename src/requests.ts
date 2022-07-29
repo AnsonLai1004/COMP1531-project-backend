@@ -85,9 +85,9 @@ export function reqChannelJoin(token: string, channelId: number) {
     }
   );
   if (res.statusCode === 200) {
-    return JSON.parse(res.getBody() as string)
+    return JSON.parse(res.getBody() as string);
   }
-  return  res.statusCode 
+  return res.statusCode;
 }
 
 export function reqChannelInvite(token: string, channelId: number, uId: number) {
@@ -118,9 +118,9 @@ export function reqChannelLeave(token: string, channelId: number) {
 
   );
   if (res.statusCode === 200) {
-    return JSON.parse(res.getBody() as string)
+    return JSON.parse(res.getBody() as string);
   }
-  return  res.statusCode 
+  return res.statusCode;
 }
 
 export function reqChannelMessages(token: string, channelId: number, start: number) {
@@ -154,7 +154,6 @@ export function reqChannelAddowner(token: string, channelId: number, uId: number
     return JSON.parse(res.getBody() as string);
   }
   return res.statusCode;
-
 }
 
 export function requestChannelsCreate(token: string, name: string, isPublic: boolean) {

@@ -5,7 +5,7 @@ import { tokenToUId } from './auth'
 import { userProfileV2 } from './users'
 import { messageSendV1 } from './message'
 
-function standupStartV1(token: string, channelId: number, length: number) {
+export function standupStartV1(token: string, channelId: number, length: number) {
   // check if token is valid
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -55,6 +55,7 @@ function standupEnd(token: string, channelId: number) {
     }
   }
 
+  // not empty string
   if (data.standupStr) {
     messageSendV1(token, channelId, data.standupStr);
     data.standupStr = '';
@@ -63,7 +64,7 @@ function standupEnd(token: string, channelId: number) {
   setData(data);
 }
 
-function standupSendV1(token: string, channelId: number, message: string) {
+export function standupSendV1(token: string, channelId: number, message: string) {
   // check if token is valid
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -98,7 +99,7 @@ function standupSendV1(token: string, channelId: number, message: string) {
   return {}
 }
 
-function standUpActiveV1(token: string, channelId: number) {
+export function standUpActiveV1(token: string, channelId: number) {
   // check if token is valid
   const tokenId = tokenToUId(token);
   if (tokenId.error) {

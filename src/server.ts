@@ -9,6 +9,7 @@ import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, ch
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2, channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
 import { messageSendV1, messageRemoveV1, messageEditV1, dmMessagesV1, messageSendDmV1 } from './message';
+import { standupSendV1, standupActiveV1, standupStartV1 } from './standups'
 
 import { dmListV2, dmRemoveV2, dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 } from './dm';
 import { clearV1 } from './other';
@@ -38,6 +39,15 @@ app.get('/echo', (req, res, next) => {
 app.use(morgan('dev'));
 
 /// /////////////////////////// ITERATION 3 /////////////////////////////////////
+app.post('/channels/create/v3', (req, res, next) => {
+  try {
+    const { token, name, isPublic } = req.body;
+    res.json(channelsCreateV3(token, name, isPublic));
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.get('/dm/list/v2', (req, res, next) => {
   try {
     const token = req.query.token as string;

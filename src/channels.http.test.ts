@@ -11,7 +11,7 @@ beforeEach(() => requestClear());
 
 describe('Channels Functions Errors', () => {
   test('error channelsCreate', () => {
-    const validToken = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang').token;
+    const validToken = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang').body.token;
     expect(requestChannelsCreate(validToken, '', true)).toStrictEqual({ error: 'error' });
     expect(requestChannelsCreate(validToken, '123456890712345678901', true)).toStrictEqual({ error: 'error' });
     // ASSUMPTION - invalid token returns error
@@ -38,11 +38,11 @@ let channel4: number;
 describe('Correct Input', () => {
   beforeEach(() => {
     // DATA
-    user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
-    user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
-    user3 = requestAuthRegister('bill@gmail.com', 'samplePass', 'Bill', 'Benkins');
-    user4 = requestAuthRegister('charlie@gmail.com', 'samplePass', 'Charlie', 'Capman');
-    user5 = requestAuthRegister('dory@gmail.com', 'samplePass', 'Dory', 'Dean');
+    user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang').body;
+    user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery').body;
+    user3 = requestAuthRegister('bill@gmail.com', 'samplePass', 'Bill', 'Benkins').body;
+    user4 = requestAuthRegister('charlie@gmail.com', 'samplePass', 'Charlie', 'Capman').body;
+    user5 = requestAuthRegister('dory@gmail.com', 'samplePass', 'Dory', 'Dean').body;
 
     channel1 = requestChannelsCreate(user1.token, 'BOOST', true).channelId;
 

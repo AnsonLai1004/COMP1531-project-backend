@@ -6,15 +6,16 @@ beforeEach(() => {
 
 test('clearV1 test: can reuse email', () => {
   const userA = requestAuthRegister('hayhay123@gmail.com', '8743b52063cd84097a65d1633f5c74f5', 'Hayden', 'Smith');
-  expect(userA).toStrictEqual({
+  expect(userA.body).toStrictEqual({
     token: expect.any(String),
     authUserId: expect.any(Number)
   });
   const userB = requestAuthRegister('hayhay123@gmail.com', '8743b52063cd84097a65d1633f5c74f5', 'Hayden', 'Smith');
-  expect(userB).toStrictEqual({ error: 'error' });
-  requestClear();
+  expect(userB.statusCode).toStrictEqual(400);
+  const clear = requestClear();
+  expect(clear.body).toEqual({});
   const userC = requestAuthRegister('hayhay123@gmail.com', '8743b52063cd84097a65d1633f5c74f5', 'Hayden', 'Smith');
-  expect(userC).toStrictEqual({
+  expect(userC.body).toStrictEqual({
     token: expect.any(String),
     authUserId: expect.any(Number)
   });
@@ -22,17 +23,17 @@ test('clearV1 test: can reuse email', () => {
 
 test('clearV1 test: viewing details', () => {
   const userA = requestAuthRegister('hayhay123@gmail.com', '8743b52063cd84097a65d1633f5c74f5', 'Hayden', 'Smith');
-  const channelA = requestChannelsCreate(userA.token, 'BOOST', true);
-  expect(requestUserProfile(userA.token, userA.authUserId)).toMatchObject({
+  const channelA = requestChannelsCreate(userA.body.token, 'BOOST', true);
+  expect(requestUserProfile(userA.body.token, userA.body.authUserId).body).toMatchObject({
     user: {
-      uId: userA.authUserId,
+      uId: userA.body.authUserId,
       email: 'hayhay123@gmail.com',
       nameFirst: 'Hayden',
       nameLast: 'Smith',
       handleStr: 'haydensmith',
     }
   });
-  expect(requestChannelsList(userA.token)).toMatchObject({
+  expect(requestChannelsList(userA.body.token)).toMatchObject({
     channels: [
       {
         name: 'BOOST',
@@ -41,6 +42,6 @@ test('clearV1 test: viewing details', () => {
     ],
   });
   requestClear();
-  expect(requestUserProfile(userA.token, userA.authUserId)).toMatchObject({ error: 'error' });
-  expect(requestChannelsList(userA.token)).toMatchObject({ error: 'error' });
+  expect(requestUserProfile(userA.body.token, userA.body.authUserId).statusCode).toEqual(403);
+  expect(requestChannelsList(userA.body.token)).toMatchObject({ error: 'error' });
 });

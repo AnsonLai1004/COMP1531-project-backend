@@ -13,7 +13,7 @@ describe('dm/create/v1', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const uIds = [-999, -1000];
     expect(reqDmCreate(user.token, uIds)).toStrictEqual({ error: 'error' });
-    expect(reqDmCreate('invalid', uIds)).toStrictEqual({ error: 'error' });
+    expect(reqDmCreate('invalid', [user.authUserId])).toStrictEqual({ error: 'error' });
   });
   test('duplicate uId', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
@@ -85,6 +85,7 @@ describe('dm/details/v1', () => {
     const uIds = [user1.authUserId, user2.authUserId];
     const dm = reqDmCreate(user.token, uIds);
     expect(reqDmDetails(notMember.token, dm.dmId)).toStrictEqual({ error: 'error' });
+    expect(reqDmDetails('invalid', dm.dmId)).toStrictEqual({ error: 'error' });
   });
   test('correct return', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
@@ -192,6 +193,7 @@ describe('dm/remove/v1', () => {
     const dm = reqDmCreate(user.token, [user1.authUserId]);
 
     expect(reqDmRemove(user2.token, dm.dmId)).toStrictEqual({ error: 'error' });
+    expect(reqDmRemove(user1.token, dm.dmId)).toStrictEqual({ error: 'error' });
   });
 
   test('correct return', () => {
@@ -255,8 +257,8 @@ describe('dm/leave/v1', () => {
     const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
     const dm = reqDmCreate(user.token, [user1.authUserId]);
 
-    expect(reqDmRemove(user2.token, dm.dmId)).toStrictEqual({ error: 'error' });
-    expect(reqDmRemove(user1.token, -1)).toStrictEqual({ error: 'error' });
+    expect(reqDmLeave(user2.token, dm.dmId)).toStrictEqual({ error: 'error' });
+    expect(reqDmLeave(user1.token, -1)).toStrictEqual({ error: 'error' });
   });
 
   test('correct return', () => {

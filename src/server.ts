@@ -6,7 +6,7 @@ import cors from 'cors';
 import errorHandler from 'middleware-http-errors';
 
 import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
-import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
+import { authRegisterV3, authLoginV3, authLogoutV2 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
 import { messageSendV1, messageRemoveV1, messageEditV1, dmMessagesV1, messageSendDmV1 } from './message';
 
@@ -41,19 +41,19 @@ app.use(errorHandler());
 app.use(morgan('dev'));
 
 // auth routes
-app.post('/auth/login/v2', (req, res) => {
+app.post('/auth/login/v3', (req, res) => {
   const { email, password } = req.body;
-  res.json(authLoginV2(email, password));
+  res.json(authLoginV3(email, password));
 });
 
-app.post('/auth/register/v2', (req, res) => {
+app.post('/auth/register/v3', (req, res) => {
   const { email, password, nameFirst, nameLast } = req.body;
-  res.json(authRegisterV2(email, password, nameFirst, nameLast));
+  res.json(authRegisterV3(email, password, nameFirst, nameLast));
 });
 
-app.post('/auth/logout/v1', (req, res) => {
-  const { token } = req.body;
-  res.json(authLogoutV1(token));
+app.post('/auth/logout/v2', (req, res) => {
+  const token = req.headers.token as string;
+  res.json(authLogoutV2(token));
 });
 
 // channels routes

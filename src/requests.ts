@@ -9,7 +9,7 @@ import { port, url } from './config.json';
 export function requestAuthLogin(email: string, password: string) {
   const res = request(
     'POST',
-    `${url}:${port}` + '/auth/login/v2',
+    `${url}:${port}` + '/auth/login/v3',
     {
       json: {
         email, password
@@ -28,7 +28,7 @@ export function requestAuthLogin(email: string, password: string) {
 export function requestAuthRegister(email: string, password: string, nameFirst: string, nameLast: string) {
   const res = request(
     'POST',
-    `${url}:${port}` + '/auth/register/v2',
+    `${url}:${port}` + '/auth/register/v3',
     {
       json: {
         email, password, nameFirst, nameLast
@@ -47,9 +47,9 @@ export function requestAuthRegister(email: string, password: string, nameFirst: 
 export function requestAuthLogout(token: string) {
   const res = request(
     'POST',
-      `${url}:${port}` + '/auth/logout/v1',
+      `${url}:${port}` + '/auth/logout/v2',
       {
-        json: {
+        headers: {
           token
         }
       }

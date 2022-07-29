@@ -120,8 +120,8 @@ describe('auth/logout/v1 function valid cases', () => {
       handleStr: 'harrypotter'
     };
     const login = requestAuthLogin('valid@gmail.com', 'password');
-    expect(requestUserProfile(registered.body.token, registered.body.authUserId)).toEqual({ user: expectDetails });
-    expect(requestUserProfile(login.body.token, registered.body.authUserId)).toEqual({ user: expectDetails });
+    expect(requestUserProfile(registered.body.token, registered.body.authUserId).body).toEqual({ user: expectDetails });
+    expect(requestUserProfile(login.body.token, registered.body.authUserId).body).toEqual({ user: expectDetails });
 
     const logout1 = requestAuthLogout(login.body.token);
     expect(logout1.body).toStrictEqual({});

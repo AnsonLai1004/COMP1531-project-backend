@@ -39,10 +39,31 @@ app.get('/echo', (req, res, next) => {
 app.use(morgan('dev'));
 
 /// /////////////////////////// ITERATION 3 /////////////////////////////////////
-app.post('/channels/create/v3', (req, res, next) => {
+app.post('standup/start/v1', (req, res, next) => {
   try {
-    const { token, name, isPublic } = req.body;
-    res.json(channelsCreateV3(token, name, isPublic));
+    const token = req.headers.token as string;
+    const { channelId, length } = req.body;
+    res.json(standupStartV1(token, channelId, length));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get('standup/active/v1', (req, res, next) => {
+  try {
+    const token = req.headers.token as string;
+    const channelId = parseInt(req.query.channelId as string);
+    res.json(standupActiveV1(token, channelId));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('standup/send/v1', (req, res, next) => {
+  try {
+    const token = req.headers.token as string;
+    const { channelId, message } = req.body;
+    res.json(standupSendV1(token, channelId, message));
   } catch (err) {
     next(err);
   }

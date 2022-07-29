@@ -16,7 +16,7 @@ const errorObject = { error: 'error' };
  * @param uId
  * @returns
  */
-export function userProfileV2(token: string, uId: number) {
+export function userProfileV2(token: string, uId: number): userProfileV1Return {
   const authUser = tokenToUId(token);
   if ('error' in authUser) {
     return errorObject;

@@ -32,7 +32,7 @@ export interface Channel {
     messages: Message[];
     isPublic: boolean;
     standupActive: boolean;
-    standupEnd: Date | null;
+    standupEnd: number | null;
 }
 
 export interface DM {

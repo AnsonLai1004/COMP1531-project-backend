@@ -16,7 +16,7 @@ export function standupStartV1(token: string, channelId: number, length: number)
     throw HTTPError(400, 'Invalid channel');
   }
   // Check if user is member of channel
-  if (!userIsMember(tokenId.id)) {
+  if (!userIsMember(tokenId.uId, channelId)) {
     throw HTTPError(403, 'User not in channel');
   }
   // check if length invalid
@@ -24,7 +24,7 @@ export function standupStartV1(token: string, channelId: number, length: number)
     throw HTTPError(400, 'Standup length invalid');
   }
   // check if standup active
-  const standupDetails = standUpActiveV1(token, channelId);
+  const standupDetails = standupActiveV1(token, channelId);
   if (standupDetails.isActive) {
     throw HTTPError(400, 'Standup already active in current channel');
   }
@@ -41,7 +41,7 @@ export function standupStartV1(token: string, channelId: number, length: number)
 
   setData(data);
 
-  setTimeout(standupEnd(token, channelId));
+  setTimeout(() => standupEnd(token, channelId), length * 1000);
   return { timeFinish: timeFinish }
 }
 
@@ -75,7 +75,7 @@ export function standupSendV1(token: string, channelId: number, message: string)
     throw HTTPError(400, 'Invalid channel');
   }
   // Check if user is member of channel
-  if (!userIsMember(tokenId.id)) {
+  if (!userIsMember(tokenId.uId, channelId)) {
     throw HTTPError(403, 'User not in channel');
   }
   // check if message too long 
@@ -83,23 +83,21 @@ export function standupSendV1(token: string, channelId: number, message: string)
     throw HTTPError(400, 'Message too long');
   }
   // check if standup active
-  const standupDetails = standUpActiveV1(token, channelId);
+  const standupDetails = standupActiveV1(token, channelId);
   if (!standupDetails.isActive) {
     throw HTTPError(400, 'No standup active in current channel');
   }
 
   const data = getData();
-  const handleStr = userProfileV2(token, tokenId.id).user.handleStr;
+  const handleStr = userProfileV2(token, tokenId.uId).user.handleStr;
 
-  if (Math.floor((new Date()).getTime() / 1000) < standupDetails.timeFinish) {
-    data.standupStr += handleStr + ': ' + message;
-  }
+  data.standupStr += handleStr + ': ' + message + '\n';
 
   setData(data);
   return {}
 }
 
-export function standUpActiveV1(token: string, channelId: number) {
+export function standupActiveV1(token: string, channelId: number) {
   // check if token is valid
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -110,7 +108,7 @@ export function standUpActiveV1(token: string, channelId: number) {
     throw HTTPError(400, 'Invalid channel');
   }
   // Check if user is member of channel
-  if (!userIsMember(tokenId.id)) {
+  if (!userIsMember(tokenId.uId, channelId)) {
     throw HTTPError(403, 'User not in channel');
   }
 

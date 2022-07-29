@@ -16,7 +16,13 @@ export function requestAuthLogin(email: string, password: string) {
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return {
+      body: JSON.parse(res.getBody() as string),
+      statusCode: res.statusCode
+    };
+  }
+  return { statusCode: res.statusCode };
 }
 
 export function requestAuthRegister(email: string, password: string, nameFirst: string, nameLast: string) {
@@ -33,7 +39,7 @@ export function requestAuthRegister(email: string, password: string, nameFirst: 
     return {
       body: JSON.parse(res.getBody() as string),
       statusCode: res.statusCode
-    }
+    };
   }
   return { statusCode: res.statusCode };
 }
@@ -48,7 +54,10 @@ export function requestAuthLogout(token: string) {
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  return {
+    body: JSON.parse(res.getBody() as string),
+    statusCode: res.statusCode
+  };
 }
 
 export function requestClear() {
@@ -309,7 +318,7 @@ export function requestUserProfile(token: string, uId: number) {
     return {
       body: JSON.parse(res.getBody() as string),
       statusCode: res.statusCode
-    }
+    };
   }
   return { statusCode: res.statusCode };
 }
@@ -344,7 +353,7 @@ export function requestUsersAll(token: string) {
     return {
       body: JSON.parse(res.getBody() as string),
       statusCode: res.statusCode
-    }
+    };
   }
   return { statusCode: res.statusCode };
 }
@@ -381,7 +390,7 @@ export function requestUserSetName(token: string, nameFirst: string, nameLast: s
     return {
       body: JSON.parse(res.getBody() as string),
       statusCode: res.statusCode
-    }
+    };
   }
   return { statusCode: res.statusCode };
 }
@@ -403,7 +412,7 @@ export function requestUserSetEmail(token: string, email: string) {
     return {
       body: JSON.parse(res.getBody() as string),
       statusCode: res.statusCode
-    }
+    };
   }
   return { statusCode: res.statusCode };
 }
@@ -425,7 +434,7 @@ export function requestUserSetHandle(token: string, handleStr: string) {
     return {
       body: JSON.parse(res.getBody() as string),
       statusCode: res.statusCode
-    }
+    };
   }
   return { statusCode: res.statusCode };
 }

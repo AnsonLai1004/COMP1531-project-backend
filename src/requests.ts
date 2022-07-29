@@ -22,9 +22,9 @@ export function requestChannelsCreateV3(token: string, name: string, isPublic: b
     }
   );
   if (res.statusCode === 200) {
-    return JSON.parse(res.body as string)
-  } 
-  return res.statusCode
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
 }
 
 export function requestChannelsListV3(token: string) {
@@ -38,9 +38,9 @@ export function requestChannelsListV3(token: string) {
     }
   );
   if (res.statusCode === 200) {
-    return JSON.parse(res.body as string)
-  } 
-  return res.statusCode
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
 }
 
 export function requestChannelsListallV3(token: string) {
@@ -54,9 +54,9 @@ export function requestChannelsListallV3(token: string) {
     }
   );
   if (res.statusCode === 200) {
-    return JSON.parse(res.body as string)
-  } 
-  return res.statusCode
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
 }
 
 export function reqDmListV3(token: string) {
@@ -70,9 +70,9 @@ export function reqDmListV3(token: string) {
     }
   );
   if (res.statusCode === 200) {
-    return JSON.parse(res.body as string)
-  } 
-  return res.statusCode
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
 }
 
 export function reqDmRemoveV3(token: string, dmId: number) {
@@ -89,9 +89,9 @@ export function reqDmRemoveV3(token: string, dmId: number) {
     }
   );
   if (res.statusCode === 200) {
-    return JSON.parse(res.body as string)
-  } 
-  return res.statusCode
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
 }
 /// /////////////////////////////////////////////////////////////////////////////
 

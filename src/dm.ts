@@ -9,7 +9,7 @@ function dmListV2(token: string) {
   // check if token passed in is valid
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
-    throw HTTPError(400, 'Invalid token');
+    throw HTTPError(403, 'Invalid token');
   }
 
   const data = getData();
@@ -32,7 +32,7 @@ function dmRemoveV2(token: string, dmId: number) {
   // check if token passed in is valid
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
-    throw HTTPError(400, 'Invalid token');
+    throw HTTPError(403, 'Invalid token');
   }
 
   // check if dmId passed in is valid

@@ -38,7 +38,7 @@ function channelsCreateV3(token: string, name: string, isPublic: boolean): chann
   // CHECK IF TOKEN VALID
   const authUser = tokenToUId(token);
   if ('error' in authUser) {
-    throw HTTPError(400, 'Invalid token');
+    throw HTTPError(403, 'Invalid token');
   }
 
   const dataStore = getData();
@@ -70,7 +70,7 @@ function channelsListV3(token: string): channelsListRet {
   const authUser = tokenToUId(token);
 
   if ('error' in authUser) {
-    throw HTTPError(400, 'Invalid token');
+    throw HTTPError(403, 'Invalid token');
   }
 
   const dataStore = getData();
@@ -103,7 +103,7 @@ function channelsListallV3(token: string): channelsListRet {
   const authUser = tokenToUId(token);
 
   if ('error' in authUser) {
-    throw HTTPError(400, 'Invalid token');
+    throw HTTPError(403, 'Invalid token');
   }
 
   const dataStore = getData();

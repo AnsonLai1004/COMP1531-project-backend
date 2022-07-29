@@ -50,7 +50,7 @@ app.post('/channels/create/v3', (req, res, next) => {
 
 app.get('/dm/list/v2', (req, res, next) => {
   try {
-    const token = req.query.token as string;
+    const token = req.headers.token as string;
     res.json(dmListV2(token));
   } catch (err) {
     next(err);
@@ -59,7 +59,7 @@ app.get('/dm/list/v2', (req, res, next) => {
 
 app.delete('/dm/remove/v2', (req, res, next) => {
   try {
-    const token = req.query.token as string;
+    const token = req.headers.token as string;
     const dmId = parseInt(req.query.dmId as string);
     res.json(dmRemoveV2(token, dmId));
   } catch (err) {
@@ -69,7 +69,8 @@ app.delete('/dm/remove/v2', (req, res, next) => {
 
 app.post('/channels/create/v3', (req, res, next) => {
   try {
-    const { token, name, isPublic } = req.body;
+    const token = req.headers.token as string;
+    const { name, isPublic } = req.body;
     res.json(channelsCreateV3(token, name, isPublic));
   } catch (err) {
     next(err);
@@ -78,7 +79,7 @@ app.post('/channels/create/v3', (req, res, next) => {
 
 app.get('/channels/list/v3', (req, res, next) => {
   try {
-    const token = req.query.token as string;
+    const token = req.headers.token as string;
     res.json(channelsListV3(token));
   } catch (err) {
     next(err);
@@ -87,7 +88,7 @@ app.get('/channels/list/v3', (req, res, next) => {
 
 app.get('/channels/listall/v3', (req, res, next) => {
   try {
-    const token = req.query.token as string;
+    const token = req.headers.token as string;
     res.json(channelsListallV3(token));
   } catch (err) {
     next(err);

@@ -15,7 +15,8 @@ let data = {
   lastChannelId: 0,
   lastDMId: 0,
   lastMessageId: 0,
-  lastToken: 0
+  lastToken: 0,
+  standupStr: '',
 };
 
 export interface DataStore {
@@ -28,6 +29,7 @@ export interface DataStore {
   lastDMId: number;
   lastMessageId: number;
   lastToken: number;
+  standupStr: string;
 }
 
 // Use get() to access the data

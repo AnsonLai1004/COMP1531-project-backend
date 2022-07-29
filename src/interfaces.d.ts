@@ -31,6 +31,8 @@ export interface Channel {
     allMembers: number[];
     messages: Message[];
     isPublic: boolean;
+    standupActive: boolean;
+    standupEnd: Date | null;
 }
 
 export interface DM {

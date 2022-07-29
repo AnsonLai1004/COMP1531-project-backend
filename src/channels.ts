@@ -49,6 +49,8 @@ function channelsCreateV3(token: string, name: string, isPublic: boolean): chann
     ownerMembers: [authUser.uId],
     allMembers: [authUser.uId],
     messages: [] as Message[],
+    standupActive: false,
+    standupEnd: null,
   };
   dataStore.channels.push(channel);
   dataStore.lastChannelId++;

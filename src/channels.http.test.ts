@@ -13,25 +13,20 @@ describe('Channels Functions Errors', () => {
   test('error channelsCreate', () => {
     const validToken = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang').token;
     let invalid = requestChannelsCreateV3(validToken, '', true);
-    expect(invalid.statusCode).toStrictEqual(400);
-    expect(invalid.body.error).toStrictEqual({ message: 'Invalid channel name' });
+    expect(invalid).toStrictEqual(400);
     invalid = requestChannelsCreateV3(validToken, '123456890712345678901', true);
-    expect(invalid.statusCode).toStrictEqual(400);
-    expect(invalid.body.error).toStrictEqual({ message: 'Invalid channel name' });
+    expect(invalid).toStrictEqual(400);
     // ASSUMPTION - invalid token returns error
     invalid = requestChannelsCreateV3('invalid token', 'TheoAng', true);
-    expect(invalid.statusCode).toStrictEqual(403);
-    expect(invalid.body.error).toStrictEqual({ message: 'Invalid token' });
+    expect(invalid).toStrictEqual(403);
   });
 
   // ASSUMPTION - invalid token returns error
   test('invalid ID channelsListV1 channelsListallV1', () => {
     let invalid = requestChannelsListV3('invalid token');
-    expect(invalid.statusCode).toStrictEqual(403);
-    expect(invalid.body.error).toStrictEqual({ message: 'Invalid token' });
+    expect(invalid).toStrictEqual(403);
     invalid = requestChannelsListallV3('invalid token');
-    expect(invalid.statusCode).toStrictEqual(403);
-    expect(invalid.body.error).toStrictEqual({ message: 'Invalid token' });
+    expect(invalid).toStrictEqual(403);
   });
 });
 
@@ -54,19 +49,18 @@ describe('Correct Input', () => {
     user4 = requestAuthRegister('charlie@gmail.com', 'samplePass', 'Charlie', 'Capman');
     user5 = requestAuthRegister('dory@gmail.com', 'samplePass', 'Dory', 'Dean');
 
-    channel1 = requestChannelsCreateV3(user1.token, 'BOOST', true).body.channelId;
+    channel1 = requestChannelsCreateV3(user1.token, 'BOOST', true).channelId;
 
-    channel2 = requestChannelsCreateV3(user2.token, 'CRUNCHIE', true).body.channelId;
+    channel2 = requestChannelsCreateV3(user2.token, 'CRUNCHIE', true).channelId;
 
-    channel3 = requestChannelsCreateV3(user1.token, 'EGGS', true).body.channelId;
+    channel3 = requestChannelsCreateV3(user1.token, 'EGGS', true).channelId;
 
-    channel4 = requestChannelsCreateV3(user3.token, 'AERO', false).body.channelId;
+    channel4 = requestChannelsCreateV3(user3.token, 'AERO', false).channelId;
   });
 
   test('channelsListV1 users 1-5', () => {
     const list1 = requestChannelsListV3(user1.token);
-    expect(list1.statusCode).toStrictEqual(200);
-    expect(list1.body).toStrictEqual({
+    expect(list1).toStrictEqual({
       channels:
                 [
                   {
@@ -81,8 +75,7 @@ describe('Correct Input', () => {
     });
 
     const list2 = requestChannelsListV3(user2.token);
-    expect(list2.statusCode).toStrictEqual(200);
-    expect(list2.body).toStrictEqual({
+    expect(list2).toStrictEqual({
       channels:
                 [
                   {
@@ -93,8 +86,7 @@ describe('Correct Input', () => {
     });
 
     const list3 = requestChannelsListV3(user3.token);
-    expect(list3.statusCode).toStrictEqual(200);
-    expect(list3.body).toStrictEqual({
+    expect(list3).toStrictEqual({
       channels:
                 [
                   {
@@ -105,14 +97,12 @@ describe('Correct Input', () => {
     });
 
     const list4 = requestChannelsListV3(user4.token);
-    expect(list4.statusCode).toStrictEqual(200);
-    expect(list4.body).toStrictEqual({
+    expect(list4).toStrictEqual({
       channels: []
     });
 
     const list5 = requestChannelsListV3(user5.token);
-    expect(list5.statusCode).toStrictEqual(200);
-    expect(list5.body).toStrictEqual({ channels: [] });
+    expect(list5).toStrictEqual({ channels: [] });
   });
 
   test('channelsListallV1 users 1-5', () => {
@@ -139,19 +129,14 @@ describe('Correct Input', () => {
     };
 
     const list1 = requestChannelsListallV3(user1.token);
-    expect(list1.statusCode).toStrictEqual(200);
-    expect(list1.body).toStrictEqual(listAll);
+    expect(list1).toStrictEqual(listAll);
     const list2 = requestChannelsListallV3(user1.token);
-    expect(list2.statusCode).toStrictEqual(200);
-    expect(list2.body).toStrictEqual(listAll);
+    expect(list2).toStrictEqual(listAll);
     const list3 = requestChannelsListallV3(user1.token);
-    expect(list3.statusCode).toStrictEqual(200);
-    expect(list3.body).toStrictEqual(listAll);
+    expect(list3).toStrictEqual(listAll);
     const list4 = requestChannelsListallV3(user1.token);
-    expect(list4.statusCode).toStrictEqual(200);
-    expect(list4.body).toStrictEqual(listAll);
+    expect(list4).toStrictEqual(listAll);
     const list5 = requestChannelsListallV3(user1.token);
-    expect(list5.statusCode).toStrictEqual(200);
-    expect(list5.body).toStrictEqual(listAll);
+    expect(list5).toStrictEqual(listAll);
   });
 });

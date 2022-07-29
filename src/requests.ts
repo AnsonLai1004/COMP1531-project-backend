@@ -13,16 +13,18 @@ export function requestChannelsCreateV3(token: string, name: string, isPublic: b
     `${url}:${port}` + '/channels/create/v3',
     {
       json: {
-        token,
         name,
         isPublic
+      },
+      headers: {
+        token: token
       }
     }
   );
-  return {
-    body: JSON.parse(res.body as string),
-    statusCode: res.statusCode,
-  };
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string)
+  } 
+  return res.statusCode
 }
 
 export function requestChannelsListV3(token: string) {
@@ -30,15 +32,15 @@ export function requestChannelsListV3(token: string) {
     'GET',
     `${url}:${port}` + '/channels/list/v3',
     {
-      qs: {
-        token
+      headers: {
+        token: token
       }
     }
   );
-  return {
-    body: JSON.parse(res.body as string),
-    statusCode: res.statusCode,
-  };
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string)
+  } 
+  return res.statusCode
 }
 
 export function requestChannelsListallV3(token: string) {
@@ -46,15 +48,15 @@ export function requestChannelsListallV3(token: string) {
     'GET',
     `${url}:${port}` + '/channels/listall/v3',
     {
-      qs: {
-        token
+      headers: {
+        token: token
       }
     }
   );
-  return {
-    body: JSON.parse(res.body as string),
-    statusCode: res.statusCode,
-  };
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string)
+  } 
+  return res.statusCode
 }
 
 export function reqDmListV3(token: string) {
@@ -62,15 +64,15 @@ export function reqDmListV3(token: string) {
     'GET',
     `${url}:${port}` + '/dm/list/v2',
     {
-      qs: {
-        token,
+      headers: {
+        token: token
       }
     }
   );
-  return {
-    body: JSON.parse(res.body as string),
-    statusCode: res.statusCode,
-  };
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string)
+  } 
+  return res.statusCode
 }
 
 export function reqDmRemoveV3(token: string, dmId: number) {
@@ -79,15 +81,17 @@ export function reqDmRemoveV3(token: string, dmId: number) {
     `${url}:${port}` + '/dm/remove/v2',
     {
       qs: {
-        token,
         dmId,
+      },
+      headers: {
+        token: token
       }
     }
   );
-  return {
-    body: JSON.parse(res.body as string),
-    statusCode: res.statusCode,
-  };
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string)
+  } 
+  return res.statusCode
 }
 /// /////////////////////////////////////////////////////////////////////////////
 

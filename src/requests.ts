@@ -295,7 +295,7 @@ export function reqDmLeave(token: string, dmId: number) {
 export function requestUserProfile(token: string, uId: number) {
   const res = request(
     'GET',
-    `${url}:${port}` + '/user/profile/v2',
+    `${url}:${port}` + '/user/profile/v3',
     {
       qs: {
         token,
@@ -331,17 +331,20 @@ export function reqMessageEdit(token: string, messageId: number, message: string
 export function requestUsersAll(token: string) {
   const res = request(
     'GET',
-    `${url}:${port}` + '/users/all/v1',
+    `${url}:${port}` + '/users/all/v2',
     {
       qs: {
         token
       }
     }
   );
-  return {
-    body: JSON.parse(res.getBody() as string),
-    statusCode: res.statusCode
+  if (res.statusCode === 200) {
+    return {
+      body: JSON.parse(res.getBody() as string),
+      statusCode: res.statusCode
+    }
   }
+  return { statusCode: res.statusCode };
 }
 
 // /message/remove/v1
@@ -362,7 +365,7 @@ export function reqMessageRemove(token: string, messageId: number) {
 export function requestUserSetName(token: string, nameFirst: string, nameLast: string) {
   const res = request(
     'PUT',
-      `${url}:${port}` + '/user/profile/setname/v1',
+      `${url}:${port}` + '/user/profile/setname/v2',
       {
         json: {
           token, nameFirst, nameLast
@@ -381,7 +384,7 @@ export function requestUserSetName(token: string, nameFirst: string, nameLast: s
 export function requestUserSetEmail(token: string, email: string) {
   const res = request(
     'PUT',
-      `${url}:${port}` + '/user/profile/setemail/v1',
+      `${url}:${port}` + '/user/profile/setemail/v2',
       {
         json: {
           token, email
@@ -400,7 +403,7 @@ export function requestUserSetEmail(token: string, email: string) {
 export function requestUserSetHandle(token: string, handleStr: string) {
   const res = request(
     'PUT',
-      `${url}:${port}` + '/user/profile/sethandle/v1',
+      `${url}:${port}` + '/user/profile/sethandle/v2',
       {
         json: {
           token, handleStr

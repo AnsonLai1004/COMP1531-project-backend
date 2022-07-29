@@ -7,10 +7,10 @@ import errorHandler from 'middleware-http-errors';
 
 import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
-import { channelsCreateV2, channelsListV2, channelsListallV2 } from './channels';
+import { channelsCreateV2, channelsListV2, channelsListallV2, channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
 import { messageSendV1, messageRemoveV1, messageEditV1, dmMessagesV1, messageSendDmV1 } from './message';
 
-import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 } from './dm';
+import { dmListV2, dmRemoveV2, dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 } from './dm';
 import { clearV1 } from './other';
 import { fileLoadData } from './data';
 
@@ -34,11 +34,57 @@ app.get('/echo', (req, res, next) => {
   }
 });
 
-// handles errors nicely
-app.use(errorHandler());
-
 // for logging errors
 app.use(morgan('dev'));
+
+/// /////////////////////////// ITERATION 3 /////////////////////////////////////
+app.get('/dm/list/v2', (req, res, next) => {
+  try {
+    const token = req.headers.token as string;
+    res.json(dmListV2(token));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.delete('/dm/remove/v2', (req, res, next) => {
+  try {
+    const token = req.headers.token as string;
+    const dmId = parseInt(req.query.dmId as string);
+    res.json(dmRemoveV2(token, dmId));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/channels/create/v3', (req, res, next) => {
+  try {
+    const token = req.headers.token as string;
+    const { name, isPublic } = req.body;
+    res.json(channelsCreateV3(token, name, isPublic));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get('/channels/list/v3', (req, res, next) => {
+  try {
+    const token = req.headers.token as string;
+    res.json(channelsListV3(token));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get('/channels/listall/v3', (req, res, next) => {
+  try {
+    const token = req.headers.token as string;
+    res.json(channelsListallV3(token));
+  } catch (err) {
+    next(err);
+  }
+});
+/// /////////////////////////////////////////////////////////////////////////////
 
 // auth routes
 app.post('/auth/login/v2', (req, res) => {
@@ -201,6 +247,9 @@ app.delete('/clear/v1', (req, res) => {
   clearV1();
   res.json({});
 });
+
+// handles errors nicely
+app.use(errorHandler());
 
 // start server
 const server = app.listen(PORT, HOST, () => {

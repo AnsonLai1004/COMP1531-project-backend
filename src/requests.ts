@@ -5,6 +5,96 @@
 
 import request from 'sync-request';
 import { port, url } from './config.json';
+
+/// //////////////////////////// ITERATION 3 ////////////////////////////////////
+export function requestChannelsCreateV3(token: string, name: string, isPublic: boolean) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/channels/create/v3',
+    {
+      json: {
+        name,
+        isPublic
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
+
+export function requestChannelsListV3(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/channels/list/v3',
+    {
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
+
+export function requestChannelsListallV3(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/channels/listall/v3',
+    {
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
+
+export function reqDmListV3(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/dm/list/v2',
+    {
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
+
+export function reqDmRemoveV3(token: string, dmId: number) {
+  const res = request(
+    'DELETE',
+    `${url}:${port}` + '/dm/remove/v2',
+    {
+      qs: {
+        dmId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
+/// /////////////////////////////////////////////////////////////////////////////
+
 // auth
 export function requestAuthLogin(email: string, password: string) {
   const res = request(

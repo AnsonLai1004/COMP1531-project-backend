@@ -66,7 +66,14 @@ export function reqChannelDetails(token: string, channelId: number) {
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return {
+      body: JSON.parse(res.getBody() as string),
+      statusCode: res.statusCode
+    };
+  }
+  return { statusCode: res.statusCode };
+
 }
 
 export function reqChannelJoin(token: string, channelId: number) {
@@ -80,7 +87,13 @@ export function reqChannelJoin(token: string, channelId: number) {
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return {
+      body: JSON.parse(res.getBody() as string),
+      statusCode: res.statusCode
+    };
+  }
+  return { statusCode: res.statusCode };
 }
 
 export function reqChannelInvite(token: string, channelId: number, uId: number) {
@@ -140,7 +153,14 @@ export function reqChannelAddowner(token: string, channelId: number, uId: number
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return {
+      body: JSON.parse(res.getBody() as string),
+      statusCode: res.statusCode
+    };
+  }
+  return { statusCode: res.statusCode };
+
 }
 
 export function requestChannelsCreate(token: string, name: string, isPublic: boolean) {
@@ -196,7 +216,13 @@ export function reqChannelRemoveowner(token: string, channelId: number, uId: num
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return {
+      body: JSON.parse(res.getBody() as string),
+      statusCode: res.statusCode
+    };
+  }
+  return { statusCode: res.statusCode };
 }
 
 // dm/.../v1
@@ -211,7 +237,13 @@ export function reqDmCreate(token: string, uIds: number[]) {
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return {
+      body: JSON.parse(res.getBody() as string),
+      statusCode: res.statusCode
+    };
+  }
+  return { statusCode: res.statusCode };
 }
 
 export function reqDmDetails(token: string, dmId: number) {
@@ -225,7 +257,13 @@ export function reqDmDetails(token: string, dmId: number) {
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return {
+      body: JSON.parse(res.getBody() as string),
+      statusCode: res.statusCode
+    };
+  }
+  return { statusCode: res.statusCode };
 }
 
 // /message/send/v1

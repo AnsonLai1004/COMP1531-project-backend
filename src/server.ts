@@ -73,15 +73,15 @@ app.get('/channels/listall/v2', (req, res) => {
 });
 
 // channel routes
-app.get('/channel/details/v2', (req, res) => {
+app.get('/channel/details/v3', (req, res) => {
   const channelId = parseInt((req.query.channelId) as string);
   const token = req.query.token as string;
-  res.json(channelDetailsV2(token, channelId));
+  res.json(channelDetailsV3(token, channelId));
 });
 
-app.post('/channel/join/v2', (req, res) => {
+app.post('/channel/join/v3', (req, res) => {
   const { token, channelId } = req.body;
-  res.json(channelJoinV2(token, channelId));
+  res.json(channelJoinV3(token, channelId));
 });
 
 app.post('/channel/invite/v2', (req, res) => {
@@ -96,17 +96,17 @@ app.get('/channel/messages/v2', (req, res) => {
   res.json(channelMessagesV2(token, channelId, start));
 });
 
-app.post('/channel/leave/v1', (req, res) => {
+app.post('/channel/leave/v2', (req, res) => {
   const { token, channelId } = req.body;
   res.json(channelLeaveV1(token, channelId));
 });
 
-app.post('/channel/addowner/v1', (req, res) => {
+app.post('/channel/addowner/v2', (req, res) => {
   const { token, channelId, uId } = req.body;
   res.json(channelAddownerV1(token, channelId, uId));
 });
 
-app.post('/channel/removeowner/v1', (req, res) => {
+app.post('/channel/removeowner/v2', (req, res) => {
   const { token, channelId, uId } = req.body;
   res.json(channelRemoveownerV1(token, channelId, uId));
 });
@@ -157,12 +157,12 @@ app.delete('/message/remove/v1', (req, res) => {
 });
 
 // dm routes
-app.post('/dm/create/v1', (req, res) => {
+app.post('/dm/create/v2', (req, res) => {
   const { token, uIds } = req.body;
   res.json(dmCreateV1(token, uIds));
 });
 
-app.get('/dm/details/v1', (req, res) => {
+app.get('/dm/details/v2', (req, res) => {
   const token = req.query.token as string;
   const dmId = parseInt((req.query.dmId) as string);
   res.json(dmDetailsV1(token, dmId));

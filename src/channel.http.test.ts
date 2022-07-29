@@ -147,23 +147,23 @@ describe('/channel/messages/v2', () => {
 });
 
 // channelDetails&Join V2 tests
-describe('channel/details/v2', () => {
+describe('channel/details/v3', () => {
   test('invalid token', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const channel = requestChannelsCreate(user.token, 'BOOST', true);
-    expect(reqChannelDetails('invalid token', channel.channelId)).toStrictEqual({ error: 'error' });
+    expect(reqChannelDetails('invalid token', channel.channelId)).toStrictEqual(403);
   });
 
   test('invalid channelId', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-    expect(reqChannelDetails(user.token, -999)).toStrictEqual({ error: 'error' });
+    expect(reqChannelDetails(user.token, -999)).toStrictEqual(400);
   });
 
   test('User not a member of channel', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const notMember = requestAuthRegister('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
     const channel = requestChannelsCreate(user.token, 'BOOST', true);
-    expect(reqChannelDetails(notMember.token, channel.channelId)).toStrictEqual({ error: 'error' });
+    expect(reqChannelDetails(notMember.token, channel.channelId)).toStrictEqual(403);
   });
 
   test('correct return', () => {
@@ -194,11 +194,11 @@ describe('channel/details/v2', () => {
   });
 });
 
-describe('channel/join/v2', () => {
+describe('channel/join/v3', () => {
   test('invalid token and channelId', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const channel = requestChannelsCreate(user.token, 'BOOST', true);
-    expect(reqChannelJoin('invalid token', channel.channelId)).toStrictEqual({ error: 'error' });
+    expect(reqChannelJoin('invalid token', channel.channelId)).toStrictEqual(403);
     expect(reqChannelJoin(user.token, -999)).toStrictEqual({ error: 'error' });
   });
   test('Authorised user is already a member of the channel, channel is private member is not a global owner', () => {

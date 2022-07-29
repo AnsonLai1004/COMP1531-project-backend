@@ -12,7 +12,7 @@ export function standupStartV1(token: string, channelId: number, length: number)
     throw HTTPError(403, 'Invalid token');
   }
   // check if channelId is valid
-  if (isValidChannelId(channelId)) {
+  if (!isValidChannelId(channelId)) {
     throw HTTPError(400, 'Invalid channel');
   }
   // Check if user is member of channel
@@ -41,7 +41,7 @@ export function standupStartV1(token: string, channelId: number, length: number)
 
   setData(data);
 
-  setTimeout(() => standupEnd(token, channelId), length * 1000);
+  setTimeout(async () => await standupEnd(token, channelId), length * 1000);
   return { timeFinish: timeFinish }
 }
 
@@ -54,6 +54,9 @@ function standupEnd(token: string, channelId: number) {
       channel.standupEnd = null;
     }
   }
+
+  setData(data);
+  console.log(data.standupStr)
 
   // not empty string
   if (data.standupStr) {
@@ -71,7 +74,7 @@ export function standupSendV1(token: string, channelId: number, message: string)
     throw HTTPError(403, 'Invalid token');
   }
   // check if channelId is valid
-  if (isValidChannelId(channelId)) {
+  if (!isValidChannelId(channelId)) {
     throw HTTPError(400, 'Invalid channel');
   }
   // Check if user is member of channel
@@ -92,7 +95,7 @@ export function standupSendV1(token: string, channelId: number, message: string)
   const handleStr = userProfileV2(token, tokenId.uId).user.handleStr;
 
   data.standupStr += handleStr + ': ' + message + '\n';
-
+  console.log(data.standupStr)
   setData(data);
   return {}
 }
@@ -104,7 +107,7 @@ export function standupActiveV1(token: string, channelId: number) {
     throw HTTPError(403, 'Invalid token');
   }
   // check if channelId is valid
-  if (isValidChannelId(channelId)) {
+  if (!isValidChannelId(channelId)) {
     throw HTTPError(400, 'Invalid channel');
   }
   // Check if user is member of channel

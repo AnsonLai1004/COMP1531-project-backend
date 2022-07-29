@@ -436,10 +436,7 @@ export function isValidChannelId(channelId: number) {
   const data = getData();
   for (const channel of data.channels) {
     if (channel.channelId === channelId) {
-      return {
-        isActive: channel.standupActive,
-        
-      }
+      return true;
     }
   }
   return false;

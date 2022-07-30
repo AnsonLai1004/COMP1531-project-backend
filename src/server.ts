@@ -9,7 +9,7 @@ import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, ch
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2, channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
 import { messageSendV1, messageRemoveV1, messageEditV1, dmMessagesV1, messageSendDmV1 } from './message';
-import { standupSendV1, standupActiveV1, standupStartV1 } from './standups'
+import { standupSendV1, standupActiveV1, standupStartV1 } from './standups';
 
 import { dmListV2, dmRemoveV2, dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 } from './dm';
 import { clearV1 } from './other';
@@ -45,7 +45,7 @@ app.post('/standup/start/v1', (req, res, next) => {
     const { channelId, length } = req.body;
     res.json(standupStartV1(token, channelId, length));
   } catch (err) {
-    console.log(err)
+    console.log(err);
     next(err);
   }
 });

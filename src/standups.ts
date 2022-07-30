@@ -1,9 +1,9 @@
 import HTTPError from 'http-errors';
-import { getData, setData, DataStore } from './data';
+import { getData, setData } from './data';
 import { userIsMember, isValidChannelId } from './channel';
-import { tokenToUId } from './auth'
-import { userProfileV2 } from './users'
-import { messageSendV1 } from './message'
+import { tokenToUId } from './auth';
+import { userProfileV2 } from './users';
+import { messageSendV1 } from './message';
 
 export function standupStartV1(token: string, channelId: number, length: number) {
   // check if token is valid
@@ -42,7 +42,7 @@ export function standupStartV1(token: string, channelId: number, length: number)
   setData(data);
 
   setTimeout(() => standupEnd(token, channelId), length * 1000);
-  return { timeFinish: timeFinish }
+  return { timeFinish: timeFinish };
 }
 
 function standupEnd(token: string, channelId: number) {
@@ -59,7 +59,7 @@ function standupEnd(token: string, channelId: number) {
 
   // not empty string
   if (data.standupStr) {
-    const finalChar = data.standupStr.length - 1
+    const finalChar = data.standupStr.length - 1;
     messageSendV1(token, channelId, data.standupStr.substring(0, finalChar));
     data.standupStr = '';
   }
@@ -81,7 +81,7 @@ export function standupSendV1(token: string, channelId: number, message: string)
   if (!userIsMember(tokenId.uId, channelId)) {
     throw HTTPError(403, 'User not in channel');
   }
-  // check if message too long 
+  // check if message too long
   if (message.length > 1000) {
     throw HTTPError(400, 'Message too long');
   }
@@ -95,9 +95,9 @@ export function standupSendV1(token: string, channelId: number, message: string)
   const handleStr = userProfileV2(token, tokenId.uId).user.handleStr;
 
   data.standupStr += handleStr + ': ' + message + '\n';
-  console.log(data.standupStr)
+  console.log(data.standupStr);
   setData(data);
-  return {}
+  return {};
 }
 
 export function standupActiveV1(token: string, channelId: number) {
@@ -122,7 +122,7 @@ export function standupActiveV1(token: string, channelId: number) {
       return {
         isActive: channel.standupActive,
         timeFinish: channel.standupEnd,
-      }
+      };
     }
   }
 }

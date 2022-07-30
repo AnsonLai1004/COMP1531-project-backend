@@ -41,7 +41,7 @@ export function standupStartV1(token: string, channelId: number, length: number)
 
   setData(data);
 
-  setTimeout(async () => await standupEnd(token, channelId), length * 1000);
+  setTimeout(() => standupEnd(token, channelId), length * 1000);
   return { timeFinish: timeFinish }
 }
 
@@ -56,11 +56,11 @@ function standupEnd(token: string, channelId: number) {
   }
 
   setData(data);
-  console.log(data.standupStr)
 
   // not empty string
   if (data.standupStr) {
-    messageSendV1(token, channelId, data.standupStr);
+    const finalChar = data.standupStr.length - 1
+    messageSendV1(token, channelId, data.standupStr.substring(0, finalChar));
     data.standupStr = '';
   }
 

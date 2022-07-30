@@ -1,7 +1,7 @@
 import { requestAuthRegister, reqChannelMessages, reqChannelInvite, requestChannelsCreateV3, requestStandupStartV3, requestStandupSendV3, requestStandupActiveV3, requestClear } from './requests'
 
-function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms * 1000));
+function sleep(s: number) {
+  return new Promise(resolve => setTimeout(resolve, s * 1000));
 }
 
 
@@ -37,13 +37,16 @@ describe('Channels Functions Errors', () => {
   });
 
   
-  test('correct return', () => {
+  test('correct return', async () => {
     const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
     const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
     const channel1 = requestChannelsCreateV3(user1.token, 'BOOST', true).channelId;
     reqChannelInvite(user1.token, channel1, user2.authUserId);
+
     const timeFinish = Math.floor((new Date()).getTime() / 1000) + 2;
     const timeFinReturned = requestStandupStartV3(user1.token, channel1, 2).timeFinish;
+
+    // account for minute time change
     expect(timeFinReturned).toBeGreaterThanOrEqual(timeFinish);
     expect(timeFinReturned).toBeLessThanOrEqual(timeFinish + 1);
     expect(requestStandupActiveV3(user1.token, channel1)).toStrictEqual({
@@ -52,13 +55,16 @@ describe('Channels Functions Errors', () => {
     });
     expect(requestStandupSendV3(user1.token, channel1, "Hello")).toStrictEqual({});
     expect(requestStandupSendV3(user2.token, channel1, "World!")).toStrictEqual({});
+
+    // wait for standup to end
+    await sleep(2);
     console.log(reqChannelMessages(user1.token, channel1, 0))
     expect(reqChannelMessages(user1.token, channel1, 0)).toStrictEqual({
         messages: [{
             messageId: 1,
             uId: user1.authUserId,
             message: 'theoang: Hello\nalexavery: World!',
-            timeSent: timeFinish,
+            timeSent: timeFinReturned,
         }],
         start: 0,
         end: -1

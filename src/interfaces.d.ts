@@ -33,6 +33,7 @@ export interface Channel {
     isPublic: boolean;
     standupActive: boolean;
     standupEnd: number | null;
+    standupStr: string;
 }
 
 export interface DM {

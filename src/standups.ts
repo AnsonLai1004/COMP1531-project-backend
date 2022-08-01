@@ -52,16 +52,13 @@ function standupEnd(token: string, channelId: number) {
     if (channel.channelId === channelId) {
       channel.standupActive = false;
       channel.standupEnd = null;
+      // not empty string - send standup message (remove trailing newline)
+      if (channel.standupStr) {
+        const finalChar = channel.standupStr.length - 1;
+        messageSendV1(token, channelId, channel.standupStr.substring(0, finalChar));
+        channel.standupStr = '';
+      }
     }
-  }
-
-  setData(data);
-
-  // not empty string
-  if (data.standupStr) {
-    const finalChar = data.standupStr.length - 1;
-    messageSendV1(token, channelId, data.standupStr.substring(0, finalChar));
-    data.standupStr = '';
   }
 
   setData(data);
@@ -94,8 +91,12 @@ export function standupSendV1(token: string, channelId: number, message: string)
   const data = getData();
   const handleStr = userProfileV2(token, tokenId.uId).user.handleStr;
 
-  data.standupStr += handleStr + ': ' + message + '\n';
-  console.log(data.standupStr);
+  for (const channel of data.channels) {
+    if (channel.channelId === channelId) {
+      channel.standupStr += handleStr + ': ' + message + '\n';
+    }
+  }
+
   setData(data);
   return {};
 }

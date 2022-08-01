@@ -51,6 +51,7 @@ function channelsCreateV3(token: string, name: string, isPublic: boolean): chann
     messages: [],
     standupActive: false,
     standupEnd: null,
+    standupStr: '',
   };
   dataStore.channels.push(channel);
   dataStore.lastChannelId++;
@@ -141,7 +142,9 @@ function channelsCreateV2(token: string, name: string, isPublic: boolean): chann
     messages: [],
     standupActive: false,
     standupEnd: null,
+    standupStr: '',
   };
+
   dataStore.channels.push(channel);
   dataStore.lastChannelId++;
   setData(dataStore);

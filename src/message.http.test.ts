@@ -8,32 +8,40 @@ import {
 beforeEach(() => {
   requestClear();
 });
-
-// make dms tesst
+afterEach(() => {
+  requestClear();
+});
 
 // message/send/v1
-describe('message/send/v1', () => {
+describe('message/send/v2', () => {
+  test('Invalid tokenId', () => {
+    expect(reqMessageSend('asdasdas', -999, 'any string message')).toStrictEqual(403);
+  });
   test('Error case for invalid channelId', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-    expect(reqMessageSend(aMember.token, -999, 'any string message')).toStrictEqual({ error: 'error' });
+    const invalid = reqMessageSend(aMember.token, -999, 'any string message');
+    expect(invalid).toStrictEqual(400);
   });
   test('Error case for length message empty or more than 1000 in length', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
-    expect(reqMessageSend(aMember.token, newchannel.channelId, '')).toStrictEqual({ error: 'error' });
-    expect(reqMessageSend(aMember.token, newchannel.channelId, 'DS3ho21uGIVZpqsCqDUv879zypAtNRC8gFrM7YecnTcdwqMCfzvUkyuxBu3zRYxhlRsMBPDJxzfUIh8bhp92owenjm8UXDPvUrI6U17qa' +
-        'Z3xc2MBMe2hvhYUbrI5CR6ylYdxGj6UikC9CpdD5CCNLGmqWigm2QkGXjLq3EcBi12nPSxuf7vGlhBWDKCwNjXBuo1KpFdogbdCwD8sEBgEQZs3Uw3vIhVOvYQzm6wkG7sU5BHjLTaXTeLIP19jAmWVFsVYG66Ztg4ZG1b' +
-        '2OScLJrg9ykkjmJf3bywy4YWmVqQihxyFL5WfEmTzrDw2SVGelnSfkNCUv9TwVrKmUzPWFR5JBNVGy71r528mDxRNwwJw1uSXhkmF39WuvlkuHHRZyUZweELBtlDKZqsG1CI4qj2M9BEKQo7OJE5ZNRtEoh2cHwzFcxgVE' +
-        'yiZ3QXnWviV5q2k6Uchm2X7iuYfC8eQNPXnx8SQzN1xkKV3GyukZPiA4szqbS0llk8q1EBKU4s3ENmroHquWeTfbplOHuRxdr9vPau9OV9Vu5sKWlqwfYQLVjaHvsTqPdMz8XKST2ick1MOtgNMn3vN0yUGJJzbc27gciQ' +
-        'y6tK6PxCGZSRhR2TLHXeYHYfVarjGGWDQ3WvsTgBSIyEzcz8cjAcOSlMravYVQtqzQo5gWwJeqvEFXSnhG8n3hnLptr0qC47hsHxS8vFKjivtO3w52yXfaUVJxD48siNyWLZg9lzZ6Qubb6w6hqP3M9ePmtINh02L8UfFk' +
-        'eVMyuWjoWudLRMaEtmxERW3WJcnJv6AYvOwFCQkLtjKRiX4GZ67sM1LKjq66aNT7tC5MViUBai8uV7LDs9fxa864GoWrw9tJD95dauiN7BJyfQFmslS3C3WClToayaqGNZjA89GollAaEHxoQGG9b4jtnAsyctv4lNtWLf' +
-        '3WF6IiCSUKoiaduaRI1wxMS6Fqpih9qyHKyr72jtS2ficEcTY6Fw3rU1n3a11sx6Ha')).toStrictEqual({ error: 'error' });
+    let invalid = reqMessageSend(aMember.token, newchannel.channelId, '');
+    expect(invalid).toStrictEqual(400);
+    invalid = reqMessageSend(aMember.token, newchannel.channelId, 'DS3ho21uGIVZpqsCqDUv879zypAtNRC8gFrM7YecnTcdwqMCfzvUkyuxBu3zRYxhlRsMBPDJxzfUIh8bhp92owenjm8UXDPvUrI6U17qa' +
+    'Z3xc2MBMe2hvhYUbrI5CR6ylYdxGj6UikC9CpdD5CCNLGmqWigm2QkGXjLq3EcBi12nPSxuf7vGlhBWDKCwNjXBuo1KpFdogbdCwD8sEBgEQZs3Uw3vIhVOvYQzm6wkG7sU5BHjLTaXTeLIP19jAmWVFsVYG66Ztg4ZG1b' +
+    '2OScLJrg9ykkjmJf3bywy4YWmVqQihxyFL5WfEmTzrDw2SVGelnSfkNCUv9TwVrKmUzPWFR5JBNVGy71r528mDxRNwwJw1uSXhkmF39WuvlkuHHRZyUZweELBtlDKZqsG1CI4qj2M9BEKQo7OJE5ZNRtEoh2cHwzFcxgVE' +
+    'yiZ3QXnWviV5q2k6Uchm2X7iuYfC8eQNPXnx8SQzN1xkKV3GyukZPiA4szqbS0llk8q1EBKU4s3ENmroHquWeTfbplOHuRxdr9vPau9OV9Vu5sKWlqwfYQLVjaHvsTqPdMz8XKST2ick1MOtgNMn3vN0yUGJJzbc27gciQ' +
+    'y6tK6PxCGZSRhR2TLHXeYHYfVarjGGWDQ3WvsTgBSIyEzcz8cjAcOSlMravYVQtqzQo5gWwJeqvEFXSnhG8n3hnLptr0qC47hsHxS8vFKjivtO3w52yXfaUVJxD48siNyWLZg9lzZ6Qubb6w6hqP3M9ePmtINh02L8UfFk' +
+    'eVMyuWjoWudLRMaEtmxERW3WJcnJv6AYvOwFCQkLtjKRiX4GZ67sM1LKjq66aNT7tC5MViUBai8uV7LDs9fxa864GoWrw9tJD95dauiN7BJyfQFmslS3C3WClToayaqGNZjA89GollAaEHxoQGG9b4jtnAsyctv4lNtWLf' +
+    '3WF6IiCSUKoiaduaRI1wxMS6Fqpih9qyHKyr72jtS2ficEcTY6Fw3rU1n3a11sx6Ha');
+    expect(invalid).toStrictEqual(400);
   });
   test('Error case where user is not authorized in channel', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
     const notMember = requestAuthRegister('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
-    expect(reqMessageSend(notMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ error: 'error' });
+    const invalid = reqMessageSend(notMember.token, newchannel.channelId, 'Hello World!');
+    expect(invalid).toStrictEqual(403);
   });
   // success input output for messagesend
   test('Valid arguments, output success', () => {
@@ -74,31 +82,38 @@ describe('message/send/v1', () => {
 });
 
 // message/edit/v1
-describe('message/edit/v1', () => {
+describe('message/edit/v2', () => {
+  test('Invalid tokenId', () => {
+    expect(reqMessageEdit('asdasdas', 1, 'any string message')).toStrictEqual(403);
+  });
   test('length of message greater than 1000', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
     reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!');
-    expect(reqMessageEdit(aMember.token, 1, 'DS3ho21uGIVZpqsCqDUv879zypAtNRC8gFrM7YecnTcdwqMCfzvUkyuxBu3zRYxhlRsMBPDJxzfUIh8bhp92owenjm8UXDPvUrI6U17qa' +
-        'Z3xc2MBMe2hvhYUbrI5CR6ylYdxGj6UikC9CpdD5CCNLGmqWigm2QkGXjLq3EcBi12nPSxuf7vGlhBWDKCwNjXBuo1KpFdogbdCwD8sEBgEQZs3Uw3vIhVOvYQzm6wkG7sU5BHjLTaXTeLIP19jAmWVFsVYG66Ztg4ZG1b' +
-        '2OScLJrg9ykkjmJf3bywy4YWmVqQihxyFL5WfEmTzrDw2SVGelnSfkNCUv9TwVrKmUzPWFR5JBNVGy71r528mDxRNwwJw1uSXhkmF39WuvlkuHHRZyUZweELBtlDKZqsG1CI4qj2M9BEKQo7OJE5ZNRtEoh2cHwzFcxgVE' +
-        'yiZ3QXnWviV5q2k6Uchm2X7iuYfC8eQNPXnx8SQzN1xkKV3GyukZPiA4szqbS0llk8q1EBKU4s3ENmroHquWeTfbplOHuRxdr9vPau9OV9Vu5sKWlqwfYQLVjaHvsTqPdMz8XKST2ick1MOtgNMn3vN0yUGJJzbc27gciQ' +
-        'y6tK6PxCGZSRhR2TLHXeYHYfVarjGGWDQ3WvsTgBSIyEzcz8cjAcOSlMravYVQtqzQo5gWwJeqvEFXSnhG8n3hnLptr0qC47hsHxS8vFKjivtO3w52yXfaUVJxD48siNyWLZg9lzZ6Qubb6w6hqP3M9ePmtINh02L8UfFk' +
-        'eVMyuWjoWudLRMaEtmxERW3WJcnJv6AYvOwFCQkLtjKRiX4GZ67sM1LKjq66aNT7tC5MViUBai8uV7LDs9fxa864GoWrw9tJD95dauiN7BJyfQFmslS3C3WClToayaqGNZjA89GollAaEHxoQGG9b4jtnAsyctv4lNtWLf' +
-        '3WF6IiCSUKoiaduaRI1wxMS6Fqpih9qyHKyr72jtS2ficEcTY6Fw3rU1n3a11sx6Ha')).toStrictEqual({ error: 'error' });
+    const invalid = reqMessageEdit(aMember.token, 1, 'DS3ho21uGIVZpqsCqDUv879zypAtNRC8gFrM7YecnTcdwqMCfzvUkyuxBu3zRYxhlRsMBPDJxzfUIh8bhp92owenjm8UXDPvUrI6U17qa' +
+    'Z3xc2MBMe2hvhYUbrI5CR6ylYdxGj6UikC9CpdD5CCNLGmqWigm2QkGXjLq3EcBi12nPSxuf7vGlhBWDKCwNjXBuo1KpFdogbdCwD8sEBgEQZs3Uw3vIhVOvYQzm6wkG7sU5BHjLTaXTeLIP19jAmWVFsVYG66Ztg4ZG1b' +
+    '2OScLJrg9ykkjmJf3bywy4YWmVqQihxyFL5WfEmTzrDw2SVGelnSfkNCUv9TwVrKmUzPWFR5JBNVGy71r528mDxRNwwJw1uSXhkmF39WuvlkuHHRZyUZweELBtlDKZqsG1CI4qj2M9BEKQo7OJE5ZNRtEoh2cHwzFcxgVE' +
+    'yiZ3QXnWviV5q2k6Uchm2X7iuYfC8eQNPXnx8SQzN1xkKV3GyukZPiA4szqbS0llk8q1EBKU4s3ENmroHquWeTfbplOHuRxdr9vPau9OV9Vu5sKWlqwfYQLVjaHvsTqPdMz8XKST2ick1MOtgNMn3vN0yUGJJzbc27gciQ' +
+    'y6tK6PxCGZSRhR2TLHXeYHYfVarjGGWDQ3WvsTgBSIyEzcz8cjAcOSlMravYVQtqzQo5gWwJeqvEFXSnhG8n3hnLptr0qC47hsHxS8vFKjivtO3w52yXfaUVJxD48siNyWLZg9lzZ6Qubb6w6hqP3M9ePmtINh02L8UfFk' +
+    'eVMyuWjoWudLRMaEtmxERW3WJcnJv6AYvOwFCQkLtjKRiX4GZ67sM1LKjq66aNT7tC5MViUBai8uV7LDs9fxa864GoWrw9tJD95dauiN7BJyfQFmslS3C3WClToayaqGNZjA89GollAaEHxoQGG9b4jtnAsyctv4lNtWLf' +
+    '3WF6IiCSUKoiaduaRI1wxMS6Fqpih9qyHKyr72jtS2ficEcTY6Fw3rU1n3a11sx6Ha');
+    expect(invalid).toStrictEqual(400);
   });
   test('messageId invalid', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
     reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!');
-    expect(reqMessageEdit(aMember.token, 2, 'DS3ho21uGIVZpqsCqDUv879zypAt')).toStrictEqual({ error: 'error' });
+    const invalid = reqMessageEdit(aMember.token, 2, 'DS3ho21uGIVZpqsCqDUv879zypAt');
+    expect(invalid).toStrictEqual(400);
   });
   test('Person doesnt have owner permissions', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
     const notowner = requestAuthRegister('asd@gmail.com', '123abc!@#', 'Jak', 'asd');
-    reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!');
-    expect(reqMessageEdit(notowner.token, 1, 'DS3ho21uGIVZpqsCqDUv879zypAt')).toStrictEqual({ error: 'error' });
+    reqChannelInvite(aMember.token, newchannel.channelId, notowner.authUserId);
+    reqMessageSend(notowner.token, newchannel.channelId, 'Hello World!');
+    const invalid = reqMessageEdit(notowner.token, 1, 'DS3ho21uGIVZpqsCqDUv879zypAt');
+    expect(invalid).toStrictEqual(403);
   });
   test('person not the sender of the message', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
@@ -106,8 +121,28 @@ describe('message/edit/v1', () => {
     const notUser = requestAuthRegister('asd@gmail.com', '123abc!@#', 'Jak', 'asd');
     // add notUser to channel and send message
     reqChannelInvite(aMember.token, newchannel.channelId, notUser.authUserId);
-    reqMessageSend(notUser.token, newchannel.channelId, 'Hello World!');
-    expect(reqMessageEdit(aMember.token, 1, 'DS3ho21uGIVZpqsCqDUv879zypAt')).toStrictEqual({ error: 'error' });
+    reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!');
+    const invalid = reqMessageEdit(notUser.token, 1, 'DS3ho21uGIVZpqsCqDUv879zypAt');
+    expect(invalid).toStrictEqual(403);
+  });
+  // error in dm
+  test('Person doesnt have owner permissions', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const uIds = [user1.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    reqSendMessageDm(user1.token, dm.dmId, 'Hello World!');
+    const invalid = reqMessageEdit(user1.token, 1, 'DS3ho21uGIVZpqsCqDUv879zypAt');
+    expect(invalid).toStrictEqual(403);
+  });
+  test('person not the sender of the message', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const uIds = [user1.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    reqSendMessageDm(user.token, dm.dmId, 'Hello World!');
+    const invalid = reqMessageEdit(user1.token, 1, 'DS3ho21uGIVZpqsCqDUv879zypAt');
+    expect(invalid).toStrictEqual(403);
   });
   // success edit
   test('edit single message from owner', () => {
@@ -151,28 +186,55 @@ describe('message/edit/v1', () => {
 });
 
 // message/remove/v1
-describe('message/remove/v1', () => {
+describe('message/remove/v2', () => {
+  test('Invalid tokenId', () => {
+    expect(reqMessageRemove('asdasdas', 1)).toStrictEqual(403);
+  });
   test('messageId invalid', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
     reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!');
-    expect(reqMessageRemove(aMember.token, 2)).toStrictEqual({ error: 'error' });
+    const invalid = reqMessageRemove(aMember.token, 2);
+    expect(invalid).toStrictEqual(400);
   });
   test('Person doesnt have owner permissions', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
-    const notowner = requestAuthRegister('asd@gmail.com', '123abc!@#', 'Jak', 'asd');
-    reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!');
-    expect(reqMessageRemove(notowner.token, 1)).toStrictEqual({ error: 'error' });
+    const notowner = requestAuthRegister('asd@gmail.com', '123abc!asd@#', 'Jak', 'asd');
+    reqChannelInvite(aMember.token, newchannel.channelId, notowner.authUserId);
+    reqMessageSend(notowner.token, newchannel.channelId, 'Hello World!');
+    const invalid = reqMessageRemove(notowner.token, 1);
+    expect(invalid).toStrictEqual(403);
   });
-  test('person not the sender of the message', () => {
+  test('person not the sender of the message in channel', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
     const notUser = requestAuthRegister('asd@gmail.com', '123abc!@#', 'Jak', 'asd');
     // add notUser to channel and send message
     reqChannelInvite(aMember.token, newchannel.channelId, notUser.authUserId);
     reqMessageSend(notUser.token, newchannel.channelId, 'Hello World!');
-    expect(reqMessageRemove(aMember.token, 1)).toStrictEqual({ error: 'error' });
+    const invalid = reqMessageRemove(aMember.token, 1);
+    expect(invalid).toStrictEqual(403);
+  });
+  // test in dm
+  test('Person doesnt have owner permissions in dm', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const uIds = [user1.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    reqSendMessageDm(user1.token, dm.dmId, 'Hello World!');
+    const invalid = reqMessageRemove(user1.token, 1);
+    expect(invalid).toStrictEqual(403);
+  });
+  test('person not the sender of the message', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const uIds = [user1.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    // add notUser to channel and send message
+    reqSendMessageDm(user1.token, dm.dmId, 'Hello World!');
+    const invalid = reqMessageRemove(user.token, 1);
+    expect(invalid).toStrictEqual(403);
   });
   // success edit
   test('remove single message from owner', () => {
@@ -196,10 +258,14 @@ describe('message/remove/v1', () => {
   });
 });
 
-describe('/message/senddm/v1', () => {
+describe('/message/senddm/v2', () => {
+  test('Invalid tokenId', () => {
+    expect(reqSendMessageDm('asdasdas', 1, 'any string message')).toStrictEqual(403);
+  });
   test('Error case for invalid channelId', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-    expect(reqSendMessageDm(aMember.token, -999, 'any string message')).toStrictEqual({ error: 'error' });
+    const invalid = reqSendMessageDm(aMember.token, -999, 'any string message');
+    expect(invalid).toStrictEqual(400);
   });
   test('Error case for length message empty or more than 1000 in length', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
@@ -207,14 +273,16 @@ describe('/message/senddm/v1', () => {
     const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
     const uIds = [user1.authUserId, user2.authUserId];
     const dm = reqDmCreate(user.token, uIds);
-    expect(reqSendMessageDm(user.token, dm.channelId, '')).toStrictEqual({ error: 'error' });
-    expect(reqSendMessageDm(user.token, dm.channelId, 'DS3ho21uGIVZpqsCqDUv879zypAtNRC8gFrM7YecnTcdwqMCfzvUkyuxBu3zRYxhlRsMBPDJxzfUIh8bhp92owenjm8UXDPvUrI6U17qa' +
-        'Z3xc2MBMe2hvhYUbrI5CR6ylYdxGj6UikC9CpdD5CCNLGmqWigm2QkGXjLq3EcBi12nPSxuf7vGlhBWDKCwNjXBuo1KpFdogbdCwD8sEBgEQZs3Uw3vIhVOvYQzm6wkG7sU5BHjLTaXTeLIP19jAmWVFsVYG66Ztg4ZG1b' +
-        '2OScLJrg9ykkjmJf3bywy4YWmVqQihxyFL5WfEmTzrDw2SVGelnSfkNCUv9TwVrKmUzPWFR5JBNVGy71r528mDxRNwwJw1uSXhkmF39WuvlkuHHRZyUZweELBtlDKZqsG1CI4qj2M9BEKQo7OJE5ZNRtEoh2cHwzFcxgVE' +
-        'yiZ3QXnWviV5q2k6Uchm2X7iuYfC8eQNPXnx8SQzN1xkKV3GyukZPiA4szqbS0llk8q1EBKU4s3ENmroHquWeTfbplOHuRxdr9vPau9OV9Vu5sKWlqwfYQLVjaHvsTqPdMz8XKST2ick1MOtgNMn3vN0yUGJJzbc27gciQ' +
-        'y6tK6PxCGZSRhR2TLHXeYHYfVarjGGWDQ3WvsTgBSIyEzcz8cjAcOSlMravYVQtqzQo5gWwJeqvEFXSnhG8n3hnLptr0qC47hsHxS8vFKjivtO3w52yXfaUVJxD48siNyWLZg9lzZ6Qubb6w6hqP3M9ePmtINh02L8UfFk' +
-        'eVMyuWjoWudLRMaEtmxERW3WJcnJv6AYvOwFCQkLtjKRiX4GZ67sM1LKjq66aNT7tC5MViUBai8uV7LDs9fxa864GoWrw9tJD95dauiN7BJyfQFmslS3C3WClToayaqGNZjA89GollAaEHxoQGG9b4jtnAsyctv4lNtWLf' +
-        '3WF6IiCSUKoiaduaRI1wxMS6Fqpih9qyHKyr72jtS2ficEcTY6Fw3rU1n3a11sx6Ha')).toStrictEqual({ error: 'error' });
+    let invalid = reqSendMessageDm(user.token, dm.dmId, '');
+    expect(invalid).toStrictEqual(400);
+    invalid = reqSendMessageDm(user.token, dm.dmId, 'DS3ho21uGIVZpqsCqDUv879zypAtNRC8gFrM7YecnTcdwqMCfzvUkyuxBu3zRYxhlRsMBPDJxzfUIh8bhp92owenjm8UXDPvUrI6U17qa' +
+    'Z3xc2MBMe2hvhYUbrI5CR6ylYdxGj6UikC9CpdD5CCNLGmqWigm2QkGXjLq3EcBi12nPSxuf7vGlhBWDKCwNjXBuo1KpFdogbdCwD8sEBgEQZs3Uw3vIhVOvYQzm6wkG7sU5BHjLTaXTeLIP19jAmWVFsVYG66Ztg4ZG1b' +
+    '2OScLJrg9ykkjmJf3bywy4YWmVqQihxasdyFL5WfEmTzrDw2SVGelnSfkNCUv9TwVrKmUzPWFR5JBNVGy71r528mDxRNwwJw1uSXhkmF39WuvlkuHHRZyUZweELBtlDKZqsG1CI4qj2M9BEKQo7OJE5ZNRtEoh2cHwzFcxgVE' +
+    'yiZ3QXnWviV5q2k6Uchm2X7iuYfC8eQNPXnx8SQzN1xkKV3GyukZPiA4szqbS0llk8q1EBKU4s3ENmroHquWeTfbplOHuRxdr9vPau9OV9Vu5sKWlqwfYQLVjaHvsTqPdMz8XKST2ick1MOtgNMn3vN0yUGJJzbc27gciQ' +
+    'y6tK6PxCGZSRhR2TLHXeYHYfVarjGGWDQ3WvsTgBSIyEzcz8cjAcOSlMravYVQtqzQo5gWwJeqvEFXSnhG8n3hnLptr0qC47hsHxS8vFKjivtO3w52yXfaUVJxD48siNyWLZg9lzZ6Qubb6w6hqP3M9ePmtINh02L8UfFk' +
+    'eVMyuWjoWudLRMaEtmxERW3WJcnJv6AYvOwFCQkLtjKRiX4GZ67sM1LKjq66aNT7tC5MViUBai8uV7LDs9fxa864GoWrw9tJD95dauiN7BJyfQFmslS3C3WClToayaqGNZjA89GollAaEHxoQGG9b4jtnAsyctv4lNtWLf' +
+    '3WF6IiCSUKoiaduaRI1wxMS6Fqpih9qyHsKyr72jtS2ficEcTY6Fw3rU1n3a11sx6Ha');
+    expect(invalid).toStrictEqual(400);
   });
   test('Error case where user is not authorized in channel', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
@@ -222,7 +290,8 @@ describe('/message/senddm/v1', () => {
     const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
     const uIds = [user1.authUserId];
     const dm = reqDmCreate(user.token, uIds);
-    expect(reqSendMessageDm(user2.token, dm.dmId, 'Hello World!')).toStrictEqual({ error: 'error' });
+    const invalid = reqSendMessageDm(user2.token, dm.dmId, 'Hello World!');
+    expect(invalid).toStrictEqual(403);
   });
   // success input output for messagesend
   test('Valid arguments, output success', () => {
@@ -273,7 +342,7 @@ describe('/message/senddm/v1', () => {
 });
 
 // message/edit/v1 success test on dm and channels
-describe('message/edit/v1 on dm and channels', () => {
+describe('message/edit/v2 on dm and channels', () => {
   test('remove multiple message from multiple channels', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
@@ -327,7 +396,7 @@ describe('message/edit/v1 on dm and channels', () => {
 });
 
 // message/remove/v1 test on dm and channels
-describe('message/remove/v1 on dm and channels', () => {
+describe('message/remove/v2 on dm and channels', () => {
   test('edit multiple message from multiple channels', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);

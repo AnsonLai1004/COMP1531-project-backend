@@ -6,10 +6,11 @@ import { getData, setData } from './data';
 import { userProfileV1 } from './users';
 import { Message } from './interfaces';
 import { tokenToUId } from './auth';
+import HTTPError from 'http-errors';
 export {
   channelDetailsV1, channelInviteV1, channelJoinV1, channelMessagesV1,
   channelLeaveV1, channelAddownerV1, channelRemoveownerV1,
-  channelMessagesV2, channelInviteV2, channelDetailsV2, channelJoinV2,
+  channelMessagesV3, channelInviteV3, channelDetailsV2, channelJoinV2,
   membersobjCreate, isValidUserId, tokenToUId
 };
 
@@ -50,10 +51,10 @@ function channelInviteV1(authUserId: number, channelId: number, uId: number) {
   const foundchannel = dataStore.channels.some(el => el.channelId === channelId);
 
   if (!founduid) {
-    return { error: 'error' };
+    throw HTTPError(400, 'uId does not refer to a valid user');
   }
   if (!foundchannel) {
-    return { error: 'error' };
+    throw HTTPError(400, 'ChannelId does not refer to a valid channel');
   }
 
   // check uId already a member in channels or not
@@ -61,7 +62,7 @@ function channelInviteV1(authUserId: number, channelId: number, uId: number) {
     if (element.channelId === channelId) {
       for (const members of element.allMembers) {
         if (members === uId) {
-          return { error: 'error' };
+          throw HTTPError(400, 'uId refers to a user who is already a member of the channel');
         }
       }
     }
@@ -74,17 +75,17 @@ function channelInviteV1(authUserId: number, channelId: number, uId: number) {
   const checkmembers = exactchannel.allMembers.includes(authUserId);
 
   if (!checkowners && !checkmembers) {
-    return { error: 'error' };
+    throw HTTPError(403, 'authorised user is not a member of the channel');
   }
   exactchannel.allMembers.push(uId);
   setData(dataStore);
   return {};
 }
 
-function channelInviteV2(token: string, channelId: number, uId: number) {
+function channelInviteV3(token: string, channelId: number, uId: number) {
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
-    return { error: 'error' };
+    throw HTTPError(403, 'Invalid token');
   }
   const result = channelInviteV1(tokenId.uId as number, channelId, uId);
   return result;
@@ -107,7 +108,7 @@ function channelMessagesV1(authUserId: number, channelId: number, start: number)
   // check authorized user who invited the member is not a member of the group
   const foundchannel = dataStore.channels.some(el => el.channelId === channelId);
   if (!foundchannel) {
-    return { error: 'error' };
+    throw HTTPError(400, 'channelId not found');
   }
 
   const channel = dataStore.channels.filter(el => el.channelId === channelId);
@@ -116,7 +117,7 @@ function channelMessagesV1(authUserId: number, channelId: number, start: number)
   const checkmembers = exactchannel.allMembers.includes(authUserId);
 
   if (!checkowners && !checkmembers) {
-    return { error: 'error' };
+    throw HTTPError(403, 'authorised user is not a member of the channel');
   }
 
   // find channel get length of messages
@@ -130,7 +131,7 @@ function channelMessagesV1(authUserId: number, channelId: number, start: number)
     }
   }
   if (start > numofmessages) {
-    return { error: 'error' };
+    throw HTTPError(400, 'start greater than total number of messages in channel');
   }
   const end = start + 50;
 
@@ -156,22 +157,14 @@ function channelMessagesV1(authUserId: number, channelId: number, start: number)
  * @param start
  * @returns {{messages: Arr object of type message, start:  number, end:  number}}
  */
-function channelMessagesV2(token: string, channelId: number, start: number) {
+function channelMessagesV3(token: string, channelId: number, start: number) {
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
-    return { error: 'error' };
+    throw HTTPError(403, 'Invalid token');
   }
   const result = channelMessagesV1(tokenId.uId as number, channelId, start);
   return result;
 }
-
-/**
- * Given a channel with ID channelId that the authorised user is a member of,
- * provide basic details about the channel.
- * @param {string} token
- * @param {number} channelId
- * @returns {{name: string, isPublic: boolean, ownerMembers: membersobj[], allMembers: membersobj[]}}
- */
 
 /**
  * Given a channel with ID channelId that the authorised user is a member of,

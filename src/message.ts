@@ -1,9 +1,10 @@
 import { getData, setData } from './data';
 import { Message } from './interfaces';
 import { tokenToUId } from './auth';
+import HTTPError from 'http-errors';
 export {
-  messageSendV1, messageRemoveV1, messageEditV1, messageSendDmV1,
-  dmMessagesV1
+  messageSendV2, messageRemoveV2, messageEditV2, messageSendDmV2,
+  dmMessagesV2
 };
 
 /**
@@ -16,23 +17,23 @@ export {
  * @param {string} message
  * @returns {{messageId: number}}
 */
-function messageSendV1(token: string, channelId: number, message: string) {
+function messageSendV2(token: string, channelId: number, message: string) {
   // channel Id does not refer to valid channel Id
-  if (!isValidChannelId(channelId)) {
-    return { error: 'error' };
-  }
-  // if message lenght is less than 1 or greater than 100
-  if (message.length < 1 || message.length > 1000) {
-    return { error: 'error' };
-  }
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
-    return { error: 'error' };
+    throw HTTPError(403, 'invalid tokenid');
+  }
+  if (!isValidChannelId(channelId)) {
+    throw HTTPError(400, 'ChannelId does not refer to a valid channel');
+  }
+  // if message lenght is less than 1 or greater than 1000
+  if (message.length < 1 || message.length > 1000) {
+    throw HTTPError(400, 'length of message less than 1 or greater than 1000');
   }
   // authorised user is not a member of the channel
   // uId is not owner?
   if (!userIsAuthorised(tokenId.uId, channelId)) {
-    return { error: 'error' };
+    throw HTTPError(403, 'Authorized user not a member of channel');
   }
   const datastore = getData();
   // lastmessageid+1, uid, message, timesent
@@ -51,7 +52,6 @@ function messageSendV1(token: string, channelId: number, message: string) {
   setData(datastore);
   return { messageId: newmessage.messageId };
 }
-
 /**
  * Given a message, update its text with new text.
  * If the new message is an empty string,
@@ -61,16 +61,15 @@ function messageSendV1(token: string, channelId: number, message: string) {
  * @param {string} message
  * @returns {{messageId: number}}
 */
-function messageEditV1(token: string, messageId: number, message: string) {
-  // if message length is less than 1 or greater than 1000
-  if (message.length > 1000) {
-    return { error: 'error' };
-  }
+function messageEditV2(token: string, messageId: number, message: string) {
+  // if message length is greater than 1000
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
-    return { error: 'error' };
+    throw HTTPError(403, 'Invalid TokenId');
   }
-
+  if (message.length > 1000) {
+    throw HTTPError(400, 'length of messages is greater than 1000');
+  }
   const datastore = getData();
   let chosenChannel = null;
   let chosenMessage: Message = null;
@@ -95,29 +94,29 @@ function messageEditV1(token: string, messageId: number, message: string) {
 
   // no message return error
   if (chosenMessage === null) {
-    return { error: 'error' };
+    throw HTTPError(400, 'messageId does not refer to any message in channel');
   }
   // if chosen message uid not equal to token then return error
   if (chosenMessage.uId !== tokenId.uId) {
-    return { error: 'error' };
+    throw HTTPError(403, 'message was not sent by current user who wants to edit');
   }
   // check if user is owner in channel
   if (chosenChannel != null) {
     if (!userIsOwner(tokenId.uId, chosenChannel.channelId)) {
-      return { error: 'error' };
+      throw HTTPError(403, 'not owner in channel');
     }
   }
   // check if userisowner in dm
   if (chosenDm != null) {
     if (!userIsOwnerInDm(tokenId.uId, chosenDm.dmId)) {
-      return { error: 'error' };
+      throw HTTPError(403, 'not member in channel');
     }
   }
 
   // change message
   if (message === '') {
     // remove message
-    messageRemoveV1(token, messageId);
+    messageRemoveV2(token, messageId);
   } else {
     chosenMessage.message = message;
     setData(datastore);
@@ -133,11 +132,11 @@ function messageEditV1(token: string, messageId: number, message: string) {
  * @param {string} message
  * @returns {{messageId: number}}
 */
-function messageRemoveV1(token: string, messageId: number) {
+function messageRemoveV2(token: string, messageId: number) {
   // if message length is less than 1 or greater than 1000
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
-    return { error: 'error' };
+    throw HTTPError(403, 'Invalid tokenId');
   }
 
   const datastore = getData();
@@ -164,22 +163,22 @@ function messageRemoveV1(token: string, messageId: number) {
 
   // no message or found return error
   if (chosenMessage === null) {
-    return { error: 'error' };
+    throw HTTPError(400, 'message not found in dms or channels');
   }
   // if chosen message uid not equal to token then return error
   if (chosenMessage.uId !== tokenId.uId) {
-    return { error: 'error' };
+    throw HTTPError(403, 'message not send by uid');
   }
   // check if user is owner in channel
   if (chosenChannel !== null) {
     if (!userIsOwner(tokenId.uId, chosenChannel.channelId)) {
-      return { error: 'error' };
+      throw HTTPError(403, 'Uid not owner of channel');
     }
   }
   // check if userisowner in dm
   if (chosenDm !== null) {
     if (!userIsOwnerInDm(tokenId.uId, chosenDm.dmId)) {
-      return { error: 'error' };
+      throw HTTPError(403, 'Uid not owner of dm');
     }
   }
 
@@ -215,23 +214,23 @@ function messageRemoveV1(token: string, messageId: number) {
  * @param {string} message
  * @returns
  */
-function messageSendDmV1(token: string, dmId: number, message: string) {
-  // channel Id does not refer to valid channel Id
+function messageSendDmV2(token: string, dmId: number, message: string) {
+  // dm Id does not refer to valid dm Id
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    throw HTTPError(403, 'invalid Token');
+  }
   if (!isValidDmId(dmId)) {
-    return { error: 'error' };
+    throw HTTPError(400, 'dmId does not refer to valid dmId');
   }
   // if message length is less than 1 or greater than 1000
   if (message.length < 1 || message.length > 1000) {
-    return { error: 'error' };
-  }
-  const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    return { error: 'error' };
+    throw HTTPError(400, 'length of message is less than 1 or over 1000 characters');
   }
   // authorised user is not a member of the dm
   // uId is not owner?
   if (!userIsAuthorisedInDm(tokenId.uId, dmId)) {
-    return { error: 'error' };
+    throw HTTPError(403, 'user is authorized but not in dm');
   }
   const datastore = getData();
   // lastmessageid+1, uid, message, timesent
@@ -264,18 +263,18 @@ function messageSendDmV1(token: string, dmId: number, message: string) {
 function dmMessageV1helper(authUserId: number, dmId: number, start: number) {
   const dataStore = getData();
 
-  // check uid and channel id exist
+  // check uid and dm id exist
   // check authorized user who invited the member is not a member of the group
   const foundDm = dataStore.dms.some(el => el.dmId === dmId);
   if (!foundDm) {
-    return { error: 'error' };
+    throw HTTPError(400, 'dmId not found');
   }
 
   const getdm = dataStore.dms.filter(el => el.dmId === dmId);
   const exactdm = getdm[0];
   const checkmembers = exactdm.uIds.includes(authUserId);
   if (!checkmembers && exactdm.ownerId !== authUserId) {
-    return { error: 'error' };
+    throw HTTPError(403, 'authorised user is not a member of the dm');
   }
 
   // find channel get length of messages
@@ -289,7 +288,7 @@ function dmMessageV1helper(authUserId: number, dmId: number, start: number) {
     }
   }
   if (start > numofmessages) {
-    return { error: 'error' };
+    throw HTTPError(400, 'start greater than total number of messages in channel');
   }
   const end = start + 50;
   if (end < numofmessages) {
@@ -307,10 +306,10 @@ function dmMessageV1helper(authUserId: number, dmId: number, start: number) {
   }
 }
 
-function dmMessagesV1(token: string, dmId: number, start: number) {
+function dmMessagesV2(token: string, dmId: number, start: number) {
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
-    return { error: 'error' };
+    throw HTTPError(403, 'Invalid token');
   }
   const result = dmMessageV1helper(tokenId.uId as number, dmId, start);
   return result;

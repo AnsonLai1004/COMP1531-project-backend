@@ -3,7 +3,7 @@ import { getData, setData } from './data';
 import { userIsMember, isValidChannelId } from './channel';
 import { tokenToUId } from './auth';
 import { userProfileV2 } from './users';
-import { messageSendV1 } from './message';
+import { messageSendV2 } from './message';
 
 export function standupStartV1(token: string, channelId: number, length: number) {
   // check if token is valid
@@ -55,7 +55,7 @@ function standupEnd(token: string, channelId: number) {
       // not empty string - send standup message (remove trailing newline)
       if (channel.standupStr) {
         const finalChar = channel.standupStr.length - 1;
-        messageSendV1(token, channelId, channel.standupStr.substring(0, finalChar));
+        messageSendV2(token, channelId, channel.standupStr.substring(0, finalChar));
         channel.standupStr = '';
       }
     }

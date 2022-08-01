@@ -12,14 +12,14 @@ describe('dm/create/v1', () => {
   test('invalid uId in uIds, invalid token', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const uIds = [-999, -1000];
-    expect(reqDmCreate(user.token, uIds)).toStrictEqual({ error: 'error' });
-    expect(reqDmCreate('invalid', [user.authUserId])).toStrictEqual({ error: 'error' });
+    expect(reqDmCreate(user.token, uIds)).toStrictEqual(403);
+    expect(reqDmCreate('invalid', [user.authUserId])).toStrictEqual(400);
   });
   test('duplicate uId', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
     const uIds = [user1.authUserId, user1.authUserId];
-    expect(reqDmCreate(user.token, uIds)).toStrictEqual({ error: 'error' });
+    expect(reqDmCreate(user.token, uIds)).toStrictEqual(400);
   });
   test('correct return', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
@@ -75,11 +75,11 @@ describe('dm/create/v1', () => {
 describe('dm/details/v1', () => {
   test('invalid token', () => {
     // const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-    expect(reqDmDetails('invalid', -999)).toStrictEqual({ error: 'error' });
+    expect(reqDmDetails('invalid', -999)).toStrictEqual(400);
   });
   test('invalid dmId', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-    expect(reqDmDetails(user.token, -999)).toStrictEqual({ error: 'error' });
+    expect(reqDmDetails(user.token, -999)).toStrictEqual(400);
   });
   test('authUserId is invalid or is not a member of DM', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
@@ -88,8 +88,8 @@ describe('dm/details/v1', () => {
     const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
     const uIds = [user1.authUserId, user2.authUserId];
     const dm = reqDmCreate(user.token, uIds);
-    expect(reqDmDetails(notMember.token, dm.dmId)).toStrictEqual({ error: 'error' });
-    expect(reqDmDetails('invalid', dm.dmId)).toStrictEqual({ error: 'error' });
+    expect(reqDmDetails(notMember.token, dm.dmId)).toStrictEqual(403);
+    expect(reqDmDetails('invalid', dm.dmId)).toStrictEqual(400);
   });
   test('correct return', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
@@ -129,7 +129,7 @@ describe('dm/details/v1', () => {
 describe('dm/list/v2', () => {
   test('invalid token', () => {
     const invalid = reqDmListV3('invalid token');
-    expect(invalid).toStrictEqual(403);
+    expect(invalid).toStrictEqual(400);
   });
 
   test('correct return', () => {
@@ -191,7 +191,7 @@ describe('dm/remove/v2', () => {
     const dm = reqDmCreate(user.token, []);
 
     let invalid = reqDmRemoveV3('invalid token', dm.dmId);
-    expect(invalid).toStrictEqual(403);
+    expect(invalid).toStrictEqual(400);
 
     invalid = reqDmRemoveV3(user.token, -1);
     expect(invalid).toStrictEqual(400);

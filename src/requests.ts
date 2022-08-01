@@ -148,7 +148,7 @@ export function requestClear() {
 export function reqChannelDetails(token: string, channelId: number) {
   const res = request(
     'GET',
-    `${url}:${port}` + '/channel/details/v2',
+    `${url}:${port}` + '/channel/details/v3',
     {
       qs: {
         token,
@@ -156,13 +156,17 @@ export function reqChannelDetails(token: string, channelId: number) {
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function reqChannelJoin(token: string, channelId: number) {
   const res = request(
     'POST',
-    `${url}:${port}` + '/channel/join/v2',
+    `${url}:${port}` + '/channel/join/v3',
     {
       json: {
         token,
@@ -170,7 +174,10 @@ export function reqChannelJoin(token: string, channelId: number) {
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function reqChannelInvite(token: string, channelId: number, uId: number) {
@@ -194,7 +201,7 @@ export function reqChannelInvite(token: string, channelId: number, uId: number) 
 export function reqChannelLeave(token: string, channelId: number) {
   const res = request(
     'POST',
-      `${url}:${port}` + '/channel/leave/v1',
+      `${url}:${port}` + '/channel/leave/v2',
       {
         json: {
           token,
@@ -203,7 +210,10 @@ export function reqChannelLeave(token: string, channelId: number) {
       }
 
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function reqChannelMessages(token: string, channelId: number, start: number) {
@@ -227,7 +237,7 @@ export function reqChannelMessages(token: string, channelId: number, start: numb
 export function reqChannelAddowner(token: string, channelId: number, uId: number) {
   const res = request(
     'POST',
-      `${url}:${port}` + '/channel/addowner/v1',
+      `${url}:${port}` + '/channel/addowner/v2',
       {
         json: {
           token,
@@ -236,7 +246,10 @@ export function reqChannelAddowner(token: string, channelId: number, uId: number
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestChannelsCreate(token: string, name: string, isPublic: boolean) {
@@ -283,7 +296,7 @@ export function requestChannelsListall(token: string) {
 export function reqChannelRemoveowner(token: string, channelId: number, uId: number) {
   const res = request(
     'POST',
-      `${url}:${port}` + '/channel/removeowner/v1',
+      `${url}:${port}` + '/channel/removeowner/v2',
       {
         json: {
           token,
@@ -292,14 +305,17 @@ export function reqChannelRemoveowner(token: string, channelId: number, uId: num
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 // dm/.../v1
 export function reqDmCreate(token: string, uIds: number[]) {
   const res = request(
     'POST',
-    `${url}:${port}` + '/dm/create/v1',
+    `${url}:${port}` + '/dm/create/v2',
     {
       json: {
         token,
@@ -307,13 +323,16 @@ export function reqDmCreate(token: string, uIds: number[]) {
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function reqDmDetails(token: string, dmId: number) {
   const res = request(
     'GET',
-    `${url}:${port}` + '/dm/details/v1',
+    `${url}:${port}` + '/dm/details/v2',
     {
       qs: {
         token,
@@ -321,7 +340,10 @@ export function reqDmDetails(token: string, dmId: number) {
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 /// ////////////////////////////////////////////

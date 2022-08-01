@@ -12,8 +12,6 @@ afterEach(() => {
   requestClear();
 });
 
-// make dms tesst
-
 // message/send/v1
 describe('message/send/v2', () => {
   test('Invalid tokenId', () => {

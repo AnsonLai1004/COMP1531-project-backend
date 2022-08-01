@@ -9,28 +9,37 @@ import {
 beforeEach(() => {
   requestClear();
 });
+afterEach(() => {
+  requestClear();
+});
 
-describe('/channel/invite/v2', () => {
+describe('/channel/invite/v3', () => {
 // error cases
+  test('Invalid tokenId', () => {
+    expect(reqChannelInvite('asdasdas', 1, 123)).toStrictEqual(403);
+  });
   test('Error case for Invalid channelId', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const notMember = requestAuthRegister('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
     // invalid channelid
-    expect(reqChannelInvite(aMember.token, -999, notMember.token)).toStrictEqual({ error: 'error' });
+    const invalid = reqChannelInvite(aMember.token, -999, notMember.authUserId);
+    expect(invalid).toStrictEqual(400);
   });
 
   test('Error case for invalid uId', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
     // invalid uid
-    expect(reqChannelInvite(aMember.token, newchannel.channelId, -999)).toStrictEqual({ error: 'error' });
+    const invalid = reqChannelInvite(aMember.token, newchannel.channelId, -999);
+    expect(invalid).toStrictEqual(400);
   });
 
   test('Error case for adding uid that is already a member of channel', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
     // uid refers to a user that is already a member
-    expect(reqChannelInvite(aMember.token, newchannel.channelId, aMember.token)).toStrictEqual({ error: 'error' });
+    const invalid = reqChannelInvite(aMember.token, newchannel.channelId, aMember.authUserId);
+    expect(invalid).toStrictEqual(400);
   });
 
   test('Error case for authorized user who invites is not a member of the group', () => {
@@ -38,11 +47,12 @@ describe('/channel/invite/v2', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
     // channelId valid but the authorized user who invites is not a member of the group
-    expect(reqChannelInvite(notMember.token, newchannel.channelId, notMember.token)).toStrictEqual({ error: 'error' });
+    const invalid = reqChannelInvite(notMember.token, newchannel.channelId, notMember.authUserId);
+    expect(invalid).toStrictEqual(403);
   });
 
   // correct input output
-  test('Cases for correct return on /channel/invite/v2', () => {
+  test('Cases for correct return on /channel/invite/v3', () => {
     const owner = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const notMember = requestAuthRegister('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
     const newchannel = requestChannelsCreate(owner.token, 'crush team', true);
@@ -81,18 +91,26 @@ describe('/channel/invite/v2', () => {
   });
 });
 
-describe('/channel/messages/v2', () => {
+describe('/channel/messages/v3 and dm/messages/v3', () => {
 // cases where error occur
+  test('Invalid tokenId', () => {
+    expect(reqChannelMessages('asdasdas', 1, 0)).toStrictEqual(403);
+  });
+  test('Invalid tokenId', () => {
+    expect(reqDmMessages('asdasdas', 1, 0)).toStrictEqual(403);
+  });
   test('Error for invalid channelId', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     // invalid channelid
-    expect(reqChannelMessages(aMember.token, -999, 0)).toStrictEqual({ error: 'error' });
+    const invalid = reqChannelMessages(aMember.token, -999, 0);
+    expect(invalid).toStrictEqual(400);
   });
 
   test('Error start is greater than total number of messages in channel', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
-    expect(reqChannelMessages(aMember.token, newchannel.channelId, 51)).toStrictEqual({ error: 'error' });
+    const invalid = reqChannelMessages(aMember.token, newchannel.channelId, 51);
+    expect(invalid).toStrictEqual(400);
   });
 
   test('Error user not a member of channel', () => {
@@ -100,7 +118,35 @@ describe('/channel/messages/v2', () => {
     const notMember = requestAuthRegister('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
     const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
     // channelid valid, authorised user not a member
-    expect(reqChannelMessages(notMember.token, newchannel.channelId, 0)).toStrictEqual({ error: 'error' });
+    const invalid = reqChannelMessages(notMember.token, newchannel.channelId, 0);
+    expect(invalid).toStrictEqual(403);
+  });
+
+  test('Error for invalid dmId', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    // invalid channelid
+    const invalid = reqDmMessages(aMember.token, -999, 0);
+    expect(invalid).toStrictEqual(400);
+  });
+
+  test('Error start is greater than total number of messages in dm', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const uIds = [user1.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    const invalid = reqDmMessages(user.token, dm.dmId, 51);
+    expect(invalid).toStrictEqual(400);
+  });
+
+  test('Error user not a member of dm', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const notMember = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    // channelid valid, authorised user not a member
+    const invalid = reqDmMessages(notMember.token, dm.dmId, 0);
+    expect(invalid).toStrictEqual(403);
   });
 
   // correct return for channelmessages

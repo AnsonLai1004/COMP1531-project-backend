@@ -20,9 +20,6 @@ export {
 function messageSendV2(token: string, channelId: number, message: string) {
   // channel Id does not refer to valid channel Id
   const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'invalid tokenid');
-  }
   if (!isValidChannelId(channelId)) {
     throw HTTPError(400, 'ChannelId does not refer to a valid channel');
   }
@@ -64,9 +61,6 @@ function messageSendV2(token: string, channelId: number, message: string) {
 function messageEditV2(token: string, messageId: number, message: string) {
   // if message length is greater than 1000
   const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'Invalid TokenId');
-  }
   if (message.length > 1000) {
     throw HTTPError(400, 'length of messages is greater than 1000');
   }
@@ -135,10 +129,6 @@ function messageEditV2(token: string, messageId: number, message: string) {
 function messageRemoveV2(token: string, messageId: number) {
   // if message length is less than 1 or greater than 1000
   const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'Invalid tokenId');
-  }
-
   const datastore = getData();
   let chosenChannel = null;
   let chosenMessage: Message = null;
@@ -217,9 +207,6 @@ function messageRemoveV2(token: string, messageId: number) {
 function messageSendDmV2(token: string, dmId: number, message: string) {
   // dm Id does not refer to valid dm Id
   const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'invalid Token');
-  }
   if (!isValidDmId(dmId)) {
     throw HTTPError(400, 'dmId does not refer to valid dmId');
   }
@@ -308,9 +295,6 @@ function dmMessageV1helper(authUserId: number, dmId: number, start: number) {
 
 function dmMessagesV2(token: string, dmId: number, start: number) {
   const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'Invalid token');
-  }
   const result = dmMessageV1helper(tokenId.uId as number, dmId, start);
   return result;
 }

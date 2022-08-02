@@ -8,10 +8,6 @@ import HTTPError from 'http-errors';
 function dmListV2(token: string) {
   // check if token passed in is valid
   const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'Invalid token');
-  }
-
   const data = getData();
   const dms = [];
 
@@ -31,9 +27,6 @@ function dmListV2(token: string) {
 function dmRemoveV2(token: string, dmId: number) {
   // check if token passed in is valid
   const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'Invalid token');
-  }
 
   // check if dmId passed in is valid
   if (!isValidDmId(dmId)) {
@@ -70,53 +63,57 @@ function dmCreateV1(token: string, uIds: number[]) {
   if (uIds.length !== unique.length) {
     return { error: 'error' };
   }
-  //
-  const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    return { error: 'error' };
-  }
-  // create dmId
-  const data = getData();
-  const newId = data.lastDMId + 1;
-  data.lastDMId = newId;
-  // create name:
-  // create array with ownerId and all uIds,
-  const arrAll = uIds.slice();
-  arrAll.push(tokenId.uId);
-  // convert to handlestr
-  const handlestrArr = [];
-  for (const id of arrAll) {
-    for (const user of data.users) {
-      if (id === user.uId) {
-        handlestrArr.push(user.handleStr);
+
+  try {
+    const tokenId = tokenToUId(token);
+
+    // create dmId
+    const data = getData();
+    const newId = data.lastDMId + 1;
+    data.lastDMId = newId;
+    // create name:
+    // create array with ownerId and all uIds,
+    const arrAll = uIds.slice();
+    arrAll.push(tokenId.uId);
+    // convert to handlestr
+    const handlestrArr = [];
+    for (const id of arrAll) {
+      for (const user of data.users) {
+        if (id === user.uId) {
+          handlestrArr.push(user.handleStr);
+        }
       }
     }
+    handlestrArr.sort();
+    const name = handlestrArr.join(', ');
+    const dm = {
+      dmId: newId,
+      name: name,
+      ownerId: tokenId.uId,
+      uIds: uIds,
+      messages: [] as Message[],
+    };
+    data.dms.push(dm);
+    setData(data);
+    return { dmId: dm.dmId };
+  } catch (err) {
+    return { error: 'error' };
   }
-  handlestrArr.sort();
-  const name = handlestrArr.join(', ');
-  const dm = {
-    dmId: newId,
-    name: name,
-    ownerId: tokenId.uId,
-    uIds: uIds,
-    messages: [] as Message[],
-  };
-  data.dms.push(dm);
-  setData(data);
-  return { dmId: dm.dmId };
 }
 
 function dmDetailsV1(token: string, dmId: number) {
-  const tokenId = tokenToUId(token);
-  if (tokenId.error) {
+  try {
+    const tokenId = tokenToUId(token);
+    if (!isValidDmId(dmId)) {
+      return { error: 'error' };
+    }
+    if (!userIsDMmember(tokenId.uId, dmId)) {
+      return { error: 'error' };
+    }
+  } catch (err) {
     return { error: 'error' };
   }
-  if (!isValidDmId(dmId)) {
-    return { error: 'error' };
-  }
-  if (!userIsDMmember(tokenId.uId, dmId)) {
-    return { error: 'error' };
-  }
+
   const data = getData();
   for (const dm of data.dms) {
     if (dm.dmId === dmId) {
@@ -135,10 +132,6 @@ function dmDetailsV1(token: string, dmId: number) {
 function dmListV1(token: string) {
   // check if token passed in is valid
   const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(400, 'Invalid token');
-  }
-
   const data = getData();
   const dms = [];
 
@@ -158,9 +151,6 @@ function dmListV1(token: string) {
 function dmRemoveV1(token: string, dmId: number) {
   // check if token passed in is valid
   const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(400, 'Invalid token');
-  }
 
   // check if dmId passed in is valid
   if (!isValidDmId(dmId)) {
@@ -186,36 +176,36 @@ function dmRemoveV1(token: string, dmId: number) {
 
 function dmLeaveV1(token: string, dmId: number) {
   // check if token passed in is valid
-  const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    return { error: 'error' };
-  }
+  try {
+    const tokenId = tokenToUId(token);
 
-  // check if dmId passed in is valid
-  if (!isValidDmId(dmId)) {
-    return { error: 'error' };
-  }
-
-  // check if user is a member of dm
-  if (!userIsDMmember(tokenId.uId, dmId)) {
-    return { error: 'error' };
-  }
-
-  const data = getData();
-  for (const dm of data.dms) {
-    if (dm.dmId === dmId) {
-      // change ownerId to negative since in our implementation cannot be negative
-      if (dm.ownerId === tokenId.uId) {
-        dm.ownerId = -1;
-      } else { // remove member that is not owner
-        dm.uIds = dm.uIds.filter((uId) => uId !== tokenId.uId);
-      }
-      break;
+    // check if dmId passed in is valid
+    if (!isValidDmId(dmId)) {
+      return { error: 'error' };
     }
-  }
 
-  setData(data);
-  return {};
+    // check if user is a member of dm
+    if (!userIsDMmember(tokenId.uId, dmId)) {
+      return { error: 'error' };
+    }
+
+    const data = getData();
+    for (const dm of data.dms) {
+      if (dm.dmId === dmId) {
+        // change ownerId to negative since in our implementation cannot be negative
+        if (dm.ownerId === tokenId.uId) {
+          dm.ownerId = -1;
+        } else { // remove member that is not owner
+          dm.uIds = dm.uIds.filter((uId) => uId !== tokenId.uId);
+        }
+        break;
+      }
+    }
+    setData(data);
+    return {};
+  } catch (err) {
+    return { error: 'error' };
+  }
 }
 
 /// //////////////////////// Helper Functions ////////////////////////////////

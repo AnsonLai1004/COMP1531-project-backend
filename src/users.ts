@@ -16,10 +16,7 @@ import HTTPError from 'http-errors';
  * @returns
  */
 export function userProfileV3(token: string, uId: number) {
-  const authUser = tokenToUId(token);
-  if ('error' in authUser) {
-    throw HTTPError(403, 'Invalid token!');
-  }
+  tokenToUId(token);
   return userProfileV1(uId);
 }
 
@@ -30,10 +27,7 @@ export function userProfileV3(token: string, uId: number) {
  * @returns
  */
 export function usersAllV2(token: string) {
-  const authUser = tokenToUId(token);
-  if ('error' in authUser) {
-    throw HTTPError(403, 'Invalid token!');
-  }
+  tokenToUId(token);
   const users = [];
   const data = getData();
   for (const user of data.users) {
@@ -59,10 +53,6 @@ export function usersAllV2(token: string) {
  */
 export function userSetNameV2(token: string, nameFirst: string, nameLast: string) {
   const authUser = tokenToUId(token);
-  // check if token is invalid
-  if ('error' in authUser) {
-    throw HTTPError(403, 'Invalid token!');
-  }
   if (nameFirst.length < 1 || nameFirst.length > 50) {
     throw HTTPError(400, 'First name is not between 1 and 50 characters inclusive!');
   }
@@ -89,10 +79,6 @@ export function userSetNameV2(token: string, nameFirst: string, nameLast: string
  */
 export function userSetEmailV2(token: string, email: string) {
   const authUser = tokenToUId(token);
-  // check if token is invalid
-  if ('error' in authUser) {
-    throw HTTPError(403, 'Invalid token!');
-  }
   // check if email is invalid
   if (!isEmail(email)) {
     throw HTTPError(400, 'Invalid email!');
@@ -121,10 +107,6 @@ export function userSetEmailV2(token: string, email: string) {
  */
 export function userSetHandleV2(token: string, handleStr: string) {
   const authUser = tokenToUId(token);
-  // check if token is invalid
-  if ('error' in authUser) {
-    throw HTTPError(403, 'Invalid token!');
-  }
   // check if handle is used by another user
   if (checkUserData(handleStr, 'handleStr', authUser.uId)) {
     throw HTTPError(400, 'Handle already in use!');

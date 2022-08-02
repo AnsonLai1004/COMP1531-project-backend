@@ -84,9 +84,6 @@ function channelInviteV1(authUserId: number, channelId: number, uId: number) {
 
 function channelInviteV3(token: string, channelId: number, uId: number) {
   const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'Invalid token');
-  }
   const result = channelInviteV1(tokenId.uId as number, channelId, uId);
   return result;
 }
@@ -159,9 +156,6 @@ function channelMessagesV1(authUserId: number, channelId: number, start: number)
  */
 function channelMessagesV3(token: string, channelId: number, start: number) {
   const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'Invalid token');
-  }
   const result = channelMessagesV1(tokenId.uId as number, channelId, start);
   return result;
 }
@@ -261,12 +255,13 @@ function channelJoinV1(authUserId: number, channelId: number) {
  * @returns {{name: string, isPublic: boolean, ownerMembers: membersobj[], allMembers: membersobj[]}}
  */
 function channelDetailsV2(token: string, channelId: number) {
-  const tokenId = tokenToUId(token);
-  if (tokenId.error) {
+  try {
+    const tokenId = tokenToUId(token);
+    const result = channelDetailsV1(tokenId.uId as number, channelId);
+    return result;
+  } catch (err) {
     return { error: 'error' };
   }
-  const result = channelDetailsV1(tokenId.uId as number, channelId);
-  return result;
 }
 
 /**
@@ -276,12 +271,13 @@ function channelDetailsV2(token: string, channelId: number) {
  * @returns {{}}
  */
 function channelJoinV2(token: string, channelId: number) {
-  const tokenId = tokenToUId(token);
-  if (tokenId.error) {
+  try {
+    const tokenId = tokenToUId(token);
+    const result = channelJoinV1(tokenId.uId as number, channelId);
+    return result;
+  } catch (err) {
     return { error: 'error' };
   }
-  const result = channelJoinV1(tokenId.uId as number, channelId);
-  return result;
 }
 
 // channel /leave /addowner /removeowner V1
@@ -293,23 +289,27 @@ function channelJoinV2(token: string, channelId: number) {
  * @returns
  */
 function channelLeaveV1(token: string, channelId: number) {
-  const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    return { error: 'error' };
-  }
+  try {
+    const tokenId = tokenToUId(token);
+    if (tokenId.error) {
+      return { error: 'error' };
+    }
 
-  const data = getData();
-  for (const channel of data.channels) {
-    if (channel.channelId === channelId) {
-      for (let i = 0; i < channel.allMembers.length; i++) {
-        if (channel.allMembers[i] === tokenId.uId) {
-          channel.allMembers.splice(i, 1);
-          return {};
+    const data = getData();
+    for (const channel of data.channels) {
+      if (channel.channelId === channelId) {
+        for (let i = 0; i < channel.allMembers.length; i++) {
+          if (channel.allMembers[i] === tokenId.uId) {
+            channel.allMembers.splice(i, 1);
+            return {};
+          }
         }
       }
     }
+    return { error: 'error' };
+  } catch (err) {
+    return { error: 'error' };
   }
-  return { error: 'error' };
 }
 
 /**
@@ -326,11 +326,15 @@ function channelAddownerV1(token: string, channelId: number, uId: number) {
     return { error: 'error' };
   }
   // auth user is owner?
-  const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    return { error: 'error' };
-  }
-  if (!userIsOwner(tokenId.uId as number, channelId)) {
+  try {
+    const tokenId = tokenToUId(token);
+    if (tokenId.error) {
+      return { error: 'error' };
+    }
+    if (!userIsOwner(tokenId.uId as number, channelId)) {
+      return { error: 'error' };
+    }
+  } catch (err) {
     return { error: 'error' };
   }
   // uId valid?
@@ -368,12 +372,16 @@ function channelRemoveownerV1(token: string, channelId: number, uId: number) {
   if (!isValidChannelId(channelId)) {
     return { error: 'error' };
   }
+  try {
   // auth user is owner?
-  const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    return { error: 'error' };
-  }
-  if (!userIsOwner(tokenId.uId as number, channelId)) {
+    const tokenId = tokenToUId(token);
+    if (tokenId.error) {
+      return { error: 'error' };
+    }
+    if (!userIsOwner(tokenId.uId as number, channelId)) {
+      return { error: 'error' };
+    }
+  } catch (err) {
     return { error: 'error' };
   }
   // uId valid?

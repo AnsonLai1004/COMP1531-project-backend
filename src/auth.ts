@@ -165,6 +165,7 @@ type tokenToUIdReturn = {
 
 /**
  * Given a token, return authUserId
+ * Throws a 403 error if the token is invalid
  * @param {string} token
  * @returns {tokenToUIdReturn}
  */
@@ -175,7 +176,7 @@ export function tokenToUId(token: string): tokenToUIdReturn {
       return { uId: element.uId };
     }
   }
-  return { error: 'error' };
+  throw HTTPError(403, 'Invalid token!');
 }
 
 /**

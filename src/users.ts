@@ -9,6 +9,17 @@ import isEmail from 'validator/lib/isEmail.js';
 
 const errorObject = { error: 'error' };
 
+interface userProfileV1Return {
+  user?: {
+    uId: number,
+    email: string,
+    nameFirst: string,
+    nameLast: string,
+    handleStr: string
+  };
+  error?: string;
+}
+
 /**
  * Function which, when given a valid token, calls userProfileV1
  * with the argument uId
@@ -16,7 +27,7 @@ const errorObject = { error: 'error' };
  * @param uId
  * @returns
  */
-export function userProfileV2(token: string, uId: number) {
+export function userProfileV2(token: string, uId: number): userProfileV1Return {
   const authUser = tokenToUId(token);
   if ('error' in authUser) {
     return errorObject;
@@ -138,17 +149,6 @@ export function userSetHandleV1(token: string, handleStr: string) {
       return {};
     }
   }
-}
-
-interface userProfileV1Return {
-  user?: {
-    uId: number,
-    email: string,
-    nameFirst: string,
-    nameLast: string,
-    handleStr: string
-  };
-  error?: string;
 }
 
 /**

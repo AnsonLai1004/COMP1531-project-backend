@@ -177,35 +177,41 @@ export function reqDmLeaveV3(token: string, dmId: number) {
 export function requestAuthLogin(email: string, password: string) {
   const res = request(
     'POST',
-    `${url}:${port}` + '/auth/login/v2',
+    `${url}:${port}` + '/auth/login/v3',
     {
       json: {
         email, password
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestAuthRegister(email: string, password: string, nameFirst: string, nameLast: string) {
   const res = request(
     'POST',
-    `${url}:${port}` + '/auth/register/v2',
+    `${url}:${port}` + '/auth/register/v3',
     {
       json: {
         email, password, nameFirst, nameLast
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestAuthLogout(token: string) {
   const res = request(
     'POST',
-      `${url}:${port}` + '/auth/logout/v1',
+      `${url}:${port}` + '/auth/logout/v2',
       {
-        json: {
+        headers: {
           token
         }
       }

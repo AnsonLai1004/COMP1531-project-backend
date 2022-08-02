@@ -7,7 +7,7 @@ import errorHandler from 'middleware-http-errors';
 
 import { channelInviteV3, channelMessagesV3, channelDetailsV3, channelJoinV3, channelLeaveV2, channelAddownerV2, channelRemoveownerV2 } from './channel';
 
-import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
+import { authRegisterV3, authLoginV3, authLogoutV2 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
 import { messagesSearch, messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2 } from './message';
 import { standupSendV1, standupActiveV1, standupStartV1 } from './standups';
@@ -125,19 +125,19 @@ app.get('/channels/listall/v3', (req, res, next) => {
 /// /////////////////////////////////////////////////////////////////////////////
 
 // auth routes
-app.post('/auth/login/v2', (req, res) => {
+app.post('/auth/login/v3', (req, res) => {
   const { email, password } = req.body;
-  res.json(authLoginV2(email, password));
+  res.json(authLoginV3(email, password));
 });
 
-app.post('/auth/register/v2', (req, res) => {
+app.post('/auth/register/v3', (req, res) => {
   const { email, password, nameFirst, nameLast } = req.body;
-  res.json(authRegisterV2(email, password, nameFirst, nameLast));
+  res.json(authRegisterV3(email, password, nameFirst, nameLast));
 });
 
-app.post('/auth/logout/v1', (req, res) => {
-  const { token } = req.body;
-  res.json(authLogoutV1(token));
+app.post('/auth/logout/v2', (req, res) => {
+  const token = req.headers.token as string;
+  res.json(authLogoutV2(token));
 });
 
 // channels routes

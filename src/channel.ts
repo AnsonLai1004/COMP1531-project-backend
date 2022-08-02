@@ -394,7 +394,7 @@ function channelRemoveownerV2(token: string, channelId: number, uId: number) {
     }
   }
 }
-// idk
+
 /************************************************************************
  * Helper function
  * return false if authUserId is not valid

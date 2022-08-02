@@ -192,7 +192,7 @@ describe('/channel/messages/v3 and dm/messages/v3', () => {
   });
 });
 
-// channelDetails&Join V2 tests
+// channelDetails&Join V3 tests
 describe('channel/details/v3', () => {
   test('invalid token', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
@@ -297,7 +297,7 @@ describe('channel/join/v3', () => {
 });
 
 // channel /leave /addowner /removeowner V1 tests
-describe('channel/leave/v1', () => {
+describe('channel/leave/v2', () => {
   test('invalid token', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const channel = requestChannelsCreate(user.token, 'BOOST', true);
@@ -346,7 +346,7 @@ describe('channel/leave/v1', () => {
   });
 });
 
-describe('channel/addowner/v1', () => {
+describe('channel/addowner/v2', () => {
   test('invalid token', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const user2 = requestAuthRegister('valid@gmail.com', '123abc!@#', 'Bob', 'Renzella');
@@ -429,7 +429,7 @@ describe('channel/addowner/v1', () => {
   });
 });
 
-describe('channel/removeowner/v1', () => {
+describe('channel/removeowner/v2', () => {
   test('invalid token', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const user2 = requestAuthRegister('valid@gmail.com', '123abc!@#', 'Bob', 'Renzella');

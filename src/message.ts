@@ -2,7 +2,6 @@ import { getData, setData } from './data';
 import { Message } from './interfaces';
 import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
-import { channelsCreateV2 } from './channels';
 export {
   messageSendV2, messageRemoveV2, messageEditV2, messageSendDmV2,
   dmMessagesV2
@@ -316,6 +315,13 @@ function dmMessagesV2(token: string, dmId: number, start: number) {
   return result;
 }
 
+/**
+ * Given a query string, return a collection of messages in all of the channels/DMs 
+ * that the user has joined that contain the query (case-insensitive). \
+ * No expected order for these messages.
+ * @param {string} queryStr
+ * @returns { messages: Array of Messages}
+*/
 function messagesSearch(queryStr: string) {
   if (queryStr.length < 1 || queryStr.length > 1000) {
     throw HTTPError(400, "length of queryStr less than 1 or more than 1000")

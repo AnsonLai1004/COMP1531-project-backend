@@ -6,66 +6,7 @@
 import request from 'sync-request';
 import { port, url } from './config.json';
 
-/// //////////////////////////// ITERATION 3 ////////////////////////////////////
-export function requestStandupStartV3(token: string, channelId: number, length: number) {
-  const res = request(
-    'POST',
-    `${url}:${port}` + '/standup/start/v1',
-    {
-      json: {
-        channelId,
-        length
-      },
-      headers: {
-        token: token
-      }
-    }
-  );
-  if (res.statusCode === 200) {
-    return JSON.parse(res.body as string);
-  }
-  return res.statusCode;
-}
-
-export function requestStandupActiveV3(token: string, channelId: number) {
-  const res = request(
-    'GET',
-    `${url}:${port}` + '/standup/active/v1',
-    {
-      qs: {
-        channelId
-      },
-      headers: {
-        token: token
-      }
-    }
-  );
-  if (res.statusCode === 200) {
-    return JSON.parse(res.body as string);
-  }
-  return res.statusCode;
-}
-
-export function requestStandupSendV3(token: string, channelId: number, message: string) {
-  const res = request(
-    'POST',
-    `${url}:${port}` + '/standup/send/v1',
-    {
-      json: {
-        channelId,
-        message
-      },
-      headers: {
-        token: token
-      }
-    }
-  );
-  if (res.statusCode === 200) {
-    return JSON.parse(res.body as string);
-  }
-  return res.statusCode;
-}
-
+/////////////////////////////// ITERATION 3 ////////////////////////////////////
 export function requestChannelsCreateV3(token: string, name: string, isPublic: boolean) {
   const res = request(
     'POST',
@@ -152,25 +93,6 @@ export function reqDmRemoveV3(token: string, dmId: number) {
   }
   return res.statusCode;
 }
-
-export function reqDmLeaveV3(token: string, dmId: number) {
-  const res = request(
-    'POST',
-    `${url}:${port}` + '/dm/leave/v2',
-    {
-      json: {
-        dmId,
-      },
-      headers: {
-        token: token
-      }
-    }
-  );
-  if (res.statusCode === 200) {
-    return JSON.parse(res.body as string);
-  }
-  return res.statusCode;
-}
 /// /////////////////////////////////////////////////////////////////////////////
 
 // auth
@@ -235,10 +157,8 @@ export function reqChannelDetails(token: string, channelId: number) {
     `${url}:${port}` + '/channel/details/v3',
     {
       qs: {
+        token,
         channelId,
-      },
-      headers: {
-        token: token
       }
     }
   );
@@ -255,10 +175,8 @@ export function reqChannelJoin(token: string, channelId: number) {
     `${url}:${port}` + '/channel/join/v3',
     {
       json: {
+        token,
         channelId,
-      },
-      headers: {
-        token: token
       }
     }
   );
@@ -274,11 +192,9 @@ export function reqChannelInvite(token: string, channelId: number, uId: number) 
     `${url}:${port}` + '/channel/invite/v3',
     {
       json: {
+        token,
         channelId,
         uId,
-      },
-      headers: {
-        token: token
       }
     });
   if (res.statusCode === 200) {
@@ -296,9 +212,6 @@ export function reqChannelLeave(token: string, channelId: number) {
         json: {
           token,
           channelId,
-        },
-        headers: {
-          token: token
         }
       }
 
@@ -315,11 +228,9 @@ export function reqChannelMessages(token: string, channelId: number, start: numb
     `${url}:${port}` + '/channel/messages/v3',
     {
       qs: {
+        token,
         channelId,
         start,
-      },
-      headers: {
-        token: token
       }
     }
   );
@@ -408,11 +319,9 @@ export function reqMessageSend(token: string, channelId: number, message: string
     `${url}:${port}` + '/message/send/v2',
     {
       json: {
+        token,
         channelId,
         message
-      },
-      headers: {
-        token: token
       }
     }
   );
@@ -429,11 +338,9 @@ export function reqMessageEdit(token: string, messageId: number, message: string
     `${url}:${port}` + '/message/edit/v2',
     {
       json: {
+        token,
         messageId,
         message,
-      },
-      headers: {
-        token: token
       }
     }
   );
@@ -450,10 +357,8 @@ export function reqMessageRemove(token: string, messageId: number) {
     `${url}:${port}` + '/message/remove/v2',
     {
       qs: {
+        token,
         messageId,
-      },
-      headers: {
-        token: token
       }
     }
   );
@@ -470,11 +375,9 @@ export function reqSendMessageDm(token: string, dmId: number, message: string) {
     `${url}:${port}` + '/message/senddm/v2',
     {
       json: {
+        token,
         dmId,
         message,
-      },
-      headers: {
-        token: token
       }
     }
   );
@@ -491,11 +394,9 @@ export function reqDmMessages(token: string, dmId: number, start: number) {
     `${url}:${port}` + '/dm/messages/v2',
     {
       qs: {
+        token,
         dmId,
         start,
-      },
-      headers: {
-        token: token
       }
     }
   );
@@ -606,26 +507,6 @@ export function requestUserSetHandle(token: string, handleStr: string) {
           handleStr
         }
       }
-  );
-  if (res.statusCode === 200) {
-    return JSON.parse(res.getBody() as string);
-  }
-  return res.statusCode;
-}
-
-// search route
-export function reqMessagesSearch(token: string, queryStr: string) {
-  const res = request(
-    'GET',
-    `${url}:${port}` + '/search/v1',
-    {
-      qs: {
-        queryStr
-      },
-      headers: {
-        token: token
-      }
-    }
   );
   if (res.statusCode === 200) {
     return JSON.parse(res.getBody() as string);

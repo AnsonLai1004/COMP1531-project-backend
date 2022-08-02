@@ -66,10 +66,7 @@ export function requestClear() {
     `${url}:${port}` + '/clear/v1',
     {}
   );
-  return {
-    body: JSON.parse(res.getBody() as string),
-    statusCode: res.statusCode
-  };
+  return JSON.parse(res.getBody() as string);
 }
 
 // channel functions

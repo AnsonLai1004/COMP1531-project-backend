@@ -17,12 +17,9 @@ export function requestAuthLogin(email: string, password: string) {
     }
   );
   if (res.statusCode === 200) {
-    return {
-      body: JSON.parse(res.getBody() as string),
-      statusCode: res.statusCode
-    };
+    return JSON.parse(res.getBody() as string);
   }
-  return { statusCode: res.statusCode };
+  return res.statusCode;
 }
 
 export function requestAuthRegister(email: string, password: string, nameFirst: string, nameLast: string) {
@@ -36,12 +33,9 @@ export function requestAuthRegister(email: string, password: string, nameFirst: 
     }
   );
   if (res.statusCode === 200) {
-    return {
-      body: JSON.parse(res.getBody() as string),
-      statusCode: res.statusCode
-    };
+    return JSON.parse(res.getBody() as string);
   }
-  return { statusCode: res.statusCode };
+  return res.statusCode;
 }
 
 export function requestAuthLogout(token: string) {
@@ -54,10 +48,7 @@ export function requestAuthLogout(token: string) {
         }
       }
   );
-  return {
-    body: JSON.parse(res.getBody() as string),
-    statusCode: res.statusCode
-  };
+  return JSON.parse(res.getBody() as string);
 }
 
 export function requestClear() {
@@ -315,12 +306,9 @@ export function requestUserProfile(token: string, uId: number) {
     }
   );
   if (res.statusCode === 200) {
-    return {
-      body: JSON.parse(res.getBody() as string),
-      statusCode: res.statusCode
-    };
+    return JSON.parse(res.getBody() as string);
   }
-  return { statusCode: res.statusCode };
+  return res.statusCode;
 }
 
 // message/edit/v1
@@ -350,12 +338,9 @@ export function requestUsersAll(token: string) {
     }
   );
   if (res.statusCode === 200) {
-    return {
-      body: JSON.parse(res.getBody() as string),
-      statusCode: res.statusCode
-    };
+    return JSON.parse(res.getBody() as string);
   }
-  return { statusCode: res.statusCode };
+  return res.statusCode;
 }
 
 // /message/remove/v1
@@ -387,12 +372,9 @@ export function requestUserSetName(token: string, nameFirst: string, nameLast: s
       }
   );
   if (res.statusCode === 200) {
-    return {
-      body: JSON.parse(res.getBody() as string),
-      statusCode: res.statusCode
-    };
+    return JSON.parse(res.getBody() as string);
   }
-  return { statusCode: res.statusCode };
+  return res.statusCode;
 }
 
 export function requestUserSetEmail(token: string, email: string) {
@@ -409,12 +391,9 @@ export function requestUserSetEmail(token: string, email: string) {
       }
   );
   if (res.statusCode === 200) {
-    return {
-      body: JSON.parse(res.getBody() as string),
-      statusCode: res.statusCode
-    };
+    return JSON.parse(res.getBody() as string);
   }
-  return { statusCode: res.statusCode };
+  return res.statusCode;
 }
 
 export function requestUserSetHandle(token: string, handleStr: string) {
@@ -431,12 +410,9 @@ export function requestUserSetHandle(token: string, handleStr: string) {
       }
   );
   if (res.statusCode === 200) {
-    return {
-      body: JSON.parse(res.getBody() as string),
-      statusCode: res.statusCode
-    };
+    return JSON.parse(res.getBody() as string);
   }
-  return { statusCode: res.statusCode };
+  return res.statusCode;
 }
 
 // message/senddm/v1

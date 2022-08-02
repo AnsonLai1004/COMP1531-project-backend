@@ -11,7 +11,7 @@ test('clearV1 test: can reuse email', () => {
     authUserId: expect.any(Number)
   });
   const userB = requestAuthRegister('hayhay123@gmail.com', '8743b52063cd84097a65d1633f5c74f5', 'Hayden', 'Smith');
-  expect(userB).toStrictEqual({ error: 'error' });
+  expect(userB).toStrictEqual(400);
   requestClear();
   const userC = requestAuthRegister('hayhay123@gmail.com', '8743b52063cd84097a65d1633f5c74f5', 'Hayden', 'Smith');
   expect(userC).toStrictEqual({
@@ -41,6 +41,6 @@ test('clearV1 test: viewing details', () => {
     ],
   });
   requestClear();
-  expect(requestUserProfile(userA.token, userA.authUserId)).toMatchObject({ error: 'error' });
-  expect(requestChannelsList(userA.token)).toMatchObject({ error: 'error' });
+  expect(requestUserProfile(userA.token, userA.authUserId)).toEqual(403);
+  expect(requestChannelsList(userA.token)).toEqual(403);
 });

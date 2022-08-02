@@ -301,9 +301,6 @@ function dmMessagesV2(token: string, dmId: number, start: number) {
 
 function messagesSearch(token: string, queryStr: string) {
   const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'Invalid token');
-  }
   if (queryStr.length < 1 || queryStr.length > 1000) {
     throw HTTPError(400, queryStr);
   }

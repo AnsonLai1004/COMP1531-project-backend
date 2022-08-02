@@ -180,6 +180,22 @@ export function tokenToUId(token: string): tokenToUIdReturn {
 }
 
 /**
+ * Given a token, return authUserId
+ * Returns an error object if the token is invalid
+ * @param {string} token
+ * @returns {tokenToUIdReturn}
+ */
+ export function tokenToUIdNonError(token: string): tokenToUIdReturn {
+  const data = getData();
+  for (const element of data.tokens) {
+    if (element.token === token) {
+      return { uId: element.uId };
+    }
+  }
+  return { error: 'error' };
+}
+
+/**
  * A function which generates a unique user handle based on
  * first name and last name concatenated, casted to lowercase,
  * non-alphanumeric characters removed and truncated at 20 characters.

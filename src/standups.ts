@@ -2,15 +2,12 @@ import HTTPError from 'http-errors';
 import { getData, setData } from './data';
 import { userIsMember, isValidChannelId } from './channel';
 import { tokenToUId } from './auth';
-import { userProfileV2 } from './users';
+import { userProfileV3 } from './users';
 import { messageSendV2 } from './message';
 
 export function standupStartV1(token: string, channelId: number, length: number) {
   // check if token is valid
   const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'Invalid token');
-  }
   // check if channelId is valid
   if (!isValidChannelId(channelId)) {
     throw HTTPError(400, 'Invalid channel');
@@ -67,9 +64,6 @@ function standupEnd(token: string, channelId: number) {
 export function standupSendV1(token: string, channelId: number, message: string) {
   // check if token is valid
   const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'Invalid token');
-  }
   // check if channelId is valid
   if (!isValidChannelId(channelId)) {
     throw HTTPError(400, 'Invalid channel');
@@ -89,7 +83,7 @@ export function standupSendV1(token: string, channelId: number, message: string)
   }
 
   const data = getData();
-  const handleStr = userProfileV2(token, tokenId.uId).user.handleStr;
+  const handleStr = userProfileV3(token, tokenId.uId).user.handleStr;
 
   for (const channel of data.channels) {
     if (channel.channelId === channelId) {
@@ -104,9 +98,6 @@ export function standupSendV1(token: string, channelId: number, message: string)
 export function standupActiveV1(token: string, channelId: number) {
   // check if token is valid
   const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'Invalid token');
-  }
   // check if channelId is valid
   if (!isValidChannelId(channelId)) {
     throw HTTPError(400, 'Invalid channel');

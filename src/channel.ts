@@ -6,7 +6,7 @@
 import { getData, setData } from './data';
 import { userProfileV1 } from './users';
 import { Message } from './interfaces';
-import { tokenToUId } from './auth';
+import { tokenToUIdNonError } from './auth';
 import HTTPError from 'http-errors';
 export {
   channelLeaveV2, channelAddownerV2, channelRemoveownerV2,
@@ -83,7 +83,10 @@ function channelInviteV1(authUserId: number, channelId: number, uId: number) {
 }
 
 function channelInviteV3(token: string, channelId: number, uId: number) {
-  const tokenId = tokenToUId(token);
+  const tokenId = tokenToUIdNonError(token); 
+  if ('error' in tokenId) {
+    throw HTTPError(403, 'invalid token!');
+  }
   const result = channelInviteV1(tokenId.uId as number, channelId, uId);
   return result;
 }
@@ -155,7 +158,10 @@ function channelMessagesV1(authUserId: number, channelId: number, start: number)
  * @returns {{messages: Arr object of type message, start:  number, end:  number}}
  */
 function channelMessagesV3(token: string, channelId: number, start: number) {
-  const tokenId = tokenToUId(token);
+  const tokenId = tokenToUIdNonError(token); 
+  if ('error' in tokenId) {
+    throw HTTPError(403, 'invalid token!');
+  }
   const result = channelMessagesV1(tokenId.uId as number, channelId, start);
   return result;
 }
@@ -247,7 +253,10 @@ function channelJoinV1(authUserId: number, channelId: number) {
  * @returns {{name: string, isPublic: boolean, ownerMembers: membersobj[], allMembers: membersobj[]}}
  */
 function channelDetailsV3(token: string, channelId: number) {
-  const tokenId = tokenToUId(token);
+  const tokenId = tokenToUIdNonError(token); 
+  if ('error' in tokenId) {
+    throw HTTPError(403, 'invalid token!');
+  }
   const result = channelDetailsV1(tokenId.uId as number, channelId);
   return result;
 }
@@ -259,7 +268,10 @@ function channelDetailsV3(token: string, channelId: number) {
  * @returns {{}}
  */
 function channelJoinV3(token: string, channelId: number) {
-  const tokenId = tokenToUId(token);
+  const tokenId = tokenToUIdNonError(token); 
+  if ('error' in tokenId) {
+    throw HTTPError(403, 'invalid token!');
+  }
   const result = channelJoinV1(tokenId.uId as number, channelId);
   return result;
 }
@@ -274,9 +286,9 @@ function channelJoinV3(token: string, channelId: number) {
  */
 // FIXME: standup error???
 function channelLeaveV2(token: string, channelId: number) {
-  const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'Invalid token');
+  const tokenId = tokenToUIdNonError(token); 
+  if ('error' in tokenId) {
+    throw HTTPError(403, 'invalid token!');
   }
 
   const data = getData();
@@ -288,6 +300,7 @@ function channelLeaveV2(token: string, channelId: number) {
           return {};
         }
       }
+      throw HTTPError(403, 'The authorised user is not a member of the channel')
     }
   }
   throw HTTPError(400, 'Invalid channel');
@@ -307,7 +320,10 @@ function channelAddownerV2(token: string, channelId: number, uId: number) {
     throw HTTPError(400, 'Invalid channel');
   }
   // auth user is owner?
-  const tokenId = tokenToUId(token);
+  const tokenId = tokenToUIdNonError(token); 
+  if ('error' in tokenId) {
+    throw HTTPError(403, 'invalid token!');
+  }
   if (!userIsOwner(tokenId.uId as number, channelId)) {
     throw HTTPError(403, 'user not an owner');
   }
@@ -347,9 +363,9 @@ function channelRemoveownerV2(token: string, channelId: number, uId: number) {
     throw HTTPError(400, 'Invalid channel');
   }
   // auth user is owner?
-  const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'Invalid token');
+  const tokenId = tokenToUIdNonError(token); 
+  if ('error' in tokenId) {
+    throw HTTPError(403, 'invalid token!');
   }
   if (!userIsOwner(tokenId.uId as number, channelId)) {
     throw HTTPError(400, 'user not an owner');

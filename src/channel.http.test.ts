@@ -325,7 +325,7 @@ describe('channel/leave/v2', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const notMember = requestAuthRegister('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
     const channel = requestChannelsCreateV3(user.token, 'teamA', true);
-    expect(reqChannelLeave(notMember.token, channel.channelId)).toStrictEqual(400);
+    expect(reqChannelLeave(notMember.token, channel.channelId)).toStrictEqual(403);
   });
   test('correct return', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');

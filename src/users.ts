@@ -101,7 +101,7 @@ export function userSetEmailV2(token: string, email: string) {
   const authUser = tokenToUId(token);
   if ('error' in authUser) {
     throw HTTPError(403, 'Invalid token!');
-  }0
+  }
   // check if email is invalid
   if (!isEmail(email)) {
     throw HTTPError(400, 'Invalid email!');

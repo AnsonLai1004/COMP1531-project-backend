@@ -1,4 +1,4 @@
-import { reqDmListV3, reqDmRemoveV3, reqDmLeave, reqDmDetails, reqDmCreate, requestClear, requestAuthRegister } from './requests';
+import { reqDmListV3, reqDmRemoveV3, reqDmLeaveV3, reqDmDetails, reqDmCreate, requestClear, requestAuthRegister } from './requests';
 
 beforeEach(() => {
   requestClear();
@@ -256,14 +256,14 @@ describe('dm/remove/v2', () => {
   });
 });
 
-describe('dm/leave/v1', () => {
+describe('dm/leave/v2', () => {
   test('invalid token + dmId', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const dm = reqDmCreate(user.token, []);
 
-    expect(reqDmLeave('invalid token', dm.dmId)).toStrictEqual({ error: 'error' });
-    expect(reqDmLeave(user.token, -1)).toStrictEqual({ error: 'error' });
-    expect(reqDmLeave('invalid token', -1)).toStrictEqual({ error: 'error' });
+    expect(reqDmLeaveV3('invalid token', dm.dmId)).toStrictEqual(400);
+    expect(reqDmLeaveV3(user.token, -1)).toStrictEqual(400);
+    expect(reqDmLeaveV3('invalid token', -1)).toStrictEqual(400);
   });
 
   test('user not member of DM', () => {
@@ -271,9 +271,8 @@ describe('dm/leave/v1', () => {
     const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
     const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
     const dm = reqDmCreate(user.token, [user1.authUserId]);
-
-    expect(reqDmLeave(user2.token, dm.dmId)).toStrictEqual({ error: 'error' });
-    expect(reqDmLeave(user1.token, -1)).toStrictEqual({ error: 'error' });
+    expect(reqDmLeaveV3(user2.token, dm.dmId)).toStrictEqual(403);
+    expect(reqDmLeaveV3(user1.token, -1)).toStrictEqual(400);
   });
 
   test('correct return', () => {
@@ -322,9 +321,9 @@ describe('dm/leave/v1', () => {
     });
 
     // OWNER LEAVE
-    expect(reqDmLeave(user.token, dm.dmId)).toStrictEqual({});
+    expect(reqDmLeaveV3(user.token, dm.dmId)).toStrictEqual({});
     // MEMBER LEAVE
-    expect(reqDmLeave(user.token, dm1.dmId)).toStrictEqual({});
+    expect(reqDmLeaveV3(user.token, dm1.dmId)).toStrictEqual({});
 
     // AFTER
     expect(reqDmListV3(user.token)).toStrictEqual({ dms: [] });

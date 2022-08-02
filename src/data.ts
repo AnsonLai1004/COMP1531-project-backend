@@ -15,7 +15,7 @@ let data = {
   lastChannelId: 0,
   lastDMId: 0,
   lastMessageId: 0,
-  lastToken: 0
+  lastToken: 0,
 };
 
 export interface DataStore {

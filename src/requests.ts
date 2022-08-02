@@ -7,6 +7,65 @@ import request from 'sync-request';
 import { port, url } from './config.json';
 
 /// //////////////////////////// ITERATION 3 ////////////////////////////////////
+export function requestStandupStartV3(token: string, channelId: number, length: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/standup/start/v1',
+    {
+      json: {
+        channelId,
+        length
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
+
+export function requestStandupActiveV3(token: string, channelId: number) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/standup/active/v1',
+    {
+      qs: {
+        channelId
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
+
+export function requestStandupSendV3(token: string, channelId: number, message: string) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/standup/send/v1',
+    {
+      json: {
+        channelId,
+        message
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
+
 export function requestChannelsCreateV3(token: string, name: string, isPublic: boolean) {
   const res = request(
     'POST',
@@ -81,6 +140,25 @@ export function reqDmRemoveV3(token: string, dmId: number) {
     `${url}:${port}` + '/dm/remove/v2',
     {
       qs: {
+        dmId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
+
+export function reqDmLeaveV3(token: string, dmId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/dm/leave/v2',
+    {
+      json: {
         dmId,
       },
       headers: {

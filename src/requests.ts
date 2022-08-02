@@ -93,7 +93,27 @@ export function reqDmRemoveV3(token: string, dmId: number) {
   }
   return res.statusCode;
 }
-/// /////////////////////////////////////////////////////////////////////////////
+
+export function reqDmLeaveV3(token: string, dmId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/dm/leave/v2',
+    {
+      json: {
+        dmId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
+
+////////////////////////////////////////////////////////////////////////////////
 
 // auth
 export function requestAuthLogin(email: string, password: string) {
@@ -406,21 +426,6 @@ export function reqDmMessages(token: string, dmId: number, start: number) {
   return res.statusCode;
 }
 /// ///////////////////////////////////////////////
-
-export function reqDmLeave(token: string, dmId: number) {
-  const res = request(
-    'POST',
-    `${url}:${port}` + '/dm/leave/v1',
-    {
-      json: {
-        token,
-        dmId,
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
 // user & users
 export function requestUserProfile(token: string, uId: number) {
   const res = request(
@@ -507,6 +512,26 @@ export function requestUserSetHandle(token: string, handleStr: string) {
           handleStr
         }
       }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+// search route
+export function reqMessagesSearch(token: string, queryStr: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/search/v1',
+    {
+      qs: {
+        queryStr
+      },
+      headers: {
+        token: token
+      }
+    }
   );
   if (res.statusCode === 200) {
     return JSON.parse(res.getBody() as string);

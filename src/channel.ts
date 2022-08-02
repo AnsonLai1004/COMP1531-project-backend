@@ -2,6 +2,7 @@
  * implementation of channel related functions
  * @module channel
 **/
+// delete channels iter 2 later on
 import { getData, setData } from './data';
 import { userProfileV1 } from './users';
 import { Message } from './interfaces';

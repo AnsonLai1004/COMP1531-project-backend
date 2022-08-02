@@ -1,14 +1,15 @@
 import { getData, setData } from './data';
 import { Message } from './interfaces';
-import { tokenToUId, membersobjCreate, isValidUserId } from './channel';
+import { membersobjCreate, isValidUserId } from './channel';
+import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
-export { dmLeaveV2 as dmLeaveV1, dmRemoveV2, dmListV2, dmCreateV2, dmDetailsV2 };
+export { dmLeaveV1, dmRemoveV2, dmListV2, dmCreateV2, dmDetailsV2 };
 
 function dmCreateV2(token: string, uIds: number[]) {
   // any invalid uId in uIds
   for (const id of uIds) {
     if (!isValidUserId(id)) {
-      throw HTTPError(403, 'Invalid uId');
+      throw HTTPError(400, 'Invalid uId');
     }
   }
   // any duplicate uId's in uIds
@@ -18,9 +19,6 @@ function dmCreateV2(token: string, uIds: number[]) {
   }
   //
   const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(400, 'Invalid token');
-  }
   // create dmId
   const data = getData();
   const newId = data.lastDMId + 1;
@@ -120,7 +118,7 @@ function dmRemoveV2(token: string, dmId: number) {
   return {};
 }
 
-function dmLeaveV2(token: string, dmId: number) {
+function dmLeaveV1(token: string, dmId: number) {
   // check if token passed in is valid
   try {
     const tokenId = tokenToUId(token);

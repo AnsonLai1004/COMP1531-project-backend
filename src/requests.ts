@@ -385,33 +385,6 @@ export function reqDmMessages(token: string, dmId: number, start: number) {
 }
 /// ///////////////////////////////////////////////
 
-export function reqDmList(token: string) {
-  const res = request(
-    'GET',
-    `${url}:${port}` + '/dm/list/v1',
-    {
-      qs: {
-        token,
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
-export function reqDmRemove(token: string, dmId: number) {
-  const res = request(
-    'DELETE',
-    `${url}:${port}` + '/dm/remove/v1',
-    {
-      qs: {
-        token,
-        dmId,
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
 export function reqDmLeave(token: string, dmId: number) {
   const res = request(
     'POST',

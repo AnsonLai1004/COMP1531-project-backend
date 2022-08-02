@@ -34,10 +34,6 @@ export function authRegisterV3(email: string, password: string, nameFirst: strin
  */
 export function authLoginV3(email: string, password: string) {
   const login = authLoginV1(email, password);
-  if ('error' in login) {
-    throw HTTPError(403, 'Invalid token!');
-  }
-
   const token = generateToken(login.authUserId);
   return {
     token: token,

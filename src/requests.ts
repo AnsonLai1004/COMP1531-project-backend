@@ -151,8 +151,10 @@ export function reqChannelDetails(token: string, channelId: number) {
     `${url}:${port}` + '/channel/details/v3',
     {
       qs: {
-        token,
         channelId,
+      },
+      headers: {
+        token: token
       }
     }
   );
@@ -169,8 +171,10 @@ export function reqChannelJoin(token: string, channelId: number) {
     `${url}:${port}` + '/channel/join/v3',
     {
       json: {
-        token,
         channelId,
+      },
+      headers: {
+        token: token
       }
     }
   );
@@ -186,9 +190,11 @@ export function reqChannelInvite(token: string, channelId: number, uId: number) 
     `${url}:${port}` + '/channel/invite/v3',
     {
       json: {
-        token,
         channelId,
         uId,
+      },
+      headers: {
+        token: token
       }
     });
   if (res.statusCode === 200) {
@@ -204,8 +210,10 @@ export function reqChannelLeave(token: string, channelId: number) {
       `${url}:${port}` + '/channel/leave/v2',
       {
         json: {
-          token,
           channelId,
+        },
+        headers: {
+          token: token
         }
       }
 
@@ -222,9 +230,11 @@ export function reqChannelMessages(token: string, channelId: number, start: numb
     `${url}:${port}` + '/channel/messages/v3',
     {
       qs: {
-        token,
         channelId,
         start,
+      },
+      headers: {
+        token: token
       }
     }
   );
@@ -354,9 +364,11 @@ export function reqMessageSend(token: string, channelId: number, message: string
     `${url}:${port}` + '/message/send/v2',
     {
       json: {
-        token,
         channelId,
         message
+      },
+      headers: {
+        token: token
       }
     }
   );
@@ -373,9 +385,11 @@ export function reqMessageEdit(token: string, messageId: number, message: string
     `${url}:${port}` + '/message/edit/v2',
     {
       json: {
-        token,
         messageId,
         message,
+      },
+      headers: {
+        token: token
       }
     }
   );
@@ -392,8 +406,10 @@ export function reqMessageRemove(token: string, messageId: number) {
     `${url}:${port}` + '/message/remove/v2',
     {
       qs: {
-        token,
         messageId,
+      },
+      headers: {
+        token: token
       }
     }
   );
@@ -410,9 +426,11 @@ export function reqSendMessageDm(token: string, dmId: number, message: string) {
     `${url}:${port}` + '/message/senddm/v2',
     {
       json: {
-        token,
         dmId,
         message,
+      },
+      headers: {
+        token: token
       }
     }
   );
@@ -429,9 +447,11 @@ export function reqDmMessages(token: string, dmId: number, start: number) {
     `${url}:${port}` + '/dm/messages/v2',
     {
       qs: {
-        token,
         dmId,
         start,
+      },
+      headers: {
+        token: token
       }
     }
   );

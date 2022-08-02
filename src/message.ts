@@ -339,6 +339,7 @@ function messagesSearch(queryStr: string) {
   }
   return matchMessage
 }
+
 /************************************************************************
 /**
  * Helper function

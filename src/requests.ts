@@ -504,3 +504,41 @@ export function reqDmMessages(token: string, dmId: number, start: number) {
   );
   return JSON.parse(res.getBody() as string);
 }
+
+/// //////////////////////////Admin requests/////////////////////////////////
+// /admin/user/remove/v1
+export function reqAdminUserRemove(token: string, uId: number) {
+  const res = request(
+    'DELETE',
+    `${url}:${port}` + '/admin/user/remove/v1',
+    {
+      qs: {
+        token,
+        uId,
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
+// /admin/userpermission/change/v1
+export function reqAdminUPChange(token: string, uId: number, permissionId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/admin/userpermission/change/v1',
+    {
+      json: {
+        token,
+        uId,
+        permissionId,
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
+/// ///////////////////////////////////////////////////////////////////////

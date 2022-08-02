@@ -15,7 +15,7 @@ import { clearV1 } from './other';
 import { fileLoadData } from './data';
 
 import { userProfileV2, usersAllV1, userSetNameV1, userSetEmailV1, userSetHandleV1 } from './users';
-
+import { adminUserRemoveV1, adminUserPermissionChangeV1 } from './admin';
 // Set up web app, use JSON
 const app = express();
 app.use(express.json());
@@ -241,6 +241,19 @@ app.post('/dm/leave/v1', (req, res) => {
   const { token, dmId } = req.body;
   res.json(dmLeaveV1(token, dmId));
 });
+
+/// //////////////////////////Admin routes/////////////////////////////////
+app.delete('/admin/user/remove/v1', (req, res) => {
+  const token = req.query.token as string;
+  const uId = parseInt(req.query.uId as string);
+  res.json(adminUserRemoveV1(token, uId));
+});
+
+app.post('/admin/userpermission/change/v1', (req, res) => {
+  const { token, uId, permissionId } = req.body;
+  res.json(adminUserPermissionChangeV1(token, uId, permissionId));
+});
+/// ///////////////////////////////////////////////////////////////////////
 
 // other routes
 app.delete('/clear/v1', (req, res) => {

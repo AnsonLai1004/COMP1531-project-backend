@@ -8,7 +8,7 @@ import errorHandler from 'middleware-http-errors';
 import { channelInviteV3, channelMessagesV3, channelDetailsV3, channelJoinV3, channelLeaveV2, channelAddownerV2, channelRemoveownerV2 } from './channel';
 
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
-import { channelsCreateV2, channelsListV2, channelsListallV2, channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
+import { channelsCreateV2, channelsListV2, channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
 import { standupSendV1, standupActiveV1, standupStartV1 } from './standups';
 import { messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2 } from './message';
 
@@ -88,6 +88,12 @@ app.delete('/dm/remove/v2', (req, res, next) => {
   } catch (err) {
     next(err);
   }
+});
+
+app.post('/dm/leave/v2', (req, res) => {
+  const token = req.headers.token as string;
+  const { dmId } = req.body;
+  res.json(dmLeaveV1(token, dmId));
 });
 
 app.post('/channels/create/v3', (req, res, next) => {
@@ -252,11 +258,6 @@ app.get('/dm/messages/v2', (req, res) => {
   const dmId = parseInt((req.query.dmId) as string);
   const start = parseInt((req.query.start) as string);
   res.json(dmMessagesV2(token, dmId, start));
-});
-
-app.post('/dm/leave/v1', (req, res) => {
-  const { token, dmId } = req.body;
-  res.json(dmLeaveV1(token, dmId));
 });
 
 // other routes

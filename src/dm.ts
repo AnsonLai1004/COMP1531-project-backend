@@ -133,17 +133,17 @@ function dmLeaveV1(token: string, dmId: number) {
   // check if token passed in is valid
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
-    return { error: 'error' };
+    throw HTTPError(400, 'Invalid token');
   }
 
   // check if dmId passed in is valid
   if (!isValidDmId(dmId)) {
-    return { error: 'error' };
+    throw HTTPError(400, 'Invalid dm');
   }
 
   // check if user is a member of dm
   if (!userIsDMmember(tokenId.uId, dmId)) {
-    return { error: 'error' };
+    throw HTTPError(403, 'User is not dm member');
   }
 
   const data = getData();

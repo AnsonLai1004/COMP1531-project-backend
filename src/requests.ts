@@ -152,6 +152,25 @@ export function reqDmRemoveV3(token: string, dmId: number) {
   }
   return res.statusCode;
 }
+
+export function reqDmLeaveV3(token: string, dmId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/dm/leave/v2',
+    {
+      json: {
+        dmId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
 /// /////////////////////////////////////////////////////////////////////////////
 
 // auth

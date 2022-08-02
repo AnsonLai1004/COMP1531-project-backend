@@ -4,7 +4,7 @@ import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
 export {
   messageSendV2, messageRemoveV2, messageEditV2, messageSendDmV2,
-  dmMessagesV2
+  dmMessagesV2, messagesSearch
 };
 
 /**
@@ -313,6 +313,38 @@ function dmMessagesV2(token: string, dmId: number, start: number) {
   }
   const result = dmMessageV1helper(tokenId.uId as number, dmId, start);
   return result;
+}
+
+function messagesSearch(token: string, queryStr: string) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    throw HTTPError(403, 'Invalid token');
+  }
+  if (queryStr.length < 1 || queryStr.length > 1000) {
+    throw HTTPError(400, queryStr);
+  }
+  const datastore = getData();
+  const matchMessage = [];
+
+  for (const channel of datastore.channels) {
+    if (userIsAuthorised(tokenId.uId, channel.channelId)) {
+      for (const messages of channel.messages) {
+        if (messages.message.toLowerCase().includes(queryStr.toLowerCase())) {
+          matchMessage.push(messages);
+        }
+      }
+    }
+  }
+  for (const dm of datastore.dms) {
+    if (userIsAuthorisedInDm(tokenId.uId, dm.dmId)) {
+      for (const messages of dm.messages) {
+        if (messages.message.toLowerCase().includes(queryStr.toLowerCase())) {
+          matchMessage.push(messages);
+        }
+      }
+    }
+  }
+  return { matchMessage };
 }
 
 /************************************************************************

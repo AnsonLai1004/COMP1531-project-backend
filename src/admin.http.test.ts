@@ -30,7 +30,7 @@ describe('admin/user/remove/v1', () => {
     const dm = reqDmCreate(channelOwner.token, [globalOwner.authUserId, user.authUserId]);
     const dm2 = reqDmCreate(channelOwner.token, [globalOwner.authUserId, user.authUserId]);
     // removed from all channels/DMS
-
+    expect(user).toStrictEqual({});
     // TODO: user/stats/v1 return userStats to get numChannelsJoined, numDmsJoined
     expect(reqChannelJoin(globalOwner.token, channel.channelId));
     expect(reqChannelJoin(user.token, channel.channelId)).toStrictEqual({});
@@ -112,7 +112,7 @@ describe('admin/userpermission/change/v1', () => {
     expect(reqAdminUPChange(globalOwner.token, user.authUserId, 3)).toStrictEqual(400);
     expect(reqAdminUPChange(globalOwner.token, user.authUserId, 2)).toStrictEqual(400);
     expect(reqAdminUPChange(globalOwner.token, globalOwner.authUserId, 2)).toStrictEqual(400);
-    expect(reqAdminUPChange(user.token, globalOwner.authUserId, 1)).toStrictEqual(400);
+    expect(reqAdminUPChange(user.token, globalOwner.authUserId, 1)).toStrictEqual(403);
   });
   test('correct return', () => {
     const globalOwner = requestAuthRegister('same@gmail.com', 'password', 'Harry', 'Potter');

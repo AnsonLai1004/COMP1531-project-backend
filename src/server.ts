@@ -9,7 +9,7 @@ import { channelInviteV3, channelMessagesV3, channelDetailsV3, channelJoinV3, ch
 
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
-import { messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2 } from './message';
+import { messagesSearch, messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2 } from './message';
 
 import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV2, dmDetailsV2 } from './dm';
 import { clearV1 } from './other';
@@ -128,7 +128,7 @@ app.get('/channel/details/v3', (req, res, next) => {
 app.post('/channel/join/v3', (req, res, next) => {
   try {
     const token = req.headers.token as string;
-    const channelId = req.body;
+    const { channelId } = req.body;
     res.json(channelJoinV3(token, channelId));
   } catch (err) {
     next(err);
@@ -156,9 +156,14 @@ app.get('/channel/messages/v3', (req, res, next) => {
   }
 });
 
-app.post('/channel/leave/v2', (req, res) => {
-  const { token, channelId } = req.body;
-  res.json(channelLeaveV2(token, channelId));
+app.post('/channel/leave/v2', (req, res, next) => {
+  try {
+    const token = req.headers.token as string;
+    const { channelId } = req.body;
+    res.json(channelLeaveV2(token, channelId));
+  } catch (err) {
+    next(err);
+  }
 });
 
 app.post('/channel/addowner/v2', (req, res) => {
@@ -255,7 +260,7 @@ app.post('/message/senddm/v2', (req, res, next) => {
 app.get('/dm/messages/v2', (req, res, next) => {
   try {
     const dmId = parseInt((req.query.dmId) as string);
-  const start = parseInt((req.query.start) as string);
+    const start = parseInt((req.query.start) as string);
     const token = req.headers.token as string;
     res.json(dmMessagesV2(token, dmId, start));
   } catch (err) {
@@ -266,6 +271,17 @@ app.get('/dm/messages/v2', (req, res, next) => {
 app.post('/dm/leave/v1', (req, res) => {
   const { token, dmId } = req.body;
   res.json(dmLeaveV1(token, dmId));
+});
+
+// search route
+app.get('/search/v1', (req, res, next) => {
+  try {
+    const queryStr = req.query.queryStr as string;
+    const token = req.headers.token as string;
+    res.json(messagesSearch(token, queryStr));
+  } catch (err) {
+    next(err);
+  }
 });
 
 // other routes

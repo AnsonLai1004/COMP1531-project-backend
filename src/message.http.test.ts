@@ -1,5 +1,5 @@
 import {
-  reqChannelInvite,
+  reqChannelInvite, reqMessagesSearch,
   requestClear, requestChannelsCreate, requestAuthRegister,
   reqChannelMessages, reqMessageSend, reqMessageEdit,
   reqMessageRemove, reqSendMessageDm, reqDmMessages, reqDmCreate
@@ -420,5 +420,80 @@ describe('message/remove/v2 on dm and channels', () => {
     expect(reqMessageRemove(user.token, 6)).toStrictEqual({});
     expect(reqMessageRemove(aMember.token, 1)).toStrictEqual({});
     expect(reqMessageRemove(aMember.token, 3)).toStrictEqual({});
+  });
+});
+
+describe('search/v1 test', () => {
+  test('invalid tokenid', () => {
+    expect(reqMessagesSearch('random token', 'any string')).toStrictEqual(403);
+  });
+  test('invalid queryStr less than 1 or more than 1000', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    let invalid = reqMessagesSearch(user.token, '');
+    expect(invalid).toStrictEqual(400);
+    invalid = reqMessagesSearch(user.token, 'DS3ho21uGIVZpqsCqDUv879zypAtNRC8gFrM7YecnTcdwqMCfzvUkyuxBu3zRYxhlRsMBPDJxzfUIh8bhp92owenjm8UXDPvUrI6U17qa' +
+    'Z3xc2MBMe2hvhYUbrI5CR6ylYdxGj6UikC9CpdD5CCNLGmqWigm2QkGXjLq3EcBi12nPSxuf7vGlhBWDKCwNjXBuo1KpFdogbdCwD8sEBgEQZs3Uw3vIhVOvYQzm6wkG7sU5BHjLTaXTeLIP19jAmWVFsVYG66Ztg4ZG1b' +
+    '2OScLJrg9ykkjmJf3bywy4YWmVqQihxasdyFL5WfEmTzrDw2SVGelnSfkNCUv9TwVrKmUzPWFR5JBNVGy71r528mDxRNwwJw1uSXhkmF39WuvlkuHHRZyUZweELBtlDKZqsG1CI4qj2M9BEKQo7OJE5ZNRtEoh2cHwzFcxgVE' +
+    'yiZ3QXnWviV5q2k6Uchm2X7iuYfC8eQNPXnx8SQzN1xkKV3GyukZPiA4szqbS0llk8q1EBKU4s3ENmroHquWeTfbplOHuRxdr9vPau9OV9Vu5sKWlqwfYQLVjaHvsTqPdMz8XKST2ick1MOtgNMn3vN0yUGJJzbc27gciQ' +
+    'y6tK6PxCGZSRhR2TLHXeYHYfVarjGGWDQ3WvsTgBSIyEzcz8cjAcOSlMravYVQtqzQo5gWwJeqvEFXSnhG8n3hnLptr0qC47hsHxS8vFKjivtO3w52yXfaUVJxD48siNyWLZg9lzZ6Qubb6w6hqP3M9ePmtINh02L8UfFk' +
+    'eVMyuWjoWudLRMaEtmxERW3WJcnJv6AYvOwFCQkLtjKRiX4GZ67sM1LKjq66aNT7tC5MViUBai8uV7LDs9fxa864GoWrw9tJD95dauiN7BJyfQFmslS3C3WClToayaqGNZjA89GollAaEHxoQGG9b4jtnAsyctv4lNtWLf' +
+    '3WF6IiCSUKoiaduaRI1wxMS6Fqpih9qyHsKyr72jtS2ficEcTY6Fw3rU1n3a11sx6Ha');
+    expect(invalid).toStrictEqual(400);
+  });
+  test('success return for single text that match', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
+    const timenow = Math.round(Date.now() / 1000);
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ messageId: 1 });
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor!')).toStrictEqual({ messageId: 2 });
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor2!')).toStrictEqual({ messageId: 3 });
+    expect(reqMessagesSearch(aMember.token, 'world')).toMatchObject({ matchMessage: [{ message: 'Hello World!', messageId: 1, timeSent: timenow, uId: 1 }] });
+  });
+  test('success multiple messages returned', () => {
+    // channel
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
+    const timenow = Math.round(Date.now() / 1000);
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ messageId: 1 });
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor!')).toStrictEqual({ messageId: 2 });
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor2!')).toStrictEqual({ messageId: 3 });
+    // dm
+    expect(reqMessagesSearch(aMember.token, 'world')).toMatchObject({ matchMessage: [{ message: 'Hello World!', messageId: 1, timeSent: timenow, uId: 1 }] });
+    const user = requestAuthRegister('randomemail@gmail.com', '123abc!@#', 'new', 'guy');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId, user2.authUserId, aMember.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    expect(reqSendMessageDm(aMember.token, dm.dmId, 'Hello World!')).toStrictEqual({ messageId: 4 });
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World2!')).toStrictEqual({ messageId: 5 });
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World3!')).toStrictEqual({ messageId: 6 });
+    expect(reqMessagesSearch(aMember.token, 'world')).toMatchObject({
+      matchMessage: [
+        {
+          message: 'Hello World!',
+          messageId: 1,
+          timeSent: timenow,
+          uId: 1,
+        },
+        {
+          message: 'Hello World3!',
+          messageId: 6,
+          timeSent: timenow,
+          uId: 2,
+        },
+        {
+          message: 'Hello World2!',
+          messageId: 5,
+          timeSent: timenow,
+          uId: 2,
+        },
+        {
+          message: 'Hello World!',
+          messageId: 4,
+          timeSent: timenow,
+          uId: 1,
+        },
+      ],
+    });
   });
 });

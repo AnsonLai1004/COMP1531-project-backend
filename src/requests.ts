@@ -210,6 +210,7 @@ export function reqChannelLeave(token: string, channelId: number) {
       `${url}:${port}` + '/channel/leave/v2',
       {
         json: {
+          token,
           channelId,
         },
         headers: {
@@ -568,4 +569,24 @@ export function requestUserSetHandle(token: string, handleStr: string) {
       }
   );
   return JSON.parse(res.getBody() as string);
+}
+
+// search route
+export function reqMessagesSearch(token: string, queryStr: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/search/v1',
+    {
+      qs: {
+        queryStr
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }

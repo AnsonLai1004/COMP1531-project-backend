@@ -9,7 +9,7 @@ import { channelInviteV3, channelMessagesV3, channelDetailsV3, channelJoinV3, ch
 
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
-import { messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2 } from './message';
+import { messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2, messageShareV1 } from './message';
 
 import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV2, dmDetailsV2 } from './dm';
 import { clearV1 } from './other';
@@ -196,6 +196,11 @@ app.delete('/message/remove/v2', (req, res) => {
   const messageId = parseInt((req.query.messageId) as string);
   const token = req.query.token as string;
   res.json(messageRemoveV2(token, messageId));
+});
+
+app.post('/message/share/v1', (req, res) => {
+  const { token, ogMessageId, message, channelId, dmId } = req.body;
+  res.json(messageShareV1(token, ogMessageId, message, channelId, dmId));
 });
 
 // dm routes

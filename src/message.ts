@@ -315,7 +315,72 @@ function dmMessagesV2(token: string, dmId: number, start: number) {
   return result;
 }
 
-/************************************************************************
+/////////////////////////Iteration 3 new functions////////////////////////////////////////////////////////////////////////////////////////
+// message/share/v1
+function messageShareV1(token: string, ogMessageId: number, message: string, channelId: number, dmId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    throw HTTPError(403, 'invalid Token');
+  }
+  // check channelId and dmId is valid, and either one need to be -1
+  // check ogMessageId is valid and get the message obj
+  if (channelId === -1) {
+    if (!isValidDmId(dmId)) {
+      throw HTTPError(400, 'Invalid dmId');
+    }
+    if (!userIsAuthorisedInDm(tokenId.uId, dmId)) {
+      throw HTTPError(403, 'user has not joined the channel');
+    }
+  } else if (dmId === -1) {
+    if (!isValidChannelId(channelId)) {
+      throw HTTPError(400, 'Invalid channelId');
+    }
+    if (!userIsAuthorised(tokenId.uId, channelId)) {
+      throw HTTPError(403, 'user has not joined the channel');
+    }
+  } else {
+    throw HTTPError(400, 'neither channelId nor dmId are -1');
+  } 
+  if (message.length > 1000) {
+    throw HTTPError(400, 'length of message is over 1000 characters');
+  }
+  const ogMessage = findMessageStr(ogMessageId);
+  if (ogMessage === undefined) {
+    throw HTTPError(400, 'ogMessageId is Invalid');
+  }
+  // create newMessage with both string concat together
+  const data = getData();
+  const newmessage: Message = {
+    messageId: (data.lastMessageId + 1) as number,
+    uId: tokenId.uId,
+    message: ogMessage.message + '' + message,
+    timeSent: Math.round(Date.now() / 1000),
+  };
+  
+  if (channelId === -1) {
+    for (const dm of data.dms) {
+      if (dm.dmId === dmId) {
+        dm.messages.unshift(newmessage);
+      }
+    }
+  } else {
+    for (const channel of data.channels) {
+      if (channel.channelId === channelId) {
+        channel.messages.unshift(newmessage);
+      }
+    }
+  }
+  data.lastMessageId++;
+  setData(data);
+  return { sharedMessageId: newmessage.messageId };
+}
+
+
+
+
+
+
+/////////////////////////Helper functions/////////////////////////////////////////////////////////////////////////////////////
 /**
  * Helper function
  * return false if channelId is not valid
@@ -430,4 +495,24 @@ function userIsAuthorisedInDm(uId: number, dmId: number) {
     }
   }
   return false;
+}
+
+// return message string from channel or Dm 
+function findMessageStr(messageId: number) {
+  const data = getData();
+  for (const channel of data.channels) {
+    for (const message of channel.messages) {
+      if (messageId === message.messageId) {
+        return message;
+      }
+    }
+  }
+  for (const dm of data.dms) {
+    for (const message of dm.messages) {
+      if (messageId === message.messageId) {
+        return message;
+      }
+    }
+  }
+  return undefined;
 }

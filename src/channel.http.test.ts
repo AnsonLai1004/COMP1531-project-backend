@@ -41,7 +41,7 @@ describe('/channel/invite/v3', () => {
     const newchannel2 = requestChannelsCreateV3(othermemeber.token, 'hello team', true);
     // uid refers to a user that is already a member
     const invalid = reqChannelInvite(aMember.token, newchannel.channelId, aMember.authUserId);
-    const invalid2 = reqChannelInvite(aMember.token, newchannel2.channelId, aMember.authUserId);
+    reqChannelInvite(aMember.token, newchannel2.channelId, aMember.authUserId);
     expect(invalid).toStrictEqual(400);
   });
 

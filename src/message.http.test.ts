@@ -446,8 +446,8 @@ describe('search/v1 test', () => {
     expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ messageId: 1 });
     expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor!')).toStrictEqual({ messageId: 2 });
     expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor2!')).toStrictEqual({ messageId: 3 });
-    const obtainMessage = reqMessagesSearch(aMember.token, 'world')
-    expect(obtainMessage.matchMessage[0].message).toStrictEqual("Hello World!");
+    const obtainMessage = reqMessagesSearch(aMember.token, 'world');
+    expect(obtainMessage.matchMessage[0].message).toStrictEqual('Hello World!');
   });
   test('success multiple messages returned', () => {
     // channel
@@ -475,10 +475,10 @@ describe('search/v1 test', () => {
     expect(reqSendMessageDm(user.token, dm2.dmId, 'Hello !')).toStrictEqual({ messageId: 9 });
     expect(reqMessageSend(user.token, newchannel2.channelId, 'Hello World!')).toStrictEqual({ messageId: 10 });
     expect(reqSendMessageDm(user.token, dm.dmId, 'Hello!')).toStrictEqual({ messageId: 11 });
-    const messagesGet = reqMessagesSearch(aMember.token, 'world')
-    expect(messagesGet.matchMessage[0].message).toStrictEqual("Hello World!");
-    expect(messagesGet.matchMessage[1].message).toStrictEqual("Hello World3!");
-    expect(messagesGet.matchMessage[2].message).toStrictEqual("Hello World2!");
-    expect(messagesGet.matchMessage[3].message).toStrictEqual("Hello World!");
+    const messagesGet = reqMessagesSearch(aMember.token, 'world');
+    expect(messagesGet.matchMessage[0].message).toStrictEqual('Hello World!');
+    expect(messagesGet.matchMessage[1].message).toStrictEqual('Hello World3!');
+    expect(messagesGet.matchMessage[2].message).toStrictEqual('Hello World2!');
+    expect(messagesGet.matchMessage[3].message).toStrictEqual('Hello World!');
   });
 });

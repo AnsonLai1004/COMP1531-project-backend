@@ -28,7 +28,9 @@ export function adminUserRemoveV1(token: string, uId: number) {
     }
   }
   for (const dm of data.dms) {
-    dm.ownerId = dm.ownerId.filter(id => { return id !== uId; });
+    if (dm.ownerId === uId) {
+        dm.ownerId = undefined;
+    }
     dm.uIds = dm.uIds.filter(id => { return id !== uId; });
     for (const message of dm.messages) {
       if (uId === message.uId) {
@@ -41,8 +43,8 @@ export function adminUserRemoveV1(token: string, uId: number) {
   // change nameFirst - Removed, nameLast - user
   // user's email and handle should be reusable
   const indexOfUser = data.users.findIndex(object => { return object.uId === uId; });
-  data.user[indexOfUser].nameFirst = 'Removed';
-  data.user[indexOfUser].nameLast = 'user';
+  data.users[indexOfUser].nameFirst = 'Removed';
+  data.users[indexOfUser].nameLast = 'user';
   setData(data);
 }
 
@@ -54,7 +56,7 @@ export function adminUserPermissionChangeV1(token: string, uId: number, permissi
   if (!isValidUserId(uId)) {
     throw HTTPError(400, 'Invalid uId');
   }
-  if (permissionId !== 1 || permissionId !== 2) {
+  if (permissionId < 1 && permissionId > 2) {
     throw HTTPError(400, 'Invalid permissionId');
   }
   if (permissionId === 2) {

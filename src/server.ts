@@ -5,10 +5,10 @@ import config from './config.json';
 import cors from 'cors';
 import errorHandler from 'middleware-http-errors';
 
-import { channelInviteV2, channelMessagesV2, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
+import { channelInviteV3, channelMessagesV3, channelDetailsV2, channelJoinV2, channelLeaveV1, channelAddownerV1, channelRemoveownerV1 } from './channel';
 import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
 import { channelsCreateV2, channelsListV2, channelsListallV2, channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
-import { messageSendV1, messageRemoveV1, messageEditV1, dmMessagesV1, messageSendDmV1 } from './message';
+import { messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2 } from './message';
 
 import { dmListV2, dmRemoveV2, dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 } from './dm';
 import { clearV1 } from './other';
@@ -130,16 +130,16 @@ app.post('/channel/join/v2', (req, res) => {
   res.json(channelJoinV2(token, channelId));
 });
 
-app.post('/channel/invite/v2', (req, res) => {
+app.post('/channel/invite/v3', (req, res) => {
   const { uId, token, channelId } = req.body;
-  res.json(channelInviteV2(token, channelId, uId));
+  res.json(channelInviteV3(token, channelId, uId));
 });
 
-app.get('/channel/messages/v2', (req, res) => {
+app.get('/channel/messages/v3', (req, res) => {
   const start = parseInt((req.query.start) as string);
   const channelId = parseInt((req.query.channelId) as string);
   const token = req.query.token as string;
-  res.json(channelMessagesV2(token, channelId, start));
+  res.json(channelMessagesV3(token, channelId, start));
 });
 
 app.post('/channel/leave/v1', (req, res) => {
@@ -186,20 +186,20 @@ app.put('/user/profile/sethandle/v1', (req, res) => {
 
 // message routes
 
-app.post('/message/send/v1', (req, res) => {
+app.post('/message/send/v2', (req, res) => {
   const { token, channelId, message } = req.body;
-  res.json(messageSendV1(token, channelId, message));
+  res.json(messageSendV2(token, channelId, message));
 });
 
-app.put('/message/edit/v1', (req, res) => {
+app.put('/message/edit/v2', (req, res) => {
   const { token, messageId, message } = req.body;
-  res.json(messageEditV1(token, messageId, message));
+  res.json(messageEditV2(token, messageId, message));
 });
 
-app.delete('/message/remove/v1', (req, res) => {
+app.delete('/message/remove/v2', (req, res) => {
   const messageId = parseInt((req.query.messageId) as string);
   const token = req.query.token as string;
-  res.json(messageRemoveV1(token, messageId));
+  res.json(messageRemoveV2(token, messageId));
 });
 
 // dm routes
@@ -214,16 +214,16 @@ app.get('/dm/details/v1', (req, res) => {
   res.json(dmDetailsV1(token, dmId));
 });
 
-app.post('/message/senddm/v1', (req, res) => {
+app.post('/message/senddm/v2', (req, res) => {
   const { token, dmId, message } = req.body;
-  res.json(messageSendDmV1(token, dmId, message));
+  res.json(messageSendDmV2(token, dmId, message));
 });
 
-app.get('/dm/messages/v1', (req, res) => {
+app.get('/dm/messages/v2', (req, res) => {
   const token = req.query.token as string;
   const dmId = parseInt((req.query.dmId) as string);
   const start = parseInt((req.query.start) as string);
-  res.json(dmMessagesV1(token, dmId, start));
+  res.json(dmMessagesV2(token, dmId, start));
 });
 
 app.get('/dm/list/v1', (req, res) => {

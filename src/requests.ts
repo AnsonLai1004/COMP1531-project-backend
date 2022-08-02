@@ -589,70 +589,97 @@ export function reqDmLeave(token: string, dmId: number) {
 }
 
 // user & users
+// user & users
 export function requestUserProfile(token: string, uId: number) {
   const res = request(
     'GET',
-    `${url}:${port}` + '/user/profile/v2',
+    `${url}:${port}` + '/user/profile/v3',
     {
+      headers: {
+        token
+      },
       qs: {
-        token,
         uId
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestUsersAll(token: string) {
   const res = request(
     'GET',
-    `${url}:${port}` + '/users/all/v1',
+    `${url}:${port}` + '/users/all/v2',
     {
-      qs: {
+      headers: {
         token
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestUserSetName(token: string, nameFirst: string, nameLast: string) {
   const res = request(
     'PUT',
-      `${url}:${port}` + '/user/profile/setname/v1',
+      `${url}:${port}` + '/user/profile/setname/v2',
       {
+        headers: {
+          token
+        },
         json: {
-          token, nameFirst, nameLast
+          nameFirst, nameLast
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestUserSetEmail(token: string, email: string) {
   const res = request(
     'PUT',
-      `${url}:${port}` + '/user/profile/setemail/v1',
+      `${url}:${port}` + '/user/profile/setemail/v2',
       {
+        headers: {
+          token
+        },
         json: {
-          token, email
+          email
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestUserSetHandle(token: string, handleStr: string) {
   const res = request(
     'PUT',
-      `${url}:${port}` + '/user/profile/sethandle/v1',
+      `${url}:${port}` + '/user/profile/sethandle/v2',
       {
+        headers: {
+          token
+        },
         json: {
-          token, handleStr
+          handleStr
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 // search route

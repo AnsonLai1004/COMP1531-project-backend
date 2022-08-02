@@ -14,14 +14,14 @@ describe('Testing user/profile/v2 error cases', () => {
     const registered = requestAuthRegister('valid@gmail.com', 'password', 'Harry', 'Potter');
     const notAnId = registered.authUserId + 99;
     const profile = requestUserProfile(registered.token, notAnId);
-    expect(profile).toStrictEqual({ error: 'error' });
+    expect(profile).toStrictEqual(400);
   });
 
   test('Invalid token', () => {
     const registered = requestAuthRegister('another-valid@gmail.com', 'password', 'Harry', 'Potter');
     const notAToken = registered.token + 'extra characters';
     const profile = requestUserProfile(notAToken, registered.authUserId);
-    expect(profile).toStrictEqual({ error: 'error' });
+    expect(profile).toStrictEqual(403);
   });
 });
 
@@ -61,7 +61,7 @@ describe('Testing users/all/v1 error cases', () => {
     const registered = requestAuthRegister('another-valid@gmail.com', 'password', 'Harry', 'Potter');
     const notAToken = registered.token + 'extra characters';
     const users = requestUsersAll(notAToken);
-    expect(users).toStrictEqual({ error: 'error' });
+    expect(users).toStrictEqual(403);
   });
 });
 
@@ -117,50 +117,50 @@ describe('Testing user/profile/set**/v1 error cases', () => {
   test('Invalid token', () => {
     const registered = requestAuthRegister('another-valid@gmail.com', 'password', 'Harry', 'Potter');
     const notAToken = registered.token + 'extra characters';
-    expect(requestUserSetName(notAToken, 'First', 'Last')).toStrictEqual({ error: 'error' });
-    expect(requestUserSetEmail(notAToken, 'email@gmail.com')).toStrictEqual({ error: 'error' });
-    expect(requestUserSetHandle(notAToken, 'newhandle')).toStrictEqual({ error: 'error' });
+    expect(requestUserSetName(notAToken, 'First', 'Last')).toStrictEqual(403);
+    expect(requestUserSetEmail(notAToken, 'email@gmail.com')).toStrictEqual(403);
+    expect(requestUserSetHandle(notAToken, 'newhandle')).toStrictEqual(403);
   });
   describe('/setname/v1 specific error cases', () => {
     test('Names are empty', () => {
       const registered = requestAuthRegister('another-valid@gmail.com', 'password', 'Harry', 'Potter');
-      expect(requestUserSetName(registered.token, '', 'Last')).toStrictEqual({ error: 'error' });
-      expect(requestUserSetName(registered.token, 'First', '')).toStrictEqual({ error: 'error' });
+      expect(requestUserSetName(registered.token, '', 'Last')).toStrictEqual(400);
+      expect(requestUserSetName(registered.token, 'First', '')).toStrictEqual(400);
     });
     test('Names are 51 characters', () => {
       const registered = requestAuthRegister('another-valid@gmail.com', 'password', 'Harry', 'Potter');
       const char = 'a';
-      expect(requestUserSetName(registered.token, char.repeat(51), 'Last')).toStrictEqual({ error: 'error' });
-      expect(requestUserSetName(registered.token, 'First', char.repeat(51))).toStrictEqual({ error: 'error' });
+      expect(requestUserSetName(registered.token, char.repeat(51), 'Last')).toStrictEqual(400);
+      expect(requestUserSetName(registered.token, 'First', char.repeat(51))).toStrictEqual(400);
     });
   });
   describe('/setemail/v1 specific error cases', () => {
     test('Invalid email', () => {
       const registered = requestAuthRegister('another-valid@gmail.com', 'password', 'Harry', 'Potter');
-      expect(requestUserSetEmail(registered.token, 'notAnEmail')).toStrictEqual({ error: 'error' });
+      expect(requestUserSetEmail(registered.token, 'notAnEmail')).toStrictEqual(400);
     });
     test('Email used by another user', () => {
       const registered1 = requestAuthRegister('another-valid@gmail.com', 'password', 'Harry', 'Potter');
       requestAuthRegister('already-used@gmail.com', 'password', 'Hermione', 'Granger');
-      expect(requestUserSetEmail(registered1.token, 'already-used@gmail.com')).toStrictEqual({ error: 'error' });
+      expect(requestUserSetEmail(registered1.token, 'already-used@gmail.com')).toStrictEqual(400);
     });
   });
   describe('/sethandle/v1 specific error cases', () => {
     test('Handle is less than 3 chars or more than 20', () => {
       const registered = requestAuthRegister('another-valid@gmail.com', 'password', 'Harry', 'Potter');
       const char = 'a';
-      expect(requestUserSetHandle(registered.token, char.repeat(2))).toStrictEqual({ error: 'error' });
-      expect(requestUserSetHandle(registered.token, char.repeat(21))).toStrictEqual({ error: 'error' });
+      expect(requestUserSetHandle(registered.token, char.repeat(2))).toStrictEqual(400);
+      expect(requestUserSetHandle(registered.token, char.repeat(21))).toStrictEqual(400);
     });
     test('Handle uses non alphanumeric characters', () => {
       const registered = requestAuthRegister('another-valid@gmail.com', 'password', 'Harry', 'Potter');
-      expect(requestUserSetHandle(registered.token, '!@#$%^&*()_+-=')).toStrictEqual({ error: 'error' });
-      expect(requestUserSetHandle(registered.token, 'notquitevalid!')).toStrictEqual({ error: 'error' });
+      expect(requestUserSetHandle(registered.token, '!@#$%^&*()_+-=')).toStrictEqual(400);
+      expect(requestUserSetHandle(registered.token, 'notquitevalid!')).toStrictEqual(400);
     });
     test('Handle used by another user', () => {
       const registered1 = requestAuthRegister('another-valid@gmail.com', 'password', 'Harry', 'Potter');
       requestAuthRegister('already-used@gmail.com', 'password', 'Hermione', 'Granger');
-      expect(requestUserSetHandle(registered1.token, 'hermionegranger')).toStrictEqual({ error: 'error' });
+      expect(requestUserSetHandle(registered1.token, 'hermionegranger')).toStrictEqual(400);
     });
   });
 });

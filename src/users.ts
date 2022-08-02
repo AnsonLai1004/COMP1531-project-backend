@@ -6,8 +6,7 @@ import { User } from './interfaces';
 import { getData, setData } from './data';
 import { tokenToUId } from './auth';
 import isEmail from 'validator/lib/isEmail.js';
-
-const errorObject = { error: 'error' };
+import HTTPError from 'http-errors';
 
 interface userProfileV1Return {
   user?: {
@@ -27,12 +26,12 @@ interface userProfileV1Return {
  * @param uId
  * @returns
  */
-export function userProfileV2(token: string, uId: number): userProfileV1Return {
+export function userProfileV3(token: string, uId: number) {
   const authUser = tokenToUId(token);
   if ('error' in authUser) {
-    return errorObject;
+    throw HTTPError(403, 'Invalid token!');
   }
-  return userProfileV1(authUser.uId, uId);
+  return userProfileV1(uId);
 }
 
 /**
@@ -41,10 +40,10 @@ export function userProfileV2(token: string, uId: number): userProfileV1Return {
  * @param token
  * @returns
  */
-export function usersAllV1(token: string) {
+export function usersAllV2(token: string) {
   const authUser = tokenToUId(token);
   if ('error' in authUser) {
-    return errorObject;
+    throw HTTPError(403, 'Invalid token!');
   }
   const users = [];
   const data = getData();
@@ -69,17 +68,16 @@ export function usersAllV1(token: string) {
  * @param nameLast
  * @returns
  */
-export function userSetNameV1(token: string, nameFirst: string, nameLast: string) {
+export function userSetNameV2(token: string, nameFirst: string, nameLast: string) {
   const authUser = tokenToUId(token);
-  // check if token is invalid
   if ('error' in authUser) {
-    return errorObject;
+    throw HTTPError(403, 'Invalid token!');
   }
   if (nameFirst.length < 1 || nameFirst.length > 50) {
-    return errorObject;
+    throw HTTPError(400, 'First name is not between 1 and 50 characters inclusive!');
   }
   if (nameLast.length < 1 || nameLast.length > 50) {
-    return errorObject;
+    throw HTTPError(400, 'Last name is not between 1 and 50 characters inclusive!');
   }
   const data = getData();
   for (const user of data.users) {
@@ -99,15 +97,18 @@ export function userSetNameV1(token: string, nameFirst: string, nameLast: string
  * @param email
  * @returns
  */
-export function userSetEmailV1(token: string, email: string) {
+export function userSetEmailV2(token: string, email: string) {
   const authUser = tokenToUId(token);
-  // check if token is invalid
   if ('error' in authUser) {
-    return errorObject;
+    throw HTTPError(403, 'Invalid token!');
+  }0
+  // check if email is invalid
+  if (!isEmail(email)) {
+    throw HTTPError(400, 'Invalid email!');
   }
-  // check if email is invalid or used by another user
-  if (!isEmail(email) || checkUserData(email, 'email', authUser.uId)) {
-    return errorObject;
+  // check if email is used by another user
+  if (checkUserData(email, 'email', authUser.uId)) {
+    throw HTTPError(400, 'Email already in use!');
   }
   const data = getData();
   for (const user of data.users) {
@@ -127,19 +128,22 @@ export function userSetEmailV1(token: string, email: string) {
  * @param handleStr
  * @returns
  */
-export function userSetHandleV1(token: string, handleStr: string) {
+export function userSetHandleV2(token: string, handleStr: string) {
   const authUser = tokenToUId(token);
-  // check if token is invalid
   if ('error' in authUser) {
-    return errorObject;
+    throw HTTPError(403, 'Invalid token!');
   }
-  // check if handle is used by another user or has non-alphanumeric characters
-  if (checkUserData(handleStr, 'handleStr', authUser.uId) || !(/^[0-9a-z]+$/i).test(handleStr)) {
-    return errorObject;
+  // check if handle is used by another user
+  if (checkUserData(handleStr, 'handleStr', authUser.uId)) {
+    throw HTTPError(400, 'Handle already in use!');
+  }
+  // check if contains non alphanumeric characters
+  if (!(/^[0-9a-z]+$/i).test(handleStr)) {
+    throw HTTPError(400, 'Handle cannot contain non alphanumeric characters!');
   }
   // check handle length
   if (handleStr.length < 3 || handleStr.length > 20) {
-    return errorObject;
+    throw HTTPError(400, 'Handle is not between 3 and 20 characters inclusive!');
   }
   const data = getData();
   for (const user of data.users) {
@@ -153,12 +157,11 @@ export function userSetHandleV1(token: string, handleStr: string) {
 
 /**
  * Function which returns the details of the user whose uId matches the argument uId
- * Assumes that the given authUserId is valid
  * @param {number} authUserId
  * @param {number} uId
  * @returns {userProfileReturn}
  */
-export function userProfileV1(authUserId: number, uId: number): userProfileV1Return {
+export function userProfileV1(uId: number): userProfileV1Return {
   const data = getData();
   for (const user of data.users) {
     if (uId === user.uId) {
@@ -174,7 +177,7 @@ export function userProfileV1(authUserId: number, uId: number): userProfileV1Ret
     }
   }
 
-  return errorObject;
+  throw HTTPError(400, 'Invalid userId!');
 }
 
 /// // HELPER FUNCTIONS

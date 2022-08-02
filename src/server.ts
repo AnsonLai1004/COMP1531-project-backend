@@ -14,8 +14,8 @@ import { standupSendV1, standupActiveV1, standupStartV1 } from './standups';
 import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV2, dmDetailsV2 } from './dm';
 import { clearV1 } from './other';
 import { fileLoadData } from './data';
+import { userProfileV3, usersAllV2, userSetNameV2, userSetEmailV2, userSetHandleV2 } from './users';
 
-import { userProfileV2, usersAllV1, userSetNameV1, userSetEmailV1, userSetHandleV1 } from './users';
 
 // Set up web app, use JSON
 const app = express();
@@ -214,30 +214,33 @@ app.post('/channel/removeowner/v2', (req, res) => {
 });
 
 // user(s) routes
-app.get('/user/profile/v2', (req, res) => {
+app.get('/user/profile/v3', (req, res) => {
   const uId = parseInt((req.query.uId) as string);
-  const token = req.query.token as string;
-  res.json(userProfileV2(token, uId));
+  const token = req.headers.token as string;
+  res.json(userProfileV3(token, uId));
 });
 
-app.get('/users/all/v1', (req, res) => {
-  const token = req.query.token as string;
-  res.json(usersAllV1(token));
+app.get('/users/all/v2', (req, res) => {
+  const token = req.headers.token as string;
+  res.json(usersAllV2(token));
 });
 
-app.put('/user/profile/setname/v1', (req, res) => {
-  const { token, nameFirst, nameLast } = req.body;
-  res.json(userSetNameV1(token, nameFirst, nameLast));
+app.put('/user/profile/setname/v2', (req, res) => {
+  const { nameFirst, nameLast } = req.body;
+  const token = req.headers.token as string;
+  res.json(userSetNameV2(token, nameFirst, nameLast));
 });
 
-app.put('/user/profile/setemail/v1', (req, res) => {
-  const { token, email } = req.body;
-  res.json(userSetEmailV1(token, email));
+app.put('/user/profile/setemail/v2', (req, res) => {
+  const { email } = req.body;
+  const token = req.headers.token as string;
+  res.json(userSetEmailV2(token, email));
 });
 
-app.put('/user/profile/sethandle/v1', (req, res) => {
-  const { token, handleStr } = req.body;
-  res.json(userSetHandleV1(token, handleStr));
+app.put('/user/profile/sethandle/v2', (req, res) => {
+  const { handleStr } = req.body;
+  const token = req.headers.token as string;
+  res.json(userSetHandleV2(token, handleStr));
 });
 
 // message routes

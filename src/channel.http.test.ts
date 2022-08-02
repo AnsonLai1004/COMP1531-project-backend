@@ -36,9 +36,12 @@ describe('/channel/invite/v3', () => {
 
   test('Error case for adding uid that is already a member of channel', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const othermember = requestAuthRegister('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
     const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    const newchannel2 = requestChannelsCreateV3(othermember.token, 'hello team', true);
     // uid refers to a user that is already a member
     const invalid = reqChannelInvite(aMember.token, newchannel.channelId, aMember.authUserId);
+    reqChannelInvite(aMember.token, newchannel2.channelId, aMember.authUserId);
     expect(invalid).toStrictEqual(400);
   });
 
@@ -204,12 +207,23 @@ describe('channel/details/v3', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     expect(reqChannelDetails(user.token, -999)).toStrictEqual(400);
   });
-
+  test('Error case for adding uid that is already a member of channel', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const othermemeber = requestAuthRegister('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    const newchannel2 = requestChannelsCreateV3(othermemeber.token, 'hello team', true);
+    // uid refers to a user that is already a member
+    const invalid = reqChannelInvite(aMember.token, newchannel.channelId, aMember.authUserId);
+    reqChannelInvite(aMember.token, newchannel2.channelId, aMember.authUserId);
+    expect(invalid).toStrictEqual(400);
+  });
   test('User not a member of channel', () => {
     const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const notMember = requestAuthRegister('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
     const channel = requestChannelsCreateV3(user.token, 'BOOST', true);
+    const newchannel2 = requestChannelsCreateV3(notMember.token, 'hello team', true);
     expect(reqChannelDetails(notMember.token, channel.channelId)).toStrictEqual(403);
+    expect(reqChannelDetails(user.token, newchannel2.channelId)).toStrictEqual(403);
   });
 
   test('correct return', () => {

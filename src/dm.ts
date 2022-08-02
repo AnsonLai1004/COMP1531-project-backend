@@ -120,12 +120,28 @@ function dmRemoveV2(token: string, dmId: number) {
 
 function dmLeaveV1(token: string, dmId: number) {
   // check if token passed in is valid
-  try {
-    const tokenId = tokenToUId(token);
+  const tokenId = tokenToUId(token);
 
-    // check if dmId passed in is valid
-    if (!isValidDmId(dmId)) {
-      return { error: 'error' };
+  // check if dmId passed in is valid
+  if (!isValidDmId(dmId)) {
+    throw HTTPError(400, 'Invalid dm');
+  }
+
+  // check if user is a member of dm
+  if (!userIsDMmember(tokenId.uId, dmId)) {
+    throw HTTPError(403, 'User is not dm member');
+  }
+
+  const data = getData();
+  for (const dm of data.dms) {
+    if (dm.dmId === dmId) {
+      // change ownerId to negative since in our implementation cannot be negative
+      if (dm.ownerId === tokenId.uId) {
+        dm.ownerId = -1;
+      } else { // remove member that is not owner
+        dm.uIds = dm.uIds.filter((uId) => uId !== tokenId.uId);
+      }
+      break;
     }
 
     // check if user is a member of dm
@@ -147,8 +163,6 @@ function dmLeaveV1(token: string, dmId: number) {
     }
     setData(data);
     return {};
-  } catch (err) {
-    return { error: 'error' };
   }
 }
 

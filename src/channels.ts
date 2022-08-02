@@ -1,5 +1,5 @@
 import { getData, setData } from './data';
-import { Message } from './interfaces';
+import { Channel } from './interfaces';
 import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
 
@@ -39,13 +39,16 @@ function channelsCreateV3(token: string, name: string, isPublic: boolean): chann
   const authUser = tokenToUId(token);
 
   const dataStore = getData();
-  const channel = {
+  const channel: Channel = {
     channelId: dataStore.lastChannelId + 1,
     name: name,
     isPublic: isPublic,
     ownerMembers: [authUser.uId],
     allMembers: [authUser.uId],
-    messages: [] as Message[],
+    messages: [],
+    standupActive: false,
+    standupEnd: null,
+    standupStr: '',
   };
   dataStore.channels.push(channel);
   dataStore.lastChannelId++;

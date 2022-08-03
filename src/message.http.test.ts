@@ -604,7 +604,7 @@ describe('/message/sendlaterdm/v1', () => {
     const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
     const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
     const uIds = [user1.authUserId, user2.authUserId];
-    const dm = reqDmCreate(user.token, uIds);
+    const dm = reqDmCreate(aMember.token, uIds);
     const invalid = reqMessageSendLaterDM(aMember.token, dm.dmId, 'Hello World', 1659505371);
     expect(invalid).toStrictEqual(400);
   });

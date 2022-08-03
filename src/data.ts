@@ -3,7 +3,8 @@
  * also contains helper functions to access and set the data
  * @module dataStore
 **/
-import { User, Channel, DM, TokenPair } from './interfaces';
+import { User, Channel, DM, TokenPair, WorkplaceStats } from './interfaces';
+import { ChannelsExist, DmsExist, MessagesExist } from './interfaces';
 import fs from 'fs';
 
 let data = {
@@ -16,6 +17,11 @@ let data = {
   lastDMId: 0,
   lastMessageId: 0,
   lastToken: 0,
+  stats: {
+    channelsExist: [] as ChannelsExist[],
+    dmsExist: [] as DmsExist[],
+    messagesExist: [] as MessagesExist[]
+  }
 };
 
 export interface DataStore {
@@ -28,6 +34,7 @@ export interface DataStore {
   lastDMId: number;
   lastMessageId: number;
   lastToken: number;
+  stats: WorkplaceStats;
 }
 
 // Use get() to access the data

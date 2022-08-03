@@ -177,35 +177,41 @@ export function reqDmLeaveV3(token: string, dmId: number) {
 export function requestAuthLogin(email: string, password: string) {
   const res = request(
     'POST',
-    `${url}:${port}` + '/auth/login/v2',
+    `${url}:${port}` + '/auth/login/v3',
     {
       json: {
         email, password
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestAuthRegister(email: string, password: string, nameFirst: string, nameLast: string) {
   const res = request(
     'POST',
-    `${url}:${port}` + '/auth/register/v2',
+    `${url}:${port}` + '/auth/register/v3',
     {
       json: {
         email, password, nameFirst, nameLast
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestAuthLogout(token: string) {
   const res = request(
     'POST',
-      `${url}:${port}` + '/auth/logout/v1',
+      `${url}:${port}` + '/auth/logout/v2',
       {
-        json: {
+        headers: {
           token
         }
       }
@@ -339,47 +345,6 @@ export function reqChannelAddowner(token: string, channelId: number, uId: number
     return JSON.parse(res.getBody() as string);
   }
   return res.statusCode;
-}
-
-export function requestChannelsCreate(token: string, name: string, isPublic: boolean) {
-  const res = request(
-    'POST',
-    `${url}:${port}` + '/channels/create/v2',
-    {
-      json: {
-        token,
-        name,
-        isPublic
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
-export function requestChannelsList(token: string) {
-  const res = request(
-    'GET',
-    `${url}:${port}` + '/channels/list/v2',
-    {
-      qs: {
-        token
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
-export function requestChannelsListall(token: string) {
-  const res = request(
-    'GET',
-    `${url}:${port}` + '/channels/listall/v2',
-    {
-      qs: {
-        token
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
 }
 
 export function reqChannelRemoveowner(token: string, channelId: number, uId: number) {
@@ -583,70 +548,97 @@ export function reqDmLeave(token: string, dmId: number) {
 }
 
 // user & users
+// user & users
 export function requestUserProfile(token: string, uId: number) {
   const res = request(
     'GET',
-    `${url}:${port}` + '/user/profile/v2',
+    `${url}:${port}` + '/user/profile/v3',
     {
+      headers: {
+        token
+      },
       qs: {
-        token,
         uId
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestUsersAll(token: string) {
   const res = request(
     'GET',
-    `${url}:${port}` + '/users/all/v1',
+    `${url}:${port}` + '/users/all/v2',
     {
-      qs: {
+      headers: {
         token
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestUserSetName(token: string, nameFirst: string, nameLast: string) {
   const res = request(
     'PUT',
-      `${url}:${port}` + '/user/profile/setname/v1',
+      `${url}:${port}` + '/user/profile/setname/v2',
       {
+        headers: {
+          token
+        },
         json: {
-          token, nameFirst, nameLast
+          nameFirst, nameLast
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestUserSetEmail(token: string, email: string) {
   const res = request(
     'PUT',
-      `${url}:${port}` + '/user/profile/setemail/v1',
+      `${url}:${port}` + '/user/profile/setemail/v2',
       {
+        headers: {
+          token
+        },
         json: {
-          token, email
+          email
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestUserSetHandle(token: string, handleStr: string) {
   const res = request(
     'PUT',
-      `${url}:${port}` + '/user/profile/sethandle/v1',
+      `${url}:${port}` + '/user/profile/sethandle/v2',
       {
+        headers: {
+          token
+        },
         json: {
-          token, handleStr
+          handleStr
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 // search route

@@ -437,7 +437,7 @@ export function isValidChannelId(channelId: number) {
 function membersobjCreate(MembersArr: number[]): membersobj[] {
   const result = [];
   for (const memberid of MembersArr) {
-    const user = userProfileV1(memberid, memberid);
+    const user = userProfileV1(memberid);
     result.push({
       uId: user.user.uId,
       email: user.user.email,

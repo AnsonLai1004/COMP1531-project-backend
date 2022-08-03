@@ -7,15 +7,14 @@ import errorHandler from 'middleware-http-errors';
 
 import { channelInviteV3, channelMessagesV3, channelDetailsV3, channelJoinV3, channelLeaveV2, channelAddownerV2, channelRemoveownerV2 } from './channel';
 
-import { authRegisterV2, authLoginV2, authLogoutV1 } from './auth';
-import { channelsCreateV2, channelsListV2, channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
+import { authRegisterV3, authLoginV3, authLogoutV2 } from './auth';
+import { channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
 import { messagesSearch, messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2 } from './message';
 import { standupSendV1, standupActiveV1, standupStartV1 } from './standups';
 import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV2, dmDetailsV2 } from './dm';
 import { clearV1 } from './other';
 import { fileLoadData } from './data';
-
-import { userProfileV2, usersAllV1, userSetNameV1, userSetEmailV1, userSetHandleV1 } from './users';
+import { userProfileV3, usersAllV2, userSetNameV2, userSetEmailV2, userSetHandleV2 } from './users';
 
 // Set up web app, use JSON
 const app = express();
@@ -125,30 +124,19 @@ app.get('/channels/listall/v3', (req, res, next) => {
 /// /////////////////////////////////////////////////////////////////////////////
 
 // auth routes
-app.post('/auth/login/v2', (req, res) => {
+app.post('/auth/login/v3', (req, res) => {
   const { email, password } = req.body;
-  res.json(authLoginV2(email, password));
+  res.json(authLoginV3(email, password));
 });
 
-app.post('/auth/register/v2', (req, res) => {
+app.post('/auth/register/v3', (req, res) => {
   const { email, password, nameFirst, nameLast } = req.body;
-  res.json(authRegisterV2(email, password, nameFirst, nameLast));
+  res.json(authRegisterV3(email, password, nameFirst, nameLast));
 });
 
-app.post('/auth/logout/v1', (req, res) => {
-  const { token } = req.body;
-  res.json(authLogoutV1(token));
-});
-
-// channels routes
-app.post('/channels/create/v2', (req, res) => {
-  const { token, name, isPublic } = req.body;
-  res.json(channelsCreateV2(token, name, isPublic));
-});
-
-app.get('/channels/list/v2', (req, res) => {
-  const token = req.query.token as string;
-  res.json(channelsListV2(token));
+app.post('/auth/logout/v2', (req, res) => {
+  const token = req.headers.token as string;
+  res.json(authLogoutV2(token));
 });
 
 // channel routes iteration 3
@@ -214,30 +202,33 @@ app.post('/channel/removeowner/v2', (req, res) => {
 });
 
 // user(s) routes
-app.get('/user/profile/v2', (req, res) => {
+app.get('/user/profile/v3', (req, res) => {
   const uId = parseInt((req.query.uId) as string);
-  const token = req.query.token as string;
-  res.json(userProfileV2(token, uId));
+  const token = req.headers.token as string;
+  res.json(userProfileV3(token, uId));
 });
 
-app.get('/users/all/v1', (req, res) => {
-  const token = req.query.token as string;
-  res.json(usersAllV1(token));
+app.get('/users/all/v2', (req, res) => {
+  const token = req.headers.token as string;
+  res.json(usersAllV2(token));
 });
 
-app.put('/user/profile/setname/v1', (req, res) => {
-  const { token, nameFirst, nameLast } = req.body;
-  res.json(userSetNameV1(token, nameFirst, nameLast));
+app.put('/user/profile/setname/v2', (req, res) => {
+  const { nameFirst, nameLast } = req.body;
+  const token = req.headers.token as string;
+  res.json(userSetNameV2(token, nameFirst, nameLast));
 });
 
-app.put('/user/profile/setemail/v1', (req, res) => {
-  const { token, email } = req.body;
-  res.json(userSetEmailV1(token, email));
+app.put('/user/profile/setemail/v2', (req, res) => {
+  const { email } = req.body;
+  const token = req.headers.token as string;
+  res.json(userSetEmailV2(token, email));
 });
 
-app.put('/user/profile/sethandle/v1', (req, res) => {
-  const { token, handleStr } = req.body;
-  res.json(userSetHandleV1(token, handleStr));
+app.put('/user/profile/sethandle/v2', (req, res) => {
+  const { handleStr } = req.body;
+  const token = req.headers.token as string;
+  res.json(userSetHandleV2(token, handleStr));
 });
 
 // message routes

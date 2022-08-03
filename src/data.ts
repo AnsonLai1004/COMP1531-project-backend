@@ -46,16 +46,12 @@ export function setData(newData: DataStore) {
 function fileSaveData() {
   try {
     fs.writeFileSync('dataStore.json', JSON.stringify(data));
-  } catch (err) {
-    console.error(err);
-  }
+  } catch (err) {}
 }
 
 // Updates the data based on the contents of dataStore.json
 export function fileLoadData() {
   try {
     data = JSON.parse(fs.readFileSync('dataStore.json', 'utf8'));
-  } catch (err) {
-    console.error(err);
-  }
+  } catch (err) {}
 }

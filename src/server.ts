@@ -267,7 +267,7 @@ app.get('/dm/messages/v2', (req, res, next) => {
     next(err);
   }
 });
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // auth routes
 app.post('/auth/login/v3', (req, res) => {
@@ -314,7 +314,6 @@ app.put('/user/profile/sethandle/v2', (req, res) => {
   const token = req.headers.token as string;
   res.json(userSetHandleV2(token, handleStr));
 });
-
 
 // search route
 app.get('/search/v1', (req, res, next) => {

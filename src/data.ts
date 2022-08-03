@@ -64,3 +64,23 @@ export function fileLoadData() {
     data = JSON.parse(fs.readFileSync('dataStore.json', 'utf8'));
   } catch (err) {}
 }
+
+// Helper function to update the user stats relating to channels joined
+export function updateStatsUserChannel(uId: number, timeStamp: number, action: 'add' | 'remove') {
+  for (const user of data.users) {
+    if (uId === user.uId) {
+      const lastChannelJoinObj = user.stats.channelsJoined.slice(-1)[0];
+      let newChannelJoinNum = lastChannelJoinObj.numChannelsJoined;
+      if (action === 'add') {
+        newChannelJoinNum++;
+      } else {
+        newChannelJoinNum--;
+      }
+      const newChannelJoinObj = {
+        numChannelsJoined: newChannelJoinNum,
+        timeStamp: timeStamp
+      };
+      user.stats.channelsJoined.push(newChannelJoinObj);
+    }
+  }
+}

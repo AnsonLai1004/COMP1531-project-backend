@@ -1,4 +1,4 @@
-import { reqUserStats, requestAuthRegister, requestClear } from './requests';
+import { reqUserStats, requestAuthRegister, requestClear, reqDmRemoveV3 } from './requests';
 import { requestChannelsCreateV3, reqMessageSend, reqDmCreate, reqSendMessageDm, reqChannelLeave, reqDmLeaveV3, reqMessageRemove, reqChannelJoin, reqChannelInvite } from './requests';
 
 beforeEach(() => {
@@ -113,8 +113,9 @@ describe('user/stats/v1', () => {
     const channel3 = requestChannelsCreateV3(user2.token, 'NEW', false);
     reqChannelInvite(user2.token, channel3.channelId, user1.authUserId);
 
-    reqDmCreate(user1.token, [user2.authUserId]);
+    const dm2 = reqDmCreate(user1.token, [user2.authUserId]);
     reqDmLeaveV3(user1.token, dm1.dmId);
+    reqDmRemoveV3(user1.token, dm2.dmId);
 
     const stats1 = reqUserStats(user1.token);
     expect(stats1).toEqual({
@@ -130,7 +131,8 @@ describe('user/stats/v1', () => {
           { numDmsJoined: 0, timeStamp: expect.any(Number) },
           { numDmsJoined: 1, timeStamp: expect.any(Number) },
           { numDmsJoined: 2, timeStamp: expect.any(Number) },
-          { numDmsJoined: 1, timeStamp: expect.any(Number) }
+          { numDmsJoined: 1, timeStamp: expect.any(Number) },
+          { numDmsJoined: 0, timeStamp: expect.any(Number) },
         ],
         messagesSent: [
           { numMessagesSent: 0, timeStamp: expect.any(Number) },

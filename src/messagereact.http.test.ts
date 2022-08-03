@@ -4,7 +4,8 @@ import {
   reqMessageSend,
   reqSendMessageDm, reqDmCreate,
   reqMessageReact,
-  reqMessageUnreact
+  reqMessageUnreact,
+  reqDmMessages, reqChannelMessages
 } from './requests';
 
 beforeEach(() => {
@@ -52,6 +53,7 @@ describe('message/react/v1', () => {
     const dm = reqDmCreate(aMember.token, uIds);
     reqDmCreate(user1.token, uIds2);
     reqChannelInvite(aMember.token, newchannel.channelId, user1.authUserId);
+    reqChannelInvite(aMember.token, newchannel.channelId, user2.authUserId);
     expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ messageId: 1 });
     expect(reqSendMessageDm(user1.token, dm.dmId, 'Hello World!')).toStrictEqual({ messageId: 2 });
     expect(reqMessageReact(user1.token, 2, 1)).toStrictEqual({});
@@ -95,6 +97,16 @@ describe('message/react/v1', () => {
         },
       ],
     });
+    // isthisuserreacted should return true as the user accessing the messages reacted
+    let el = reqChannelMessages(aMember.token, newchannel.channelId, 0);
+    let el2 = reqDmMessages(aMember.token, dm.dmId, 0);
+    expect(el.messages[0].reacts[0].isThisUserReacted).toStrictEqual(true);
+    expect(el2.messages[0].reacts[0].isThisUserReacted).toStrictEqual(true);
+    el = reqChannelMessages(user2.token, newchannel.channelId, 0);
+    el2 = reqDmMessages(user2.token, dm.dmId, 0);
+    // isthisuserreacted should return false as the user accessing the messages reacted
+    expect(el.messages[0].reacts[0].isThisUserReacted).toStrictEqual(false);
+    expect(el2.messages[0].reacts[0].isThisUserReacted).toStrictEqual(false);
   });
 });
 
@@ -183,8 +195,14 @@ describe('message/unreact/v1', () => {
       ],
     });
     expect(reqMessageUnreact(user1.token, 2, 1)).toStrictEqual({});
+    // isthisuserreacted should return false as the user accessing the messages unreacted
+    let el = reqDmMessages(user1.token, dm.dmId, 0);
+    expect(el.messages[0].reacts[0].isThisUserReacted).toStrictEqual(false);
+
     expect(reqMessageUnreact(aMember.token, 2, 1)).toStrictEqual({});
     expect(reqMessageUnreact(user1.token, 1, 1)).toStrictEqual({});
+    el = reqChannelMessages(user1.token, newchannel.channelId, 0);
+    expect(el.messages[0].reacts[0].isThisUserReacted).toStrictEqual(false);
     expect(reqMessageUnreact(aMember.token, 1, 1)).toStrictEqual({});
     messagesGet = reqMessagesSearch(aMember.token, 'World');
     expect(messagesGet).toStrictEqual({

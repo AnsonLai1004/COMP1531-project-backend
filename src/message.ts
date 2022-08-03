@@ -296,6 +296,15 @@ function dmMessageV1helper(authUserId: number, dmId: number, start: number) {
     throw HTTPError(400, 'start greater than total number of messages in channel');
   }
   const end = start + 50;
+  for (const message of messages) {
+    for (const reaction of message.reacts) {
+      if (reaction.uIds.includes(authUserId)) {
+        reaction.isThisUserReacted = true;
+      } else {
+        reaction.isThisUserReacted = false;
+      }
+    }
+  }
   if (end < numofmessages) {
     return {
       messages: messages,

@@ -9,7 +9,7 @@ import { channelInviteV3, channelMessagesV3, channelDetailsV3, channelJoinV3, ch
 
 import { authRegisterV3, authLoginV3, authLogoutV2 } from './auth';
 import { channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
-import { messageUnpin, messagePin, messagesSearch, messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2, messageReact, messageUnreact } from './message';
+import { messageUnpin, messagePin, messagesSearch, messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2, messageSendLater, messageSendLaterDM, messageReact, messageUnreact } from './message';
 import { standupSendV1, standupActiveV1, standupStartV1 } from './standups';
 import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV2, dmDetailsV2 } from './dm';
 import { clearV1 } from './other';
@@ -257,6 +257,26 @@ app.post('/message/senddm/v2', (req, res, next) => {
   }
 });
 
+app.post('/message/pin/v1', (req, res, next) => {
+  try {
+    const { messageId } = req.body;
+    const token = req.headers.token as string;
+    res.json(messagePin(token, messageId));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/message/unpin/v1', (req, res, next) => {
+  try {
+    const { messageId } = req.body;
+    const token = req.headers.token as string;
+    res.json(messageUnpin(token, messageId));
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.get('/dm/messages/v2', (req, res, next) => {
   try {
     const dmId = parseInt((req.query.dmId) as string);
@@ -267,6 +287,27 @@ app.get('/dm/messages/v2', (req, res, next) => {
     next(err);
   }
 });
+
+app.post('/message/sendlater/v1', (req, res, next) => {
+  try {
+    const { channelId, message, timeSent } = req.body;
+    const token = req.headers.token as string;
+    res.json(messageSendLater(token, channelId, message, timeSent));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/message/sendlaterdm/v1', (req, res, next) => {
+  try {
+    const { dmId, message, timeSent } = req.body;
+    const token = req.headers.token as string;
+    res.json(messageSendLaterDM(token, dmId, message, timeSent));
+  } catch (err) {
+    next(err);
+  }
+});
+
 /// ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // auth routes

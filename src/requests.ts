@@ -494,6 +494,88 @@ export function reqSendMessageDm(token: string, dmId: number, message: string) {
   return res.statusCode;
 }
 
+// message/sendlater/v1
+export function reqMessageSendLater(token: string, channelId: number, message: string, timeSent: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/sendlater/v1',
+    {
+      json: {
+        channelId,
+        message,
+        timeSent
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+// message/sendlaterdm/v1
+export function reqMessageSendLaterDM(token: string, dmId: number, message: string, timeSent: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/sendlaterdm/v1',
+    {
+      json: {
+        dmId,
+        message,
+        timeSent
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+export function reqMessagePin(token: string, messageId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/pin/v1',
+    {
+      json: {
+        messageId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+export function reqMessageUnpin(token: string, messageId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/unpin/v1',
+    {
+      json: {
+        messageId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
 // dm/messages/v2
 export function reqDmMessages(token: string, dmId: number, start: number) {
   const res = request(
@@ -618,44 +700,6 @@ export function reqMessagesSearch(token: string, queryStr: string) {
     {
       qs: {
         queryStr
-      },
-      headers: {
-        token: token
-      }
-    }
-  );
-  if (res.statusCode === 200) {
-    return JSON.parse(res.getBody() as string);
-  }
-  return res.statusCode;
-}
-
-export function reqMessagePin(token: string, messageId: number) {
-  const res = request(
-    'POST',
-    `${url}:${port}` + '/message/pin/v1',
-    {
-      json: {
-        messageId,
-      },
-      headers: {
-        token: token
-      }
-    }
-  );
-  if (res.statusCode === 200) {
-    return JSON.parse(res.getBody() as string);
-  }
-  return res.statusCode;
-}
-
-export function reqMessageUnpin(token: string, messageId: number) {
-  const res = request(
-    'POST',
-    `${url}:${port}` + '/message/unpin/v1',
-    {
-      json: {
-        messageId,
       },
       headers: {
         token: token

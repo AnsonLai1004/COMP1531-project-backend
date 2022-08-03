@@ -12,7 +12,7 @@ export interface User {
     nameFirst: string;
     nameLast: string;
     email: string;
-    password: string;
+    passwordHash: string;
     handleStr: string;
     isGlobalOwner: boolean;
 }

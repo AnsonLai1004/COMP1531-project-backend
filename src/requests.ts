@@ -6,7 +6,7 @@
 import request from 'sync-request';
 import { port, url } from './config.json';
 
-/////////////////////////////// ITERATION 3 ////////////////////////////////////
+/// //////////////////////////// ITERATION 3 ////////////////////////////////////
 export function requestStandupStartV3(token: string, channelId: number, length: number) {
   const res = request(
     'POST',

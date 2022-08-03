@@ -2,8 +2,13 @@ import {
   reqChannelInvite, reqMessagesSearch,
   requestClear, requestChannelsCreateV3, requestAuthRegister,
   reqChannelMessages, reqMessageSend, reqMessageEdit,
-  reqMessageRemove, reqSendMessageDm, reqDmMessages, reqDmCreate
+  reqMessageRemove, reqSendMessageDm, reqDmMessages, reqDmCreate,
+  reqMessageSendLater, reqMessageSendLaterDM
 } from './requests';
+
+function sleep(s: number) {
+  return new Promise(resolve => setTimeout(resolve, s * 1000));
+}
 
 beforeEach(() => {
   requestClear();
@@ -480,5 +485,187 @@ describe('search/v1 test', () => {
     expect(messagesGet.messages[1].message).toStrictEqual('Hello World3!');
     expect(messagesGet.messages[2].message).toStrictEqual('Hello World2!');
     expect(messagesGet.messages[3].message).toStrictEqual('Hello World!');
+  });
+});
+
+
+// message/sendlater/v1
+describe('message/sendlater/v1', () => {
+  test('Invalid tokenId', () => {
+    expect(reqMessageSendLater('asdasdas', -999, 'any string message', 2659505371)).toStrictEqual(403);
+  });
+  test('Error case for invalid channelId', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const invalid = reqMessageSendLater(aMember.token, -999, 'any string message', 2659505371);
+    expect(invalid).toStrictEqual(400);
+  });
+  test('Error case for length message empty or more than 1000 in length', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    let invalid = reqMessageSendLater(aMember.token, newchannel.channelId, '', 2659505371);
+    expect(invalid).toStrictEqual(400);
+    invalid = reqMessageSendLater(aMember.token, newchannel.channelId, 'DS3ho21uGIVZpqsCqDUv879zypAtNRC8gFrM7YecnTcdwqMCfzvUkyuxBu3zRYxhlRsMBPDJxzfUIh8bhp92owenjm8UXDPvUrI6U17qa' +
+    'Z3xc2MBMe2hvhYUbrI5CR6ylYdxGj6UikC9CpdD5CCNLGmqWigm2QkGXjLq3EcBi12nPSxuf7vGlhBWDKCwNjXBuo1KpFdogbdCwD8sEBgEQZs3Uw3vIhVOvYQzm6wkG7sU5BHjLTaXTeLIP19jAmWVFsVYG66Ztg4ZG1b' +
+    '2OScLJrg9ykkjmJf3bywy4YWmVqQihxyFL5WfEmTzrDw2SVGelnSfkNCUv9TwVrKmUzPWFR5JBNVGy71r528mDxRNwwJw1uSXhkmF39WuvlkuHHRZyUZweELBtlDKZqsG1CI4qj2M9BEKQo7OJE5ZNRtEoh2cHwzFcxgVE' +
+    'yiZ3QXnWviV5q2k6Uchm2X7iuYfC8eQNPXnx8SQzN1xkKV3GyukZPiA4szqbS0llk8q1EBKU4s3ENmroHquWeTfbplOHuRxdr9vPau9OV9Vu5sKWlqwfYQLVjaHvsTqPdMz8XKST2ick1MOtgNMn3vN0yUGJJzbc27gciQ' +
+    'y6tK6PxCGZSRhR2TLHXeYHYfVarjGGWDQ3WvsTgBSIyEzcz8cjAcOSlMravYVQtqzQo5gWwJeqvEFXSnhG8n3hnLptr0qC47hsHxS8vFKjivtO3w52yXfaUVJxD48siNyWLZg9lzZ6Qubb6w6hqP3M9ePmtINh02L8UfFk' +
+    'eVMyuWjoWudLRMaEtmxERW3WJcnJv6AYvOwFCQkLtjKRiX4GZ67sM1LKjq66aNT7tC5MViUBai8uV7LDs9fxa864GoWrw9tJD95dauiN7BJyfQFmslS3C3WClToayaqGNZjA89GollAaEHxoQGG9b4jtnAsyctv4lNtWLf' +
+    '3WF6IiCSUKoiaduaRI1wxMS6Fqpih9qyHKyr72jtS2ficEcTY6Fw3rU1n3a11sx6Ha', 2659505371);
+    expect(invalid).toStrictEqual(400);
+  });
+  test('Error case for past time sent', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    let invalid = reqMessageSendLater(aMember.token, newchannel.channelId, 'Hello World', 1659505371);
+    expect(invalid).toStrictEqual(400);
+  });
+  test('Error case where user is not authorized in channel', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    const notMember = requestAuthRegister('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
+    const invalid = reqMessageSendLater(notMember.token, newchannel.channelId, 'Hello World!', 2659505371);
+    expect(invalid).toStrictEqual(403);
+  });
+  // success input output for messagesend
+  test('Valid arguments, output success', async () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    const curTime = Math.floor((new Date()).getTime() / 1000);
+    expect(reqMessageSendLater(aMember.token, newchannel.channelId, 'Hello World!', curTime + 3)).toStrictEqual({ messageId: 1 });
+    let channelmessages = reqChannelMessages(aMember.token, newchannel.channelId, 0);
+    // check still empty
+    expect(channelmessages.messages.length).toStrictEqual(0);
+    // wait for message to send;
+    await sleep(3.3)
+    channelmessages = reqChannelMessages(aMember.token, newchannel.channelId, 0);
+    expect(channelmessages.messages[0].uId).toStrictEqual(1);
+    expect(channelmessages.messages[0].message).toStrictEqual('Hello World!');
+  });
+  test('Valid arguments, output success, multiple message, different channels', async () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    const newchannel2 = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    const curTime = Math.floor((new Date()).getTime() / 1000);
+
+    // messages are ordered in order from most recent message to oldest
+    // first channel, first message, slowest in channel
+    expect(reqMessageSendLater(aMember.token, newchannel.channelId, 'Hello World!', curTime + 3)).toStrictEqual({ messageId: 1 });
+    // second channel, second message, same time in channel
+    expect(reqMessageSendLater(aMember.token, newchannel2.channelId, 'Hello World!', curTime + 2)).toStrictEqual({ messageId: 2 });
+    // first channel, third message, fastest in channel
+    expect(reqMessageSendLater(aMember.token, newchannel.channelId, 'Hello World second!', curTime + 2)).toStrictEqual({ messageId: 3 });
+    // second channel, fourth message, same time in channel
+    expect(reqMessageSendLater(aMember.token, newchannel2.channelId, 'Hello World second!', curTime + 2)).toStrictEqual({ messageId: 4 });
+
+    await sleep(3.3)
+    const channelmessages1 = reqChannelMessages(aMember.token, newchannel.channelId, 0);
+    const channelmessages2 = reqChannelMessages(aMember.token, newchannel2.channelId, 0);
+
+    expect(channelmessages1.messages[0].messageId).toStrictEqual(1);
+    expect(channelmessages1.messages[0].message).toStrictEqual('Hello World!');
+    expect(channelmessages1.messages[1].messageId).toStrictEqual(3);
+    expect(channelmessages1.messages[1].message).toStrictEqual('Hello World second!');
+
+    expect(channelmessages2.messages[0].messageId).toStrictEqual(4);
+    expect(channelmessages2.messages[0].message).toStrictEqual('Hello World second!');
+    expect(channelmessages2.messages[1].messageId).toStrictEqual(2);
+    expect(channelmessages2.messages[1].message).toStrictEqual('Hello World!');
+  });
+});
+
+// message/sendlaterdm/v1
+describe('/message/sendlaterdm/v1', () => {
+  test('Invalid tokenId', () => {
+    expect(reqMessageSendLaterDM('asdasdas', 1, 'any string message', 2659505371)).toStrictEqual(403);
+  });
+  test('Error case for invalid channelId', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const invalid = reqMessageSendLaterDM(aMember.token, -999, 'any string message', 2659505371);
+    expect(invalid).toStrictEqual(400);
+  });
+  test('Error case for length message empty or more than 1000 in length', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId, user2.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    let invalid = reqMessageSendLaterDM(user.token, dm.dmId, '', 2659505371);
+    expect(invalid).toStrictEqual(400);
+    invalid = reqMessageSendLaterDM(user.token, dm.dmId, 'DS3ho21uGIVZpqsCqDUv879zypAtNRC8gFrM7YecnTcdwqMCfzvUkyuxBu3zRYxhlRsMBPDJxzfUIh8bhp92owenjm8UXDPvUrI6U17qa' +
+    'Z3xc2MBMe2hvhYUbrI5CR6ylYdxGj6UikC9CpdD5CCNLGmqWigm2QkGXjLq3EcBi12nPSxuf7vGlhBWDKCwNjXBuo1KpFdogbdCwD8sEBgEQZs3Uw3vIhVOvYQzm6wkG7sU5BHjLTaXTeLIP19jAmWVFsVYG66Ztg4ZG1b' +
+    '2OScLJrg9ykkjmJf3bywy4YWmVqQihxasdyFL5WfEmTzrDw2SVGelnSfkNCUv9TwVrKmUzPWFR5JBNVGy71r528mDxRNwwJw1uSXhkmF39WuvlkuHHRZyUZweELBtlDKZqsG1CI4qj2M9BEKQo7OJE5ZNRtEoh2cHwzFcxgVE' +
+    'yiZ3QXnWviV5q2k6Uchm2X7iuYfC8eQNPXnx8SQzN1xkKV3GyukZPiA4szqbS0llk8q1EBKU4s3ENmroHquWeTfbplOHuRxdr9vPau9OV9Vu5sKWlqwfYQLVjaHvsTqPdMz8XKST2ick1MOtgNMn3vN0yUGJJzbc27gciQ' +
+    'y6tK6PxCGZSRhR2TLHXeYHYfVarjGGWDQ3WvsTgBSIyEzcz8cjAcOSlMravYVQtqzQo5gWwJeqvEFXSnhG8n3hnLptr0qC47hsHxS8vFKjivtO3w52yXfaUVJxD48siNyWLZg9lzZ6Qubb6w6hqP3M9ePmtINh02L8UfFk' +
+    'eVMyuWjoWudLRMaEtmxERW3WJcnJv6AYvOwFCQkLtjKRiX4GZ67sM1LKjq66aNT7tC5MViUBai8uV7LDs9fxa864GoWrw9tJD95dauiN7BJyfQFmslS3C3WClToayaqGNZjA89GollAaEHxoQGG9b4jtnAsyctv4lNtWLf' +
+    '3WF6IiCSUKoiaduaRI1wxMS6Fqpih9qyHsKyr72jtS2ficEcTY6Fw3rU1n3a11sx6Ha', 2659505371);
+    expect(invalid).toStrictEqual(400);
+  });
+  test('Error case for past time sent', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    let invalid = reqMessageSendLaterDM(aMember.token, newchannel.channelId, 'Hello World', 1659505371);
+    expect(invalid).toStrictEqual(400);
+  });
+  test('Error case where user is not authorized in dm', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    const invalid = reqMessageSendLaterDM(user2.token, dm.dmId, 'Hello World!', 2659505371);
+    expect(invalid).toStrictEqual(403);
+  });
+  // success input output for messagesend
+  test('Valid arguments, output success', async () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId, user2.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    const curTime = Math.floor((new Date()).getTime() / 1000);
+
+    expect(reqMessageSendLaterDM(user.token, dm.dmId, 'Hello World!', curTime + 2)).toStrictEqual({ messageId: 1 });
+    // check empty first
+    let dmMessages = reqDmMessages(user.token, dm.dmId, 0);
+    expect(dmMessages.messages.length).toStrictEqual(0);
+
+    await sleep(3.3)
+    dmMessages = reqDmMessages(user.token, dm.dmId, 0);
+    expect(dmMessages.messages[0].uId).toStrictEqual(1);
+    expect(dmMessages.messages[0].message).toStrictEqual('Hello World!');
+  });
+  test('Valid arguments, output success, multiple message, different channels', async () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId, user2.authUserId];
+    const uIds2 = [user1.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    const dm2 = reqDmCreate(user.token, uIds2);
+    const curTime = Math.floor((new Date()).getTime() / 1000);
+
+    // messages are ordered in order from most recent message to oldest
+    // first channel, first message, slowest in channel
+    expect(reqMessageSendLaterDM(user.token, dm.dmId, 'Hello World!', curTime + 3)).toStrictEqual({ messageId: 1 });
+    // second channel, second message, same time in channel
+    expect(reqMessageSendLaterDM(user.token, dm2.dmId, 'Hello World!', curTime + 2)).toStrictEqual({ messageId: 2 });
+    // first channel, third message, fastest in channel
+    expect(reqMessageSendLaterDM(user.token, dm.dmId, 'Hello World second!', curTime + 2)).toStrictEqual({ messageId: 3 });
+    // second channel, fourth message, same time in channel
+    expect(reqMessageSendLaterDM(user.token, dm2.dmId, 'Hello World second!', curTime + 2)).toStrictEqual({ messageId: 4 });
+
+    await sleep(3.3)
+    const dmmessages1 = reqDmMessages(user.token, dm.dmId, 0);
+    const dmmessages2 = reqDmMessages(user.token, dm2.dmId, 0);
+
+    expect(dmmessages1.messages[0].messageId).toStrictEqual(1);
+    expect(dmmessages1.messages[0].message).toStrictEqual('Hello World!');
+    expect(dmmessages1.messages[1].messageId).toStrictEqual(3);
+    expect(dmmessages1.messages[1].message).toStrictEqual('Hello World second!');
+
+    expect(dmmessages2.messages[0].messageId).toStrictEqual(4);
+    expect(dmmessages2.messages[0].message).toStrictEqual('Hello World second!');
+    expect(dmmessages2.messages[1].messageId).toStrictEqual(2);
+    expect(dmmessages2.messages[1].message).toStrictEqual('Hello World!');
   });
 });

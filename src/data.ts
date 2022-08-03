@@ -84,3 +84,23 @@ export function updateStatsUserChannel(uId: number, timeStamp: number, action: '
     }
   }
 }
+
+// Helper function to update the user stats relating to dms joined
+export function updateStatsUserDm(uId: number, timeStamp: number, action: 'add' | 'remove') {
+  for (const user of data.users) {
+    if (uId === user.uId) {
+      const lastDmJoinObj = user.stats.dmsJoined.slice(-1)[0];
+      let newDmJoinNum = lastDmJoinObj.numDmsJoined;
+      if (action === 'add') {
+        newDmJoinNum++;
+      } else {
+        newDmJoinNum--;
+      }
+      const newDmJoinObj = {
+        numDmsJoined: newDmJoinNum,
+        timeStamp: timeStamp
+      };
+      user.stats.dmsJoined.push(newDmJoinObj);
+    }
+  }
+}

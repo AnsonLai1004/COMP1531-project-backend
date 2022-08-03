@@ -8,7 +8,7 @@ import errorHandler from 'middleware-http-errors';
 import { channelInviteV3, channelMessagesV3, channelDetailsV3, channelJoinV3, channelLeaveV2, channelAddownerV2, channelRemoveownerV2 } from './channel';
 
 import { authRegisterV3, authLoginV3, authLogoutV2 } from './auth';
-import { channelsCreateV2, channelsListV2, channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
+import { channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
 import { messagesSearch, messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2 } from './message';
 import { standupSendV1, standupActiveV1, standupStartV1 } from './standups';
 import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV2, dmDetailsV2 } from './dm';
@@ -137,17 +137,6 @@ app.post('/auth/register/v3', (req, res) => {
 app.post('/auth/logout/v2', (req, res) => {
   const token = req.headers.token as string;
   res.json(authLogoutV2(token));
-});
-
-// channels routes
-app.post('/channels/create/v2', (req, res) => {
-  const { token, name, isPublic } = req.body;
-  res.json(channelsCreateV2(token, name, isPublic));
-});
-
-app.get('/channels/list/v2', (req, res) => {
-  const token = req.query.token as string;
-  res.json(channelsListV2(token));
 });
 
 // channel routes iteration 3

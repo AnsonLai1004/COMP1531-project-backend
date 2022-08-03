@@ -367,6 +367,26 @@ app.get('/search/v1', (req, res, next) => {
   }
 });
 
+app.post('/message/pin/v1', (req, res, next) => {
+  try {
+    const { messageId } = req.body;
+    const token = req.headers.token as string;
+    res.json(messagePin(token, messageId));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/message/unpin/v1', (req, res, next) => {
+  try {
+    const { messageId } = req.body;
+    const token = req.headers.token as string;
+    res.json(messageUnpin(token, messageId));
+  } catch (err) {
+    next(err);
+  }
+});
+
 // other routes
 app.delete('/clear/v1', (req, res) => {
   clearV1();

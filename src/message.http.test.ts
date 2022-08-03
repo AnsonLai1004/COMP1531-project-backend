@@ -2,8 +2,12 @@ import {
   reqChannelInvite, reqMessagesSearch,
   requestClear, requestChannelsCreateV3, requestAuthRegister,
   reqChannelMessages, reqMessageSend, reqMessageEdit,
+<<<<<<< HEAD
   reqMessageRemove, reqSendMessageDm, reqDmMessages, reqDmCreate,
   reqMessageSendLater, reqMessageSendLaterDM, reqMessagePin, reqMessageUnpin
+=======
+  reqMessageRemove, reqSendMessageDm, reqDmMessages, reqDmCreate, reqMessagePin, reqMessageUnpin
+>>>>>>> master
 } from './requests';
 
 function sleep(s: number) {
@@ -405,7 +409,7 @@ describe('message/remove/v2 on dm and channels', () => {
   test('edit multiple message from multiple channels', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
-    const newchannel2 = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    const newchannel2 = requestChannelsCreateV3(aMember.token, 'crush teamasd', true);
     const user = requestAuthRegister('a@gmail.com', '123abc!@#', 'b', 'c');
     const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
     const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');

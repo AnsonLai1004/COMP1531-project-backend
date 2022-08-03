@@ -711,3 +711,41 @@ export function reqMessagesSearch(token: string, queryStr: string) {
   }
   return res.statusCode;
 }
+
+export function reqMessagePin(token: string, messageId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/pin/v1',
+    {
+      json: {
+        messageId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+export function reqMessageUnpin(token: string, messageId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/unpin/v1',
+    {
+      json: {
+        messageId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}

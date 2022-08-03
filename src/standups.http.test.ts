@@ -49,7 +49,7 @@ describe('Channels Functions Errors', () => {
     expect(timeFinReturned).toBeLessThanOrEqual(timeFinish + 1);
     expect(requestStandupActiveV3(user1.token, channel1)).toStrictEqual({
       isActive: true,
-      timeFinish: timeFinish
+      timeFinish: timeFinReturned
     });
     expect(requestStandupSendV3(user1.token, channel1, 'Hello')).toStrictEqual({});
     expect(requestStandupSendV3(user2.token, channel1, 'World!')).toStrictEqual({});

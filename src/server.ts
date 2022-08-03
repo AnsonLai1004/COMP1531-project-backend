@@ -269,7 +269,6 @@ app.get('/dm/messages/v2', (req, res, next) => {
   }
 });
 
-
 /// ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // auth routes
@@ -333,8 +332,6 @@ app.post('/message/share/v1', (req, res, next) => {
   try {
     const token = req.headers.token as string;
     const { ogMessageId, message, channelId, dmId } = req.body;
-    console.log(req.body);
-    console.log('hi' + message.length);
     res.json(messageShareV1(token, ogMessageId, message, channelId, dmId));
   } catch (err) {
     next(err);

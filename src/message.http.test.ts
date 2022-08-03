@@ -424,7 +424,6 @@ describe('message/remove/v2 on dm and channels', () => {
   });
 });
 
-
 /// //////////////////////Iteration 3 new functions tests////////////////////////////////////////////////////////////////////////////////////////
 describe('search/v1 test', () => {
   test('invalid tokenid', () => {
@@ -503,14 +502,13 @@ describe('message/share/v1', () => {
     expect(reqMessageShare(user.token, message.messageId, '3', channel.channelId, dm.dmId)).toStrictEqual(400);
     expect(reqMessageShare(user.token, -999, '4', channel.channelId, -1)).toStrictEqual(400);
     // user1 not in channel
-    expect(reqMessageShare(user1.token, message2.messageId,'5', -1, dm.dmId)).toStrictEqual(400);
-    expect(reqMessageShare(user2.token, message.messageId,'5', channel2.channelId, -1)).toStrictEqual(400);
+    expect(reqMessageShare(user1.token, message2.messageId, '5', -1, dm.dmId)).toStrictEqual(400);
+    expect(reqMessageShare(user2.token, message.messageId, '5', channel2.channelId, -1)).toStrictEqual(400);
     expect(reqMessageShare(user.token, message.messageId, '6'.repeat(1001), -1, dm.dmId)).toStrictEqual(400);
-    
+
     expect(reqMessageShare(user.token, message.messageId, '7', channel2.channelId, -1)).toStrictEqual(403);
     expect(reqMessageShare('Invalid', message.messageId, '8', channel.channelId, -1)).toStrictEqual(403);
     expect(reqMessageShare(user2.token, message.messageId, '8', -1, dm.dmId)).toStrictEqual(403);
-
   });
 
   test('share message to a channel', () => {

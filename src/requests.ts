@@ -190,7 +190,6 @@ export function reqMessageShare(token: string, ogMessageId: number, message: str
       }
     }
   );
-  console.log(message);
   if (res.statusCode === 200) {
     return JSON.parse(res.body as string);
   }

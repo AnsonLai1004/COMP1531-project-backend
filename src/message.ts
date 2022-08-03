@@ -320,11 +320,9 @@ function dmMessagesV2(token: string, dmId: number, start: number) {
   return result;
 }
 
-
 /// //////////////////////Iteration 3 new functions////////////////////////////////////////////////////////////////////////////////////////
 // message/share/v1
 function messageShareV1(token: string, ogMessageId: number, message: string, channelId: number, dmId: number) {
-
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
     throw HTTPError(403, 'Invalid token');
@@ -562,7 +560,6 @@ function findMessageStr(messageId: number) {
   for (i = 0; i < data.channels.length; i++) {
     for (const message of data.channels[i].messages) {
       if (messageId === message.messageId) {
-        console.log(data.channels[i].channelId + '+_=============================================');
         return {
           message: message.message,
           Id: data.channels[i].channelId,
@@ -573,7 +570,6 @@ function findMessageStr(messageId: number) {
   for (i = 0; i < data.dms.length; i++) {
     for (const message of data.dms[i].messages) {
       if (messageId === message.messageId) {
-        console.log(data.dms[i].dmId + '+_=============================================');
         return {
           message: message.message,
           Id: data.dms[i].dmId,

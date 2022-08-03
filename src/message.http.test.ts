@@ -488,7 +488,6 @@ describe('search/v1 test', () => {
   });
 });
 
-
 // message/sendlater/v1
 describe('message/sendlater/v1', () => {
   test('Invalid tokenId', () => {
@@ -516,7 +515,7 @@ describe('message/sendlater/v1', () => {
   test('Error case for past time sent', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
-    let invalid = reqMessageSendLater(aMember.token, newchannel.channelId, 'Hello World', 1659505371);
+    const invalid = reqMessageSendLater(aMember.token, newchannel.channelId, 'Hello World', 1659505371);
     expect(invalid).toStrictEqual(400);
   });
   test('Error case where user is not authorized in channel', () => {
@@ -536,7 +535,7 @@ describe('message/sendlater/v1', () => {
     // check still empty
     expect(channelmessages.messages.length).toStrictEqual(0);
     // wait for message to send;
-    await sleep(3.3)
+    await sleep(3.3);
     channelmessages = reqChannelMessages(aMember.token, newchannel.channelId, 0);
     expect(channelmessages.messages[0].uId).toStrictEqual(1);
     expect(channelmessages.messages[0].message).toStrictEqual('Hello World!');
@@ -557,7 +556,7 @@ describe('message/sendlater/v1', () => {
     // second channel, fourth message, same time in channel
     expect(reqMessageSendLater(aMember.token, newchannel2.channelId, 'Hello World second!', curTime + 2)).toStrictEqual({ messageId: 4 });
 
-    await sleep(3.3)
+    await sleep(3.3);
     const channelmessages1 = reqChannelMessages(aMember.token, newchannel.channelId, 0);
     const channelmessages2 = reqChannelMessages(aMember.token, newchannel2.channelId, 0);
 
@@ -603,7 +602,7 @@ describe('/message/sendlaterdm/v1', () => {
   test('Error case for past time sent', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
-    let invalid = reqMessageSendLaterDM(aMember.token, newchannel.channelId, 'Hello World', 1659505371);
+    const invalid = reqMessageSendLaterDM(aMember.token, newchannel.channelId, 'Hello World', 1659505371);
     expect(invalid).toStrictEqual(400);
   });
   test('Error case where user is not authorized in dm', () => {
@@ -629,7 +628,7 @@ describe('/message/sendlaterdm/v1', () => {
     let dmMessages = reqDmMessages(user.token, dm.dmId, 0);
     expect(dmMessages.messages.length).toStrictEqual(0);
 
-    await sleep(3.3)
+    await sleep(3.3);
     dmMessages = reqDmMessages(user.token, dm.dmId, 0);
     expect(dmMessages.messages[0].uId).toStrictEqual(1);
     expect(dmMessages.messages[0].message).toStrictEqual('Hello World!');
@@ -654,7 +653,7 @@ describe('/message/sendlaterdm/v1', () => {
     // second channel, fourth message, same time in channel
     expect(reqMessageSendLaterDM(user.token, dm2.dmId, 'Hello World second!', curTime + 2)).toStrictEqual({ messageId: 4 });
 
-    await sleep(3.3)
+    await sleep(3.3);
     const dmmessages1 = reqDmMessages(user.token, dm.dmId, 0);
     const dmmessages2 = reqDmMessages(user.token, dm2.dmId, 0);
 

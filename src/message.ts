@@ -359,9 +359,9 @@ function messagesSearch(token: string, queryStr: string) {
 }
 
 /**
- * Send a message from the authorised user to the channel specified by channelId 
- * automatically at a specified time in the future. The returned messageId will only 
- * be considered valid for other actions (editing/deleting/reacting/etc) 
+ * Send a message from the authorised user to the channel specified by channelId
+ * automatically at a specified time in the future. The returned messageId will only
+ * be considered valid for other actions (editing/deleting/reacting/etc)
  * once it has been sent (i.e. after timeSent).
  * @param { channelId, message, timeSent }
  * @returns { messageId }
@@ -389,7 +389,7 @@ function messageSendLater(token: string, channelId: number, message: string, tim
   if (timeSent < curTime) {
     throw HTTPError(400, 'Time must be after current time');
   }
-  
+
   // update lastmessageid
   const data = getData();
   data.lastMessageId++;
@@ -399,7 +399,7 @@ function messageSendLater(token: string, channelId: number, message: string, tim
   setTimeout((futureMessageId, tokenId, channelId, message, timeSent) => {
     // basically send message but with custom lastmessageid (futuremessageid)
     const datastore = getData();
-    console.log("IN TIMEOUT ADDING", futureMessageId, tokenId, channelId, message, timeSent)
+    console.log('IN TIMEOUT ADDING', futureMessageId, tokenId, channelId, message, timeSent);
     const newmessage: Message = {
       messageId: (futureMessageId) as number,
       uId: tokenId.uId,
@@ -417,14 +417,14 @@ function messageSendLater(token: string, channelId: number, message: string, tim
     setData(datastore);
   }, (timeSent - curTime) * 1000, futureMessageId, tokenId, channelId, message, timeSent);
 
-  return { messageId: futureMessageId }
+  return { messageId: futureMessageId };
 }
 
 /**
- * Send a message from the authorised user to the DM specified by dmId 
- * automatically at a specified time in the future. The returned messageId will 
- * only be considered valid for other actions (editing/deleting/reacting/etc) 
- * once it has been sent (i.e. after timeSent). If the DM is removed before the 
+ * Send a message from the authorised user to the DM specified by dmId
+ * automatically at a specified time in the future. The returned messageId will
+ * only be considered valid for other actions (editing/deleting/reacting/etc)
+ * once it has been sent (i.e. after timeSent). If the DM is removed before the
  * message has sent, the message will not be sent.
  * @param { dmId, message, timeSent }
  * @returns { messageId }
@@ -452,7 +452,7 @@ function messageSendLaterDM(token: string, dmId: number, message: string, timeSe
   if (timeSent < curTime) {
     throw HTTPError(400, 'Time must be after current time');
   }
-  
+
   // update lastmessageid
   const data = getData();
   data.lastMessageId++;
@@ -482,7 +482,7 @@ function messageSendLaterDM(token: string, dmId: number, message: string, timeSe
     }
   }, (timeSent - curTime) * 1000, futureMessageId, tokenId, dmId, message, timeSent);
 
-  return { messageId: futureMessageId }
+  return { messageId: futureMessageId };
 }
 
 /************************************************************************

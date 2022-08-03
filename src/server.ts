@@ -309,7 +309,7 @@ app.get('/search/v1', (req, res, next) => {
 //  user statistics routes
 app.get('/user/stats/v1', (req, res) => {
   const token = req.query.token as string;
-  res.json({error: "not yet implemented"});
+  res.json({ error: 'not yet implemented' });
 });
 
 // other routes

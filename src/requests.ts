@@ -616,7 +616,6 @@ export function reqUserStats(token: string) {
   return res.statusCode;
 }
 
-
 // search route
 export function reqMessagesSearch(token: string, queryStr: string) {
   const res = request(

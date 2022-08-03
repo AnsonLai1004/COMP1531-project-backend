@@ -141,9 +141,9 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
     handleStr: handle,
     isGlobalOwner: isGlobalOwner,
     stats: {
-      channelsJoined: [{ numChannelsJoined: 0, timeStamp: registerTime}],
-      dmsJoined: [{ numDmsJoined: 0, timeStamp: registerTime}],
-      messagesSent: [{ numMessagesSent: 0, timeStamp: registerTime}],
+      channelsJoined: [{ numChannelsJoined: 0, timeStamp: registerTime }],
+      dmsJoined: [{ numDmsJoined: 0, timeStamp: registerTime }],
+      messagesSent: [{ numMessagesSent: 0, timeStamp: registerTime }],
     }
   };
 

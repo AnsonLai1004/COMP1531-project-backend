@@ -3,11 +3,18 @@
  * storing data in dataStore.ts and accessed by other files.
  */
 
+export interface Reacts {
+    reactId: number;
+    uIds: number[];
+}
+
 export interface Message {
     messageId: number;
     uId: number;
     message: string;
     timeSent: number;
+    reacts: Reacts[];
+    isPinned: boolean;
 }
 
 export interface Channel {
@@ -86,7 +93,7 @@ export interface User {
     nameFirst: string;
     nameLast: string;
     email: string;
-    password: string;
+    passwordHash: string;
     handleStr: string;
     isGlobalOwner: boolean;
     stats: UserStats;

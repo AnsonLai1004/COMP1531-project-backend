@@ -6,6 +6,7 @@ import { getData, setData } from './data';
 import { checkUserData } from './users';
 import isEmail from 'validator/lib/isEmail.js';
 import HTTPError from 'http-errors';
+import crypto from 'crypto';
 
 /**
  * Wrapper function which calls authRegisterV1 and generates a token
@@ -69,8 +70,11 @@ export function authLogoutV2(token: string) {
 export function authLoginV1(email: string, password: string) {
   const data = getData();
   for (const user of data.users) {
-    if (email === user.email && password === user.password) {
-      return { authUserId: user.uId };
+    if (email === user.email) {
+      const inputHash = crypto.createHash('sha256').update(password + data.secret).digest('hex');
+      if (inputHash === user.passwordHash) {
+        return { authUserId: user.uId };
+      }
     }
   }
 
@@ -120,6 +124,8 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
   const handle = generateHandle(nameFirst, nameLast);
   let isGlobalOwner = false;
 
+  const passwordHash = crypto.createHash('sha256').update(password + data.secret).digest('hex');
+
   if (newId === 1) {
     // the first user who signs up
     isGlobalOwner = true;
@@ -130,7 +136,7 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
     nameFirst: nameFirst,
     nameLast: nameLast,
     email: email,
-    password: password,
+    passwordHash: passwordHash,
     handleStr: handle,
     isGlobalOwner: isGlobalOwner,
   };
@@ -152,10 +158,11 @@ function generateToken(uId: number) {
   const data = getData();
   const tokenNum = data.lastToken + 1;
   const tokenStr = tokenNum.toString();
+  const hashedToken = crypto.createHash('sha256').update(tokenStr + data.secret).digest('hex');
   data.lastToken = tokenNum;
-  data.tokens.push({ token: tokenStr, uId: uId });
+  data.tokens.push({ token: hashedToken, uId: uId });
   setData(data);
-  return tokenStr;
+  return hashedToken;
 }
 
 type tokenToUIdReturn = {

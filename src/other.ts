@@ -21,7 +21,8 @@ function clearV1() {
       channelsExist: [] as ChannelsExist[],
       dmsExist: [] as DmsExist[],
       messagesExist: [] as MessagesExist[]
-    }
+    },
+    secret: 'COMP1531W14BHASHASHAHSHAHSA(*%&&%&*&&FKUYSCWLCW',
   };
   setData(data);
   return {};

@@ -21,7 +21,8 @@ let data = {
     channelsExist: [] as ChannelsExist[],
     dmsExist: [] as DmsExist[],
     messagesExist: [] as MessagesExist[]
-  }
+  },
+  secret: 'COMP1531W14BHASHASHAHSHAHSA(*%&&%&*&&FKUYSCWLCW',
 };
 
 export interface DataStore {
@@ -35,6 +36,7 @@ export interface DataStore {
   lastMessageId: number;
   lastToken: number;
   stats: WorkplaceStats;
+  secret: string;
 }
 
 // Use get() to access the data

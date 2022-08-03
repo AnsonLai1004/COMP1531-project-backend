@@ -7,6 +7,7 @@ import request from 'sync-request';
 import { port, url } from './config.json';
 
 /// //////////////////////////// ITERATION 3 ////////////////////////////////////
+// Standup
 export function requestStandupStartV3(token: string, channelId: number, length: number) {
   const res = request(
     'POST',
@@ -66,6 +67,7 @@ export function requestStandupSendV3(token: string, channelId: number, message: 
   return res.statusCode;
 }
 
+// Channels
 export function requestChannelsCreateV3(token: string, name: string, isPublic: boolean) {
   const res = request(
     'POST',
@@ -118,6 +120,7 @@ export function requestChannelsListallV3(token: string) {
   return res.statusCode;
 }
 
+// dm
 export function reqDmListV3(token: string) {
   const res = request(
     'GET',
@@ -333,8 +336,10 @@ export function reqChannelAddowner(token: string, channelId: number, uId: number
     'POST',
       `${url}:${port}` + '/channel/addowner/v2',
       {
+        headers: {
+          token: token
+        },
         json: {
-          token,
           channelId,
           uId,
         }
@@ -351,8 +356,10 @@ export function reqChannelRemoveowner(token: string, channelId: number, uId: num
     'POST',
       `${url}:${port}` + '/channel/removeowner/v2',
       {
+        headers: {
+          token: token
+        },
         json: {
-          token,
           channelId,
           uId,
         }
@@ -370,8 +377,10 @@ export function reqDmCreate(token: string, uIds: number[]) {
     'POST',
     `${url}:${port}` + '/dm/create/v2',
     {
+      headers: {
+        token: token
+      },
       json: {
-        token,
         uIds,
       }
     }
@@ -387,8 +396,10 @@ export function reqDmDetails(token: string, dmId: number) {
     'GET',
     `${url}:${port}` + '/dm/details/v2',
     {
+      headers: {
+        token: token
+      },
       qs: {
-        token,
         dmId,
       }
     }

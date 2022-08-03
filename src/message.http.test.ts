@@ -2,12 +2,8 @@ import {
   reqChannelInvite, reqMessagesSearch,
   requestClear, requestChannelsCreateV3, requestAuthRegister,
   reqChannelMessages, reqMessageSend, reqMessageEdit,
-<<<<<<< HEAD
   reqMessageRemove, reqSendMessageDm, reqDmMessages, reqDmCreate,
   reqMessageSendLater, reqMessageSendLaterDM, reqMessagePin, reqMessageUnpin
-=======
-  reqMessageRemove, reqSendMessageDm, reqDmMessages, reqDmCreate, reqMessagePin, reqMessageUnpin
->>>>>>> master
 } from './requests';
 
 function sleep(s: number) {

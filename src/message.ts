@@ -369,14 +369,14 @@ function messagePin(token: string, messageId: number) {
       for (const message of channel.messages) {
         if (message.messageId === messageId) {
           if (!userIsOwner(tokenId.uId, channel.channelId)) {
-            throw HTTPError(403, "No owner permissions in channel")
+            throw HTTPError(403, 'No owner permissions in channel');
           }
           if (message.isPinned === false) {
-            message.isPinned = true
-            setData(datastore)
-            return {}
+            message.isPinned = true;
+            setData(datastore);
+            return {};
           } else {
-            throw HTTPError(400, "the message is already pinned")
+            throw HTTPError(400, 'the message is already pinned');
           }
         }
       }
@@ -387,20 +387,20 @@ function messagePin(token: string, messageId: number) {
       for (const message of dm.messages) {
         if (message.messageId === messageId) {
           if (!userIsOwnerInDm(tokenId.uId, dm.dmId)) {
-            throw HTTPError(403, "No owner permissions in dm")
+            throw HTTPError(403, 'No owner permissions in dm');
           }
           if (message.isPinned === false) {
-            message.isPinned = true
-            setData(datastore)
-            return {}
+            message.isPinned = true;
+            setData(datastore);
+            return {};
           } else {
-            throw HTTPError(400, "the message is already pinned")
+            throw HTTPError(400, 'the message is already pinned');
           }
         }
       }
     }
   }
-  throw HTTPError(400, "messageId is not found in dms or channels")
+  throw HTTPError(400, 'messageId is not found in dms or channels');
 }
 
 function messageUnpin(token: string, messageId: number) {
@@ -414,14 +414,14 @@ function messageUnpin(token: string, messageId: number) {
       for (const message of channel.messages) {
         if (message.messageId === messageId) {
           if (!userIsOwner(tokenId.uId, channel.channelId)) {
-            throw HTTPError(403, "No owner permissions in channel")
+            throw HTTPError(403, 'No owner permissions in channel');
           }
           if (message.isPinned === true) {
-            message.isPinned = false
-            setData(datastore)
-            return {}
+            message.isPinned = false;
+            setData(datastore);
+            return {};
           } else {
-            throw HTTPError(400, "the message is not pinned")
+            throw HTTPError(400, 'the message is not pinned');
           }
         }
       }
@@ -432,20 +432,20 @@ function messageUnpin(token: string, messageId: number) {
       for (const message of dm.messages) {
         if (message.messageId === messageId) {
           if (!userIsOwnerInDm(tokenId.uId, dm.dmId)) {
-            throw HTTPError(403, "No owner permissions in dm")
+            throw HTTPError(403, 'No owner permissions in dm');
           }
           if (message.isPinned === true) {
-            message.isPinned = false
-            setData(datastore)
-            return {}
+            message.isPinned = false;
+            setData(datastore);
+            return {};
           } else {
-            throw HTTPError(400, "the message is not pinned")
+            throw HTTPError(400, 'the message is not pinned');
           }
         }
       }
     }
   }
-  throw HTTPError(400, "messageId is not found in dms or channels")
+  throw HTTPError(400, 'messageId is not found in dms or channels');
 }
 
 /************************************************************************

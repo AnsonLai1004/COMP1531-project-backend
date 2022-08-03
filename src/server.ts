@@ -334,7 +334,7 @@ app.post('/message/pin/v1', (req, res, next) => {
   } catch (err) {
     next(err);
   }
-})
+});
 
 app.post('/message/unpin/v1', (req, res, next) => {
   try {
@@ -344,7 +344,7 @@ app.post('/message/unpin/v1', (req, res, next) => {
   } catch (err) {
     next(err);
   }
-})
+});
 
 // other routes
 app.delete('/clear/v1', (req, res) => {

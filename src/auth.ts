@@ -70,8 +70,11 @@ export function authLogoutV2(token: string) {
 export function authLoginV1(email: string, password: string) {
   const data = getData();
   for (const user of data.users) {
-    if (email === user.email && password === user.password) {
-      return { authUserId: user.uId };
+    if (email === user.email) {
+      const inputHash = crypto.createHash('sha256').update(password + data.secret).digest('hex');
+      if (inputHash === user.passwordHash) {
+        return { authUserId: user.uId };
+      }
     }
   }
 
@@ -121,6 +124,8 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
   const handle = generateHandle(nameFirst, nameLast);
   let isGlobalOwner = false;
 
+  const passwordHash = crypto.createHash('sha256').update(password + data.secret).digest('hex');
+
   if (newId === 1) {
     // the first user who signs up
     isGlobalOwner = true;
@@ -131,7 +136,7 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
     nameFirst: nameFirst,
     nameLast: nameLast,
     email: email,
-    password: password,
+    passwordHash: passwordHash,
     handleStr: handle,
     isGlobalOwner: isGlobalOwner,
   };

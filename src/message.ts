@@ -4,7 +4,7 @@ import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
 export {
   messageSendV2, messageRemoveV2, messageEditV2, messageSendDmV2,
-  dmMessagesV2, messagesSearch
+  dmMessagesV2, messagesSearch, messageSendLater, messageSendLaterDM
 };
 
 /**
@@ -356,6 +356,133 @@ function messagesSearch(token: string, queryStr: string) {
     }
   }
   return { messages };
+}
+
+/**
+ * Send a message from the authorised user to the channel specified by channelId 
+ * automatically at a specified time in the future. The returned messageId will only 
+ * be considered valid for other actions (editing/deleting/reacting/etc) 
+ * once it has been sent (i.e. after timeSent).
+ * @param { channelId, message, timeSent }
+ * @returns { messageId }
+*/
+function messageSendLater(token: string, channelId: number, message: string, timeSent: number) {
+  // check for invalid token
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    throw HTTPError(403, 'Invalid token');
+  }
+  // check if channelId is valid
+  if (!isValidChannelId(channelId)) {
+    throw HTTPError(400, 'Invalid channel');
+  }
+  // check if user is member of channel
+  if (!userIsAuthorised(tokenId.uId, channelId)) {
+    throw HTTPError(403, 'User not in channel');
+  }
+  // check if message too long or short
+  if (message.length > 1000 || message.length < 1) {
+    throw HTTPError(400, 'Message too long');
+  }
+  // check if timeSent is valid
+  const curTime = Math.floor((new Date()).getTime() / 1000);
+  if (timeSent < curTime) {
+    throw HTTPError(400, 'Time must be after current time');
+  }
+  
+  // update lastmessageid
+  const data = getData();
+  data.lastMessageId++;
+  const futureMessageId = data.lastMessageId;
+  setData(data);
+
+  setTimeout((futureMessageId, tokenId, channelId, message, timeSent) => {
+    // basically send message but with custom lastmessageid (futuremessageid)
+    const datastore = getData();
+    console.log("IN TIMEOUT ADDING", futureMessageId, tokenId, channelId, message, timeSent)
+    const newmessage: Message = {
+      messageId: (futureMessageId) as number,
+      uId: tokenId.uId,
+      message: message,
+      timeSent: timeSent,
+      reacts: [],
+      isPinned: false
+    };
+    for (const channel of datastore.channels) {
+      if (channel.channelId === channelId) {
+        channel.messages.unshift(newmessage);
+      }
+    }
+    datastore.lastMessageId++;
+    setData(datastore);
+  }, (timeSent - curTime) * 1000, futureMessageId, tokenId, channelId, message, timeSent);
+
+  return { messageId: futureMessageId }
+}
+
+/**
+ * Send a message from the authorised user to the DM specified by dmId 
+ * automatically at a specified time in the future. The returned messageId will 
+ * only be considered valid for other actions (editing/deleting/reacting/etc) 
+ * once it has been sent (i.e. after timeSent). If the DM is removed before the 
+ * message has sent, the message will not be sent.
+ * @param { dmId, message, timeSent }
+ * @returns { messageId }
+*/
+function messageSendLaterDM(token: string, dmId: number, message: string, timeSent: number) {
+  // check for invalid token
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    throw HTTPError(403, 'Invalid token');
+  }
+  // check if dmId is valid
+  if (!isValidDmId(dmId)) {
+    throw HTTPError(400, 'Invalid dm');
+  }
+  // check if user is member of dm
+  if (!userIsAuthorisedInDm(tokenId.uId, dmId)) {
+    throw HTTPError(403, 'User not in dm');
+  }
+  // check if message too long or short
+  if (message.length > 1000 || message.length < 1) {
+    throw HTTPError(400, 'Message too long');
+  }
+  // check if timeSent is valid
+  const curTime = Math.floor((new Date()).getTime() / 1000);
+  if (timeSent < curTime) {
+    throw HTTPError(400, 'Time must be after current time');
+  }
+  
+  // update lastmessageid
+  const data = getData();
+  data.lastMessageId++;
+  const futureMessageId = data.lastMessageId;
+  setData(data);
+
+  setTimeout((futureMessageId, tokenId, dmId, message, timeSent) => {
+    // check if dm has not been removed
+    if (isValidDmId(dmId)) {
+      // basically send message but with custom lastmessageid (futuremessageid)
+      const datastore = getData();
+      const newmessage: Message = {
+        messageId: (futureMessageId) as number,
+        uId: tokenId.uId,
+        message: message,
+        timeSent: timeSent,
+        reacts: [],
+        isPinned: false
+      };
+      for (const dm of datastore.dms) {
+        if (dm.dmId === dmId) {
+          dm.messages.unshift(newmessage);
+        }
+      }
+      datastore.lastMessageId++;
+      setData(datastore);
+    }
+  }, (timeSent - curTime) * 1000, futureMessageId, tokenId, dmId, message, timeSent);
+
+  return { messageId: futureMessageId }
 }
 
 /************************************************************************

@@ -94,7 +94,7 @@ export function reqDmRemoveV3(token: string, dmId: number) {
   return res.statusCode;
 }
 
-export function reqMessageShare(token: string, ogMessageId: number, message: string, channelId: number ,dmId: number) {
+export function reqMessageShare(token: string, ogMessageId: number, message: string, channelId: number, dmId: number) {
   const res = request(
     'POST',
     `${url}:${port}` + '/message/share/v1',
@@ -110,6 +110,7 @@ export function reqMessageShare(token: string, ogMessageId: number, message: str
       }
     }
   );
+  console.log(message);
   if (res.statusCode === 200) {
     return JSON.parse(res.body as string);
   }

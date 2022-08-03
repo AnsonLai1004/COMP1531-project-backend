@@ -23,6 +23,7 @@ function messageSendV2(token: string, channelId: number, message: string) {
   if (tokenId.error) {
     throw HTTPError(403, 'invalid tokenid');
   }
+  console.log(message);
   if (!isValidChannelId(channelId)) {
     throw HTTPError(400, 'ChannelId does not refer to a valid channel');
   }
@@ -315,14 +316,14 @@ function dmMessagesV2(token: string, dmId: number, start: number) {
   return result;
 }
 
-/////////////////////////Iteration 3 new functions////////////////////////////////////////////////////////////////////////////////////////
+/// //////////////////////Iteration 3 new functions////////////////////////////////////////////////////////////////////////////////////////
 // message/share/v1
 function messageShareV1(token: string, ogMessageId: number, message: string, channelId: number, dmId: number) {
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
     throw HTTPError(403, 'Invalid token');
   }
-  console.log(message.length)
+  console.log(message);
   if (message.length > 1000) {
     throw HTTPError(400, 'length of messages is greater than 1000');
   }
@@ -344,22 +345,32 @@ function messageShareV1(token: string, ogMessageId: number, message: string, cha
     }
   } else {
     throw HTTPError(400, 'neither channelId nor dmId are -1');
-  } 
-  
+  }
+
   const ogMessage = findMessageStr(ogMessageId);
   if (ogMessage === undefined) {
     throw HTTPError(400, 'ogMessageId is Invalid');
   }
-  // TODO: ogMessageId does not refer to a valid message within a channel/DM that the authorised user has joined
+  // ogMessageId does not refer to a valid message within a channel/DM that the authorised user has joined
+  if (channelId === -1) {
+    if (!userIsAuthorisedInDm(tokenId.uId, ogMessage.Id)) {
+      throw HTTPError(400, 'user share message from Dm they are not authorised');
+    }
+  }
+  if (dmId === -1) {
+    if (!userIsAuthorised(tokenId.uId, ogMessage.Id)) {
+      throw HTTPError(400, 'user share message from channel they are not authorised');
+    }
+  }
   // create newMessage with both string concat together
   const data = getData();
   const newmessage: Message = {
     messageId: (data.lastMessageId + 1) as number,
     uId: tokenId.uId,
-    message: ogMessage.message + '' + message,
+    message: ogMessage.message + message,
     timeSent: Math.round(Date.now() / 1000),
   };
-  
+
   if (channelId === -1) {
     for (const dm of data.dms) {
       if (dm.dmId === dmId) {
@@ -378,12 +389,7 @@ function messageShareV1(token: string, ogMessageId: number, message: string, cha
   return { sharedMessageId: newmessage.messageId };
 }
 
-
-
-
-
-
-/////////////////////////Helper functions/////////////////////////////////////////////////////////////////////////////////////
+/// //////////////////////Helper functions/////////////////////////////////////////////////////////////////////////////////////
 /**
  * Helper function
  * return false if channelId is not valid
@@ -500,20 +506,29 @@ function userIsAuthorisedInDm(uId: number, dmId: number) {
   return false;
 }
 
-// return message string from channel or Dm 
+// return message string from channel or Dm
 function findMessageStr(messageId: number) {
   const data = getData();
-  for (const channel of data.channels) {
-    for (const message of channel.messages) {
+  let i;
+  for (i = 0; i < data.channels.length; i++) {
+    for (const message of data.channels[i].messages) {
       if (messageId === message.messageId) {
-        return message;
+        console.log(data.channels[i].channelId + '+_=============================================');
+        return {
+          message: message.message,
+          Id: data.channels[i].channelId,
+        };
       }
     }
-  }
-  for (const dm of data.dms) {
-    for (const message of dm.messages) {
+  }// let j = 0; j < data.channels[i].messages.length; i++
+  for (i = 0; i < data.dms.length; i++) {
+    for (const message of data.dms[i].messages) {
       if (messageId === message.messageId) {
-        return message;
+        console.log(data.dms[i].dmId + '+_=============================================');
+        return {
+          message: message.message,
+          Id: data.dms[i].dmId,
+        };
       }
     }
   }

@@ -90,12 +90,14 @@ app.post('/message/share/v1', (req, res, next) => {
   try {
     const token = req.headers.token as string;
     const { ogMessageId, message, channelId, dmId } = req.body;
+    console.log(req.body);
+    console.log('hi' + message.length);
     res.json(messageShareV1(token, ogMessageId, message, channelId, dmId));
   } catch (err) {
     next(err);
   }
 });
-///////////////////////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////////////////////
 
 // auth routes
 app.post('/auth/login/v2', (req, res) => {
@@ -207,8 +209,6 @@ app.delete('/message/remove/v2', (req, res) => {
   const token = req.query.token as string;
   res.json(messageRemoveV2(token, messageId));
 });
-
-
 
 // dm routes
 app.post('/dm/create/v2', (req, res) => {

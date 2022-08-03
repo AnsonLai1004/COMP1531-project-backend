@@ -4,7 +4,7 @@ import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
 export {
   messageSendV2, messageRemoveV2, messageEditV2, messageSendDmV2,
-  dmMessagesV2, messagesSearch, messageSendLater, 
+  dmMessagesV2, messagesSearch, messageSendLater,
   messageSendLaterDM, messagePin, messageUnpin
 };
 
@@ -575,7 +575,6 @@ function messageUnpin(token: string, messageId: number) {
   }
   throw HTTPError(400, 'messageId is not found in dms or channels');
 }
-
 
 /************************************************************************
 /**

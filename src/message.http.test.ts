@@ -601,8 +601,11 @@ describe('/message/sendlaterdm/v1', () => {
   });
   test('Error case for past time sent', () => {
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
-    const invalid = reqMessageSendLaterDM(aMember.token, newchannel.channelId, 'Hello World', 1659505371);
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId, user2.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    const invalid = reqMessageSendLaterDM(aMember.token, dm.dmId, 'Hello World', 1659505371);
     expect(invalid).toStrictEqual(400);
   });
   test('Error case where user is not authorized in dm', () => {
@@ -916,4 +919,3 @@ describe('/message/unpin/v1', () => {
     expect(messagesGet.messages[4].isPinned).toStrictEqual(false);
   });
 });
-

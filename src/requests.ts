@@ -576,7 +576,6 @@ export function reqMessageUnpin(token: string, messageId: number) {
   return res.statusCode;
 }
 
-
 // dm/messages/v2
 export function reqDmMessages(token: string, dmId: number, start: number) {
   const res = request(

@@ -277,7 +277,6 @@ app.post('/message/unpin/v1', (req, res, next) => {
   }
 });
 
-
 app.get('/dm/messages/v2', (req, res, next) => {
   try {
     const dmId = parseInt((req.query.dmId) as string);

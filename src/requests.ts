@@ -538,6 +538,45 @@ export function reqMessageSendLaterDM(token: string, dmId: number, message: stri
   return res.statusCode;
 }
 
+export function reqMessagePin(token: string, messageId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/pin/v1',
+    {
+      json: {
+        messageId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+export function reqMessageUnpin(token: string, messageId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/unpin/v1',
+    {
+      json: {
+        messageId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+
 // dm/messages/v2
 export function reqDmMessages(token: string, dmId: number, start: number) {
   const res = request(

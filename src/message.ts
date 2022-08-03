@@ -4,7 +4,8 @@ import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
 export {
   messageSendV2, messageRemoveV2, messageEditV2, messageSendDmV2,
-  dmMessagesV2, messagesSearch, messageSendLater, messageSendLaterDM
+  dmMessagesV2, messagesSearch, messageSendLater, 
+  messageSendLaterDM, messagePin, messageUnpin
 };
 
 /**
@@ -484,6 +485,97 @@ function messageSendLaterDM(token: string, dmId: number, message: string, timeSe
 
   return { messageId: futureMessageId };
 }
+
+function messagePin(token: string, messageId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    throw HTTPError(403, 'Invalid token');
+  }
+  const datastore = getData();
+  for (const channel of datastore.channels) {
+    if (userIsAuthorised(tokenId.uId, channel.channelId)) {
+      for (const message of channel.messages) {
+        if (message.messageId === messageId) {
+          if (!userIsOwner(tokenId.uId, channel.channelId)) {
+            throw HTTPError(403, 'No owner permissions in channel');
+          }
+          if (message.isPinned === false) {
+            message.isPinned = true;
+            setData(datastore);
+            return {};
+          } else {
+            throw HTTPError(400, 'the message is already pinned');
+          }
+        }
+      }
+    }
+  }
+  for (const dm of datastore.dms) {
+    if (userIsAuthorisedInDm(tokenId.uId, dm.dmId)) {
+      for (const message of dm.messages) {
+        if (message.messageId === messageId) {
+          if (!userIsOwnerInDm(tokenId.uId, dm.dmId)) {
+            throw HTTPError(403, 'No owner permissions in dm');
+          }
+          if (message.isPinned === false) {
+            message.isPinned = true;
+            setData(datastore);
+            return {};
+          } else {
+            throw HTTPError(400, 'the message is already pinned');
+          }
+        }
+      }
+    }
+  }
+  throw HTTPError(400, 'messageId is not found in dms or channels');
+}
+
+function messageUnpin(token: string, messageId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    throw HTTPError(403, 'Invalid token');
+  }
+  const datastore = getData();
+  for (const channel of datastore.channels) {
+    if (userIsAuthorised(tokenId.uId, channel.channelId)) {
+      for (const message of channel.messages) {
+        if (message.messageId === messageId) {
+          if (!userIsOwner(tokenId.uId, channel.channelId)) {
+            throw HTTPError(403, 'No owner permissions in channel');
+          }
+          if (message.isPinned === true) {
+            message.isPinned = false;
+            setData(datastore);
+            return {};
+          } else {
+            throw HTTPError(400, 'the message is not pinned');
+          }
+        }
+      }
+    }
+  }
+  for (const dm of datastore.dms) {
+    if (userIsAuthorisedInDm(tokenId.uId, dm.dmId)) {
+      for (const message of dm.messages) {
+        if (message.messageId === messageId) {
+          if (!userIsOwnerInDm(tokenId.uId, dm.dmId)) {
+            throw HTTPError(403, 'No owner permissions in dm');
+          }
+          if (message.isPinned === true) {
+            message.isPinned = false;
+            setData(datastore);
+            return {};
+          } else {
+            throw HTTPError(400, 'the message is not pinned');
+          }
+        }
+      }
+    }
+  }
+  throw HTTPError(400, 'messageId is not found in dms or channels');
+}
+
 
 /************************************************************************
 /**

@@ -3,7 +3,7 @@ import {
   requestClear, requestChannelsCreateV3, requestAuthRegister,
   reqChannelMessages, reqMessageSend, reqMessageEdit,
   reqMessageRemove, reqSendMessageDm, reqDmMessages, reqDmCreate,
-  reqMessageSendLater, reqMessageSendLaterDM
+  reqMessageSendLater, reqMessageSendLaterDM, reqMessagePin, reqMessageUnpin
 } from './requests';
 
 function sleep(s: number) {
@@ -668,3 +668,252 @@ describe('/message/sendlaterdm/v1', () => {
     expect(dmmessages2.messages[1].message).toStrictEqual('Hello World!');
   });
 });
+
+describe('/message/pin/v1', () => {
+  test('invalid token', () => {
+    reqMessagePin('any random', 1);
+  });
+  test('the message is already pinned in dm or channel', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    requestChannelsCreateV3(aMember.token, 'crush teamasd', true);
+    const user = requestAuthRegister('a@gmail.com', '123abc!@#', 'b', 'c');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId, user2.authUserId];
+    const uIds2 = [user2.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    reqDmCreate(user1.token, uIds2);
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ messageId: 1 });
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor!')).toStrictEqual({ messageId: 2 });
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor2!')).toStrictEqual({ messageId: 3 });
+    expect(reqMessagePin(aMember.token, 1)).toStrictEqual({});
+    expect(reqMessagePin(aMember.token, 1)).toStrictEqual(400);
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World!')).toStrictEqual({ messageId: 4 });
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World2!')).toStrictEqual({ messageId: 5 });
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World3!')).toStrictEqual({ messageId: 6 });
+    expect(reqMessagePin(user.token, 5)).toStrictEqual({});
+    expect(reqMessagePin(user.token, 5)).toStrictEqual(400);
+  });
+  test('no owner permissions in dm & channel', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    requestChannelsCreateV3(aMember.token, 'crush teamasd', true);
+    const user = requestAuthRegister('a@gmail.com', '123abc!@#', 'b', 'c');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId, user2.authUserId];
+    const uIds2 = [user2.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    reqChannelInvite(aMember.token, newchannel.channelId, user.authUserId);
+    reqDmCreate(user1.token, uIds2);
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ messageId: 1 });
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor!')).toStrictEqual({ messageId: 2 });
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor2!')).toStrictEqual({ messageId: 3 });
+    expect(reqMessagePin(user.token, 1)).toStrictEqual(403);
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World!')).toStrictEqual({ messageId: 4 });
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World2!')).toStrictEqual({ messageId: 5 });
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World3!')).toStrictEqual({ messageId: 6 });
+    expect(reqMessagePin(user1.token, 5)).toStrictEqual(403);
+  });
+  test('message not found in dm nor channel', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    requestChannelsCreateV3(aMember.token, 'crush teamasd', true);
+    const user = requestAuthRegister('a@gmail.com', '123abc!@#', 'b', 'c');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId, user2.authUserId];
+    const uIds2 = [user2.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    reqChannelInvite(aMember.token, newchannel.channelId, user.authUserId);
+    reqDmCreate(user1.token, uIds2);
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ messageId: 1 });
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor!')).toStrictEqual({ messageId: 2 });
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor2!')).toStrictEqual({ messageId: 3 });
+    expect(reqMessagePin(user.token, 21)).toStrictEqual(400);
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World!')).toStrictEqual({ messageId: 4 });
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World2!')).toStrictEqual({ messageId: 5 });
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World3!')).toStrictEqual({ messageId: 6 });
+    expect(reqMessagePin(user1.token, 35)).toStrictEqual(400);
+  });
+  test('success output for single message in dm or channel', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    requestChannelsCreateV3(aMember.token, 'crush teamasd', true);
+    requestAuthRegister('a@gmail.com', '123abc!@#', 'b', 'c');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId, user2.authUserId];
+    const uIds2 = [user2.authUserId];
+    const dm = reqDmCreate(aMember.token, uIds);
+    reqDmCreate(user1.token, uIds2);
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ messageId: 1 });
+    expect(reqSendMessageDm(user1.token, dm.dmId, 'Hello World!')).toStrictEqual({ messageId: 2 });
+    expect(reqMessagePin(aMember.token, 1)).toStrictEqual({});
+    expect(reqMessagePin(aMember.token, 2)).toStrictEqual({});
+    const messagesGet = reqMessagesSearch(aMember.token, 'World');
+    expect(messagesGet.messages[0].isPinned).toStrictEqual(true);
+    expect(messagesGet.messages[1].isPinned).toStrictEqual(true);
+  });
+  test('success out for multiple messages in dm or channel', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    requestChannelsCreateV3(aMember.token, 'crush teamasd', true);
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId, user2.authUserId];
+    const uIds2 = [user2.authUserId];
+    const dm = reqDmCreate(aMember.token, uIds);
+    reqDmCreate(user1.token, uIds2);
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ messageId: 1 });
+    expect(reqSendMessageDm(user1.token, dm.dmId, 'Hello World!')).toStrictEqual({ messageId: 2 });
+    expect(reqSendMessageDm(user1.token, dm.dmId, 'Hello World!')).toStrictEqual({ messageId: 3 });
+    expect(reqSendMessageDm(user2.token, dm.dmId, 'Hello World2!')).toStrictEqual({ messageId: 4 });
+    expect(reqSendMessageDm(user1.token, dm.dmId, 'Hello World3!')).toStrictEqual({ messageId: 5 });
+    expect(reqMessagePin(aMember.token, 1)).toStrictEqual({});
+    expect(reqMessagePin(aMember.token, 2)).toStrictEqual({});
+    let messagesGet = reqMessagesSearch(aMember.token, 'World');
+    expect(messagesGet.messages[0].isPinned).toStrictEqual(true);
+    expect(messagesGet.messages[1].isPinned).toStrictEqual(false);
+    expect(messagesGet.messages[2].isPinned).toStrictEqual(false);
+    expect(messagesGet.messages[3].isPinned).toStrictEqual(false);
+    expect(messagesGet.messages[4].isPinned).toStrictEqual(true);
+    expect(reqMessagePin(aMember.token, 3)).toStrictEqual({});
+    expect(reqMessagePin(aMember.token, 4)).toStrictEqual({});
+    messagesGet = reqMessagesSearch(aMember.token, 'World');
+    expect(messagesGet.messages[3].isPinned).toStrictEqual(true);
+    expect(messagesGet.messages[2].isPinned).toStrictEqual(true);
+  });
+});
+
+describe('/message/unpin/v1', () => {
+  test('invalid token', () => {
+    reqMessageUnpin('any random', 1);
+  });
+  test('the message is already pinned in dm or channel', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    requestChannelsCreateV3(aMember.token, 'crush teamasd', true);
+    const user = requestAuthRegister('a@gmail.com', '123abc!@#', 'b', 'c');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId, user2.authUserId];
+    const uIds2 = [user2.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    reqDmCreate(user1.token, uIds2);
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ messageId: 1 });
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor!')).toStrictEqual({ messageId: 2 });
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor2!')).toStrictEqual({ messageId: 3 });
+    expect(reqMessageUnpin(aMember.token, 1)).toStrictEqual(400);
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World!')).toStrictEqual({ messageId: 4 });
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World2!')).toStrictEqual({ messageId: 5 });
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World3!')).toStrictEqual({ messageId: 6 });
+    expect(reqMessageUnpin(user.token, 5)).toStrictEqual(400);
+  });
+  test('no owner permissions in dm & channel', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    requestChannelsCreateV3(aMember.token, 'crush teamasd', true);
+    const user = requestAuthRegister('a@gmail.com', '123abc!@#', 'b', 'c');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId, user2.authUserId];
+    const uIds2 = [user2.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    reqChannelInvite(aMember.token, newchannel.channelId, user.authUserId);
+    reqDmCreate(user1.token, uIds2);
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ messageId: 1 });
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor!')).toStrictEqual({ messageId: 2 });
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor2!')).toStrictEqual({ messageId: 3 });
+    expect(reqMessageUnpin(user.token, 1)).toStrictEqual(403);
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World!')).toStrictEqual({ messageId: 4 });
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World2!')).toStrictEqual({ messageId: 5 });
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World3!')).toStrictEqual({ messageId: 6 });
+    expect(reqMessageUnpin(user1.token, 5)).toStrictEqual(403);
+  });
+  test('message not found in dm nor channel', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    requestChannelsCreateV3(aMember.token, 'crush teamasd', true);
+    const user = requestAuthRegister('a@gmail.com', '123abc!@#', 'b', 'c');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId, user2.authUserId];
+    const uIds2 = [user2.authUserId];
+    const dm = reqDmCreate(user.token, uIds);
+    reqChannelInvite(aMember.token, newchannel.channelId, user.authUserId);
+    reqDmCreate(user1.token, uIds2);
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ messageId: 1 });
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor!')).toStrictEqual({ messageId: 2 });
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor2!')).toStrictEqual({ messageId: 3 });
+    expect(reqMessageUnpin(user.token, 21)).toStrictEqual(400);
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World!')).toStrictEqual({ messageId: 4 });
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World2!')).toStrictEqual({ messageId: 5 });
+    expect(reqSendMessageDm(user.token, dm.dmId, 'Hello World3!')).toStrictEqual({ messageId: 6 });
+    expect(reqMessageUnpin(user1.token, 35)).toStrictEqual(400);
+  });
+  test('success output for single message in dm or channel', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    requestChannelsCreateV3(aMember.token, 'crush teamasd', true);
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId, user2.authUserId];
+    const uIds2 = [user2.authUserId];
+    const dm = reqDmCreate(aMember.token, uIds);
+    reqDmCreate(user1.token, uIds2);
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ messageId: 1 });
+    expect(reqSendMessageDm(user1.token, dm.dmId, 'Hello World!')).toStrictEqual({ messageId: 2 });
+    expect(reqMessagePin(aMember.token, 1)).toStrictEqual({});
+    expect(reqMessagePin(aMember.token, 2)).toStrictEqual({});
+    const messagesGet = reqMessagesSearch(aMember.token, 'World');
+    expect(messagesGet.messages[0].isPinned).toStrictEqual(true);
+    expect(messagesGet.messages[1].isPinned).toStrictEqual(true);
+    expect(reqMessageUnpin(aMember.token, 1)).toStrictEqual({});
+    expect(reqMessageUnpin(aMember.token, 2)).toStrictEqual({});
+    const messagesGet2 = reqMessagesSearch(aMember.token, 'World');
+    expect(messagesGet2.messages[0].isPinned).toStrictEqual(false);
+    expect(messagesGet2.messages[1].isPinned).toStrictEqual(false);
+  });
+  test('success out for multiple messages in dm or channel', () => {
+    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
+    requestChannelsCreateV3(aMember.token, 'crush teamasd', true);
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const uIds = [user1.authUserId, user2.authUserId];
+    const uIds2 = [user2.authUserId];
+    const dm = reqDmCreate(aMember.token, uIds);
+    reqDmCreate(user1.token, uIds2);
+    expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ messageId: 1 });
+    expect(reqSendMessageDm(user1.token, dm.dmId, 'Hello World!')).toStrictEqual({ messageId: 2 });
+    expect(reqSendMessageDm(user1.token, dm.dmId, 'Hello World!')).toStrictEqual({ messageId: 3 });
+    expect(reqSendMessageDm(user2.token, dm.dmId, 'Hello World2!')).toStrictEqual({ messageId: 4 });
+    expect(reqSendMessageDm(user1.token, dm.dmId, 'Hello World3!')).toStrictEqual({ messageId: 5 });
+    expect(reqMessagePin(aMember.token, 1)).toStrictEqual({});
+    expect(reqMessagePin(aMember.token, 2)).toStrictEqual({});
+    let messagesGet = reqMessagesSearch(aMember.token, 'World');
+    expect(messagesGet.messages[0].isPinned).toStrictEqual(true);
+    expect(messagesGet.messages[1].isPinned).toStrictEqual(false);
+    expect(messagesGet.messages[2].isPinned).toStrictEqual(false);
+    expect(messagesGet.messages[3].isPinned).toStrictEqual(false);
+    expect(messagesGet.messages[4].isPinned).toStrictEqual(true);
+    expect(reqMessagePin(aMember.token, 3)).toStrictEqual({});
+    expect(reqMessagePin(aMember.token, 4)).toStrictEqual({});
+    messagesGet = reqMessagesSearch(aMember.token, 'World');
+    expect(messagesGet.messages[3].isPinned).toStrictEqual(true);
+    expect(messagesGet.messages[2].isPinned).toStrictEqual(true);
+    expect(reqMessageUnpin(aMember.token, 1)).toStrictEqual({});
+    expect(reqMessageUnpin(aMember.token, 2)).toStrictEqual({});
+    expect(reqMessageUnpin(aMember.token, 3)).toStrictEqual({});
+    expect(reqMessageUnpin(aMember.token, 4)).toStrictEqual({});
+    messagesGet = reqMessagesSearch(aMember.token, 'World');
+    expect(messagesGet.messages[0].isPinned).toStrictEqual(false);
+    expect(messagesGet.messages[1].isPinned).toStrictEqual(false);
+    expect(messagesGet.messages[2].isPinned).toStrictEqual(false);
+    expect(messagesGet.messages[3].isPinned).toStrictEqual(false);
+    expect(messagesGet.messages[4].isPinned).toStrictEqual(false);
+  });
+});
+

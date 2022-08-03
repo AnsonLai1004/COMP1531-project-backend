@@ -119,3 +119,46 @@ export function updateStatsUserMessage(uId: number, timeStamp: number) {
     }
   }
 }
+
+// Helper function to update the workplace stats relating to channels existing
+export function updateStatsWorkplaceChannels(timeStamp: number) {
+  const lastChannelExistObj = data.stats.channelsExist.slice(-1)[0];
+  const newChannelExistNum = lastChannelExistObj.numChannelsExist + 1;
+  const newChannelExistObj = {
+    numChannelsExist: newChannelExistNum,
+    timeStamp: timeStamp
+  };
+  data.stats.channelsExist.push(newChannelExistObj);
+}
+
+// Helper function to update the workplace stats relating to dms existing
+export function updateStatsWorkplaceDms(timeStamp: number, action: 'add' | 'remove') {
+  const lastDmExistObj = data.stats.dmsExist.slice(-1)[0];
+  let newDmExistNum = lastDmExistObj.numDmsExist;
+  if (action === 'add') {
+    newDmExistNum++;
+  } else {
+    newDmExistNum--;
+  }
+  const newDmExistObj = {
+    numDmsExist: newDmExistNum,
+    timeStamp: timeStamp
+  };
+  data.stats.dmsExist.push(newDmExistObj);
+}
+
+// Helper function to update the workplace stats relating to messages existing
+export function updateStatsWorkplaceMessages(timeStamp: number, action: 'add' | 'remove') {
+  const lastMessageExistObj = data.stats.messagesExist.slice(-1)[0];
+  let numMessageExistNum = lastMessageExistObj.numMessagesExist;
+  if (action === 'add') {
+    numMessageExistNum++;
+  } else {
+    numMessageExistNum--;
+  }
+  const newMessageExistObj = {
+    numMessagesExist: numMessageExistNum,
+    timeStamp: timeStamp
+  };
+  data.stats.messagesExist.push(newMessageExistObj);
+}

@@ -1,4 +1,4 @@
-import { getData, setData, updateStatsUserDm } from './data';
+import { getData, setData, updateStatsUserDm, updateStatsWorkplaceDms } from './data';
 import { Message } from './interfaces';
 import { tokenToUId, membersobjCreate, isValidUserId } from './channel';
 import HTTPError from 'http-errors';
@@ -39,6 +39,7 @@ function dmCreateV2(token: string, uIds: number[]) {
       }
     }
     updateStatsUserDm(id, timeCreate, 'add');
+    updateStatsWorkplaceDms(timeCreate, 'add');
   }
   handlestrArr.sort();
   const name = handlestrArr.join(', ');
@@ -138,6 +139,8 @@ function dmRemoveV1(token: string, dmId: number) {
   // remove dm from dataStore
   data.dms = data.dms.filter((dm) => dm.dmId !== dmId);
   setData(data);
+
+  updateStatsWorkplaceDms(timeRemove, 'remove');
 
   return {};
 }

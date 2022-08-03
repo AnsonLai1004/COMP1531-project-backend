@@ -1,4 +1,4 @@
-import { getData, setData, updateStatsUserMessage } from './data';
+import { getData, setData, updateStatsUserMessage, updateStatsWorkplaceMessages } from './data';
 import { Message } from './interfaces';
 import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
@@ -55,6 +55,7 @@ function messageSendV2(token: string, channelId: number, message: string) {
   setData(datastore);
 
   updateStatsUserMessage(tokenId.uId, timeSent);
+  updateStatsWorkplaceMessages(timeSent, 'add');
 
   return { messageId: newmessage.messageId };
 }
@@ -139,6 +140,7 @@ function messageEditV2(token: string, messageId: number, message: string) {
  * @returns {{messageId: number}}
 */
 function messageRemoveV2(token: string, messageId: number) {
+  const timeRemove = Math.floor((new Date()).getTime() / 1000);
   // if message length is less than 1 or greater than 1000
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -207,6 +209,7 @@ function messageRemoveV2(token: string, messageId: number) {
     }
     setData(datastore);
   }
+  updateStatsWorkplaceMessages(timeRemove, 'remove');
   return {};
 }
 

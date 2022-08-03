@@ -68,7 +68,7 @@ export interface DmsExist {
 }
 
 export interface MessagesExist {
-    messagesExist: number;
+    numMessagesExist: number;
     timeStamp: number;
 }
 

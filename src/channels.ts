@@ -1,4 +1,4 @@
-import { getData, setData, updateStatsUserChannel } from './data';
+import { getData, setData, updateStatsUserChannel, updateStatsWorkplaceChannels } from './data';
 import { Channel } from './interfaces';
 import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
@@ -60,6 +60,7 @@ function channelsCreateV3(token: string, name: string, isPublic: boolean): chann
 
   // update user stats
   updateStatsUserChannel(authUser.uId, timeCreate, 'add');
+  updateStatsWorkplaceChannels(timeCreate);
 
   return { channelId: channel.channelId };
 }

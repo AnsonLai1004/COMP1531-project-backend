@@ -1,4 +1,4 @@
-import { getData, setData } from './data';
+import { getData, setData, updateStatsUserMessage } from './data';
 import { Message } from './interfaces';
 import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
@@ -18,6 +18,7 @@ export {
  * @returns {{messageId: number}}
 */
 function messageSendV2(token: string, channelId: number, message: string) {
+  const timeSent = Math.floor((new Date()).getTime() / 1000);
   // channel Id does not refer to valid channel Id
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -41,7 +42,7 @@ function messageSendV2(token: string, channelId: number, message: string) {
     messageId: (datastore.lastMessageId + 1) as number,
     uId: tokenId.uId,
     message: message,
-    timeSent: Math.round(Date.now() / 1000),
+    timeSent: timeSent,
     reacts: [],
     isPinned: false
   };
@@ -52,6 +53,9 @@ function messageSendV2(token: string, channelId: number, message: string) {
   }
   datastore.lastMessageId++;
   setData(datastore);
+
+  updateStatsUserMessage(tokenId.uId, timeSent);
+
   return { messageId: newmessage.messageId };
 }
 /**
@@ -217,6 +221,7 @@ function messageRemoveV2(token: string, messageId: number) {
  * @returns
  */
 function messageSendDmV2(token: string, dmId: number, message: string) {
+  const timeSent = Math.floor((new Date()).getTime() / 1000);
   // dm Id does not refer to valid dm Id
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -240,7 +245,7 @@ function messageSendDmV2(token: string, dmId: number, message: string) {
     messageId: (datastore.lastMessageId + 1) as number,
     uId: tokenId.uId,
     message: message,
-    timeSent: Math.round(Date.now() / 1000),
+    timeSent: timeSent,
     reacts: [],
     isPinned: false
   };
@@ -251,6 +256,9 @@ function messageSendDmV2(token: string, dmId: number, message: string) {
   }
   datastore.lastMessageId++;
   setData(datastore);
+
+  updateStatsUserMessage(tokenId.uId, timeSent);
+
   return { messageId: newmessage.messageId };
 }
 

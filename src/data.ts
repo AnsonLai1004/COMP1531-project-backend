@@ -104,3 +104,18 @@ export function updateStatsUserDm(uId: number, timeStamp: number, action: 'add' 
     }
   }
 }
+
+// Helper function to update the user stats relating to messages sent
+export function updateStatsUserMessage(uId: number, timeStamp: number) {
+  for (const user of data.users) {
+    if (uId === user.uId) {
+      const lastMessageObj = user.stats.messagesSent.slice(-1)[0];
+      const newMessageNum = lastMessageObj.numMessagesSent;
+      const newMessageObj = {
+        numMessagesSent: newMessageNum,
+        timeStamp: timeStamp
+      };
+      user.stats.messagesSent.push(newMessageObj);
+    }
+  }
+}

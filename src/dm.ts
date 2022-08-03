@@ -1,4 +1,4 @@
-import { getData, setData, updateStatsUserDm. } from './data';
+import { getData, setData, updateStatsUserDm } from './data';
 import { Message } from './interfaces';
 import { tokenToUId, membersobjCreate, isValidUserId } from './channel';
 import HTTPError from 'http-errors';
@@ -127,7 +127,7 @@ function dmRemoveV1(token: string, dmId: number) {
   }
 
   const data = getData();
-  
+
   // update user stats
   const toRemoveDm = data.dms.filter((dm) => dm.dmId === dmId)[0];
   updateStatsUserDm(toRemoveDm.ownerId, timeRemove, 'remove');

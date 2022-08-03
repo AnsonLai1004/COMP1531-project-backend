@@ -315,6 +315,13 @@ function dmMessagesV2(token: string, dmId: number, start: number) {
   return result;
 }
 
+/**
+ * Given a query string, return a collection of messages in all of the channels/DMs 
+ * that the user has joined that contain the query (case-insensitive). \
+ * No expected order for these messages.
+ * @param {string} queryStr
+ * @returns { messages: Array of Messages}
+*/
 function messagesSearch(token: string, queryStr: string) {
   const tokenId = tokenToUId(token);
   if (tokenId.error) {

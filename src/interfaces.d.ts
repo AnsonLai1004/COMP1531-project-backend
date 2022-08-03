@@ -22,6 +22,13 @@ export interface Message {
     uId: number;
     message: string;
     timeSent: number;
+    reacts: reacts[];
+    isPinned: boolean;
+}
+
+export interface reacts {
+    reactId: number;
+    uIds: number[];
 }
 
 export interface Channel {

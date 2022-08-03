@@ -41,7 +41,9 @@ function messageSendV2(token: string, channelId: number, message: string) {
     messageId: (datastore.lastMessageId + 1) as number,
     uId: tokenId.uId,
     message: message,
-    timeSent: Math.round(Date.now() / 1000)
+    timeSent: Math.round(Date.now() / 1000),
+    reacts: [],
+    isPinned: false
   };
   for (const channel of datastore.channels) {
     if (channel.channelId === channelId) {
@@ -238,7 +240,9 @@ function messageSendDmV2(token: string, dmId: number, message: string) {
     messageId: (datastore.lastMessageId + 1) as number,
     uId: tokenId.uId,
     message: message,
-    timeSent: Math.round(Date.now() / 1000)
+    timeSent: Math.round(Date.now() / 1000),
+    reacts: [],
+    isPinned: false
   };
   for (const dm of datastore.dms) {
     if (dm.dmId === dmId) {
@@ -331,27 +335,27 @@ function messagesSearch(token: string, queryStr: string) {
     throw HTTPError(400, queryStr);
   }
   const datastore = getData();
-  const matchMessage = [];
+  const messages  = [];
 
   for (const channel of datastore.channels) {
     if (userIsAuthorised(tokenId.uId, channel.channelId)) {
-      for (const messages of channel.messages) {
-        if (messages.message.toLowerCase().includes(queryStr.toLowerCase())) {
-          matchMessage.push(messages);
+      for (const message of channel.messages) {
+        if (message.message.toLowerCase().includes(queryStr.toLowerCase())) {
+          messages.push(message);
         }
       }
     }
   }
   for (const dm of datastore.dms) {
     if (userIsAuthorisedInDm(tokenId.uId, dm.dmId)) {
-      for (const messages of dm.messages) {
-        if (messages.message.toLowerCase().includes(queryStr.toLowerCase())) {
-          matchMessage.push(messages);
+      for (const message of dm.messages) {
+        if (message.message.toLowerCase().includes(queryStr.toLowerCase())) {
+          messages.push(message);
         }
       }
     }
   }
-  return { matchMessage };
+  return { messages };
 }
 
 /************************************************************************

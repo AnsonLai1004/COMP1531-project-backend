@@ -447,18 +447,18 @@ describe('search/v1 test', () => {
     expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor!')).toStrictEqual({ messageId: 2 });
     expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor2!')).toStrictEqual({ messageId: 3 });
     const obtainMessage = reqMessagesSearch(aMember.token, 'world');
-    expect(obtainMessage.matchMessage[0].message).toStrictEqual('Hello World!');
+    expect(obtainMessage.messages[0].message).toStrictEqual('Hello World!');
   });
   test('success multiple messages returned', () => {
     // channel
     const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
-    const timenow = Math.round(Date.now() / 1000);
     expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!')).toStrictEqual({ messageId: 1 });
     expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor!')).toStrictEqual({ messageId: 2 });
     expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor2!')).toStrictEqual({ messageId: 3 });
     // dm
-    expect(reqMessagesSearch(aMember.token, 'world')).toMatchObject({ matchMessage: [{ message: 'Hello World!', messageId: 1, timeSent: timenow, uId: 1 }] });
+    const getmessage = reqMessagesSearch(aMember.token, 'world')
+    expect(getmessage.messages[0].message).toStrictEqual('Hello World!');
     const user = requestAuthRegister('randomemail@gmail.com', '123abc!@#', 'new', 'guy');
     const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
     const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
@@ -476,9 +476,9 @@ describe('search/v1 test', () => {
     expect(reqMessageSend(user.token, newchannel2.channelId, 'Hello World!')).toStrictEqual({ messageId: 10 });
     expect(reqSendMessageDm(user.token, dm.dmId, 'Hello!')).toStrictEqual({ messageId: 11 });
     const messagesGet = reqMessagesSearch(aMember.token, 'world');
-    expect(messagesGet.matchMessage[0].message).toStrictEqual('Hello World!');
-    expect(messagesGet.matchMessage[1].message).toStrictEqual('Hello World3!');
-    expect(messagesGet.matchMessage[2].message).toStrictEqual('Hello World2!');
-    expect(messagesGet.matchMessage[3].message).toStrictEqual('Hello World!');
+    expect(messagesGet.messages[0].message).toStrictEqual('Hello World!');
+    expect(messagesGet.messages[1].message).toStrictEqual('Hello World3!');
+    expect(messagesGet.messages[2].message).toStrictEqual('Hello World2!');
+    expect(messagesGet.messages[3].message).toStrictEqual('Hello World!');
   });
 });

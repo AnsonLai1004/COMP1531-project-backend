@@ -457,7 +457,7 @@ describe('search/v1 test', () => {
     expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor!')).toStrictEqual({ messageId: 2 });
     expect(reqMessageSend(aMember.token, newchannel.channelId, 'Hello Wor2!')).toStrictEqual({ messageId: 3 });
     // dm
-    const getmessage = reqMessagesSearch(aMember.token, 'world')
+    const getmessage = reqMessagesSearch(aMember.token, 'world');
     expect(getmessage.messages[0].message).toStrictEqual('Hello World!');
     const user = requestAuthRegister('randomemail@gmail.com', '123abc!@#', 'new', 'guy');
     const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');

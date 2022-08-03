@@ -320,7 +320,7 @@ function dmMessagesV2(token: string, dmId: number, start: number) {
 }
 
 /**
- * Given a query string, return a collection of messages in all of the channels/DMs 
+ * Given a query string, return a collection of messages in all of the channels/DMs
  * that the user has joined that contain the query (case-insensitive). \
  * No expected order for these messages.
  * @param {string} queryStr
@@ -335,7 +335,7 @@ function messagesSearch(token: string, queryStr: string) {
     throw HTTPError(400, queryStr);
   }
   const datastore = getData();
-  const messages  = [];
+  const messages = [];
 
   for (const channel of datastore.channels) {
     if (userIsAuthorised(tokenId.uId, channel.channelId)) {

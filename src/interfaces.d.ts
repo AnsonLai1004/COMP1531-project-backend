@@ -17,18 +17,18 @@ export interface User {
     isGlobalOwner: boolean;
 }
 
+export interface Reacts {
+    reactId: number;
+    uIds: number[];
+}
+
 export interface Message {
     messageId: number;
     uId: number;
     message: string;
     timeSent: number;
-    reacts: reacts[];
+    reacts: Reacts[];
     isPinned: boolean;
-}
-
-export interface reacts {
-    reactId: number;
-    uIds: number[];
 }
 
 export interface Channel {

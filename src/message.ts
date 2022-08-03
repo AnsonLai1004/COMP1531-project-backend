@@ -475,8 +475,8 @@ function messageReact(token: string, messageId: number, reactId: number) {
   if (tokenId.error) {
     throw HTTPError(403, 'Invalid token');
   }
-  if (reactId != 1) {
-    throw HTTPError(400, 'Invalid reactId')
+  if (reactId !== 1) {
+    throw HTTPError(400, 'Invalid reactId');
   }
 
   const datastore = getData();
@@ -485,27 +485,27 @@ function messageReact(token: string, messageId: number, reactId: number) {
       for (const message of channel.messages) {
         if (message.messageId === messageId) {
           // check whether reactId in reacts
-          let reactexist = false
+          let reactexist = false;
           for (const i of message.reacts) {
             if ((i.reactId === reactId) && (i.uIds.includes(tokenId.uId))) {
-              throw HTTPError(400, "the message already contains a react with ID reactId from the authorised user")
+              throw HTTPError(400, 'the message already contains a react with ID reactId from the authorised user');
             } else if ((i.reactId === reactId) && !(i.uIds.includes(tokenId.uId))) {
-              reactexist = true
-              i.uIds.push(tokenId.uId)
-              setData(datastore)
-              return {}
+              reactexist = true;
+              i.uIds.push(tokenId.uId);
+              setData(datastore);
+              return {};
             }
           }
           // if reactid dont exist, add new react
           if (reactexist === false) {
             const newreact: Reacts = {
               reactId: reactId,
-              uIds: [ tokenId.uId ],
+              uIds: [tokenId.uId],
               isThisUserReacted: false
-            }
-            message.reacts.push(newreact)
-            setData(datastore)
-            return {}
+            };
+            message.reacts.push(newreact);
+            setData(datastore);
+            return {};
           }
         }
       }
@@ -516,27 +516,27 @@ function messageReact(token: string, messageId: number, reactId: number) {
     if (userIsAuthorisedInDm(tokenId.uId, dm.dmId)) {
       for (const message of dm.messages) {
         if (message.messageId === messageId) {
-          let reactexist = false
+          let reactexist = false;
           for (const i of message.reacts) {
             if ((i.reactId === reactId) && (i.uIds.includes(tokenId.uId))) {
-              throw HTTPError(400, "the message already contains a react with ID reactId from the authorised user")
+              throw HTTPError(400, 'the message already contains a react with ID reactId from the authorised user');
             } else if ((i.reactId === reactId) && !(i.uIds.includes(tokenId.uId))) {
-              reactexist = true
-              i.uIds.push(tokenId.uId)
-              setData(datastore)
-              return {}
+              reactexist = true;
+              i.uIds.push(tokenId.uId);
+              setData(datastore);
+              return {};
             }
           }
           // if reactid dont exist, add new react
           if (reactexist === false) {
             const newreact: Reacts = {
               reactId: reactId,
-              uIds: [ tokenId.uId ],
+              uIds: [tokenId.uId],
               isThisUserReacted: false
-            }
-            message.reacts.push(newreact)
-            setData(datastore)
-            return {}
+            };
+            message.reacts.push(newreact);
+            setData(datastore);
+            return {};
           }
         }
       }
@@ -550,8 +550,8 @@ function messageUnreact(token: string, messageId: number, reactId: number) {
   if (tokenId.error) {
     throw HTTPError(403, 'Invalid token');
   }
-  if (reactId != 1) {
-    throw HTTPError(400, 'Invalid reactId')
+  if (reactId !== 1) {
+    throw HTTPError(400, 'Invalid reactId');
   }
 
   const datastore = getData();
@@ -560,25 +560,25 @@ function messageUnreact(token: string, messageId: number, reactId: number) {
       for (const message of channel.messages) {
         if (message.messageId === messageId) {
           // check whether reactId in reacts
-          let reactexist = false
+          let reactexist = false;
           for (const i of message.reacts) {
             if ((i.reactId === reactId) && (i.uIds.includes(tokenId.uId))) {
-              reactexist = true
-              i.uIds = i.uIds.filter(e => e !== tokenId.uId)
+              reactexist = true;
+              i.uIds = i.uIds.filter(e => e !== tokenId.uId);
               if (i.uIds.length === 0) {
-                message.reacts = []
+                message.reacts = [];
               }
-              setData(datastore)
-              return {}
+              setData(datastore);
+              return {};
             } else if ((i.reactId === reactId) && !(i.uIds.includes(tokenId.uId))) {
               // user dont exist in uids
-              throw HTTPError(400, 'authorised user not in react uids')
+              throw HTTPError(400, 'authorised user not in react uids');
             }
           }
           // if reactid dont exist, return error
           if (reactexist === false) {
-            //react dont exist
-            throw HTTPError(400, 'reactId is not valid reactId')
+            // react dont exist
+            throw HTTPError(400, 'reactId is not valid reactId');
           }
         }
       }
@@ -589,23 +589,23 @@ function messageUnreact(token: string, messageId: number, reactId: number) {
     if (userIsAuthorisedInDm(tokenId.uId, dm.dmId)) {
       for (const message of dm.messages) {
         if (message.messageId === messageId) {
-          let reactexist = false
+          let reactexist = false;
           for (const i of message.reacts) {
             if ((i.reactId === reactId) && (i.uIds.includes(tokenId.uId))) {
-              reactexist = true
-              i.uIds = i.uIds.filter(e => e !== tokenId.uId)
+              reactexist = true;
+              i.uIds = i.uIds.filter(e => e !== tokenId.uId);
               if (i.uIds.length === 0) {
-                message.reacts = []
+                message.reacts = [];
               }
-              setData(datastore)
-              return {}
+              setData(datastore);
+              return {};
             } else if ((i.reactId === reactId) && !(i.uIds.includes(tokenId.uId))) {
-              throw HTTPError(400, 'authorised user not in react uids')
+              throw HTTPError(400, 'authorised user not in react uids');
             }
           }
           // if reactid dont exist, add new react
           if (reactexist === false) {
-            throw HTTPError(400, 'react dont exist')
+            throw HTTPError(400, 'react dont exist');
           }
         }
       }

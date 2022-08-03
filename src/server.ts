@@ -366,7 +366,6 @@ app.post('/message/unreact/v1', (req, res, next) => {
   }
 });
 
-
 // other routes
 app.delete('/clear/v1', (req, res) => {
   clearV1();

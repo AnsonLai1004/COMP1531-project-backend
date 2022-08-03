@@ -16,6 +16,7 @@ let data = {
   lastDMId: 0,
   lastMessageId: 0,
   lastToken: 0,
+  secret: 'COMP1531W14BHASHASHAHSHAHSA(*%&&%&*&&FKUYSCWLCW',
 };
 
 export interface DataStore {
@@ -28,6 +29,7 @@ export interface DataStore {
   lastDMId: number;
   lastMessageId: number;
   lastToken: number;
+  secret: string;
 }
 
 // Use get() to access the data

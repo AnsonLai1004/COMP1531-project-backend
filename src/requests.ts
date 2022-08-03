@@ -174,7 +174,6 @@ export function reqDmLeaveV3(token: string, dmId: number) {
   }
   return res.statusCode;
 }
-/// /////////////////////////////////////////////////////////////////////////////
 
 // auth
 export function requestAuthLogin(email: string, password: string) {
@@ -516,47 +515,6 @@ export function reqDmMessages(token: string, dmId: number, start: number) {
   return res.statusCode;
 }
 /// ///////////////////////////////////////////////
-
-export function reqDmList(token: string) {
-  const res = request(
-    'GET',
-    `${url}:${port}` + '/dm/list/v1',
-    {
-      qs: {
-        token,
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
-export function reqDmRemove(token: string, dmId: number) {
-  const res = request(
-    'DELETE',
-    `${url}:${port}` + '/dm/remove/v1',
-    {
-      qs: {
-        token,
-        dmId,
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
-export function reqDmLeave(token: string, dmId: number) {
-  const res = request(
-    'POST',
-    `${url}:${port}` + '/dm/leave/v1',
-    {
-      json: {
-        token,
-        dmId,
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
 
 // user & users
 // user & users

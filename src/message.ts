@@ -4,7 +4,7 @@ import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
 export {
   messageSendV2, messageRemoveV2, messageEditV2, messageSendDmV2,
-  dmMessagesV2
+  dmMessagesV2, messageShareV1
 };
 
 /**
@@ -320,19 +320,23 @@ function dmMessagesV2(token: string, dmId: number, start: number) {
 function messageShareV1(token: string, ogMessageId: number, message: string, channelId: number, dmId: number) {
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
-    throw HTTPError(403, 'invalid Token');
+    throw HTTPError(403, 'Invalid token');
+  }
+  console.log(message.length)
+  if (message.length > 1000) {
+    throw HTTPError(400, 'length of messages is greater than 1000');
   }
   // check channelId and dmId is valid, and either one need to be -1
   // check ogMessageId is valid and get the message obj
   if (channelId === -1) {
-    if (!isValidDmId(dmId)) {
+    if (isValidDmId(dmId) === false) {
       throw HTTPError(400, 'Invalid dmId');
     }
     if (!userIsAuthorisedInDm(tokenId.uId, dmId)) {
       throw HTTPError(403, 'user has not joined the channel');
     }
   } else if (dmId === -1) {
-    if (!isValidChannelId(channelId)) {
+    if (isValidChannelId(channelId) === false) {
       throw HTTPError(400, 'Invalid channelId');
     }
     if (!userIsAuthorised(tokenId.uId, channelId)) {
@@ -341,13 +345,12 @@ function messageShareV1(token: string, ogMessageId: number, message: string, cha
   } else {
     throw HTTPError(400, 'neither channelId nor dmId are -1');
   } 
-  if (message.length > 1000) {
-    throw HTTPError(400, 'length of message is over 1000 characters');
-  }
+  
   const ogMessage = findMessageStr(ogMessageId);
   if (ogMessage === undefined) {
     throw HTTPError(400, 'ogMessageId is Invalid');
   }
+  // TODO: ogMessageId does not refer to a valid message within a channel/DM that the authorised user has joined
   // create newMessage with both string concat together
   const data = getData();
   const newmessage: Message = {

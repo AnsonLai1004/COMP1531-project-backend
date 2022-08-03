@@ -3,7 +3,7 @@ import {
   requestClear, requestChannelsCreate, requestAuthRegister,
   reqChannelMessages, reqMessageSend, reqMessageEdit,
   reqMessageRemove, reqSendMessageDm, reqDmMessages, reqDmCreate,
-  reqMessageShare
+  reqMessageShare, reqChannelJoin
 } from './requests';
 
 beforeEach(() => {
@@ -425,75 +425,3 @@ describe('message/remove/v2 on dm and channels', () => {
 });
 
 /////////////////////////Iteration 3 new functions tests////////////////////////////////////////////////////////////////////////////////////////
-// message/share/v1
-describe('message/share/v1', () => {
-  test('Invalid tokenId', () => {
-    expect(reqMessageShare).toStrictEqual(403);
-  });
-  test('messageId invalid', () => {
-    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-    const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
-    reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!');
-    const invalid = reqMessageRemove(aMember.token, 2);
-    expect(invalid).toStrictEqual(400);
-  });
-  test('Person doesnt have owner permissions', () => {
-    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-    const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
-    const notowner = requestAuthRegister('asd@gmail.com', '123abc!asd@#', 'Jak', 'asd');
-    reqChannelInvite(aMember.token, newchannel.channelId, notowner.authUserId);
-    reqMessageSend(notowner.token, newchannel.channelId, 'Hello World!');
-    const invalid = reqMessageRemove(notowner.token, 1);
-    expect(invalid).toStrictEqual(403);
-  });
-  test('person not the sender of the message in channel', () => {
-    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-    const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
-    const notUser = requestAuthRegister('asd@gmail.com', '123abc!@#', 'Jak', 'asd');
-    // add notUser to channel and send message
-    reqChannelInvite(aMember.token, newchannel.channelId, notUser.authUserId);
-    reqMessageSend(notUser.token, newchannel.channelId, 'Hello World!');
-    const invalid = reqMessageRemove(aMember.token, 1);
-    expect(invalid).toStrictEqual(403);
-  });
-  // test in dm
-  test('Person doesnt have owner permissions in dm', () => {
-    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
-    const uIds = [user1.authUserId];
-    const dm = reqDmCreate(user.token, uIds);
-    reqSendMessageDm(user1.token, dm.dmId, 'Hello World!');
-    const invalid = reqMessageRemove(user1.token, 1);
-    expect(invalid).toStrictEqual(403);
-  });
-  test('person not the sender of the message', () => {
-    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
-    const uIds = [user1.authUserId];
-    const dm = reqDmCreate(user.token, uIds);
-    // add notUser to channel and send message
-    reqSendMessageDm(user1.token, dm.dmId, 'Hello World!');
-    const invalid = reqMessageRemove(user.token, 1);
-    expect(invalid).toStrictEqual(403);
-  });
-  // success edit
-  test('remove single message from owner', () => {
-    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-    const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
-    reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!');
-    expect(reqMessageRemove(aMember.token, 1)).toStrictEqual({});
-  });
-  test('remove multiple message from multiple channels', () => {
-    const aMember = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
-    const newchannel = requestChannelsCreate(aMember.token, 'crush team', true);
-    const newchannel2 = requestChannelsCreate(aMember.token, 'crush team', true);
-    reqMessageSend(aMember.token, newchannel.channelId, 'Hello World!');
-    reqMessageSend(aMember.token, newchannel2.channelId, 'Hello World2!');
-    reqMessageSend(aMember.token, newchannel.channelId, 'Hello World3!');
-    reqMessageSend(aMember.token, newchannel2.channelId, 'Hello World4!');
-    reqMessageSend(aMember.token, newchannel2.channelId, 'Hello World5!');
-    expect(reqMessageRemove(aMember.token, 4)).toStrictEqual({});
-    expect(reqMessageRemove(aMember.token, 1)).toStrictEqual({});
-    expect(reqMessageRemove(aMember.token, 3)).toStrictEqual({});
-  });
-});

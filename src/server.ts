@@ -85,7 +85,17 @@ app.get('/channels/listall/v3', (req, res, next) => {
     next(err);
   }
 });
-/// /////////////////////////////////////////////////////////////////////////////
+
+app.post('/message/share/v1', (req, res, next) => {
+  try {
+    const token = req.headers.token as string;
+    const { ogMessageId, message, channelId, dmId } = req.body;
+    res.json(messageShareV1(token, ogMessageId, message, channelId, dmId));
+  } catch (err) {
+    next(err);
+  }
+});
+///////////////////////////////////////////////////////////////////////////
 
 // auth routes
 app.post('/auth/login/v2', (req, res) => {
@@ -198,10 +208,7 @@ app.delete('/message/remove/v2', (req, res) => {
   res.json(messageRemoveV2(token, messageId));
 });
 
-app.post('/message/share/v1', (req, res) => {
-  const { token, ogMessageId, message, channelId, dmId } = req.body;
-  res.json(messageShareV1(token, ogMessageId, message, channelId, dmId));
-});
+
 
 // dm routes
 app.post('/dm/create/v2', (req, res) => {

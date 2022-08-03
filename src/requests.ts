@@ -99,12 +99,14 @@ export function reqMessageShare(token: string, ogMessageId: number, message: str
     'POST',
     `${url}:${port}` + '/message/share/v1',
     {
-      qs: {
-        token,
+      json: {
         ogMessageId,
-        message,
         channelId,
         dmId,
+        message,
+      },
+      headers: {
+        token: token,
       }
     }
   );

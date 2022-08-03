@@ -16,6 +16,7 @@ function clearV1() {
     lastDMId: 0,
     lastMessageId: 0,
     lastToken: 0,
+    secret: 'COMP1531W14BHASHASHAHSHAHSA(*%&&%&*&&FKUYSCWLCW',
   };
   setData(data);
   return {};

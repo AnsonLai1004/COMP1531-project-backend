@@ -6,6 +6,7 @@ import { getData, setData } from './data';
 import { checkUserData } from './users';
 import isEmail from 'validator/lib/isEmail.js';
 import HTTPError from 'http-errors';
+import crypto from 'crypto';
 
 /**
  * Wrapper function which calls authRegisterV1 and generates a token
@@ -152,10 +153,11 @@ function generateToken(uId: number) {
   const data = getData();
   const tokenNum = data.lastToken + 1;
   const tokenStr = tokenNum.toString();
+  const hashedToken = crypto.createHash('sha256').update(tokenStr + data.secret).digest('hex');
   data.lastToken = tokenNum;
-  data.tokens.push({ token: tokenStr, uId: uId });
+  data.tokens.push({ token: hashedToken, uId: uId });
   setData(data);
-  return tokenStr;
+  return hashedToken;
 }
 
 type tokenToUIdReturn = {

@@ -62,6 +62,8 @@ describe('Channels Functions Errors', () => {
         uId: user1.authUserId,
         message: 'theoang: Hello\nalexavery: World!',
         timeSent: expect.any(Number),
+        reacts: [],
+        isPinned: false,
       }],
       start: 0,
       end: -1

@@ -4,7 +4,7 @@ import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
 export {
   messageSendV2, messageRemoveV2, messageEditV2, messageSendDmV2,
-  dmMessagesV2, messageShareV1
+  dmMessagesV2, messageShareV1, messagesSearch
 };
 
 /**
@@ -42,7 +42,9 @@ function messageSendV2(token: string, channelId: number, message: string) {
     messageId: (datastore.lastMessageId + 1) as number,
     uId: tokenId.uId,
     message: message,
-    timeSent: Math.round(Date.now() / 1000)
+    timeSent: Math.round(Date.now() / 1000),
+    reacts: [],
+    isPinned: false
   };
   for (const channel of datastore.channels) {
     if (channel.channelId === channelId) {
@@ -239,7 +241,9 @@ function messageSendDmV2(token: string, dmId: number, message: string) {
     messageId: (datastore.lastMessageId + 1) as number,
     uId: tokenId.uId,
     message: message,
-    timeSent: Math.round(Date.now() / 1000)
+    timeSent: Math.round(Date.now() / 1000),
+    reacts: [],
+    isPinned: false
   };
   for (const dm of datastore.dms) {
     if (dm.dmId === dmId) {
@@ -316,9 +320,11 @@ function dmMessagesV2(token: string, dmId: number, start: number) {
   return result;
 }
 
+
 /// //////////////////////Iteration 3 new functions////////////////////////////////////////////////////////////////////////////////////////
 // message/share/v1
 function messageShareV1(token: string, ogMessageId: number, message: string, channelId: number, dmId: number) {
+
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
     throw HTTPError(403, 'Invalid token');
@@ -353,6 +359,7 @@ function messageShareV1(token: string, ogMessageId: number, message: string, cha
   }
   // ogMessageId does not refer to a valid message within a channel/DM that the authorised user has joined
   if (channelId === -1) {
+    console.log(userIsAuthorisedInDm(tokenId.uId, ogMessage.Id));
     if (!userIsAuthorisedInDm(tokenId.uId, ogMessage.Id)) {
       throw HTTPError(400, 'user share message from Dm they are not authorised');
     }
@@ -369,6 +376,8 @@ function messageShareV1(token: string, ogMessageId: number, message: string, cha
     uId: tokenId.uId,
     message: ogMessage.message + message,
     timeSent: Math.round(Date.now() / 1000),
+    reacts: [],
+    isPinned: false,
   };
 
   if (channelId === -1) {
@@ -389,7 +398,47 @@ function messageShareV1(token: string, ogMessageId: number, message: string, cha
   return { sharedMessageId: newmessage.messageId };
 }
 
+/**
+ * Given a query string, return a collection of messages in all of the channels/DMs
+ * that the user has joined that contain the query (case-insensitive). \
+ * No expected order for these messages.
+ * @param {string} queryStr
+ * @returns { messages: Array of Messages}
+*/
+function messagesSearch(token: string, queryStr: string) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    throw HTTPError(403, 'Invalid token');
+  }
+  if (queryStr.length < 1 || queryStr.length > 1000) {
+    throw HTTPError(400, queryStr);
+  }
+  const datastore = getData();
+  const messages = [];
+
+  for (const channel of datastore.channels) {
+    if (userIsAuthorised(tokenId.uId, channel.channelId)) {
+      for (const message of channel.messages) {
+        if (message.message.toLowerCase().includes(queryStr.toLowerCase())) {
+          messages.push(message);
+        }
+      }
+    }
+  }
+  for (const dm of datastore.dms) {
+    if (userIsAuthorisedInDm(tokenId.uId, dm.dmId)) {
+      for (const message of dm.messages) {
+        if (message.message.toLowerCase().includes(queryStr.toLowerCase())) {
+          messages.push(message);
+        }
+      }
+    }
+  }
+  return { messages };
+}
+
 /// //////////////////////Helper functions/////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * Helper function
  * return false if channelId is not valid

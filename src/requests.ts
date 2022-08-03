@@ -7,6 +7,67 @@ import request from 'sync-request';
 import { port, url } from './config.json';
 
 /// //////////////////////////// ITERATION 3 ////////////////////////////////////
+// Standup
+export function requestStandupStartV3(token: string, channelId: number, length: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/standup/start/v1',
+    {
+      json: {
+        channelId,
+        length
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
+
+export function requestStandupActiveV3(token: string, channelId: number) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/standup/active/v1',
+    {
+      qs: {
+        channelId
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
+
+export function requestStandupSendV3(token: string, channelId: number, message: string) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/standup/send/v1',
+    {
+      json: {
+        channelId,
+        message
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
+
+// Channels
 export function requestChannelsCreateV3(token: string, name: string, isPublic: boolean) {
   const res = request(
     'POST',
@@ -59,6 +120,7 @@ export function requestChannelsListallV3(token: string) {
   return res.statusCode;
 }
 
+// dm
 export function reqDmListV3(token: string) {
   const res = request(
     'GET',
@@ -94,6 +156,24 @@ export function reqDmRemoveV3(token: string, dmId: number) {
   return res.statusCode;
 }
 
+export function reqDmLeaveV3(token: string, dmId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/dm/leave/v2',
+    {
+      json: {
+        dmId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
 export function reqMessageShare(token: string, ogMessageId: number, message: string, channelId: number, dmId: number) {
   const res = request(
     'POST',
@@ -116,41 +196,45 @@ export function reqMessageShare(token: string, ogMessageId: number, message: str
   }
   return res.statusCode;
 }
-/// /////////////////////////////////////////////////////////////////////////////
-
 // auth
 export function requestAuthLogin(email: string, password: string) {
   const res = request(
     'POST',
-    `${url}:${port}` + '/auth/login/v2',
+    `${url}:${port}` + '/auth/login/v3',
     {
       json: {
         email, password
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestAuthRegister(email: string, password: string, nameFirst: string, nameLast: string) {
   const res = request(
     'POST',
-    `${url}:${port}` + '/auth/register/v2',
+    `${url}:${port}` + '/auth/register/v3',
     {
       json: {
         email, password, nameFirst, nameLast
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestAuthLogout(token: string) {
   const res = request(
     'POST',
-      `${url}:${port}` + '/auth/logout/v1',
+      `${url}:${port}` + '/auth/logout/v2',
       {
-        json: {
+        headers: {
           token
         }
       }
@@ -174,8 +258,10 @@ export function reqChannelDetails(token: string, channelId: number) {
     `${url}:${port}` + '/channel/details/v3',
     {
       qs: {
-        token,
         channelId,
+      },
+      headers: {
+        token: token
       }
     }
   );
@@ -192,8 +278,10 @@ export function reqChannelJoin(token: string, channelId: number) {
     `${url}:${port}` + '/channel/join/v3',
     {
       json: {
-        token,
         channelId,
+      },
+      headers: {
+        token: token
       }
     }
   );
@@ -209,9 +297,11 @@ export function reqChannelInvite(token: string, channelId: number, uId: number) 
     `${url}:${port}` + '/channel/invite/v3',
     {
       json: {
-        token,
         channelId,
         uId,
+      },
+      headers: {
+        token: token
       }
     });
   if (res.statusCode === 200) {
@@ -229,6 +319,9 @@ export function reqChannelLeave(token: string, channelId: number) {
         json: {
           token,
           channelId,
+        },
+        headers: {
+          token: token
         }
       }
 
@@ -245,9 +338,11 @@ export function reqChannelMessages(token: string, channelId: number, start: numb
     `${url}:${port}` + '/channel/messages/v3',
     {
       qs: {
-        token,
         channelId,
         start,
+      },
+      headers: {
+        token: token
       }
     }
   );
@@ -262,8 +357,10 @@ export function reqChannelAddowner(token: string, channelId: number, uId: number
     'POST',
       `${url}:${port}` + '/channel/addowner/v2',
       {
+        headers: {
+          token: token
+        },
         json: {
-          token,
           channelId,
           uId,
         }
@@ -275,54 +372,15 @@ export function reqChannelAddowner(token: string, channelId: number, uId: number
   return res.statusCode;
 }
 
-export function requestChannelsCreate(token: string, name: string, isPublic: boolean) {
-  const res = request(
-    'POST',
-    `${url}:${port}` + '/channels/create/v2',
-    {
-      json: {
-        token,
-        name,
-        isPublic
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
-export function requestChannelsList(token: string) {
-  const res = request(
-    'GET',
-    `${url}:${port}` + '/channels/list/v2',
-    {
-      qs: {
-        token
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
-export function requestChannelsListall(token: string) {
-  const res = request(
-    'GET',
-    `${url}:${port}` + '/channels/listall/v2',
-    {
-      qs: {
-        token
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
 export function reqChannelRemoveowner(token: string, channelId: number, uId: number) {
   const res = request(
     'POST',
       `${url}:${port}` + '/channel/removeowner/v2',
       {
+        headers: {
+          token: token
+        },
         json: {
-          token,
           channelId,
           uId,
         }
@@ -340,8 +398,10 @@ export function reqDmCreate(token: string, uIds: number[]) {
     'POST',
     `${url}:${port}` + '/dm/create/v2',
     {
+      headers: {
+        token: token
+      },
       json: {
-        token,
         uIds,
       }
     }
@@ -357,8 +417,10 @@ export function reqDmDetails(token: string, dmId: number) {
     'GET',
     `${url}:${port}` + '/dm/details/v2',
     {
+      headers: {
+        token: token
+      },
       qs: {
-        token,
         dmId,
       }
     }
@@ -377,9 +439,11 @@ export function reqMessageSend(token: string, channelId: number, message: string
     `${url}:${port}` + '/message/send/v2',
     {
       json: {
-        token,
         channelId,
         message
+      },
+      headers: {
+        token: token
       }
     }
   );
@@ -396,9 +460,11 @@ export function reqMessageEdit(token: string, messageId: number, message: string
     `${url}:${port}` + '/message/edit/v2',
     {
       json: {
-        token,
         messageId,
         message,
+      },
+      headers: {
+        token: token
       }
     }
   );
@@ -415,8 +481,10 @@ export function reqMessageRemove(token: string, messageId: number) {
     `${url}:${port}` + '/message/remove/v2',
     {
       qs: {
-        token,
         messageId,
+      },
+      headers: {
+        token: token
       }
     }
   );
@@ -433,9 +501,11 @@ export function reqSendMessageDm(token: string, dmId: number, message: string) {
     `${url}:${port}` + '/message/senddm/v2',
     {
       json: {
-        token,
         dmId,
         message,
+      },
+      headers: {
+        token: token
       }
     }
   );
@@ -452,9 +522,11 @@ export function reqDmMessages(token: string, dmId: number, start: number) {
     `${url}:${port}` + '/dm/messages/v2',
     {
       qs: {
-        token,
         dmId,
         start,
+      },
+      headers: {
+        token: token
       }
     }
   );
@@ -465,110 +537,116 @@ export function reqDmMessages(token: string, dmId: number, start: number) {
 }
 /// ///////////////////////////////////////////////
 
-export function reqDmList(token: string) {
-  const res = request(
-    'GET',
-    `${url}:${port}` + '/dm/list/v1',
-    {
-      qs: {
-        token,
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
-export function reqDmRemove(token: string, dmId: number) {
-  const res = request(
-    'DELETE',
-    `${url}:${port}` + '/dm/remove/v1',
-    {
-      qs: {
-        token,
-        dmId,
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
-export function reqDmLeave(token: string, dmId: number) {
-  const res = request(
-    'POST',
-    `${url}:${port}` + '/dm/leave/v1',
-    {
-      json: {
-        token,
-        dmId,
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
+// user & users
 // user & users
 export function requestUserProfile(token: string, uId: number) {
   const res = request(
     'GET',
-    `${url}:${port}` + '/user/profile/v2',
+    `${url}:${port}` + '/user/profile/v3',
     {
+      headers: {
+        token
+      },
       qs: {
-        token,
         uId
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestUsersAll(token: string) {
   const res = request(
     'GET',
-    `${url}:${port}` + '/users/all/v1',
+    `${url}:${port}` + '/users/all/v2',
     {
-      qs: {
+      headers: {
         token
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestUserSetName(token: string, nameFirst: string, nameLast: string) {
   const res = request(
     'PUT',
-      `${url}:${port}` + '/user/profile/setname/v1',
+      `${url}:${port}` + '/user/profile/setname/v2',
       {
+        headers: {
+          token
+        },
         json: {
-          token, nameFirst, nameLast
+          nameFirst, nameLast
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestUserSetEmail(token: string, email: string) {
   const res = request(
     'PUT',
-      `${url}:${port}` + '/user/profile/setemail/v1',
+      `${url}:${port}` + '/user/profile/setemail/v2',
       {
+        headers: {
+          token
+        },
         json: {
-          token, email
+          email
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestUserSetHandle(token: string, handleStr: string) {
   const res = request(
     'PUT',
-      `${url}:${port}` + '/user/profile/sethandle/v1',
+      `${url}:${port}` + '/user/profile/sethandle/v2',
       {
+        headers: {
+          token
+        },
         json: {
-          token, handleStr
+          handleStr
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+// search route
+export function reqMessagesSearch(token: string, queryStr: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/search/v1',
+    {
+      qs: {
+        queryStr
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }

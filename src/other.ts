@@ -18,14 +18,14 @@ function clearV1() {
     lastMessageId: 0,
     lastToken: 0,
     stats: {
-      channelsExist: [{numChannelsExist: 0, timeStamp: timeStamp}],
-      dmsExist: [{numDmsExist: 0, timeStamp: timeStamp}],
-      messagesExist: [{numMessagesExist: 0, timeStamp: timeStamp}],
+      channelsExist: [{ numChannelsExist: 0, timeStamp: timeStamp }],
+      dmsExist: [{ numDmsExist: 0, timeStamp: timeStamp }],
+      messagesExist: [{ numMessagesExist: 0, timeStamp: timeStamp }],
     },
     secret: 'COMP1531W14BHASHASHAHSHAHSA(*%&&%&*&&FKUYSCWLCW',
   };
   setData(data);
-  
+
   return {};
 }
 

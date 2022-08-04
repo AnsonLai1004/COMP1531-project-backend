@@ -3,7 +3,7 @@
  * @module user
 **/
 import { User } from './interfaces';
-import { getData, setData } from './data';
+import { getData, setData, getUserStats, getWorkplaceStats } from './data';
 import { tokenToUId } from './auth';
 import isEmail from 'validator/lib/isEmail.js';
 import HTTPError from 'http-errors';
@@ -157,10 +157,10 @@ export function userSetHandleV2(token: string, handleStr: string) {
 
 /**
  * Function which returns the analytics stats of a given user
- * Includes the number of channels and dms they have joined and 
+ * Includes the number of channels and dms they have joined and
  * the number of messages they have sent
- * @param token 
- * @returns 
+ * @param token
+ * @returns
  */
 export function userStatsV1(token: string) {
   const authUser = tokenToUId(token);
@@ -170,30 +170,16 @@ export function userStatsV1(token: string) {
   return getUserStats(authUser.uId);
 }
 
-// Helper function to get the userStats object ready for return 
-// Assumes that given uId is valid
-function getUserStats(uId: number) {
-  const data = getData();
-  const numChannelsExist = data.stats.channelsExist.slice(-1)[0].numChannelsExist;
-  const numDmsExist = data.stats.dmsExist.slice(-1)[0].numDmsExist;
-  const numMessagesExist = data.stats.messagesExist.slice(-1)[0].numMessagesExist;
-  
-  for (const user of data.users) {
-    if (uId === user.uId) {
-
-      const numChannelsJoined = user.stats.channelsJoined.slice(-1)[0].numChannelsJoined;
-      const numDmsJoined = user.stats.dmsJoined.slice(-1)[0].numDmsJoined;
-      const numMessagesSent = user.stats.messagesSent.slice(-1)[0].numMessagesSent;
-
-      const numerator = numChannelsJoined + numDmsJoined + numMessagesSent;
-      const denominator = numChannelsExist + numDmsExist + numMessagesExist;
-
-      const involvementRate = (denominator !== 0) ? numerator / denominator : 0;
-      user.stats.involvementRate = (involvementRate <  1) ? involvementRate : 1;
-
-      return {userStats: user.stats}; 
-    }
+/**
+ * Function which returns the analytics stats of the workplace
+ * @param token
+ */
+export function usersStatsV1(token: string) {
+  const authUser = tokenToUId(token);
+  if ('error' in authUser) {
+    throw HTTPError(403, 'Invalid token!');
   }
+  return getWorkplaceStats();
 }
 
 /**

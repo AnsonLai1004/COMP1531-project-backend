@@ -159,9 +159,9 @@ describe('users/stats/v1', () => {
     const stats = reqWorkspaceStats(user1.token + '');
     expect(stats).toEqual({
       workplaceStats: {
-        channelsExist: [{numChannelsExist: 0, timeStamp: expect.any(Number)}],
-        dmsExist: [{numDmsExist: 0, timeStamp: expect.any(Number)}],
-        messagesExist: [{numMessagesExist: 0, timeStamp: expect.any(Number)}],
+        channelsExist: [{ numChannelsExist: 0, timeStamp: expect.any(Number) }],
+        dmsExist: [{ numDmsExist: 0, timeStamp: expect.any(Number) }],
+        messagesExist: [{ numMessagesExist: 0, timeStamp: expect.any(Number) }],
         utilizationRate: 0
       }
     });
@@ -188,9 +188,9 @@ describe('users/stats/v1', () => {
     const stats = reqWorkspaceStats(user1.token);
     expect(stats).toEqual({
       workplaceStats: {
-        channelsExist: [{numChannelsExist: 0, timeStamp: expect.any(Number)}, {numChannelsExist: 1, timeStamp: expect.any(Number)}],
-        dmsExist: [{numDmsExist: 0, timeStamp: expect.any(Number)}, {numDmsExist: 1, timeStamp: expect.any(Number)}],
-        messagesExist: [{numMessagesExist: 0, timeStamp: expect.any(Number)}, {numMessagesExist: 1, timeStamp: expect.any(Number)}],
+        channelsExist: [{ numChannelsExist: 0, timeStamp: expect.any(Number) }, { numChannelsExist: 1, timeStamp: expect.any(Number) }],
+        dmsExist: [{ numDmsExist: 0, timeStamp: expect.any(Number) }, { numDmsExist: 1, timeStamp: expect.any(Number) }],
+        messagesExist: [{ numMessagesExist: 0, timeStamp: expect.any(Number) }, { numMessagesExist: 1, timeStamp: expect.any(Number) }],
         utilizationRate: 1
       }
     });
@@ -204,7 +204,6 @@ describe('users/stats/v1', () => {
 
     expect(stats.workplaceStats.messagesExist[1].timeStamp).toBeGreaterThanOrEqual(timeSent);
     expect(stats.workplaceStats.messagesExist[1].timeStamp).toBeLessThanOrEqual(timeSent + 1);
-
   });
 
   test('many interactions', () => {
@@ -219,12 +218,12 @@ describe('users/stats/v1', () => {
 
     const dm1 = reqDmCreate(user2.token, [user1.authUserId, user3.authUserId]);
     const dm2 = reqDmCreate(user2.token, [user1.authUserId, user3.authUserId]);
-    
+
     const message1 = reqMessageSend(user1.token, channel1.channelId, 'message 1');
-    const message2 = reqMessageSend(user1.token, channel2.channelId, 'message 2');
+    const message2 = reqMessageSend(user2.token, channel2.channelId, 'message 2');
     reqMessageRemove(user1.token, message1.messageId);
-    reqMessageRemove(user1.token, message2.messageId);
-    reqMessageSend(user3.token, channel3.channelId, 'message 3');
+    reqMessageRemove(user2.token, message2.messageId);
+    reqMessageSend(user2.token, channel3.channelId, 'message 3');
 
     reqSendMessageDm(user3.token, dm1.dmId, 'GO AWAY');
     reqSendMessageDm(user3.token, dm2.dmId, 'BOTH OF YOU');
@@ -235,27 +234,27 @@ describe('users/stats/v1', () => {
     expect(stats).toEqual({
       workplaceStats: {
         channelsExist: [
-          {numChannelsExist: 0, timeStamp: expect.any(Number)}, 
-          {numChannelsExist: 1, timeStamp: expect.any(Number)},
-          {numChannelsExist: 2, timeStamp: expect.any(Number)},
-          {numChannelsExist: 3, timeStamp: expect.any(Number)},
+          { numChannelsExist: 0, timeStamp: expect.any(Number) },
+          { numChannelsExist: 1, timeStamp: expect.any(Number) },
+          { numChannelsExist: 2, timeStamp: expect.any(Number) },
+          { numChannelsExist: 3, timeStamp: expect.any(Number) },
         ],
         dmsExist: [
-          {numDmsExist: 0, timeStamp: expect.any(Number)}, 
-          {numDmsExist: 1, timeStamp: expect.any(Number)},
-          {numDmsExist: 2, timeStamp: expect.any(Number)},
-          {numDmsExist: 1, timeStamp: expect.any(Number)},
+          { numDmsExist: 0, timeStamp: expect.any(Number) },
+          { numDmsExist: 1, timeStamp: expect.any(Number) },
+          { numDmsExist: 2, timeStamp: expect.any(Number) },
+          { numDmsExist: 1, timeStamp: expect.any(Number) },
         ],
         messagesExist: [
-          {numMessagesExist: 0, timeStamp: expect.any(Number)}, 
-          {numMessagesExist: 1, timeStamp: expect.any(Number)},
-          {numMessagesExist: 2, timeStamp: expect.any(Number)},
-          {numMessagesExist: 1, timeStamp: expect.any(Number)},
-          {numMessagesExist: 0, timeStamp: expect.any(Number)},
-          {numMessagesExist: 1, timeStamp: expect.any(Number)},
-          {numMessagesExist: 2, timeStamp: expect.any(Number)},
-          {numMessagesExist: 3, timeStamp: expect.any(Number)},
-          {numMessagesExist: 2, timeStamp: expect.any(Number)},
+          { numMessagesExist: 0, timeStamp: expect.any(Number) },
+          { numMessagesExist: 1, timeStamp: expect.any(Number) },
+          { numMessagesExist: 2, timeStamp: expect.any(Number) },
+          { numMessagesExist: 1, timeStamp: expect.any(Number) },
+          { numMessagesExist: 0, timeStamp: expect.any(Number) },
+          { numMessagesExist: 1, timeStamp: expect.any(Number) },
+          { numMessagesExist: 2, timeStamp: expect.any(Number) },
+          { numMessagesExist: 3, timeStamp: expect.any(Number) },
+          { numMessagesExist: 2, timeStamp: expect.any(Number) },
         ],
         utilizationRate: 1 / 2
       }

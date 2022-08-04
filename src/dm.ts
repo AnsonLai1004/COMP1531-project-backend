@@ -1,4 +1,4 @@
-import { getData, setData, updateStatsUserDm, updateStatsWorkplaceDms } from './data';
+import { getData, setData, updateStatsUserDm, updateStatsWorkplaceDms, updateStatsWorkplaceMessages } from './data';
 import { Message } from './interfaces';
 import { tokenToUId, membersobjCreate, isValidUserId } from './channel';
 import HTTPError from 'http-errors';
@@ -38,7 +38,6 @@ function dmCreateV2(token: string, uIds: number[]) {
         handlestrArr.push(user.handleStr);
       }
     }
-
   }
   handlestrArr.sort();
   const name = handlestrArr.join(', ');
@@ -132,17 +131,20 @@ function dmRemoveV1(token: string, dmId: number) {
   }
 
   const data = getData();
-
-  // update user stats
   const toRemoveDm = data.dms.filter((dm) => dm.dmId === dmId)[0];
 
   // remove dm from dataStore
   data.dms = data.dms.filter((dm) => dm.dmId !== dmId);
   setData(data);
 
+  // update stats
   updateStatsUserDm(toRemoveDm.ownerId, timeRemove, 'remove');
   for (const uId of toRemoveDm.uIds) {
     updateStatsUserDm(uId, timeRemove, 'remove');
+  }
+  const numDmMessages = toRemoveDm.messages.length;
+  for (let i = 0; i < numDmMessages; i++) {
+    updateStatsWorkplaceMessages(timeRemove, 'remove');
   }
 
   updateStatsWorkplaceDms(timeRemove, 'remove');

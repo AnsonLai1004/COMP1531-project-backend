@@ -6,7 +6,6 @@
 import { User, Channel, DM, TokenPair, WorkplaceStats } from './interfaces';
 import { ChannelsExist, DmsExist, MessagesExist } from './interfaces';
 import fs from 'fs';
-import { time } from 'console';
 
 let data = {
   users: [] as User[],
@@ -21,7 +20,7 @@ let data = {
   stats: {
     channelsExist: [] as ChannelsExist[],
     dmsExist: [] as DmsExist[],
-    messagesExist: [] as MessagesExist[]
+    messagesExist: [] as MessagesExist[],
   },
   secret: 'COMP1531W14BHASHASHAHSHAHSA(*%&&%&*&&FKUYSCWLCW',
 };
@@ -176,3 +175,57 @@ export function updateStatsWorkplaceMessages(timeStamp: number, action: 'add' | 
   setData(dataEdit);
 }
 
+// Helper function to get the userStats object ready for return
+// Assumes that given uId is valid
+export function getUserStats(uId: number) {
+  // Get most recent values
+  const numChannelsExist = data.stats.channelsExist.slice(-1)[0].numChannelsExist;
+  const numDmsExist = data.stats.dmsExist.slice(-1)[0].numDmsExist;
+  const numMessagesExist = data.stats.messagesExist.slice(-1)[0].numMessagesExist;
+
+  for (const user of data.users) {
+    if (uId === user.uId) {
+      const numChannelsJoined = user.stats.channelsJoined.slice(-1)[0].numChannelsJoined;
+      const numDmsJoined = user.stats.dmsJoined.slice(-1)[0].numDmsJoined;
+      const numMessagesSent = user.stats.messagesSent.slice(-1)[0].numMessagesSent;
+
+      const numerator = numChannelsJoined + numDmsJoined + numMessagesSent;
+      const denominator = numChannelsExist + numDmsExist + numMessagesExist;
+
+      const involvementRate = (denominator !== 0) ? numerator / denominator : 0;
+      user.stats.involvementRate = (involvementRate < 1) ? involvementRate : 1;
+
+      return { userStats: user.stats };
+    }
+  }
+}
+
+// Helper function to get the workplaceStats object ready for return
+export function getWorkplaceStats() {
+  const numUsers = data.users.length;
+
+  const allJoinedUsers = new Set();
+  for (const channel of data.channels) {
+    for (const uId of channel.allMembers) {
+      allJoinedUsers.add(uId);
+    }
+  }
+  for (const dm of data.dms) {
+    allJoinedUsers.add(dm.ownerId);
+    for (const uId of dm.uIds) {
+      allJoinedUsers.add(uId);
+    }
+  }
+
+  const numJoinedUsers = allJoinedUsers.size;
+  const utilizationRate = (numUsers !== 0) ? numJoinedUsers / numUsers : 0;
+
+  return {
+    workplaceStats: {
+      channelsExist: data.stats.channelsExist,
+      dmsExist: data.stats.dmsExist,
+      messagesExist: data.stats.messagesExist,
+      utilizationRate: utilizationRate
+    }
+  };
+}

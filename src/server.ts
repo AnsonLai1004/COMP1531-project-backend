@@ -332,6 +332,11 @@ app.get('/user/stats/v1', (req, res) => {
   res.json(userStatsV1(token));
 });
 
+app.get('/users/stats/v1', (req, res) => {
+  const token = req.headers.token as string;
+  res.json({ error: token });
+});
+
 // other routes
 app.delete('/clear/v1', (req, res) => {
   clearV1();

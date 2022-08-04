@@ -627,6 +627,22 @@ export function reqUserStats(token: string) {
   return res.statusCode;
 }
 
+export function reqWorkspaceStats(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/users/stats/v1',
+    {
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
 // search route
 export function reqMessagesSearch(token: string, queryStr: string) {
   const res = request(

@@ -72,8 +72,22 @@ describe('valid single tagging', () => {
       ]
     });
   });
+  test('can tag self', () => {
+    const user1 = requestAuthRegister('email@email.com', 'password', 'Sherlock', 'Holmes');
+    const user2 = requestAuthRegister('diff@email.com', 'password', 'John', 'Watson');
+    const channel = requestChannelsCreateV3(user1.token, '221B Baker St', true);
+    reqChannelInvite(user1.token, channel.channelId, user2.authUserId);
+    const dm = reqDmCreate(user1.token, [user2.authUserId]);
+    reqMessageSend(user1.token, channel.channelId, '@sherlockholmes');
+    reqSendMessageDm(user1.token, dm.dmId, '@sherlockholmes');
+    expect(reqGetNotification(user1.token)).toEqual({
+      notifications: [
+        { channelId: -1, dmId: dm.dmId, notificationMessage: `sherlockholmes tagged you in johnwatson, sherlockholmes: @sherlockholmes` },
+        { channelId: channel.channelId, dmId: -1, notificationMessage: `sherlockholmes tagged you in 221B Baker St: @sherlockholmes` },
+      ]
+    });
+  });
   // more tests...
-  // can tag self
   // tag in sendlater and sendlater dm
   // message editing
   // message sharing

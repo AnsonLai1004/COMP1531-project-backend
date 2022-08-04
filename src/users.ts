@@ -10,6 +10,7 @@ import HTTPError from 'http-errors';
 import request from 'sync-request';
 import fs from 'fs';
 import sizeOf from 'image-size';
+import sharp from 'sharp';
 import config from './config.json';
 
 interface userProfileV1Return {
@@ -215,7 +216,7 @@ export function userUploadPhoto(token: string, imgUrl: string, xStart: number, y
   }
   // save image locally
   const body = res.body;
-  const imgPath = `img/${tokenId.uId}`
+  const imgPath = `img/${tokenId.uId}.jpg`
   fs.writeFileSync(imgPath, body, { flag: 'w' });
   // get dimensions
   const dimensions = sizeOf(imgPath);
@@ -226,13 +227,21 @@ export function userUploadPhoto(token: string, imgUrl: string, xStart: number, y
     console.log(dimensions, x, y, xEnd, yEnd, xStart, yStart)
     throw HTTPError(400, 'Illegal dimensions');
   }
+  // crop image - NOT WORKING
+  sharp(imgPath).extract({ width: xEnd - xStart, height: yEnd - yStart, left: xStart, top: yStart }).toFile(imgPath)
+  .then(function(success) {
+      console.log("Image cropped and saved");
+  })
+  .catch(function(err) {
+      console.log("An error occured");
+  });
   // set users profile img url
   const PORT: number = parseInt(process.env.PORT || config.port);
   const HOST: string = process.env.IP || 'localhost';
   const data = getData()
   for (const user of data.users) {
     if (user.uId === tokenId.uId) {
-      user.profileImgUrl = `${HOST}:${PORT}/${imgPath}`
+      user.profileImgUrl = `http://${HOST}:${PORT}/${imgPath}`
       console.log(user)
     }
   }

@@ -13,7 +13,8 @@ function sleep(s: number) {
 beforeEach(() => {
   requestClear();
 });
-afterEach(() => {
+
+afterAll(() => {
   requestClear();
 });
 

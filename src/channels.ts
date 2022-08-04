@@ -1,4 +1,4 @@
-import { getData, setData } from './data';
+import { getData, setData, updateStatsUserChannel, updateStatsWorkplaceChannels } from './data';
 import { Channel } from './interfaces';
 import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
@@ -30,6 +30,7 @@ interface channelsListRet {
  */
 
 function channelsCreateV3(token: string, name: string, isPublic: boolean): channelsCreateRet {
+  const timeCreate = Math.floor((new Date()).getTime() / 1000);
   // INVALID NAME
   if (name.length < 1 || name.length > 20) {
     throw HTTPError(400, 'Invalid channel name');
@@ -56,6 +57,11 @@ function channelsCreateV3(token: string, name: string, isPublic: boolean): chann
   dataStore.channels.push(channel);
   dataStore.lastChannelId++;
   setData(dataStore);
+
+  // update user stats
+  updateStatsUserChannel(authUser.uId, timeCreate, 'add');
+  updateStatsWorkplaceChannels(timeCreate);
+
   return { channelId: channel.channelId };
 }
 

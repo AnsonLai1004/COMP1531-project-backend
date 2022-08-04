@@ -1,79 +1,25 @@
 import { getData, setData } from './data';
 import { Message } from './interfaces';
 import { tokenToUId, membersobjCreate, isValidUserId } from './channel';
-export { dmListV2, dmRemoveV2, dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV1, dmDetailsV1 };
 import HTTPError from 'http-errors';
+export { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV2, dmDetailsV2 };
 
-/// ////////////////////////// ITERATION 3 //////////////////////////////////////
-function dmListV2(token: string) {
-  // check if token passed in is valid
-  const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'Invalid token');
-  }
-
-  const data = getData();
-  const dms = [];
-
-  for (const dm of data.dms) {
-    // check if user is owner / member of a dm
-    if (tokenId.uId === dm.ownerId || dm.uIds.includes(tokenId.uId)) {
-      dms.push({
-        dmId: dm.dmId,
-        name: dm.name,
-      });
-    }
-  }
-
-  return { dms: dms };
-}
-
-function dmRemoveV2(token: string, dmId: number) {
-  // check if token passed in is valid
-  const tokenId = tokenToUId(token);
-  if (tokenId.error) {
-    throw HTTPError(403, 'Invalid token');
-  }
-
-  // check if dmId passed in is valid
-  if (!isValidDmId(dmId)) {
-    throw HTTPError(400, 'Invalid dm');
-  }
-
-  // check if user is a member of dm
-  if (!userIsDMmember(tokenId.uId, dmId)) {
-    throw HTTPError(403, 'User not in dm');
-  }
-
-  // check if user is dm creator
-  if (!userIsDMOwner(tokenId.uId, dmId)) {
-    throw HTTPError(403, 'User is not dm creator');
-  }
-
-  const data = getData();
-  data.dms = data.dms.filter((dm) => dm.dmId !== dmId);
-  setData(data);
-
-  return {};
-}
-/// /////////////////////////////////////////////////////////////////////////////
-
-function dmCreateV1(token: string, uIds: number[]) {
+function dmCreateV2(token: string, uIds: number[]) {
   // any invalid uId in uIds
   for (const id of uIds) {
     if (!isValidUserId(id)) {
-      return { error: 'error' };
+      throw HTTPError(403, 'Invalid uId');
     }
   }
   // any duplicate uId's in uIds
   const unique = Array.from(new Set(uIds));
   if (uIds.length !== unique.length) {
-    return { error: 'error' };
+    throw HTTPError(400, 'duplicate uId');
   }
   //
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
-    return { error: 'error' };
+    throw HTTPError(400, 'Invalid token');
   }
   // create dmId
   const data = getData();
@@ -106,16 +52,16 @@ function dmCreateV1(token: string, uIds: number[]) {
   return { dmId: dm.dmId };
 }
 
-function dmDetailsV1(token: string, dmId: number) {
+function dmDetailsV2(token: string, dmId: number) {
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
-    return { error: 'error' };
+    throw HTTPError(400, 'Invalid token');
   }
   if (!isValidDmId(dmId)) {
-    return { error: 'error' };
+    throw HTTPError(400, 'Invalid DM');
   }
   if (!userIsDMmember(tokenId.uId, dmId)) {
-    return { error: 'error' };
+    throw HTTPError(403, 'user not DM member');
   }
   const data = getData();
   for (const dm of data.dms) {
@@ -129,7 +75,6 @@ function dmDetailsV1(token: string, dmId: number) {
       };
     }
   }
-  return { error: 'error' };
 }
 
 function dmListV1(token: string) {
@@ -188,17 +133,17 @@ function dmLeaveV1(token: string, dmId: number) {
   // check if token passed in is valid
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
-    return { error: 'error' };
+    throw HTTPError(400, 'Invalid token');
   }
 
   // check if dmId passed in is valid
   if (!isValidDmId(dmId)) {
-    return { error: 'error' };
+    throw HTTPError(400, 'Invalid dm');
   }
 
   // check if user is a member of dm
   if (!userIsDMmember(tokenId.uId, dmId)) {
-    return { error: 'error' };
+    throw HTTPError(403, 'User is not dm member');
   }
 
   const data = getData();

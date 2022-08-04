@@ -10,6 +10,10 @@ export function adminUserRemoveV1(token: string, uId: number) {
   if (!isValidUserId(uId)) {
     throw HTTPError(400, 'Invalid uId');
   }
+  const globalOwner = isOnlyGlobalOwner(tokenId.uId);
+  if (globalOwner.globalOwner === false) {
+    throw HTTPError(403, 'auth user not a global owner');
+  }
   const user = isOnlyGlobalOwner(uId);
   if (user.globalOwner === true && user.count === 1) {
     throw HTTPError(400, 'only global owner');
@@ -46,6 +50,7 @@ export function adminUserRemoveV1(token: string, uId: number) {
   data.users[indexOfUser].nameFirst = 'Removed';
   data.users[indexOfUser].nameLast = 'user';
   setData(data);
+  return {};
 }
 
 export function adminUserPermissionChangeV1(token: string, uId: number, permissionId: number) {
@@ -53,10 +58,14 @@ export function adminUserPermissionChangeV1(token: string, uId: number, permissi
   if (tokenId.error) {
     throw HTTPError(403, 'Invalid token');
   }
+  const globalOwner = isOnlyGlobalOwner(tokenId.uId);
+  if (globalOwner.globalOwner === false) {
+    throw HTTPError(403, 'auth user not a global owner');
+  }
   if (!isValidUserId(uId)) {
     throw HTTPError(400, 'Invalid uId');
   }
-  if (permissionId < 1 && permissionId > 2) {
+  if (permissionId < 1 || permissionId > 2) {
     throw HTTPError(400, 'Invalid permissionId');
   }
   if (permissionId === 2) {
@@ -86,6 +95,7 @@ export function adminUserPermissionChangeV1(token: string, uId: number, permissi
     }
   }
   setData(data);
+  return {};
 }
 
 function isOnlyGlobalOwner(uId) {

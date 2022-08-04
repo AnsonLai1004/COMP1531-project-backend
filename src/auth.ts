@@ -5,8 +5,8 @@
 import { getData, setData } from './data';
 import { checkUserData } from './users';
 import isEmail from 'validator/lib/isEmail.js';
-
-const errorObject = { error: 'error' };
+import HTTPError from 'http-errors';
+import crypto from 'crypto';
 
 /**
  * Wrapper function which calls authRegisterV1 and generates a token
@@ -17,11 +17,8 @@ const errorObject = { error: 'error' };
  * @param nameLast
  * @returns {{token: string, authUserId: number}}
  */
-export function authRegisterV2(email: string, password: string, nameFirst: string, nameLast: string) {
+export function authRegisterV3(email: string, password: string, nameFirst: string, nameLast: string) {
   const register = authRegisterV1(email, password, nameFirst, nameLast);
-  if ('error' in register) {
-    return errorObject;
-  }
   const token = generateToken(register.authUserId);
   return {
     token: token,
@@ -36,12 +33,8 @@ export function authRegisterV2(email: string, password: string, nameFirst: strin
  * @param password
  * @returns {{token: string, authUserId: number}}
  */
-export function authLoginV2(email: string, password: string) {
+export function authLoginV3(email: string, password: string) {
   const login = authLoginV1(email, password);
-  if ('error' in login) {
-    return errorObject;
-  }
-
   const token = generateToken(login.authUserId);
   return {
     token: token,
@@ -55,7 +48,7 @@ export function authLoginV2(email: string, password: string) {
  * @param token
  * @returns {{}}
  */
-export function authLogoutV1(token: string) {
+export function authLogoutV2(token: string) {
   const data = getData();
   data.tokens = data.tokens.filter((pair) => pair.token !== token);
   setData(data);
@@ -66,7 +59,7 @@ export function authLogoutV1(token: string) {
  * A function called authLoginV1
  * Given a correct email - password pair, returns an object with
  * the matching user id
- * Returns an errorObject if email does not belong to a user or
+ * Throws an error if email does not belong to a user or
  * password is incorrect
  *
  * @param {string} email
@@ -77,12 +70,15 @@ export function authLogoutV1(token: string) {
 export function authLoginV1(email: string, password: string) {
   const data = getData();
   for (const user of data.users) {
-    if (email === user.email && password === user.password) {
-      return { authUserId: user.uId };
+    if (email === user.email) {
+      const inputHash = crypto.createHash('sha256').update(password + data.secret).digest('hex');
+      if (inputHash === user.passwordHash) {
+        return { authUserId: user.uId };
+      }
     }
   }
 
-  return errorObject;
+  throw HTTPError(400, 'User not found!');
 }
 
 interface authRegisterV1Return {
@@ -94,7 +90,7 @@ interface authRegisterV1Return {
  * A function called authRegisterV1
  * Registers a new user to the dataStore and returns their
  * unique user id
- * Returns an errorObject if email is invalid, already used by another user,
+ * Throws an error if email is invalid, already used by another user,
  * password is less than 6 characters, or nameFirst or nameLast are not
  * between 1 and 50 characters inclusive.
  *
@@ -105,17 +101,20 @@ interface authRegisterV1Return {
  * @returns {{authUserId: number}}
  */
 export function authRegisterV1(email: string, password: string, nameFirst: string, nameLast: string): authRegisterV1Return {
-  if (!isEmail(email) || checkUserData(email, 'email')) {
-    return errorObject;
+  if (!isEmail(email)) {
+    throw HTTPError(400, 'Invalid email!');
+  }
+  if (checkUserData(email, 'email')) {
+    throw HTTPError(400, 'Email is already in use!');
   }
   if (password.length < 6) {
-    return errorObject;
+    throw HTTPError(400, 'Password is less than 6 characters!');
   }
   if (nameFirst.length < 1 || nameFirst.length > 50) {
-    return errorObject;
+    throw HTTPError(400, 'First name is not between 1 and 50 characters inclusive!');
   }
   if (nameLast.length < 1 || nameLast.length > 50) {
-    return errorObject;
+    throw HTTPError(400, 'Last name is not between 1 and 50 characters inclusive!');
   }
 
   const data = getData();
@@ -124,6 +123,8 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
 
   const handle = generateHandle(nameFirst, nameLast);
   let isGlobalOwner = false;
+
+  const passwordHash = crypto.createHash('sha256').update(password + data.secret).digest('hex');
 
   if (newId === 1) {
     // the first user who signs up
@@ -135,7 +136,7 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
     nameFirst: nameFirst,
     nameLast: nameLast,
     email: email,
-    password: password,
+    passwordHash: passwordHash,
     handleStr: handle,
     isGlobalOwner: isGlobalOwner,
   };
@@ -157,10 +158,11 @@ function generateToken(uId: number) {
   const data = getData();
   const tokenNum = data.lastToken + 1;
   const tokenStr = tokenNum.toString();
+  const hashedToken = crypto.createHash('sha256').update(tokenStr + data.secret).digest('hex');
   data.lastToken = tokenNum;
-  data.tokens.push({ token: tokenStr, uId: uId });
+  data.tokens.push({ token: hashedToken, uId: uId });
   setData(data);
-  return tokenStr;
+  return hashedToken;
 }
 
 type tokenToUIdReturn = {
@@ -170,6 +172,7 @@ type tokenToUIdReturn = {
 
 /**
  * Given a token, return authUserId
+ * Returns an error object if the token is invalid
  * @param {string} token
  * @returns {tokenToUIdReturn}
  */

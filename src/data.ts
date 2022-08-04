@@ -15,7 +15,8 @@ let data = {
   lastChannelId: 0,
   lastDMId: 0,
   lastMessageId: 0,
-  lastToken: 0
+  lastToken: 0,
+  secret: 'COMP1531W14BHASHASHAHSHAHSA(*%&&%&*&&FKUYSCWLCW',
 };
 
 export interface DataStore {
@@ -28,6 +29,7 @@ export interface DataStore {
   lastDMId: number;
   lastMessageId: number;
   lastToken: number;
+  secret: string;
 }
 
 // Use get() to access the data
@@ -46,16 +48,12 @@ export function setData(newData: DataStore) {
 function fileSaveData() {
   try {
     fs.writeFileSync('dataStore.json', JSON.stringify(data));
-  } catch (err) {
-    console.error(err);
-  }
+  } catch (err) {}
 }
 
 // Updates the data based on the contents of dataStore.json
 export function fileLoadData() {
   try {
     data = JSON.parse(fs.readFileSync('dataStore.json', 'utf8'));
-  } catch (err) {
-    console.error(err);
-  }
+  } catch (err) {}
 }

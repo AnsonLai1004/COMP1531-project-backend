@@ -751,3 +751,19 @@ export function reqMessageUnreact(token: string, messageId: number, reactId) {
   }
   return res.statusCode;
 }
+
+export function reqGetNotification(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/notifications/get/v1',
+    {
+      headers: {
+        token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}

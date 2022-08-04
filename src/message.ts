@@ -1,11 +1,12 @@
 import { getData, setData } from './data';
-import { Message, Reacts } from './interfaces';
+import { Message, Reacts, Notif } from './interfaces';
 import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
+import { userProfileV3 } from './users';
 export {
   messageSendV2, messageRemoveV2, messageEditV2, messageSendDmV2,
   dmMessagesV2, messagesSearch, messagePin, messageUnpin, messageReact,
-  messageUnreact, messageSendLater, messageSendLaterDM
+  messageUnreact, messageSendLater, messageSendLaterDM, getNotification
 };
 
 /**
@@ -615,12 +616,31 @@ function messageReact(token: string, messageId: number, reactId: number) {
     throw HTTPError(400, 'Invalid reactId');
   }
 
+  const getUserInfo = userProfileV3(token, tokenId.uId);
+  const getHandle = getUserInfo.user.handleStr;
   const datastore = getData();
   for (const channel of datastore.channels) {
     if (userIsAuthorised(tokenId.uId, channel.channelId)) {
       for (const message of channel.messages) {
         if (message.messageId === messageId) {
           // check whether reactId in reacts
+          if (userIsAuthorised(message.uId, channel.channelId) && (message.uId !== tokenId.uId)) {
+            const newNotif: Notif = {
+              channelId: channel.channelId,
+              dmId: -1,
+              notificationMessage: `${getHandle} reacted to your message in ${channel.name}`
+            };
+            // get user of message.uId then unshift newNotif
+            const getUidMessage = datastore.users.filter(el => el.uId === message.uId);
+            const exactUser = getUidMessage[0];
+            if (exactUser.notification.length === 20) {
+              // pop then add
+              exactUser.notification.pop();
+              exactUser.notification.unshift(newNotif);
+            } else {
+              exactUser.notification.unshift(newNotif);
+            }
+          }
           let reactexist = false;
           for (const i of message.reacts) {
             if ((i.reactId === reactId) && (i.uIds.includes(tokenId.uId))) {
@@ -652,6 +672,23 @@ function messageReact(token: string, messageId: number, reactId: number) {
     if (userIsAuthorisedInDm(tokenId.uId, dm.dmId)) {
       for (const message of dm.messages) {
         if (message.messageId === messageId) {
+          if (userIsAuthorisedInDm(message.uId, dm.dmId) && (message.uId !== tokenId.uId)) {
+            const newNotif: Notif = {
+              channelId: -1,
+              dmId: dm.dmId,
+              notificationMessage: `${getHandle} reacted to your message in ${dm.name}`
+            };
+            // get user of message.uId then unshift newNotif
+            const getUidMessage = datastore.users.filter(el => el.uId === message.uId);
+            const exactUser = getUidMessage[0];
+            if (exactUser.notification.length === 20) {
+              // pop then add
+              exactUser.notification.pop();
+              exactUser.notification.unshift(newNotif);
+            } else {
+              exactUser.notification.unshift(newNotif);
+            }
+          }
           let reactexist = false;
           for (const i of message.reacts) {
             if ((i.reactId === reactId) && (i.uIds.includes(tokenId.uId))) {
@@ -748,6 +785,17 @@ function messageUnreact(token: string, messageId: number, reactId: number) {
     }
   }
   throw HTTPError(400, 'messageId is not found in dms or channels');
+}
+
+function getNotification(token: string) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    throw HTTPError(403, 'Invalid token');
+  }
+  const datastore = getData();
+  const getUidMessage = datastore.users.filter(el => el.uId === tokenId.uId);
+  const notifications = getUidMessage[0].notification;
+  return { notifications };
 }
 
 /************************************************************************

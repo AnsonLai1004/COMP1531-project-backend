@@ -139,6 +139,7 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
     passwordHash: passwordHash,
     handleStr: handle,
     isGlobalOwner: isGlobalOwner,
+    notification: [],
   };
 
   data.users.push(newUser);

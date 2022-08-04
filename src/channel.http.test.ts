@@ -59,9 +59,47 @@ describe('/channel/invite/v3', () => {
     const owner = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const notMember = requestAuthRegister('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
     const newchannel = requestChannelsCreateV3(owner.token, 'crush team', true);
+    const newchannel2 = requestChannelsCreateV3(owner.token, 'a team', true);
+    const newchannel3 = requestChannelsCreateV3(owner.token, 'b team', true);
+    const newchannel4 = requestChannelsCreateV3(owner.token, 'c team', true);
+    const newchannel5 = requestChannelsCreateV3(owner.token, 'd team', true);
+    const newchannel6 = requestChannelsCreateV3(owner.token, 'e team', true);
+    const newchannel7 = requestChannelsCreateV3(owner.token, 'f team', true);
+    const newchannel8 = requestChannelsCreateV3(owner.token, 'g team', true);
+    const newchannel9 = requestChannelsCreateV3(owner.token, 'h team', true);
+    const newchannel10 = requestChannelsCreateV3(owner.token, 'i team', true);
+    const newchannel11 = requestChannelsCreateV3(owner.token, 'j team', true);
+    const newchannel12 = requestChannelsCreateV3(owner.token, 'k team', true);
+    const newchannel13 = requestChannelsCreateV3(owner.token, 'l team', true);
+    const newchannel14 = requestChannelsCreateV3(owner.token, 'm team', true);
+    const newchannel15 = requestChannelsCreateV3(owner.token, 'n team', true);
+    const newchannel16 = requestChannelsCreateV3(owner.token, 'o team', true);
+    const newchannel17 = requestChannelsCreateV3(owner.token, 'p team', true);
+    const newchannel18 = requestChannelsCreateV3(owner.token, 'q team', true);
+    const newchannel19 = requestChannelsCreateV3(owner.token, 'r team', true);
+    const newchannel20 = requestChannelsCreateV3(owner.token, 's team', true);
+
     // valid invite
     expect(reqChannelInvite(owner.token, newchannel.channelId, notMember.authUserId)).toStrictEqual({});
-
+    expect(reqChannelInvite(owner.token, newchannel2.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel3.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel4.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel5.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel6.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel7.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel8.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel9.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel10.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel11.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel12.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel13.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel14.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel15.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel16.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel17.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel18.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel19.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel20.channelId, notMember.authUserId)).toStrictEqual({});
     expect(reqChannelDetails(owner.token, newchannel.channelId)).toMatchObject({
       name: 'crush team',
       isPublic: true,

@@ -6,6 +6,7 @@
 export interface Reacts {
     reactId: number;
     uIds: number[];
+    isThisUserReacted: boolean
 }
 
 export interface Message {

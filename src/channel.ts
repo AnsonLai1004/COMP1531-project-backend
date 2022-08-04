@@ -138,7 +138,15 @@ function channelMessagesV1(authUserId: number, channelId: number, start: number)
     throw HTTPError(400, 'start greater than total number of messages in channel');
   }
   const end = start + 50;
-
+  for (const el of messages) {
+    for (const reaction of el.reacts) {
+      if (reaction.uIds.includes(authUserId)) {
+        reaction.isThisUserReacted = true;
+      } else {
+        reaction.isThisUserReacted = false;
+      }
+    }
+  }
   if (end < numofmessages) {
     return {
       messages: messages,

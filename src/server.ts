@@ -13,13 +13,15 @@ import { standupSendV1, standupActiveV1, standupStartV1 } from './standups';
 import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV2, dmDetailsV2 } from './dm';
 import { clearV1 } from './other';
 import { fileLoadData } from './data';
-import { userProfileV3, usersAllV2, userSetNameV2, userSetEmailV2, userSetHandleV2, userStatsV1, usersStatsV1 } from './users';
+import { userProfileV3, usersAllV2, userSetNameV2, userSetEmailV2, userSetHandleV2, userStatsV1, usersStatsV1, userUploadPhoto } from './users';
 
 // Set up web app, use JSON
 const app = express();
 app.use(express.json());
 // Use middleware that allows for access from other domains
 app.use(cors());
+// for upload photo
+app.use('/img', express.static('img'));
 
 const PORT: number = parseInt(process.env.PORT || config.port);
 const HOST: string = process.env.IP || 'localhost';
@@ -356,6 +358,16 @@ app.put('/user/profile/sethandle/v2', (req, res) => {
   const token = req.headers.token as string;
   res.json(userSetHandleV2(token, handleStr));
 });
+
+app.post('/user/profile/uploadphoto/v1', (req, res, next) => {
+  try {
+    const token = req.headers.token as string;
+    const { imgUrl, xStart, yStart, xEnd, yEnd } = req.body;
+    res.json(userUploadPhoto(token, imgUrl, xStart, yStart, xEnd, yEnd));
+  } catch (err) {
+    next(err);
+  }
+})
 
 // search route
 app.get('/search/v1', (req, res, next) => {

@@ -99,4 +99,5 @@ export interface User {
     handleStr: string;
     isGlobalOwner: boolean;
     stats: UserStats;
+    profileImgUrl: string;
 }

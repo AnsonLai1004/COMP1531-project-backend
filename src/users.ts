@@ -7,6 +7,10 @@ import { getData, setData, getUserStats, getWorkplaceStats } from './data';
 import { tokenToUId } from './auth';
 import isEmail from 'validator/lib/isEmail.js';
 import HTTPError from 'http-errors';
+import request from 'sync-request';
+import fs from 'fs';
+import sizeOf from 'image-size';
+import config from './config.json';
 
 interface userProfileV1Return {
   user?: {
@@ -14,7 +18,8 @@ interface userProfileV1Return {
     email: string,
     nameFirst: string,
     nameLast: string,
-    handleStr: string
+    handleStr: string,
+    profileImgUrl: string,
   };
   error?: string;
 }
@@ -54,6 +59,7 @@ export function usersAllV2(token: string) {
       nameFirst: user.nameFirst,
       nameLast: user.nameLast,
       handleStr: user.handleStr,
+      profileImgUrl: user.profileImgUrl,
     });
   }
   return { users: users };
@@ -183,6 +189,54 @@ export function usersStatsV1(token: string) {
 }
 
 /**
+ * Given a URL of an image on the internet, crop the image within bounds 
+ * (xStart, yStart) and (xEnd, yEnd). Position (0,0) is the top left.
+ * @param { imgUrl, xStart, yStart, xEnd, yEnd }
+ * @returns {}
+ */
+export function userUploadPhoto(token: string, imgUrl: string, xStart: number, yStart: number, xEnd: number, yEnd: number) {
+  const tokenId = tokenToUId(token);
+  // check if token valid
+  if ('error' in tokenId) {
+    throw HTTPError(403, 'Invalid token!');
+  }
+  // make request
+  const res = request(
+    'GET',
+    imgUrl
+  );
+  // check if request to get image failes
+  if (res.statusCode !== 200) {
+    throw HTTPError(400, 'Error getting image');
+  }
+  // save image locally
+  const body = res.body;
+  const imgPath = `img/${tokenId.uId}`
+  fs.writeFileSync(imgPath, body, { flag: 'w' });
+  // get dimensions
+  const dimensions = sizeOf(imgPath);
+  const x = dimensions.width;
+  const y = dimensions.height;
+  // dimension errors
+  if (xEnd > x || xStart < 0 || yEnd > y || yStart < 0 || xStart >= xEnd || yStart >= yEnd) {
+    console.log(dimensions, x, y, xEnd, yEnd, xStart, yStart)
+    throw HTTPError(400, 'Illegal dimensions');
+  }
+  // set users profile img url
+  const PORT: number = parseInt(process.env.PORT || config.port);
+  const HOST: string = process.env.IP || 'localhost';
+  const data = getData()
+  for (const user of data.users) {
+    if (user.uId === tokenId.uId) {
+      user.profileImgUrl = `${HOST}:${PORT}/${imgPath}`
+      console.log(user)
+    }
+  }
+  setData(data)
+  return {};
+}
+
+/**
  * Function which returns the details of the user whose uId matches the argument uId
  * @param {number} authUserId
  * @param {number} uId
@@ -199,6 +253,7 @@ export function userProfileV1(uId: number): userProfileV1Return {
           nameFirst: user.nameFirst,
           nameLast: user.nameLast,
           handleStr: user.handleStr,
+          profileImgUrl: user.profileImgUrl,
         }
       };
     }

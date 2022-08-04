@@ -1,5 +1,5 @@
 import { requestAuthRegister, requestUserProfile, requestUsersAll, requestClear } from './requests';
-import { requestUserSetEmail, requestUserSetHandle, requestUserSetName } from './requests';
+import { requestUserSetEmail, requestUserSetHandle, requestUserSetName, reqUserUploadPhoto } from './requests';
 
 beforeEach(() => {
   requestClear();
@@ -201,3 +201,22 @@ describe('Testing user/profile/set**/v1 valid cases', () => {
     });
   });
 });
+
+describe('upload photo', () => {
+  test('Error', () => {
+    const user = requestAuthRegister('testemail@gmail.com', 'TestPassword', 'Test', 'User');
+    expect(reqUserUploadPhoto('Invalid token', 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg', 1, 1, 2, 2)).toStrictEqual(403);
+    expect(reqUserUploadPhoto(user.token, 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg', -1, 1, 2, 2)).toStrictEqual(400);
+    expect(reqUserUploadPhoto(user.token, 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg', 1, -1, 2, 2)).toStrictEqual(400);
+    expect(reqUserUploadPhoto(user.token, 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg', 1, 1, 900, 2)).toStrictEqual(400);
+    expect(reqUserUploadPhoto(user.token, 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg', 1, 1, 2, 900)).toStrictEqual(400);
+    expect(reqUserUploadPhoto(user.token, 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg', 5, 1, 1, 2)).toStrictEqual(400);
+    expect(reqUserUploadPhoto(user.token, 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg', 1, 5, 2, 1)).toStrictEqual(400);
+  });
+  test('Correct', () => {
+    const user = requestAuthRegister('testemail@gmail.com', 'TestPassword', 'Test', 'User');
+    const user2 = requestAuthRegister('testemail2@gmail.com', 'TestPassword', 'Test', 'User2');
+    expect(reqUserUploadPhoto(user2.token, 'http://www.gstatic.com/webp/gallery/4.sm.jpg', 0, 0, 320, 240)).toStrictEqual({});
+  });
+});
+

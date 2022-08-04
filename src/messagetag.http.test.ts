@@ -4,7 +4,8 @@ import {
   reqMessageSend,
   reqSendMessageDm, reqDmCreate,
   reqGetNotification,
-  reqMessageEdit
+  reqMessageEdit,
+  reqMessageShare
 } from './requests';
 
 beforeEach(() => {
@@ -122,9 +123,36 @@ describe('valid single tagging', () => {
       ]
     });
   });
+  test('share message - does not retag from og message, tags in opt message', () => {
+    const user1 = requestAuthRegister('email@email.com', 'password', 'Sherlock', 'Holmes');
+    const user2 = requestAuthRegister('diff@email.com', 'password', 'John', 'Watson');
+    const channel = requestChannelsCreateV3(user1.token, '221B Baker St', true);
+    reqChannelInvite(user1.token, channel.channelId, user2.authUserId);
+    const dm = reqDmCreate(user1.token, [user2.authUserId]);
+    const message = reqMessageSend(user1.token, channel.channelId, "@johnwatson i'm going out");
+    const messageDm = reqSendMessageDm(user1.token, dm.dmId, 'cabbie 41st anderson st');
+
+    reqMessageShare(user1.token, message.messageId, '@johnwatson', -1, dm.dmId);
+    reqMessageShare(user1.token, messageDm.messageId, '@johnwatson', channel.channelId, -1);
+
+    expect(reqGetNotification(user2.token)).toEqual({
+      notifications: [
+        { channelId: channel.channelId, dmId: -1, notificationMessage: 'sherlockholmes tagged you in 221B Baker St: cabbie 41st anderson' },
+        { channelId: -1, dmId: dm.dmId, notificationMessage: "sherlockholmes tagged you in johnwatson, sherlockholmes: @johnwatson i'm goin" },
+        { channelId: channel.channelId, dmId: -1, notificationMessage: "sherlockholmes tagged you in 221B Baker St: @johnwatson i'm goin" },
+        { channelId: -1, dmId: dm.dmId, notificationMessage: 'sherlockholmes added you to johnwatson, sherlockholmes' },
+        { channelId: channel.channelId, dmId: -1, notificationMessage: 'sherlockholmes added you to 221B Baker St' },
+      ]
+    });
+
+    reqMessageShare(user2.token, messageDm.messageId, 'bloody unbelievable @sherlockholmes', channel.channelId, -1);
+    expect(reqGetNotification(user1.token)).toEqual({
+      notifications: [
+        { channelId: channel.channelId, dmId: -1, notificationMessage: 'johnwatson tagged you in 221B Baker St: cabbie 41st anderson' },
+      ]
+    });
+  });
+
   // more tests...
   // tag in sendlater and sendlater dm
-  // message editing
-  // message sharing
-  // truncate message at 20 chars
 });

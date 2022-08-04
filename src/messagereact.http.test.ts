@@ -262,8 +262,13 @@ describe('message/react/v1 with notifications', () => {
         {
           channelId: 1,
           dmId: -1,
-          notificationMessage: 'jakerenzella added you to crush team"',
+          notificationMessage: 'jakerenzella added you to crush team',
         },
+        {
+          channelId: -1,
+          dmId: 1,
+          notificationMessage: 'jakerenzella added you to alexavery, jakerenzella, theoang',
+        }
       ],
     });
     expect(reqMessageReact(user1.token, 1, 1)).toStrictEqual({});
@@ -340,8 +345,13 @@ describe('message/react/v1 with notifications', () => {
         {
           channelId: 1,
           dmId: -1,
-          notificationMessage: 'jakerenzella added you to crush team"',
-        }
+          notificationMessage: 'jakerenzella added you to crush team',
+        },
+        {
+          channelId: -1,
+          dmId: 1,
+          notificationMessage: 'jakerenzella added you to alexavery, jakerenzella, theoang',
+        },
       ],
     });
     for (let i = 0; i < 21; i++) {

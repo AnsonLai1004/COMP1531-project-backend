@@ -2,6 +2,7 @@
  * Test file for auth routes endpoints and status codes.
  */
 import {
+  reqGetNotification,
   reqChannelInvite, reqChannelDetails, reqChannelJoin, reqChannelLeave, reqChannelAddowner, reqChannelRemoveowner,
   requestClear, requestChannelsCreateV3, requestAuthRegister, reqChannelMessages, reqMessageSend, reqSendMessageDm, reqDmCreate, reqDmMessages
 } from './requests';
@@ -78,6 +79,7 @@ describe('/channel/invite/v3', () => {
     const newchannel18 = requestChannelsCreateV3(owner.token, 'q team', true);
     const newchannel19 = requestChannelsCreateV3(owner.token, 'r team', true);
     const newchannel20 = requestChannelsCreateV3(owner.token, 's team', true);
+    const newchannel21 = requestChannelsCreateV3(owner.token, 'z team', true);
 
     // valid invite
     expect(reqChannelInvite(owner.token, newchannel.channelId, notMember.authUserId)).toStrictEqual({});
@@ -100,6 +102,7 @@ describe('/channel/invite/v3', () => {
     expect(reqChannelInvite(owner.token, newchannel18.channelId, notMember.authUserId)).toStrictEqual({});
     expect(reqChannelInvite(owner.token, newchannel19.channelId, notMember.authUserId)).toStrictEqual({});
     expect(reqChannelInvite(owner.token, newchannel20.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel21.channelId, notMember.authUserId)).toStrictEqual({});
     expect(reqChannelDetails(owner.token, newchannel.channelId)).toMatchObject({
       name: 'crush team',
       isPublic: true,
@@ -129,6 +132,7 @@ describe('/channel/invite/v3', () => {
         }
       ],
     });
+    expect(reqGetNotification(notMember.token).notifications.length).toStrictEqual(20);
   });
 });
 

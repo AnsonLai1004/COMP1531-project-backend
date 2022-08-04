@@ -84,7 +84,7 @@ function channelInviteV1(token:string, authUserId: number, channelId: number, uI
   const newNotif: Notif = {
     channelId: exactchannel.channelId,
     dmId: -1,
-    notificationMessage: `${getHandle} added you to ${exactchannel.name}"`
+    notificationMessage: `${getHandle} added you to ${exactchannel.name}`
   };
   // get user of message.uId then unshift newNotif
   const getUidMessage = dataStore.users.filter(el => el.uId === uId);

@@ -10,7 +10,8 @@ import {
 beforeEach(() => {
   requestClear();
 });
-afterEach(() => {
+
+afterAll(() => {
   requestClear();
 });
 

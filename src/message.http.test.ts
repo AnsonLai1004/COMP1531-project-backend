@@ -3,7 +3,7 @@ import {
   requestClear, requestChannelsCreateV3, requestAuthRegister,
   reqChannelMessages, reqMessageSend, reqMessageEdit,
   reqMessageRemove, reqSendMessageDm, reqDmMessages, reqDmCreate,
-  reqMessageSendLater, reqMessageSendLaterDM, reqMessagePin, reqMessageUnpin
+  reqMessageShare, reqMessageSendLater, reqMessageSendLaterDM, reqMessagePin, reqMessageUnpin, reqChannelJoin
 } from './requests';
 
 function sleep(s: number) {
@@ -13,7 +13,8 @@ function sleep(s: number) {
 beforeEach(() => {
   requestClear();
 });
-afterEach(() => {
+
+afterAll(() => {
   requestClear();
 });
 
@@ -428,6 +429,7 @@ describe('message/remove/v2 on dm and channels', () => {
   });
 });
 
+/// //////////////////////Iteration 3 new functions tests////////////////////////////////////////////////////////////////////////////////////////
 describe('search/v1 test', () => {
   test('invalid tokenid', () => {
     expect(reqMessagesSearch('random token', 'any string')).toStrictEqual(403);
@@ -485,6 +487,57 @@ describe('search/v1 test', () => {
     expect(messagesGet.messages[1].message).toStrictEqual('Hello World3!');
     expect(messagesGet.messages[2].message).toStrictEqual('Hello World2!');
     expect(messagesGet.messages[3].message).toStrictEqual('Hello World!');
+  });
+});
+
+// message/share/v1
+describe('message/share/v1', () => {
+  test('Invalid cases', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const channel = requestChannelsCreateV3(user.token, 'crush team', true);
+    const channel2 = requestChannelsCreateV3(user2.token, 'team', true);
+    const dm = reqDmCreate(user.token, [user1.authUserId]);
+    const message = reqMessageSend(user.token, channel.channelId, 'Hello World!');
+    const message2 = reqMessageSend(user2.token, channel2.channelId, 'Hello World!');
+    expect(message).toStrictEqual({ messageId: 1 });
+    expect(reqMessageShare(user.token, message.messageId, '1', -999, -1)).toStrictEqual(400);
+    expect(reqMessageShare(user.token, message.messageId, '2', -1, -999)).toStrictEqual(400);
+    expect(reqMessageShare(user.token, message.messageId, '3', channel.channelId, dm.dmId)).toStrictEqual(400);
+    expect(reqMessageShare(user.token, -999, '4', channel.channelId, -1)).toStrictEqual(400);
+    // user1 not in channel
+    expect(reqMessageShare(user1.token, message2.messageId, '5', -1, dm.dmId)).toStrictEqual(400);
+    expect(reqMessageShare(user2.token, message.messageId, '5', channel2.channelId, -1)).toStrictEqual(400);
+    expect(reqMessageShare(user.token, message.messageId, '6'.repeat(1001), -1, dm.dmId)).toStrictEqual(400);
+
+    expect(reqMessageShare(user.token, message.messageId, '7', channel2.channelId, -1)).toStrictEqual(403);
+    expect(reqMessageShare('Invalid', message.messageId, '8', channel.channelId, -1)).toStrictEqual(403);
+    expect(reqMessageShare(user2.token, message.messageId, '8', -1, dm.dmId)).toStrictEqual(403);
+  });
+
+  test('share message to a channel', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    // const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const channel = requestChannelsCreateV3(user.token, 'crush team', true);
+    const channel2 = requestChannelsCreateV3(user2.token, 'team', true);
+    const message = reqMessageSend(user.token, channel.channelId, 'abc');
+    expect(reqChannelJoin(user.token, channel2.channelId));
+    expect(reqMessageShare(user.token, message.messageId, 'abc', channel2.channelId, -1)).toStrictEqual({ sharedMessageId: 2 });
+    const channelmessages = reqChannelMessages(user.token, channel2.channelId, 0);
+    expect(channelmessages.messages[0].message).toStrictEqual('abcabc');
+  });
+  test('share message to a dm', () => {
+    const user = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
+    const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
+    const dm = reqDmCreate(user.token, [user1.authUserId]);
+    const dm2 = reqDmCreate(user.token, [user1.authUserId, user2.authUserId]);
+    expect(reqSendMessageDm(user.token, dm.dmId, 'abc')).toStrictEqual({ messageId: 1 });
+    expect(reqMessageShare(user.token, 1, 'abc', -1, dm2.dmId)).toStrictEqual({ sharedMessageId: 2 });
+    const dmMessages = reqDmMessages(user.token, dm2.dmId, 0);
+    expect(dmMessages.messages[0].message).toStrictEqual('abcabc');
   });
 });
 

@@ -174,7 +174,27 @@ export function reqDmLeaveV3(token: string, dmId: number) {
   }
   return res.statusCode;
 }
-
+export function reqMessageShare(token: string, ogMessageId: number, message: string, channelId: number, dmId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/share/v1',
+    {
+      json: {
+        ogMessageId,
+        channelId,
+        dmId,
+        message,
+      },
+      headers: {
+        token: token,
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.body as string);
+  }
+  return res.statusCode;
+}
 // auth
 export function requestAuthLogin(email: string, password: string) {
   const res = request(
@@ -692,6 +712,39 @@ export function requestUserSetHandle(token: string, handleStr: string) {
   return res.statusCode;
 }
 
+// user statistics routes
+export function reqUserStats(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/user/stats/v1',
+    {
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+export function reqWorkspaceStats(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/users/stats/v1',
+    {
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
 // search route
 export function reqMessagesSearch(token: string, queryStr: string) {
   const res = request(
@@ -703,6 +756,48 @@ export function reqMessagesSearch(token: string, queryStr: string) {
       },
       headers: {
         token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+/// //////////////////////////Admin requests/////////////////////////////////
+// /admin/user/remove/v1
+export function reqAdminUserRemove(token: string, uId: number) {
+  const res = request(
+    'DELETE',
+    `${url}:${port}` + '/admin/user/remove/v1',
+    {
+      headers: {
+        token: token
+      },
+      qs: {
+        uId,
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+// /admin/userpermission/change/v1
+export function reqAdminUPChange(token: string, uId: number, permissionId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/admin/userpermission/change/v1',
+    {
+      headers: {
+        token: token
+      },
+      json: {
+        uId,
+        permissionId,
       }
     }
   );

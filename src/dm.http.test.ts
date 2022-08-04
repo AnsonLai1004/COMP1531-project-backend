@@ -7,7 +7,7 @@ beforeEach(() => {
   requestClear();
 });
 
-afterEach(() => {
+afterAll(() => {
   requestClear();
 });
 

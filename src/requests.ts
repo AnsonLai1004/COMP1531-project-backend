@@ -82,7 +82,6 @@ export function requestChannelsCreateV3(token: string, name: string, isPublic: b
       }
     }
   );
-  console.log(token, name, isPublic + 'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL')
   if (res.statusCode === 200) {
     return JSON.parse(res.body as string);
   }
@@ -265,7 +264,6 @@ export function reqChannelJoin(token: string, channelId: number) {
       }
     }
   );
-  console.log(token, channelId + '++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
   if (res.statusCode === 200) {
     return JSON.parse(res.getBody() as string);
   }
@@ -694,6 +692,39 @@ export function requestUserSetHandle(token: string, handleStr: string) {
   return res.statusCode;
 }
 
+// user statistics routes
+export function reqUserStats(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/user/stats/v1',
+    {
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+export function reqWorkspaceStats(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/users/stats/v1',
+    {
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
 // search route
 export function reqMessagesSearch(token: string, queryStr: string) {
   const res = request(
@@ -714,7 +745,6 @@ export function reqMessagesSearch(token: string, queryStr: string) {
   return res.statusCode;
 }
 
-
 /// //////////////////////////Admin requests/////////////////////////////////
 // /admin/user/remove/v1
 export function reqAdminUserRemove(token: string, uId: number) {
@@ -730,12 +760,12 @@ export function reqAdminUserRemove(token: string, uId: number) {
       }
     }
   );
-  //console.log(token, uId + 'LKKJLKJKLLLLLLLLLLLLLLLLLLLLLL')
   if (res.statusCode === 200) {
     return JSON.parse(res.getBody() as string);
   }
   return res.statusCode;
 }
+
 // /admin/userpermission/change/v1
 export function reqAdminUPChange(token: string, uId: number, permissionId: number) {
   const res = request(
@@ -756,4 +786,43 @@ export function reqAdminUPChange(token: string, uId: number, permissionId: numbe
   }
   return res.statusCode;
 }
-/// ///////////////////////////////////////////////////////////////////////
+
+export function reqMessageReact(token: string, messageId: number, reactId) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/react/v1',
+    {
+      json: {
+        messageId,
+        reactId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+export function reqMessageUnreact(token: string, messageId: number, reactId) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/unreact/v1',
+    {
+      json: {
+        messageId,
+        reactId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}

@@ -9,14 +9,13 @@ import { channelInviteV3, channelMessagesV3, channelDetailsV3, channelJoinV3, ch
 
 import { authRegisterV3, authLoginV3, authLogoutV2 } from './auth';
 import { channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
-import { messageUnpin, messagePin, messagesSearch, messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2, messageSendLater, messageSendLaterDM } from './message';
+import { messageUnpin, messagePin, messagesSearch, messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2, messageSendLater, messageSendLaterDM, messageReact, messageUnreact } from './message';
 import { standupSendV1, standupActiveV1, standupStartV1 } from './standups';
 import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV2, dmDetailsV2 } from './dm';
 import { clearV1 } from './other';
 import { fileLoadData } from './data';
 import { adminUserRemoveV1, adminUserPermissionChangeV1 } from './admin';
-import { userProfileV3, usersAllV2, userSetNameV2, userSetEmailV2, userSetHandleV2 } from './users';
-
+import { userProfileV3, usersAllV2, userSetNameV2, userSetEmailV2, userSetHandleV2, userStatsV1, usersStatsV1 } from './users';
 
 // Set up web app, use JSON
 const app = express();
@@ -369,6 +368,17 @@ app.get('/search/v1', (req, res, next) => {
   }
 });
 
+//  user statistics routes
+app.get('/user/stats/v1', (req, res) => {
+  const token = req.headers.token as string;
+  res.json(userStatsV1(token));
+});
+
+app.get('/users/stats/v1', (req, res) => {
+  const token = req.headers.token as string;
+  res.json(usersStatsV1(token));
+});
+
 app.post('/message/pin/v1', (req, res, next) => {
   try {
     const { messageId } = req.body;
@@ -394,7 +404,6 @@ app.delete('/admin/user/remove/v1', (req, res, next) => {
   try {
     const uId = parseInt((req.query.uId) as string);
     const token = req.headers.token as string;
-    //console.log(token, uId + '   jfdslkaaaaaaaaaaaaaaaaaaaaaa')
     res.json(adminUserRemoveV1(token, uId));
   } catch (err) {
     next(err);
@@ -410,8 +419,27 @@ app.post('/admin/userpermission/change/v1', (req, res, next) => {
     next(err);
   }
 });
-/// ///////////////////////////////////////////////////////////////////////
 
+/// ///////////////////////////////////////////////////////////////////////
+app.post('/message/react/v1', (req, res, next) => {
+  try {
+    const { messageId, reactId } = req.body;
+    const token = req.headers.token as string;
+    res.json(messageReact(token, messageId, reactId));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/message/unreact/v1', (req, res, next) => {
+  try {
+    const { messageId, reactId } = req.body;
+    const token = req.headers.token as string;
+    res.json(messageUnreact(token, messageId, reactId));
+  } catch (err) {
+    next(err);
+  }
+});
 // other routes
 app.delete('/clear/v1', (req, res) => {
   clearV1();

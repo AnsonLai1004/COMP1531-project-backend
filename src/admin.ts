@@ -33,7 +33,7 @@ export function adminUserRemoveV1(token: string, uId: number) {
   }
   for (const dm of data.dms) {
     if (dm.ownerId === uId) {
-        dm.ownerId = undefined;
+      dm.ownerId = undefined;
     }
     dm.uIds = dm.uIds.filter(id => { return id !== uId; });
     for (const message of dm.messages) {
@@ -109,7 +109,7 @@ function isOnlyGlobalOwner(uId) {
         count++;
       }
     } else {
-      if (user.isGlobalOwner == true) {
+      if (user.isGlobalOwner === true) {
         count++;
       }
     }

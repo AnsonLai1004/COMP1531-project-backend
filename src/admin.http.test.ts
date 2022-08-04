@@ -2,7 +2,7 @@ import {
   requestClear, requestAuthRegister, requestUserProfile,
   reqAdminUserRemove, reqAdminUPChange,
   requestChannelsCreateV3, reqChannelJoin, reqChannelMessages, reqMessageSend,
-  reqDmCreate, reqDmMessages, reqSendMessageDm, reqUserStats, requestUserAll
+  reqDmCreate, reqDmMessages, reqSendMessageDm, reqUserStats, requestUsersAll
 } from './requests';
 beforeEach(() => {
   requestClear();
@@ -17,6 +17,7 @@ describe('admin/user/remove/v1', () => {
     const globalOwner = requestAuthRegister('same@gmail.com', 'password', 'Harry', 'Potter');
     const user = requestAuthRegister('bruh@gmail.com', 'password', 'Hermione', 'Granger');
     const user2 = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
+    expect(reqAdminUserRemove('Invalid', user2.authUserId)).toStrictEqual(403);
     expect(reqAdminUserRemove(user.token, user2.authUserId)).toStrictEqual(403);
     expect(reqAdminUserRemove(globalOwner.token, -999)).toStrictEqual(400);
     expect(reqAdminUserRemove(globalOwner.token, globalOwner.authUserId)).toStrictEqual(400);
@@ -29,35 +30,40 @@ describe('admin/user/remove/v1', () => {
     const channel2 = requestChannelsCreateV3(channelOwner.token, 'second', true);
     const dm = reqDmCreate(channelOwner.token, [globalOwner.authUserId, user.authUserId]);
     const dm2 = reqDmCreate(channelOwner.token, [globalOwner.authUserId, user.authUserId]);
+    const dm3 = reqDmCreate(user.token, [globalOwner.authUserId]);
+
+    expect(dm).toStrictEqual({ dmId: 1 });
+    expect(dm2).toStrictEqual({ dmId: 2 });
+    expect(dm3).toStrictEqual({ dmId: 3 });
     expect(reqChannelJoin(user.token, channel.channelId)).toStrictEqual({});
     expect(reqChannelJoin(user.token, channel2.channelId)).toStrictEqual({});
     // user - numChannelJoined = 2, numDmJoined = 2
-    // TODO: user/stats/v1 return userStats to get numChannelsJoined, numDmsJoined
-    /*expect(reqUserStats(user.token)).toMatchObject({
-      channelsJoined: [{2, any }],
-      
-    })*/
-    // dont think we need this, expect(reqChannelJoin(globalOwner.token, channel.channelId)).toStrictEqual({});
+    const stats = reqUserStats(user.token);
+    expect(stats.userStats.channelsJoined[2].numChannelsJoined).toStrictEqual(2);
+    expect(stats.userStats.dmsJoined[2].numDmsJoined).toStrictEqual(2);
     // removed from all channels/DMS
-    expect(reqAdminUserRemove(globalOwner.token, user.authUserId)).toStrictEqual({});//FIXME:
-    // TODO: user/stats/v1 return userStats to get numChannelsJoined, numDmsJoined0
+    expect(reqAdminUserRemove(globalOwner.token, user.authUserId)).toStrictEqual({});
+    const stats2 = reqUserStats(user.token);
+    expect(stats2.userStats.channelsJoined[2].numChannelsJoined).toStrictEqual(2);
+    expect(stats2.userStats.dmsJoined[2].numDmsJoined).toStrictEqual(2);
 
     // not be included in user array returned by users/all
-    // TODO: request users/all/v2
-    expect(reqUserAll(user.token)).toMatchObject([
+    expect(requestUsersAll(user.token)).toMatchObject({
+      users: [
         {
-            uId: globalOwner.authUserId,
-            nameFirst: 'Harry',
-            nameLast: 'Potter',
-            handleStr: 'harrypotter',
+          uId: globalOwner.authUserId,
+          nameFirst: 'Harry',
+          nameLast: 'Potter',
+          handleStr: 'harrypotter',
         },
         {
-            uId: channelOwner.authUserId,
-            nameFirst: 'Hermione',
-            nameLast: 'Granger',
-            handleStr: 'hermionegranger',
+          uId: channelOwner.authUserId,
+          nameFirst: 'Hermione',
+          nameLast: 'Granger',
+          handleStr: 'hermionegranger',
         },
-    ]);
+      ]
+    });
     // treats owners can remove other threats owners(including the original first owner)
     const newGO = requestAuthRegister('abs@gmail.com', 'password', 'Jordan', 'Potter');
     expect(reqAdminUPChange(globalOwner.token, newGO.authUserId, 1)).toStrictEqual({});
@@ -109,12 +115,14 @@ describe('admin/userpermission/change/v1', () => {
   test('error cases', () => {
     const globalOwner = requestAuthRegister('same@gmail.com', 'password', 'Harry', 'Potter');
     const user = requestAuthRegister('fdfs@gmail.com', 'password', 'Hermione', 'Granger');
+    expect(reqAdminUPChange('Invalid', -999, 1)).toStrictEqual(403);
     expect(reqAdminUPChange(globalOwner.token, -999, 1)).toStrictEqual(400);
     expect(reqAdminUPChange(globalOwner.token, globalOwner.authUserId, 2)).toStrictEqual(400);
     expect(reqAdminUPChange(globalOwner.token, user.authUserId, 3)).toStrictEqual(400);
     expect(reqAdminUPChange(globalOwner.token, user.authUserId, 2)).toStrictEqual(400);
     expect(reqAdminUPChange(globalOwner.token, globalOwner.authUserId, 2)).toStrictEqual(400);
     expect(reqAdminUPChange(user.token, globalOwner.authUserId, 1)).toStrictEqual(403);
+    expect(reqAdminUPChange(globalOwner.token, globalOwner.authUserId, 1)).toStrictEqual(400);
   });
   test('correct return', () => {
     const globalOwner = requestAuthRegister('same@gmail.com', 'password', 'Harry', 'Potter');

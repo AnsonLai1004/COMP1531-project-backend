@@ -3,23 +3,10 @@
  * storing data in dataStore.ts and accessed by other files.
  */
 
-/**
- * User object: contains uId, nameFirst, nameLast, email,
- * password, handleStr, isGlobalOwner
- */
-export interface User {
-    uId: number;
-    nameFirst: string;
-    nameLast: string;
-    email: string;
-    passwordHash: string;
-    handleStr: string;
-    isGlobalOwner: boolean;
-}
-
 export interface Reacts {
     reactId: number;
     uIds: number[];
+    isThisUserReacted: boolean
 }
 
 export interface Message {
@@ -54,4 +41,62 @@ export interface DM {
 export interface TokenPair {
     token: string;
     uId: number;
+}
+
+interface ChannelsJoined {
+    numChannelsJoined: number;
+    timeStamp: number;
+}
+
+interface DmsJoined {
+    numDmsJoined: number;
+    timeStamp: number;
+}
+
+interface MessagesSent {
+    numMessagesSent: number;
+    timeStamp: number;
+}
+
+export interface ChannelsExist {
+    numChannelsExist: number;
+    timeStamp: number;
+}
+
+export interface DmsExist {
+    numDmsExist: number;
+    timeStamp: number;
+}
+
+export interface MessagesExist {
+    numMessagesExist: number;
+    timeStamp: number;
+}
+
+interface UserStats {
+    channelsJoined: ChannelsJoined[];
+    dmsJoined: DmsJoined[];
+    messagesSent: MessagesSent[];
+    involvementRate ?: number;
+}
+
+export interface WorkplaceStats {
+    channelsExist: ChannelsExist[];
+    dmsExist: DmsExist[];
+    messagesExist: MessagesExist[];
+}
+
+/**
+ * User object: contains uId, nameFirst, nameLast, email,
+ * password, handleStr, isGlobalOwner
+ */
+export interface User {
+    uId: number;
+    nameFirst: string;
+    nameLast: string;
+    email: string;
+    passwordHash: string;
+    handleStr: string;
+    isGlobalOwner: boolean;
+    stats: UserStats;
 }

@@ -83,8 +83,8 @@ describe('valid single tagging', () => {
     reqSendMessageDm(user1.token, dm.dmId, '@sherlockholmes');
     expect(reqGetNotification(user1.token)).toEqual({
       notifications: [
-        { channelId: -1, dmId: dm.dmId, notificationMessage: `sherlockholmes tagged you in johnwatson, sherlockholmes: @sherlockholmes` },
-        { channelId: channel.channelId, dmId: -1, notificationMessage: `sherlockholmes tagged you in 221B Baker St: @sherlockholmes` },
+        { channelId: -1, dmId: dm.dmId, notificationMessage: 'sherlockholmes tagged you in johnwatson, sherlockholmes: @sherlockholmes' },
+        { channelId: channel.channelId, dmId: -1, notificationMessage: 'sherlockholmes tagged you in 221B Baker St: @sherlockholmes' },
       ]
     });
   });
@@ -98,27 +98,28 @@ describe('valid single tagging', () => {
     const messageDm = reqSendMessageDm(user1.token, dm.dmId, 'john come downstairs');
 
     reqMessageEdit(user1.token, message.messageId, "@johnwatson i'm home");
-    reqMessageEdit(user1.token, messageDm.messageId, "@johnwatson come downstairs");
+    reqMessageEdit(user1.token, messageDm.messageId, '@johnwatson come downstairs');
 
     expect(reqGetNotification(user2.token)).toEqual({
       notifications: [
-        { channelId: -1, dmId: dm.dmId, notificationMessage: `sherlockholmes tagged you in johnwatson, sherlockholmes: @johnwatson come dow` },
-        { channelId: channel.channelId, dmId: -1, notificationMessage: `sherlockholmes tagged you in 221B Baker St: @johnwatson i'm home` },
+        { channelId: -1, dmId: dm.dmId, notificationMessage: 'sherlockholmes tagged you in johnwatson, sherlockholmes: @johnwatson come dow' },
+        { channelId: channel.channelId, dmId: -1, notificationMessage: 'sherlockholmes tagged you in 221B Baker St: @johnwatson i\'m home' },
         { channelId: -1, dmId: dm.dmId, notificationMessage: 'sherlockholmes added you to johnwatson, sherlockholmes' },
         { channelId: channel.channelId, dmId: -1, notificationMessage: 'sherlockholmes added you to 221B Baker St' },
       ]
     });
 
-    reqMessageEdit(user1.token, message.messageId, "fine i won't ping you");
-    reqMessageEdit(user1.token, messageDm.messageId, "but hurry up already will you");
+    // already prev tagged, should not notif again
+    reqMessageEdit(user1.token, message.messageId, '@johnwatson @johnwatson @johnwatson!!!');
+    reqMessageEdit(user1.token, messageDm.messageId, 'hurry up already will you');
 
     expect(reqGetNotification(user2.token)).toEqual({
-        notifications: [
-          { channelId: -1, dmId: dm.dmId, notificationMessage: `sherlockholmes tagged you in johnwatson, sherlockholmes: @johnwatson come dow` },
-          { channelId: channel.channelId, dmId: -1, notificationMessage: `sherlockholmes tagged you in 221B Baker St: @johnwatson i'm home` },
-          { channelId: -1, dmId: dm.dmId, notificationMessage: 'sherlockholmes added you to johnwatson, sherlockholmes' },
-          { channelId: channel.channelId, dmId: -1, notificationMessage: 'sherlockholmes added you to 221B Baker St' },
-        ]
+      notifications: [
+        { channelId: -1, dmId: dm.dmId, notificationMessage: 'sherlockholmes tagged you in johnwatson, sherlockholmes: @johnwatson come dow' },
+        { channelId: channel.channelId, dmId: -1, notificationMessage: 'sherlockholmes tagged you in 221B Baker St: @johnwatson i\'m home' },
+        { channelId: -1, dmId: dm.dmId, notificationMessage: 'sherlockholmes added you to johnwatson, sherlockholmes' },
+        { channelId: channel.channelId, dmId: -1, notificationMessage: 'sherlockholmes added you to 221B Baker St' },
+      ]
     });
   });
   // more tests...

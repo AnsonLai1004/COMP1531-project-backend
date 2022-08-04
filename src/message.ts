@@ -130,6 +130,7 @@ function messageEditV2(token: string, messageId: number, message: string) {
     }
   }
 
+  const prevMessage = chosenMessage.message;
   // change message
   if (message === '') {
     // remove message
@@ -141,10 +142,10 @@ function messageEditV2(token: string, messageId: number, message: string) {
 
   // check for tags
   if (chosenChannel != null) {
-    pushTagsChannel(message, chosenChannel.channelId, chosenChannel.name, tokenId.uId);
+    pushTagsChannel(message, chosenChannel.channelId, chosenChannel.name, tokenId.uId, prevMessage);
   }
   if (chosenDm != null) {
-    pushTagsDm(message, chosenDm.dmId, chosenDm.name, tokenId.uId);
+    pushTagsDm(message, chosenDm.dmId, chosenDm.name, tokenId.uId, prevMessage);
   }
 
   return {};
@@ -1065,7 +1066,7 @@ function findMessageStr(messageId: number) {
 }
 
 // helper function, check for tags and push to notifications array for channels
-function pushTagsChannel(message: string, channelId: number, channelName: string, senderId: number) {
+function pushTagsChannel(message: string, channelId: number, channelName: string, senderId: number, prevMessage?: string) {
   const datastore = getData();
   let senderName = '';
   // get handle of user who sent
@@ -1078,6 +1079,10 @@ function pushTagsChannel(message: string, channelId: number, channelName: string
   // check for tags for notifications
   for (const user of datastore.users) {
     const regex = new RegExp('@' + user.handleStr + '\\b');
+    if (prevMessage !== undefined && regex.test(prevMessage)) {
+      // already taggged in previous version of message
+      continue;
+    }
     if (regex.test(message) && userIsAuthorised(user.uId, channelId)) {
       const notificationMessage = `${senderName} tagged you in ${channelName}: ${message.slice(0, 20)}`;
       const newNotif: Notif = {
@@ -1098,7 +1103,7 @@ function pushTagsChannel(message: string, channelId: number, channelName: string
 }
 
 // helper function, check for tags and push to notifications array for dms
-function pushTagsDm(message: string, dmId: number, dmName: string, senderId: number) {
+function pushTagsDm(message: string, dmId: number, dmName: string, senderId: number, prevMessage ?: string) {
   const datastore = getData();
   let senderName = '';
   // get handle of user who sent
@@ -1111,6 +1116,10 @@ function pushTagsDm(message: string, dmId: number, dmName: string, senderId: num
   // check for tags for notifications
   for (const user of datastore.users) {
     const regex = new RegExp('@' + user.handleStr + '\\b');
+    if (prevMessage !== undefined && regex.test(prevMessage)) {
+      // already taggged in previous version of message
+      continue;
+    }
     if (regex.test(message) && userIsAuthorisedInDm(user.uId, dmId)) {
       const notificationMessage = `${senderName} tagged you in ${dmName}: ${message.slice(0, 20)}`;
       const newNotif: Notif = {

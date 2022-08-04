@@ -711,3 +711,43 @@ export function reqMessagesSearch(token: string, queryStr: string) {
   }
   return res.statusCode;
 }
+
+export function reqMessageReact(token: string, messageId: number, reactId) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/react/v1',
+    {
+      json: {
+        messageId,
+        reactId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+export function reqMessageUnreact(token: string, messageId: number, reactId) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/unreact/v1',
+    {
+      json: {
+        messageId,
+        reactId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}

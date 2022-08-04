@@ -13,6 +13,7 @@ import { standupSendV1, standupActiveV1, standupStartV1 } from './standups';
 import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV2, dmDetailsV2 } from './dm';
 import { clearV1 } from './other';
 import { fileLoadData } from './data';
+import { adminUserRemoveV1, adminUserPermissionChangeV1 } from './admin';
 import { userProfileV3, usersAllV2, userSetNameV2, userSetEmailV2, userSetHandleV2, userStatsV1, usersStatsV1 } from './users';
 
 // Set up web app, use JSON
@@ -408,6 +409,28 @@ app.post('/message/unpin/v1', (req, res, next) => {
   }
 });
 
+/// //////////////////////////Admin routes/////////////////////////////////
+app.delete('/admin/user/remove/v1', (req, res, next) => {
+  try {
+    const uId = parseInt((req.query.uId) as string);
+    const token = req.headers.token as string;
+    res.json(adminUserRemoveV1(token, uId));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.post('/admin/userpermission/change/v1', (req, res, next) => {
+  try {
+    const { uId, permissionId } = req.body;
+    const token = req.headers.token as string;
+    res.json(adminUserPermissionChangeV1(token, uId, permissionId));
+  } catch (err) {
+    next(err);
+  }
+});
+
+/// ///////////////////////////////////////////////////////////////////////
 app.post('/message/react/v1', (req, res, next) => {
   try {
     const { messageId, reactId } = req.body;
@@ -427,7 +450,6 @@ app.post('/message/unreact/v1', (req, res, next) => {
     next(err);
   }
 });
-
 // other routes
 app.delete('/clear/v1', (req, res) => {
   clearV1();

@@ -45,16 +45,19 @@ export function usersAllV2(token: string) {
   if ('error' in authUser) {
     throw HTTPError(403, 'Invalid token!');
   }
+
   const users = [];
   const data = getData();
   for (const user of data.users) {
-    users.push({
-      uId: user.uId,
-      email: user.email,
-      nameFirst: user.nameFirst,
-      nameLast: user.nameLast,
-      handleStr: user.handleStr,
-    });
+    if (user.nameFirst !== 'Removed' && user.nameLast !== 'user') {
+      users.push({
+        uId: user.uId,
+        email: user.email,
+        nameFirst: user.nameFirst,
+        nameLast: user.nameLast,
+        handleStr: user.handleStr,
+      });
+    }
   }
   return { users: users };
 }

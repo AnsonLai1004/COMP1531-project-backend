@@ -2,7 +2,7 @@ import {
   requestClear, requestAuthRegister, requestUserProfile,
   reqAdminUserRemove, reqAdminUPChange,
   requestChannelsCreateV3, reqChannelJoin, reqChannelMessages, reqMessageSend,
-  reqDmCreate, reqDmMessages, reqSendMessageDm, //reqUserStats
+  reqDmCreate, reqDmMessages, reqSendMessageDm, reqUserStats, requestUserAll
 } from './requests';
 beforeEach(() => {
   requestClear();
@@ -29,30 +29,35 @@ describe('admin/user/remove/v1', () => {
     const channel2 = requestChannelsCreateV3(channelOwner.token, 'second', true);
     const dm = reqDmCreate(channelOwner.token, [globalOwner.authUserId, user.authUserId]);
     const dm2 = reqDmCreate(channelOwner.token, [globalOwner.authUserId, user.authUserId]);
-    // removed from all channels/DMS
-    // TODO: user/stats/v1 return userStats to get numChannelsJoined, numDmsJoined
     expect(reqChannelJoin(user.token, channel.channelId)).toStrictEqual({});
     expect(reqChannelJoin(user.token, channel2.channelId)).toStrictEqual({});
-    expect(reqChannelJoin(globalOwner.token, channel.channelId)).toStrictEqual({});
+    // user - numChannelJoined = 2, numDmJoined = 2
+    // TODO: user/stats/v1 return userStats to get numChannelsJoined, numDmsJoined
+    /*expect(reqUserStats(user.token)).toMatchObject({
+      channelsJoined: [{2, any }],
+      
+    })*/
+    // dont think we need this, expect(reqChannelJoin(globalOwner.token, channel.channelId)).toStrictEqual({});
+    // removed from all channels/DMS
     expect(reqAdminUserRemove(globalOwner.token, user.authUserId)).toStrictEqual({});//FIXME:
     // TODO: user/stats/v1 return userStats to get numChannelsJoined, numDmsJoined0
 
     // not be included in user array returned by users/all
     // TODO: request users/all/v2
-    /*expect(users/all/v2).toMatchObject([
-            {
-                uId: globalOwner.authUserId,
-                nameFirst: 'Harry',
-                nameLast: 'Potter',
-                handleStr: 'harrypotter',
-            },
-            {
-                uId: channelOwner.authUserId,
-                nameFirst: 'Hermione',
-                nameLast: 'Granger',
-                handleStr: 'hermionegranger',
-            },
-        ]);*/ 
+    expect(reqUserAll(user.token)).toMatchObject([
+        {
+            uId: globalOwner.authUserId,
+            nameFirst: 'Harry',
+            nameLast: 'Potter',
+            handleStr: 'harrypotter',
+        },
+        {
+            uId: channelOwner.authUserId,
+            nameFirst: 'Hermione',
+            nameLast: 'Granger',
+            handleStr: 'hermionegranger',
+        },
+    ]);
     // treats owners can remove other threats owners(including the original first owner)
     const newGO = requestAuthRegister('abs@gmail.com', 'password', 'Jordan', 'Potter');
     expect(reqAdminUPChange(globalOwner.token, newGO.authUserId, 1)).toStrictEqual({});

@@ -6,10 +6,9 @@ import cors from 'cors';
 import errorHandler from 'middleware-http-errors';
 
 import { channelInviteV3, channelMessagesV3, channelDetailsV3, channelJoinV3, channelLeaveV2, channelAddownerV2, channelRemoveownerV2 } from './channel';
-
 import { authRegisterV3, authLoginV3, authLogoutV2 } from './auth';
 import { channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
-import { messageUnpin, messagePin, messagesSearch, messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2, messageSendLater, messageSendLaterDM, messageReact, messageUnreact } from './message';
+import { messageShareV1, messageUnpin, messagePin, messagesSearch, messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2, messageSendLater, messageSendLaterDM, messageReact, messageUnreact } from './message';
 import { standupSendV1, standupActiveV1, standupStartV1 } from './standups';
 import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV2, dmDetailsV2 } from './dm';
 import { clearV1 } from './other';
@@ -144,6 +143,8 @@ app.get('/channels/listall/v3', (req, res, next) => {
     next(err);
   }
 });
+
+/// ////////////////////////////////////////////////////////////////////////
 
 // channel routes
 app.get('/channel/details/v3', (req, res, next) => {
@@ -368,6 +369,16 @@ app.get('/search/v1', (req, res, next) => {
   }
 });
 
+app.post('/message/share/v1', (req, res, next) => {
+  try {
+    const token = req.headers.token as string;
+    const { ogMessageId, message, channelId, dmId } = req.body;
+    res.json(messageShareV1(token, ogMessageId, message, channelId, dmId));
+  } catch (err) {
+    next(err);
+  }
+});
+
 //  user statistics routes
 app.get('/user/stats/v1', (req, res) => {
   const token = req.headers.token as string;
@@ -388,7 +399,6 @@ app.post('/message/pin/v1', (req, res, next) => {
     next(err);
   }
 });
-
 app.post('/message/unpin/v1', (req, res, next) => {
   try {
     const { messageId } = req.body;

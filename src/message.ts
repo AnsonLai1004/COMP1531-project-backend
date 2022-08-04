@@ -1,10 +1,11 @@
 import { getData, setData } from './data';
-import { Message } from './interfaces';
+import { Message, Reacts } from './interfaces';
 import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
 export {
   messageSendV2, messageRemoveV2, messageEditV2, messageSendDmV2,
-  dmMessagesV2, messagesSearch
+  dmMessagesV2, messagesSearch, messagePin, messageUnpin, messageReact,
+  messageUnreact, messageSendLater, messageSendLaterDM
 };
 
 /**
@@ -41,7 +42,9 @@ function messageSendV2(token: string, channelId: number, message: string) {
     messageId: (datastore.lastMessageId + 1) as number,
     uId: tokenId.uId,
     message: message,
-    timeSent: Math.round(Date.now() / 1000)
+    timeSent: Math.round(Date.now() / 1000),
+    reacts: [],
+    isPinned: false
   };
   for (const channel of datastore.channels) {
     if (channel.channelId === channelId) {
@@ -238,7 +241,9 @@ function messageSendDmV2(token: string, dmId: number, message: string) {
     messageId: (datastore.lastMessageId + 1) as number,
     uId: tokenId.uId,
     message: message,
-    timeSent: Math.round(Date.now() / 1000)
+    timeSent: Math.round(Date.now() / 1000),
+    reacts: [],
+    isPinned: false
   };
   for (const dm of datastore.dms) {
     if (dm.dmId === dmId) {
@@ -291,6 +296,15 @@ function dmMessageV1helper(authUserId: number, dmId: number, start: number) {
     throw HTTPError(400, 'start greater than total number of messages in channel');
   }
   const end = start + 50;
+  for (const message of messages) {
+    for (const reaction of message.reacts) {
+      if (reaction.uIds.includes(authUserId)) {
+        reaction.isThisUserReacted = true;
+      } else {
+        reaction.isThisUserReacted = false;
+      }
+    }
+  }
   if (end < numofmessages) {
     return {
       messages: messages,
@@ -315,6 +329,14 @@ function dmMessagesV2(token: string, dmId: number, start: number) {
   return result;
 }
 
+/**
+ * Given a query string, return a collection of messages in all of the channels/DMs
+ * that the user has joined that contain the query (case-insensitive). \
+ * No expected order for these messages.
+ * @param {string} token
+ * @param {string} queryStr
+ * @returns { messages: Array of Messages}
+*/
 function messagesSearch(token: string, queryStr: string) {
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -324,27 +346,408 @@ function messagesSearch(token: string, queryStr: string) {
     throw HTTPError(400, queryStr);
   }
   const datastore = getData();
-  const matchMessage = [];
+  const messages = [];
 
   for (const channel of datastore.channels) {
     if (userIsAuthorised(tokenId.uId, channel.channelId)) {
-      for (const messages of channel.messages) {
-        if (messages.message.toLowerCase().includes(queryStr.toLowerCase())) {
-          matchMessage.push(messages);
+      for (const message of channel.messages) {
+        if (message.message.toLowerCase().includes(queryStr.toLowerCase())) {
+          messages.push(message);
         }
       }
     }
   }
   for (const dm of datastore.dms) {
     if (userIsAuthorisedInDm(tokenId.uId, dm.dmId)) {
-      for (const messages of dm.messages) {
-        if (messages.message.toLowerCase().includes(queryStr.toLowerCase())) {
-          matchMessage.push(messages);
+      for (const message of dm.messages) {
+        if (message.message.toLowerCase().includes(queryStr.toLowerCase())) {
+          messages.push(message);
         }
       }
     }
   }
-  return { matchMessage };
+  return { messages };
+}
+
+/*
+ * Send a message from the authorised user to the channel specified by channelId
+ * automatically at a specified time in the future. The returned messageId will only
+ * be considered valid for other actions (editing/deleting/reacting/etc)
+ * once it has been sent (i.e. after timeSent).
+ * @param { channelId, message, timeSent }
+ * @returns { messageId }
+*/
+function messageSendLater(token: string, channelId: number, message: string, timeSent: number) {
+  // check for invalid token
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    throw HTTPError(403, 'Invalid token');
+  }
+  // check if channelId is valid
+  if (!isValidChannelId(channelId)) {
+    throw HTTPError(400, 'Invalid channel');
+  }
+  // check if user is member of channel
+  if (!userIsAuthorised(tokenId.uId, channelId)) {
+    throw HTTPError(403, 'User not in channel');
+  }
+  // check if message too long or short
+  if (message.length > 1000 || message.length < 1) {
+    throw HTTPError(400, 'Message too long');
+  }
+  // check if timeSent is valid
+  const curTime = Math.floor((new Date()).getTime() / 1000);
+  if (timeSent < curTime) {
+    throw HTTPError(400, 'Time must be after current time');
+  }
+
+  // update lastmessageid
+  const data = getData();
+  data.lastMessageId++;
+  const futureMessageId = data.lastMessageId;
+  setData(data);
+
+  setTimeout((futureMessageId, tokenId, channelId, message, timeSent) => {
+    // basically send message but with custom lastmessageid (futuremessageid)
+    const datastore = getData();
+    console.log('IN TIMEOUT ADDING', futureMessageId, tokenId, channelId, message, timeSent);
+    const newmessage: Message = {
+      messageId: (futureMessageId) as number,
+      uId: tokenId.uId,
+      message: message,
+      timeSent: timeSent,
+      reacts: [],
+      isPinned: false
+    };
+    for (const channel of datastore.channels) {
+      if (channel.channelId === channelId) {
+        channel.messages.unshift(newmessage);
+      }
+    }
+    datastore.lastMessageId++;
+    setData(datastore);
+  }, (timeSent - curTime) * 1000, futureMessageId, tokenId, channelId, message, timeSent);
+
+  return { messageId: futureMessageId };
+}
+
+/**
+ * Send a message from the authorised user to the DM specified by dmId
+ * automatically at a specified time in the future. The returned messageId will
+ * only be considered valid for other actions (editing/deleting/reacting/etc)
+ * once it has been sent (i.e. after timeSent). If the DM is removed before the
+ * message has sent, the message will not be sent.
+ * @param { dmId, message, timeSent }
+ * @returns { messageId }
+*/
+function messageSendLaterDM(token: string, dmId: number, message: string, timeSent: number) {
+  // check for invalid token
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    throw HTTPError(403, 'Invalid token');
+  }
+  // check if dmId is valid
+  if (!isValidDmId(dmId)) {
+    throw HTTPError(400, 'Invalid dm');
+  }
+  // check if user is member of dm
+  if (!userIsAuthorisedInDm(tokenId.uId, dmId)) {
+    throw HTTPError(403, 'User not in dm');
+  }
+  // check if message too long or short
+  if (message.length > 1000 || message.length < 1) {
+    throw HTTPError(400, 'Message too long');
+  }
+  // check if timeSent is valid
+  const curTime = Math.floor((new Date()).getTime() / 1000);
+  if (timeSent < curTime) {
+    throw HTTPError(400, 'Time must be after current time');
+  }
+
+  // update lastmessageid
+  const data = getData();
+  data.lastMessageId++;
+  const futureMessageId = data.lastMessageId;
+  setData(data);
+
+  setTimeout((futureMessageId, tokenId, dmId, message, timeSent) => {
+    // check if dm has not been removed
+    if (isValidDmId(dmId)) {
+      // basically send message but with custom lastmessageid (futuremessageid)
+      const datastore = getData();
+      const newmessage: Message = {
+        messageId: (futureMessageId) as number,
+        uId: tokenId.uId,
+        message: message,
+        timeSent: timeSent,
+        reacts: [],
+        isPinned: false
+      };
+      for (const dm of datastore.dms) {
+        if (dm.dmId === dmId) {
+          dm.messages.unshift(newmessage);
+        }
+      }
+      datastore.lastMessageId++;
+      setData(datastore);
+    }
+  }, (timeSent - curTime) * 1000, futureMessageId, tokenId, dmId, message, timeSent);
+
+  return { messageId: futureMessageId };
+}
+
+/**
+ * Given a message within a channel or DM, mark it as "pinned".
+ * @param {string} token
+ * @param {number} messageId
+ * @returns { messages: Array of Messages}
+*/
+function messagePin(token: string, messageId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    throw HTTPError(403, 'Invalid token');
+  }
+  const datastore = getData();
+  for (const channel of datastore.channels) {
+    if (userIsAuthorised(tokenId.uId, channel.channelId)) {
+      for (const message of channel.messages) {
+        if (message.messageId === messageId) {
+          if (!userIsOwner(tokenId.uId, channel.channelId)) {
+            throw HTTPError(403, 'No owner permissions in channel');
+          }
+          if (message.isPinned === false) {
+            message.isPinned = true;
+            setData(datastore);
+            return {};
+          } else {
+            throw HTTPError(400, 'the message is already pinned');
+          }
+        }
+      }
+    }
+  }
+  for (const dm of datastore.dms) {
+    if (userIsAuthorisedInDm(tokenId.uId, dm.dmId)) {
+      for (const message of dm.messages) {
+        if (message.messageId === messageId) {
+          if (!userIsOwnerInDm(tokenId.uId, dm.dmId)) {
+            throw HTTPError(403, 'No owner permissions in dm');
+          }
+          if (message.isPinned === false) {
+            message.isPinned = true;
+            setData(datastore);
+            return {};
+          } else {
+            throw HTTPError(400, 'the message is already pinned');
+          }
+        }
+      }
+    }
+  }
+  throw HTTPError(400, 'messageId is not found in dms or channels');
+}
+
+/**
+ * Given a message within a channel or DM, remove its mark as "unpinned".
+ * @param {string} token
+ * @param {number} messageId
+ * @returns { messages: Array of Messages}
+*/
+function messageUnpin(token: string, messageId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    throw HTTPError(403, 'Invalid token');
+  }
+  const datastore = getData();
+  for (const channel of datastore.channels) {
+    if (userIsAuthorised(tokenId.uId, channel.channelId)) {
+      for (const message of channel.messages) {
+        if (message.messageId === messageId) {
+          if (!userIsOwner(tokenId.uId, channel.channelId)) {
+            throw HTTPError(403, 'No owner permissions in channel');
+          }
+          if (message.isPinned === true) {
+            message.isPinned = false;
+            setData(datastore);
+            return {};
+          } else {
+            throw HTTPError(400, 'the message is not pinned');
+          }
+        }
+      }
+    }
+  }
+  for (const dm of datastore.dms) {
+    if (userIsAuthorisedInDm(tokenId.uId, dm.dmId)) {
+      for (const message of dm.messages) {
+        if (message.messageId === messageId) {
+          if (!userIsOwnerInDm(tokenId.uId, dm.dmId)) {
+            throw HTTPError(403, 'No owner permissions in dm');
+          }
+          if (message.isPinned === true) {
+            message.isPinned = false;
+            setData(datastore);
+            return {};
+          } else {
+            throw HTTPError(400, 'the message is not pinned');
+          }
+        }
+      }
+    }
+  }
+  throw HTTPError(400, 'messageId is not found in dms or channels');
+}
+
+/**
+ * Given a message within a channel or DM the authorised user is part of
+ * add a "react" to that particular message.
+ * @param {string} token
+ * @param {number} messageId
+ * @param {number} reactId
+ * @returns { messages: Array of Messages}
+*/
+function messageReact(token: string, messageId: number, reactId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    throw HTTPError(403, 'Invalid token');
+  }
+  if (reactId !== 1) {
+    throw HTTPError(400, 'Invalid reactId');
+  }
+
+  const datastore = getData();
+  for (const channel of datastore.channels) {
+    if (userIsAuthorised(tokenId.uId, channel.channelId)) {
+      for (const message of channel.messages) {
+        if (message.messageId === messageId) {
+          // check whether reactId in reacts
+          let reactexist = false;
+          for (const i of message.reacts) {
+            if ((i.reactId === reactId) && (i.uIds.includes(tokenId.uId))) {
+              throw HTTPError(400, 'the message already contains a react with ID reactId from the authorised user');
+            } else if ((i.reactId === reactId) && !(i.uIds.includes(tokenId.uId))) {
+              reactexist = true;
+              i.uIds.push(tokenId.uId);
+              setData(datastore);
+              return {};
+            }
+          }
+          // if reactid dont exist, add new react
+          if (reactexist === false) {
+            const newreact: Reacts = {
+              reactId: reactId,
+              uIds: [tokenId.uId],
+              isThisUserReacted: false
+            };
+            message.reacts.push(newreact);
+            setData(datastore);
+            return {};
+          }
+        }
+      }
+    }
+  }
+
+  for (const dm of datastore.dms) {
+    if (userIsAuthorisedInDm(tokenId.uId, dm.dmId)) {
+      for (const message of dm.messages) {
+        if (message.messageId === messageId) {
+          let reactexist = false;
+          for (const i of message.reacts) {
+            if ((i.reactId === reactId) && (i.uIds.includes(tokenId.uId))) {
+              throw HTTPError(400, 'the message already contains a react with ID reactId from the authorised user');
+            } else if ((i.reactId === reactId) && !(i.uIds.includes(tokenId.uId))) {
+              reactexist = true;
+              i.uIds.push(tokenId.uId);
+              setData(datastore);
+              return {};
+            }
+          }
+          // if reactid dont exist, add new react
+          if (reactexist === false) {
+            const newreact: Reacts = {
+              reactId: reactId,
+              uIds: [tokenId.uId],
+              isThisUserReacted: false
+            };
+            message.reacts.push(newreact);
+            setData(datastore);
+            return {};
+          }
+        }
+      }
+    }
+  }
+  throw HTTPError(400, 'messageId is not found in dms or channels');
+}
+
+function messageUnreact(token: string, messageId: number, reactId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    throw HTTPError(403, 'Invalid token');
+  }
+  if (reactId !== 1) {
+    throw HTTPError(400, 'Invalid reactId');
+  }
+
+  const datastore = getData();
+  for (const channel of datastore.channels) {
+    if (userIsAuthorised(tokenId.uId, channel.channelId)) {
+      for (const message of channel.messages) {
+        if (message.messageId === messageId) {
+          // check whether reactId in reacts
+          let reactexist = false;
+          for (const i of message.reacts) {
+            if ((i.reactId === reactId) && (i.uIds.includes(tokenId.uId))) {
+              reactexist = true;
+              i.uIds = i.uIds.filter(e => e !== tokenId.uId);
+              if (i.uIds.length === 0) {
+                message.reacts = [];
+              }
+              setData(datastore);
+              return {};
+            } else if ((i.reactId === reactId) && !(i.uIds.includes(tokenId.uId))) {
+              // user dont exist in uids
+              throw HTTPError(400, 'authorised user not in react uids');
+            }
+          }
+          // if reactid dont exist, return error
+          if (reactexist === false) {
+            // react dont exist
+            throw HTTPError(400, 'reactId is not valid reactId');
+          }
+        }
+      }
+    }
+  }
+
+  for (const dm of datastore.dms) {
+    if (userIsAuthorisedInDm(tokenId.uId, dm.dmId)) {
+      for (const message of dm.messages) {
+        if (message.messageId === messageId) {
+          let reactexist = false;
+          for (const i of message.reacts) {
+            if ((i.reactId === reactId) && (i.uIds.includes(tokenId.uId))) {
+              reactexist = true;
+              i.uIds = i.uIds.filter(e => e !== tokenId.uId);
+              if (i.uIds.length === 0) {
+                message.reacts = [];
+              }
+              setData(datastore);
+              return {};
+            } else if ((i.reactId === reactId) && !(i.uIds.includes(tokenId.uId))) {
+              throw HTTPError(400, 'authorised user not in react uids');
+            }
+          }
+          // if reactid dont exist, add new react
+          if (reactexist === false) {
+            throw HTTPError(400, 'react dont exist');
+          }
+        }
+      }
+    }
+  }
+  throw HTTPError(400, 'messageId is not found in dms or channels');
 }
 
 /************************************************************************

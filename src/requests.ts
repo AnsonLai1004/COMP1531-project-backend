@@ -7,6 +7,7 @@ import request from 'sync-request';
 import { port, url } from './config.json';
 
 /// //////////////////////////// ITERATION 3 ////////////////////////////////////
+// Standup
 export function requestStandupStartV3(token: string, channelId: number, length: number) {
   const res = request(
     'POST',
@@ -66,6 +67,7 @@ export function requestStandupSendV3(token: string, channelId: number, message: 
   return res.statusCode;
 }
 
+// Channels
 export function requestChannelsCreateV3(token: string, name: string, isPublic: boolean) {
   const res = request(
     'POST',
@@ -118,6 +120,7 @@ export function requestChannelsListallV3(token: string) {
   return res.statusCode;
 }
 
+// dm
 export function reqDmListV3(token: string) {
   const res = request(
     'GET',
@@ -171,41 +174,46 @@ export function reqDmLeaveV3(token: string, dmId: number) {
   }
   return res.statusCode;
 }
-/// /////////////////////////////////////////////////////////////////////////////
 
 // auth
 export function requestAuthLogin(email: string, password: string) {
   const res = request(
     'POST',
-    `${url}:${port}` + '/auth/login/v2',
+    `${url}:${port}` + '/auth/login/v3',
     {
       json: {
         email, password
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestAuthRegister(email: string, password: string, nameFirst: string, nameLast: string) {
   const res = request(
     'POST',
-    `${url}:${port}` + '/auth/register/v2',
+    `${url}:${port}` + '/auth/register/v3',
     {
       json: {
         email, password, nameFirst, nameLast
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestAuthLogout(token: string) {
   const res = request(
     'POST',
-      `${url}:${port}` + '/auth/logout/v1',
+      `${url}:${port}` + '/auth/logout/v2',
       {
-        json: {
+        headers: {
           token
         }
       }
@@ -328,8 +336,10 @@ export function reqChannelAddowner(token: string, channelId: number, uId: number
     'POST',
       `${url}:${port}` + '/channel/addowner/v2',
       {
+        headers: {
+          token: token
+        },
         json: {
-          token,
           channelId,
           uId,
         }
@@ -341,54 +351,15 @@ export function reqChannelAddowner(token: string, channelId: number, uId: number
   return res.statusCode;
 }
 
-export function requestChannelsCreate(token: string, name: string, isPublic: boolean) {
-  const res = request(
-    'POST',
-    `${url}:${port}` + '/channels/create/v2',
-    {
-      json: {
-        token,
-        name,
-        isPublic
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
-export function requestChannelsList(token: string) {
-  const res = request(
-    'GET',
-    `${url}:${port}` + '/channels/list/v2',
-    {
-      qs: {
-        token
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
-export function requestChannelsListall(token: string) {
-  const res = request(
-    'GET',
-    `${url}:${port}` + '/channels/listall/v2',
-    {
-      qs: {
-        token
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
 export function reqChannelRemoveowner(token: string, channelId: number, uId: number) {
   const res = request(
     'POST',
       `${url}:${port}` + '/channel/removeowner/v2',
       {
+        headers: {
+          token: token
+        },
         json: {
-          token,
           channelId,
           uId,
         }
@@ -406,8 +377,10 @@ export function reqDmCreate(token: string, uIds: number[]) {
     'POST',
     `${url}:${port}` + '/dm/create/v2',
     {
+      headers: {
+        token: token
+      },
       json: {
-        token,
         uIds,
       }
     }
@@ -423,8 +396,10 @@ export function reqDmDetails(token: string, dmId: number) {
     'GET',
     `${url}:${port}` + '/dm/details/v2',
     {
+      headers: {
+        token: token
+      },
       qs: {
-        token,
         dmId,
       }
     }
@@ -519,6 +494,88 @@ export function reqSendMessageDm(token: string, dmId: number, message: string) {
   return res.statusCode;
 }
 
+// message/sendlater/v1
+export function reqMessageSendLater(token: string, channelId: number, message: string, timeSent: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/sendlater/v1',
+    {
+      json: {
+        channelId,
+        message,
+        timeSent
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+// message/sendlaterdm/v1
+export function reqMessageSendLaterDM(token: string, dmId: number, message: string, timeSent: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/sendlaterdm/v1',
+    {
+      json: {
+        dmId,
+        message,
+        timeSent
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+export function reqMessagePin(token: string, messageId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/pin/v1',
+    {
+      json: {
+        messageId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+export function reqMessageUnpin(token: string, messageId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/unpin/v1',
+    {
+      json: {
+        messageId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
 // dm/messages/v2
 export function reqDmMessages(token: string, dmId: number, start: number) {
   const res = request(
@@ -541,112 +598,98 @@ export function reqDmMessages(token: string, dmId: number, start: number) {
 }
 /// ///////////////////////////////////////////////
 
-export function reqDmList(token: string) {
-  const res = request(
-    'GET',
-    `${url}:${port}` + '/dm/list/v1',
-    {
-      qs: {
-        token,
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
-export function reqDmRemove(token: string, dmId: number) {
-  const res = request(
-    'DELETE',
-    `${url}:${port}` + '/dm/remove/v1',
-    {
-      qs: {
-        token,
-        dmId,
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
-export function reqDmLeave(token: string, dmId: number) {
-  const res = request(
-    'POST',
-    `${url}:${port}` + '/dm/leave/v1',
-    {
-      json: {
-        token,
-        dmId,
-      }
-    }
-  );
-  return JSON.parse(res.getBody() as string);
-}
-
+// user & users
 // user & users
 export function requestUserProfile(token: string, uId: number) {
   const res = request(
     'GET',
-    `${url}:${port}` + '/user/profile/v2',
+    `${url}:${port}` + '/user/profile/v3',
     {
+      headers: {
+        token
+      },
       qs: {
-        token,
         uId
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestUsersAll(token: string) {
   const res = request(
     'GET',
-    `${url}:${port}` + '/users/all/v1',
+    `${url}:${port}` + '/users/all/v2',
     {
-      qs: {
+      headers: {
         token
       }
     }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestUserSetName(token: string, nameFirst: string, nameLast: string) {
   const res = request(
     'PUT',
-      `${url}:${port}` + '/user/profile/setname/v1',
+      `${url}:${port}` + '/user/profile/setname/v2',
       {
+        headers: {
+          token
+        },
         json: {
-          token, nameFirst, nameLast
+          nameFirst, nameLast
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestUserSetEmail(token: string, email: string) {
   const res = request(
     'PUT',
-      `${url}:${port}` + '/user/profile/setemail/v1',
+      `${url}:${port}` + '/user/profile/setemail/v2',
       {
+        headers: {
+          token
+        },
         json: {
-          token, email
+          email
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 export function requestUserSetHandle(token: string, handleStr: string) {
   const res = request(
     'PUT',
-      `${url}:${port}` + '/user/profile/sethandle/v1',
+      `${url}:${port}` + '/user/profile/sethandle/v2',
       {
+        headers: {
+          token
+        },
         json: {
-          token, handleStr
+          handleStr
         }
       }
   );
-  return JSON.parse(res.getBody() as string);
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
 }
 
 // search route
@@ -657,6 +700,46 @@ export function reqMessagesSearch(token: string, queryStr: string) {
     {
       qs: {
         queryStr
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+export function reqMessageReact(token: string, messageId: number, reactId) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/react/v1',
+    {
+      json: {
+        messageId,
+        reactId,
+      },
+      headers: {
+        token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+export function reqMessageUnreact(token: string, messageId: number, reactId) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/message/unreact/v1',
+    {
+      json: {
+        messageId,
+        reactId,
       },
       headers: {
         token: token

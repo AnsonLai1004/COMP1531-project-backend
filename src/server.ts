@@ -14,7 +14,7 @@ import { standupSendV1, standupActiveV1, standupStartV1 } from './standups';
 import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV2, dmDetailsV2 } from './dm';
 import { clearV1 } from './other';
 import { fileLoadData } from './data';
-import { userProfileV3, usersAllV2, userSetNameV2, userSetEmailV2, userSetHandleV2 } from './users';
+import { userProfileV3, usersAllV2, userSetNameV2, userSetEmailV2, userSetHandleV2, userStatsV1 } from './users';
 
 // Set up web app, use JSON
 const app = express();
@@ -328,8 +328,8 @@ app.get('/search/v1', (req, res, next) => {
 
 //  user statistics routes
 app.get('/user/stats/v1', (req, res) => {
-  const token = req.query.token as string;
-  res.json({ error: 'not yet implemented' });
+  const token = req.headers.token as string;
+  res.json(userStatsV1(token));
 });
 
 // other routes

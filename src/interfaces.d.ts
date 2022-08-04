@@ -76,6 +76,7 @@ interface UserStats {
     channelsJoined: ChannelsJoined[];
     dmsJoined: DmsJoined[];
     messagesSent: MessagesSent[];
+    involvementRate ?: number;
 }
 
 export interface WorkplaceStats {

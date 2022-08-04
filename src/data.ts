@@ -6,6 +6,7 @@
 import { User, Channel, DM, TokenPair, WorkplaceStats } from './interfaces';
 import { ChannelsExist, DmsExist, MessagesExist } from './interfaces';
 import fs from 'fs';
+import { time } from 'console';
 
 let data = {
   users: [] as User[],
@@ -67,7 +68,8 @@ export function fileLoadData() {
 
 // Helper function to update the user stats relating to channels joined
 export function updateStatsUserChannel(uId: number, timeStamp: number, action: 'add' | 'remove') {
-  for (const user of data.users) {
+  const dataEdit = getData();
+  for (const user of dataEdit.users) {
     if (uId === user.uId) {
       const lastChannelJoinObj = user.stats.channelsJoined.slice(-1)[0];
       let newChannelJoinNum = lastChannelJoinObj.numChannelsJoined;
@@ -83,11 +85,13 @@ export function updateStatsUserChannel(uId: number, timeStamp: number, action: '
       user.stats.channelsJoined.push(newChannelJoinObj);
     }
   }
+  setData(dataEdit);
 }
 
 // Helper function to update the user stats relating to dms joined
 export function updateStatsUserDm(uId: number, timeStamp: number, action: 'add' | 'remove') {
-  for (const user of data.users) {
+  const dataEdit = getData();
+  for (const user of dataEdit.users) {
     if (uId === user.uId) {
       const lastDmJoinObj = user.stats.dmsJoined.slice(-1)[0];
       let newDmJoinNum = lastDmJoinObj.numDmsJoined;
@@ -103,14 +107,16 @@ export function updateStatsUserDm(uId: number, timeStamp: number, action: 'add' 
       user.stats.dmsJoined.push(newDmJoinObj);
     }
   }
+  setData(dataEdit);
 }
 
 // Helper function to update the user stats relating to messages sent
 export function updateStatsUserMessage(uId: number, timeStamp: number) {
-  for (const user of data.users) {
+  const dataEdit = getData();
+  for (const user of dataEdit.users) {
     if (uId === user.uId) {
       const lastMessageObj = user.stats.messagesSent.slice(-1)[0];
-      const newMessageNum = lastMessageObj.numMessagesSent;
+      const newMessageNum = lastMessageObj.numMessagesSent + 1;
       const newMessageObj = {
         numMessagesSent: newMessageNum,
         timeStamp: timeStamp
@@ -118,22 +124,26 @@ export function updateStatsUserMessage(uId: number, timeStamp: number) {
       user.stats.messagesSent.push(newMessageObj);
     }
   }
+  setData(dataEdit);
 }
 
 // Helper function to update the workplace stats relating to channels existing
 export function updateStatsWorkplaceChannels(timeStamp: number) {
-  const lastChannelExistObj = data.stats.channelsExist.slice(-1)[0];
+  const dataEdit = getData();
+  const lastChannelExistObj = dataEdit.stats.channelsExist.slice(-1)[0];
   const newChannelExistNum = lastChannelExistObj.numChannelsExist + 1;
   const newChannelExistObj = {
     numChannelsExist: newChannelExistNum,
     timeStamp: timeStamp
   };
-  data.stats.channelsExist.push(newChannelExistObj);
+  dataEdit.stats.channelsExist.push(newChannelExistObj);
+  setData(dataEdit);
 }
 
 // Helper function to update the workplace stats relating to dms existing
 export function updateStatsWorkplaceDms(timeStamp: number, action: 'add' | 'remove') {
-  const lastDmExistObj = data.stats.dmsExist.slice(-1)[0];
+  const dataEdit = getData();
+  const lastDmExistObj = dataEdit.stats.dmsExist.slice(-1)[0];
   let newDmExistNum = lastDmExistObj.numDmsExist;
   if (action === 'add') {
     newDmExistNum++;
@@ -144,12 +154,14 @@ export function updateStatsWorkplaceDms(timeStamp: number, action: 'add' | 'remo
     numDmsExist: newDmExistNum,
     timeStamp: timeStamp
   };
-  data.stats.dmsExist.push(newDmExistObj);
+  dataEdit.stats.dmsExist.push(newDmExistObj);
+  setData(dataEdit);
 }
 
 // Helper function to update the workplace stats relating to messages existing
 export function updateStatsWorkplaceMessages(timeStamp: number, action: 'add' | 'remove') {
-  const lastMessageExistObj = data.stats.messagesExist.slice(-1)[0];
+  const dataEdit = getData();
+  const lastMessageExistObj = dataEdit.stats.messagesExist.slice(-1)[0];
   let numMessageExistNum = lastMessageExistObj.numMessagesExist;
   if (action === 'add') {
     numMessageExistNum++;
@@ -160,5 +172,7 @@ export function updateStatsWorkplaceMessages(timeStamp: number, action: 'add' | 
     numMessagesExist: numMessageExistNum,
     timeStamp: timeStamp
   };
-  data.stats.messagesExist.push(newMessageExistObj);
+  dataEdit.stats.messagesExist.push(newMessageExistObj);
+  setData(dataEdit);
 }
+

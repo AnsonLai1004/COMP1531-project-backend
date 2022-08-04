@@ -81,7 +81,7 @@ function channelInviteV1(authUserId: number, channelId: number, uId: number) {
   exactchannel.allMembers.push(uId);
   setData(dataStore);
 
-  updateStatsUserChannel(authUserId, timeInvite, 'add');
+  updateStatsUserChannel(uId, timeInvite, 'add');
 
   return {};
 }
@@ -304,6 +304,7 @@ function channelLeaveV2(token: string, channelId: number) {
       for (let i = 0; i < channel.allMembers.length; i++) {
         if (channel.allMembers[i] === tokenId.uId) {
           channel.allMembers.splice(i, 1);
+          setData(data);
           updateStatsUserChannel(tokenId.uId, timeLeave, 'remove');
           return {};
         }

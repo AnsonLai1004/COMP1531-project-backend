@@ -261,6 +261,7 @@ function messageSendDmV2(token: string, dmId: number, message: string) {
   setData(datastore);
 
   updateStatsUserMessage(tokenId.uId, timeSent);
+  updateStatsWorkplaceMessages(timeSent, 'add');
 
   return { messageId: newmessage.messageId };
 }

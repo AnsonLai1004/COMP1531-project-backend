@@ -101,7 +101,7 @@ interface authRegisterV1Return {
  * @returns {{authUserId: number}}
  */
 export function authRegisterV1(email: string, password: string, nameFirst: string, nameLast: string): authRegisterV1Return {
-  const registerTime = Math.floor((new Date()).getTime() / 1000) + 2;
+  const registerTime = Math.floor((Date.now() / 1000));
   if (!isEmail(email)) {
     throw HTTPError(400, 'Invalid email!');
   }

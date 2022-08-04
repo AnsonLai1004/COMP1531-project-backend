@@ -38,8 +38,7 @@ function dmCreateV2(token: string, uIds: number[]) {
         handlestrArr.push(user.handleStr);
       }
     }
-    updateStatsUserDm(id, timeCreate, 'add');
-    updateStatsWorkplaceDms(timeCreate, 'add');
+
   }
   handlestrArr.sort();
   const name = handlestrArr.join(', ');
@@ -52,6 +51,11 @@ function dmCreateV2(token: string, uIds: number[]) {
   };
   data.dms.push(dm);
   setData(data);
+
+  for (const id of arrAll) {
+    updateStatsUserDm(id, timeCreate, 'add');
+  }
+  updateStatsWorkplaceDms(timeCreate, 'add');
 
   return { dmId: dm.dmId };
 }
@@ -131,14 +135,15 @@ function dmRemoveV1(token: string, dmId: number) {
 
   // update user stats
   const toRemoveDm = data.dms.filter((dm) => dm.dmId === dmId)[0];
-  updateStatsUserDm(toRemoveDm.ownerId, timeRemove, 'remove');
-  for (const uId of toRemoveDm.uIds) {
-    updateStatsUserDm(uId, timeRemove, 'remove');
-  }
 
   // remove dm from dataStore
   data.dms = data.dms.filter((dm) => dm.dmId !== dmId);
   setData(data);
+
+  updateStatsUserDm(toRemoveDm.ownerId, timeRemove, 'remove');
+  for (const uId of toRemoveDm.uIds) {
+    updateStatsUserDm(uId, timeRemove, 'remove');
+  }
 
   updateStatsWorkplaceDms(timeRemove, 'remove');
 

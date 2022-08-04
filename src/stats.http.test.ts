@@ -21,7 +21,7 @@ describe('user/stats/v1', () => {
 
     // newly registered user
     const stats1a = reqUserStats(user1.token);
-    expect(stats1a).toEqual({
+    expect(stats1a).toStrictEqual({
       userStats: {
         channelsJoined: [{ numChannelsJoined: 0, timeStamp: expect.any(Number) }],
         dmsJoined: [{ numDmsJoined: 0, timeStamp: expect.any(Number) }],
@@ -31,10 +31,10 @@ describe('user/stats/v1', () => {
     });
 
     // time check on user registration
-    expect(stats1a.channelsJoined[0].timeStamp).toBeGreaterThanOrEqual(time1a);
-    expect(stats1a.channelsJoined[0].timeStamp).toBeLessThanOrEqual(time1a + 1);
-    expect(stats1a.channelsJoined[0].timeStamp).toEqual(stats1a.dmsJoined[0].timeStamp);
-    expect(stats1a.channelsJoined[0].timeStamp).toEqual(stats1a.messagesSent[0].timeStamp);
+    expect(stats1a.userStats.channelsJoined[0].timeStamp).toBeGreaterThanOrEqual(time1a);
+    expect(stats1a.userStats.channelsJoined[0].timeStamp).toBeLessThanOrEqual(time1a + 1);
+    expect(stats1a.userStats.channelsJoined[0].timeStamp).toEqual(stats1a.userStats.dmsJoined[0].timeStamp);
+    expect(stats1a.userStats.channelsJoined[0].timeStamp).toEqual(stats1a.userStats.messagesSent[0].timeStamp);
 
     const time1b = Math.floor((new Date()).getTime() / 1000);
     const channel1 = requestChannelsCreateV3(user1.token, 'BOOST', true);
@@ -51,10 +51,10 @@ describe('user/stats/v1', () => {
       }
     });
 
-    expect(stats1b.channelsJoined[1].timeStamp).toBeGreaterThanOrEqual(time1b);
-    expect(stats1b.channelsJoined[1].timeStamp).toBeLessThanOrEqual(time1b + 1);
-    expect(stats1b.messagesSent[1].timeStamp).toBeGreaterThanOrEqual(time1c);
-    expect(stats1b.messagesSent[1].timeStamp).toBeLessThanOrEqual(time1c + 1);
+    expect(stats1b.userStats.channelsJoined[1].timeStamp).toBeGreaterThanOrEqual(time1b);
+    expect(stats1b.userStats.channelsJoined[1].timeStamp).toBeLessThanOrEqual(time1b + 1);
+    expect(stats1b.userStats.messagesSent[1].timeStamp).toBeGreaterThanOrEqual(time1c);
+    expect(stats1b.userStats.messagesSent[1].timeStamp).toBeLessThanOrEqual(time1c + 1);
 
     const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
 
@@ -70,13 +70,13 @@ describe('user/stats/v1', () => {
       userStats: {
         channelsJoined: [{ numChannelsJoined: 0, timeStamp: expect.any(Number) }, { numChannelsJoined: 1, timeStamp: expect.any(Number) }],
         dmsJoined: [{ numDmsJoined: 0, timeStamp: expect.any(Number) }, { numDmsJoined: 1, timeStamp: expect.any(Number) }],
-        messagesSent: [{ numMessagesSent: 0, timeStamp: expect.any(Number) }, { numMessagesSent: 1, timeStamp: expect.any(Number) }, { numDmsJoined: 2, timeStamp: expect.any(Number) }],
-        involvementRate: 4 / 6,
+        messagesSent: [{ numMessagesSent: 0, timeStamp: expect.any(Number) }, { numMessagesSent: 1, timeStamp: expect.any(Number) }, { numMessagesSent: 2, timeStamp: expect.any(Number) }],
+        involvementRate: 4 / 5,
       }
     });
 
-    expect(stats1c.dmsJoined[1].timeStamp).toBeGreaterThanOrEqual(time2a);
-    expect(stats1c.dmsJoined[1].timeStamp).toBeLessThanOrEqual(time2a + 1);
+    expect(stats1c.userStats.dmsJoined[1].timeStamp).toBeGreaterThanOrEqual(time2a);
+    expect(stats1c.userStats.dmsJoined[1].timeStamp).toBeLessThanOrEqual(time2a + 1);
 
     const stats2a = reqUserStats(user2.token);
     expect(stats2a).toEqual({
@@ -84,14 +84,14 @@ describe('user/stats/v1', () => {
         channelsJoined: [{ numChannelsJoined: 0, timeStamp: expect.any(Number) }],
         dmsJoined: [{ numDmsJoined: 0, timeStamp: expect.any(Number) }, { numDmsJoined: 1, timeStamp: expect.any(Number) }],
         messagesSent: [{ numMessagesSent: 0, timeStamp: expect.any(Number) }, { numMessagesSent: 1, timeStamp: expect.any(Number) }],
-        involvementRate: 2 / 6,
+        involvementRate: 2 / 5,
       }
     });
 
-    expect(stats2a.dmsJoined[1].timeStamp).toBeGreaterThanOrEqual(time2a);
-    expect(stats2a.dmsJoined[1].timeStamp).toBeLessThanOrEqual(time2a + 1);
-    expect(stats2a.messagesSent[1].timeStamp).toBeGreaterThanOrEqual(time2b);
-    expect(stats2a.messagesSent[1].timeStamp).toBeLessThanOrEqual(time2b + 1);
+    expect(stats2a.userStats.dmsJoined[1].timeStamp).toBeGreaterThanOrEqual(time2a);
+    expect(stats2a.userStats.dmsJoined[1].timeStamp).toBeLessThanOrEqual(time2a + 1);
+    expect(stats2a.userStats.messagesSent[1].timeStamp).toBeGreaterThanOrEqual(time2b);
+    expect(stats2a.userStats.messagesSent[1].timeStamp).toBeLessThanOrEqual(time2b + 1);
   });
   test('with message/remove, channel/leave, dm/leave', () => {
     const user1 = requestAuthRegister('theo.ang816@gmail.com', 'samplePass', 'Theo', 'Ang');
@@ -139,6 +139,7 @@ describe('user/stats/v1', () => {
           { numMessagesSent: 1, timeStamp: expect.any(Number) },
           { numMessagesSent: 2, timeStamp: expect.any(Number) },
           { numMessagesSent: 3, timeStamp: expect.any(Number) },
+          { numMessagesSent: 4, timeStamp: expect.any(Number) },
         ],
         involvementRate: 1,
       }

@@ -47,15 +47,49 @@ function messageSendV2(token: string, channelId: number, message: string) {
     reacts: [],
     isPinned: false
   };
+
+  let channelName = '';
   for (const channel of datastore.channels) {
     if (channel.channelId === channelId) {
       channel.messages.unshift(newmessage);
+      channelName = channel.name;
     }
   }
   datastore.lastMessageId++;
+  
+  let senderName = '';
+  // get handle of user who sent
+  for (const user of datastore.users) {
+    if (tokenId.uId === user.uId) {
+      senderName = user.handleStr;
+    }
+  }
+
+  // check for tags for notifications
+  for (const user of datastore.users) {
+    const regex = new RegExp('/@' + user.handleStr + '\b');
+    if (regex.test(message)) {
+      const notificationMessage = `${senderName} tagged you in ${channelName}: ${message.slice(0, 20)}`;
+      const newNotif: Notif = {
+        channelId: channelId,
+        dmId: -1,
+        notificationMessage: notificationMessage
+      };
+      if (user.notification.length === 20) {
+        // pop then add
+        user.notification.pop();
+        user.notification.unshift(newNotif);
+      } else {
+        user.notification.unshift(newNotif);
+      }
+    }
+    
+  }
+
   setData(datastore);
   return { messageId: newmessage.messageId };
 }
+
 /**
  * Given a message, update its text with new text.
  * If the new message is an empty string,

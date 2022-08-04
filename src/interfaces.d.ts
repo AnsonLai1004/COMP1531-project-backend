@@ -3,6 +3,12 @@
  * storing data in dataStore.ts and accessed by other files.
  */
 
+export interface Notif {
+    channelId: number;
+    dmId: number;
+    notificationMessage: string;
+}
+
 export interface Reacts {
     reactId: number;
     uIds: number[];
@@ -98,6 +104,7 @@ export interface User {
     passwordHash: string;
     handleStr: string;
     isGlobalOwner: boolean;
+    notification: Notif[];
     stats: UserStats;
     profileImgUrl: string;
 }

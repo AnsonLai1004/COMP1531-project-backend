@@ -194,7 +194,6 @@ export function getUserStats(uId: number) {
 
       const involvementRate = (denominator !== 0) ? numerator / denominator : 0;
       user.stats.involvementRate = (involvementRate < 1) ? involvementRate : 1;
-
       return { userStats: user.stats };
     }
   }

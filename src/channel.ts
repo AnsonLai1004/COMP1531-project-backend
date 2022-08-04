@@ -5,9 +5,10 @@
 // delete channels iter 2 later on
 import { getData, setData, updateStatsUserChannel } from './data';
 import { userProfileV1 } from './users';
-import { Message } from './interfaces';
+import { Message, Notif } from './interfaces';
 import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
+import { userProfileV3 } from './users';
 export {
   channelLeaveV2, channelAddownerV2, channelRemoveownerV2,
   channelInviteV3, channelMessagesV3, channelDetailsV3, channelJoinV3,
@@ -43,7 +44,7 @@ interface DetailReturn {
  * @param {number} uId
  * @returns {{}}
 */
-function channelInviteV1(authUserId: number, channelId: number, uId: number) {
+function channelInviteV1(token:string, authUserId: number, channelId: number, uId: number) {
   const timeInvite = Math.floor((new Date()).getTime() / 1000);
   const dataStore = getData();
 
@@ -79,6 +80,23 @@ function channelInviteV1(authUserId: number, channelId: number, uId: number) {
     throw HTTPError(403, 'authorised user is not a member of the channel');
   }
   exactchannel.allMembers.push(uId);
+  const getUserInfo = userProfileV3(token, authUserId);
+  const getHandle = getUserInfo.user.handleStr;
+  const newNotif: Notif = {
+    channelId: exactchannel.channelId,
+    dmId: -1,
+    notificationMessage: `${getHandle} added you to ${exactchannel.name}`
+  };
+  // get user of message.uId then unshift newNotif
+  const getUidMessage = dataStore.users.filter(el => el.uId === uId);
+  const exactUser = getUidMessage[0];
+  if (exactUser.notification.length === 20) {
+    // pop then add
+    exactUser.notification.pop();
+    exactUser.notification.unshift(newNotif);
+  } else {
+    exactUser.notification.unshift(newNotif);
+  }
   setData(dataStore);
 
   updateStatsUserChannel(uId, timeInvite, 'add');
@@ -91,7 +109,7 @@ function channelInviteV3(token: string, channelId: number, uId: number) {
   if (tokenId.error) {
     throw HTTPError(403, 'Invalid token');
   }
-  const result = channelInviteV1(tokenId.uId as number, channelId, uId);
+  const result = channelInviteV1(token, tokenId.uId as number, channelId, uId);
   return result;
 }
 

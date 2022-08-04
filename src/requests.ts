@@ -789,6 +789,48 @@ export function reqMessagesSearch(token: string, queryStr: string) {
   return res.statusCode;
 }
 
+/// //////////////////////////Admin requests/////////////////////////////////
+// /admin/user/remove/v1
+export function reqAdminUserRemove(token: string, uId: number) {
+  const res = request(
+    'DELETE',
+    `${url}:${port}` + '/admin/user/remove/v1',
+    {
+      headers: {
+        token: token
+      },
+      qs: {
+        uId,
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+// /admin/userpermission/change/v1
+export function reqAdminUPChange(token: string, uId: number, permissionId: number) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/admin/userpermission/change/v1',
+    {
+      headers: {
+        token: token
+      },
+      json: {
+        uId,
+        permissionId,
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
 export function reqMessageReact(token: string, messageId: number, reactId) {
   const res = request(
     'POST',
@@ -820,6 +862,22 @@ export function reqMessageUnreact(token: string, messageId: number, reactId) {
       },
       headers: {
         token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+export function reqGetNotification(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/notifications/get/v1',
+    {
+      headers: {
+        token
       }
     }
   );

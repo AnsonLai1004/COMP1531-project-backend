@@ -3,7 +3,7 @@
  * @module user
 **/
 import { User } from './interfaces';
-import { getData, setData } from './data';
+import { getData, setData, getUserStats, getWorkplaceStats } from './data';
 import { tokenToUId } from './auth';
 import isEmail from 'validator/lib/isEmail.js';
 import HTTPError from 'http-errors';
@@ -45,16 +45,19 @@ export function usersAllV2(token: string) {
   if ('error' in authUser) {
     throw HTTPError(403, 'Invalid token!');
   }
+
   const users = [];
   const data = getData();
   for (const user of data.users) {
-    users.push({
-      uId: user.uId,
-      email: user.email,
-      nameFirst: user.nameFirst,
-      nameLast: user.nameLast,
-      handleStr: user.handleStr,
-    });
+    if (user.nameFirst !== 'Removed' && user.nameLast !== 'user') {
+      users.push({
+        uId: user.uId,
+        email: user.email,
+        nameFirst: user.nameFirst,
+        nameLast: user.nameLast,
+        handleStr: user.handleStr,
+      });
+    }
   }
   return { users: users };
 }
@@ -153,6 +156,33 @@ export function userSetHandleV2(token: string, handleStr: string) {
       return {};
     }
   }
+}
+
+/**
+ * Function which returns the analytics stats of a given user
+ * Includes the number of channels and dms they have joined and
+ * the number of messages they have sent
+ * @param token
+ * @returns
+ */
+export function userStatsV1(token: string) {
+  const authUser = tokenToUId(token);
+  if ('error' in authUser) {
+    throw HTTPError(403, 'Invalid token!');
+  }
+  return getUserStats(authUser.uId);
+}
+
+/**
+ * Function which returns the analytics stats of the workplace
+ * @param token
+ */
+export function usersStatsV1(token: string) {
+  const authUser = tokenToUId(token);
+  if ('error' in authUser) {
+    throw HTTPError(403, 'Invalid token!');
+  }
+  return getWorkplaceStats();
 }
 
 /**

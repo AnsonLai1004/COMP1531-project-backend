@@ -3,7 +3,7 @@
  * @module channel
 **/
 // delete channels iter 2 later on
-import { getData, setData } from './data';
+import { getData, setData, updateStatsUserChannel } from './data';
 import { userProfileV1 } from './users';
 import { Message, Notif } from './interfaces';
 import { tokenToUId } from './auth';
@@ -45,6 +45,7 @@ interface DetailReturn {
  * @returns {{}}
 */
 function channelInviteV1(token:string, authUserId: number, channelId: number, uId: number) {
+  const timeInvite = Math.floor((new Date()).getTime() / 1000);
   const dataStore = getData();
 
   // check uid and channel id exist
@@ -84,7 +85,7 @@ function channelInviteV1(token:string, authUserId: number, channelId: number, uI
   const newNotif: Notif = {
     channelId: exactchannel.channelId,
     dmId: -1,
-    notificationMessage: `${getHandle} added you to ${exactchannel.name}"`
+    notificationMessage: `${getHandle} added you to ${exactchannel.name}`
   };
   // get user of message.uId then unshift newNotif
   const getUidMessage = dataStore.users.filter(el => el.uId === uId);
@@ -97,6 +98,9 @@ function channelInviteV1(token:string, authUserId: number, channelId: number, uI
     exactUser.notification.unshift(newNotif);
   }
   setData(dataStore);
+
+  updateStatsUserChannel(uId, timeInvite, 'add');
+
   return {};
 }
 
@@ -235,6 +239,7 @@ function channelDetailsV1(authUserId: number, channelId: number): DetailReturn {
  * @returns {{}}
  */
 function channelJoinV1(authUserId: number, channelId: number) {
+  const timeJoin = Math.floor((new Date()).getTime() / 1000);
   // check if channel exist, if yes return channel detail
   const data = getData();
   let channelDetail;
@@ -262,11 +267,12 @@ function channelJoinV1(authUserId: number, channelId: number) {
       throw HTTPError(400, 'already a member');
     }
   }
-  // add memeber to channel
+  // add member to channel
   for (const channel of data.channels) {
     if (channelId === channel.channelId) {
       channel.allMembers.push(authUserId);
       setData(data);
+      updateStatsUserChannel(authUserId, timeJoin, 'add');
       return {};
     }
   }
@@ -312,6 +318,7 @@ function channelJoinV3(token: string, channelId: number) {
  */
 // FIXME: standup error???
 function channelLeaveV2(token: string, channelId: number) {
+  const timeLeave = Math.floor((new Date()).getTime() / 1000);
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
     throw HTTPError(403, 'Invalid token');
@@ -323,6 +330,8 @@ function channelLeaveV2(token: string, channelId: number) {
       for (let i = 0; i < channel.allMembers.length; i++) {
         if (channel.allMembers[i] === tokenId.uId) {
           channel.allMembers.splice(i, 1);
+          setData(data);
+          updateStatsUserChannel(tokenId.uId, timeLeave, 'remove');
           return {};
         }
       }

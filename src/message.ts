@@ -1,5 +1,5 @@
-import { getData, setData } from './data';
 import { Message, Reacts, Notif } from './interfaces';
+import { getData, setData, updateStatsUserMessage, updateStatsWorkplaceMessages } from './data';
 import { tokenToUId } from './auth';
 import HTTPError from 'http-errors';
 import { userProfileV3 } from './users';
@@ -7,6 +7,7 @@ export {
   messageSendV2, messageRemoveV2, messageEditV2, messageSendDmV2,
   dmMessagesV2, messagesSearch, messagePin, messageUnpin, messageReact,
   messageUnreact, messageSendLater, messageSendLaterDM, getNotification
+  , messageShareV1
 };
 
 /**
@@ -20,11 +21,13 @@ export {
  * @returns {{messageId: number}}
 */
 function messageSendV2(token: string, channelId: number, message: string) {
+  const timeSent = Math.floor((new Date()).getTime() / 1000);
   // channel Id does not refer to valid channel Id
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
     throw HTTPError(403, 'invalid tokenid');
   }
+  console.log(message);
   if (!isValidChannelId(channelId)) {
     throw HTTPError(400, 'ChannelId does not refer to a valid channel');
   }
@@ -43,7 +46,7 @@ function messageSendV2(token: string, channelId: number, message: string) {
     messageId: (datastore.lastMessageId + 1) as number,
     uId: tokenId.uId,
     message: message,
-    timeSent: Math.round(Date.now() / 1000),
+    timeSent: timeSent,
     reacts: [],
     isPinned: false
   };
@@ -87,6 +90,10 @@ function messageSendV2(token: string, channelId: number, message: string) {
   }
 
   setData(datastore);
+
+  updateStatsUserMessage(tokenId.uId, timeSent);
+  updateStatsWorkplaceMessages(timeSent, 'add');
+
   return { messageId: newmessage.messageId };
 }
 
@@ -171,6 +178,7 @@ function messageEditV2(token: string, messageId: number, message: string) {
  * @returns {{messageId: number}}
 */
 function messageRemoveV2(token: string, messageId: number) {
+  const timeRemove = Math.floor((new Date()).getTime() / 1000);
   // if message length is less than 1 or greater than 1000
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -239,6 +247,7 @@ function messageRemoveV2(token: string, messageId: number) {
     }
     setData(datastore);
   }
+  updateStatsWorkplaceMessages(timeRemove, 'remove');
   return {};
 }
 
@@ -253,6 +262,7 @@ function messageRemoveV2(token: string, messageId: number) {
  * @returns
  */
 function messageSendDmV2(token: string, dmId: number, message: string) {
+  const timeSent = Math.floor((new Date()).getTime() / 1000);
   // dm Id does not refer to valid dm Id
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -276,7 +286,7 @@ function messageSendDmV2(token: string, dmId: number, message: string) {
     messageId: (datastore.lastMessageId + 1) as number,
     uId: tokenId.uId,
     message: message,
-    timeSent: Math.round(Date.now() / 1000),
+    timeSent: timeSent,
     reacts: [],
     isPinned: false
   };
@@ -287,6 +297,10 @@ function messageSendDmV2(token: string, dmId: number, message: string) {
   }
   datastore.lastMessageId++;
   setData(datastore);
+
+  updateStatsUserMessage(tokenId.uId, timeSent);
+  updateStatsWorkplaceMessages(timeSent, 'add');
+
   return { messageId: newmessage.messageId };
 }
 
@@ -364,6 +378,82 @@ function dmMessagesV2(token: string, dmId: number, start: number) {
   return result;
 }
 
+/// //////////////////////Iteration 3 new functions////////////////////////////////////////////////////////////////////////////////////////
+// message/share/v1
+function messageShareV1(token: string, ogMessageId: number, message: string, channelId: number, dmId: number) {
+  const tokenId = tokenToUId(token);
+  if (tokenId.error) {
+    throw HTTPError(403, 'Invalid token');
+  }
+  console.log(message);
+  if (message.length > 1000) {
+    throw HTTPError(400, 'length of messages is greater than 1000');
+  }
+  // check channelId and dmId is valid, and either one need to be -1
+  // check ogMessageId is valid and get the message obj
+  if (channelId === -1) {
+    if (isValidDmId(dmId) === false) {
+      throw HTTPError(400, 'Invalid dmId');
+    }
+    if (!userIsAuthorisedInDm(tokenId.uId, dmId)) {
+      throw HTTPError(403, 'user has not joined the channel');
+    }
+  } else if (dmId === -1) {
+    if (isValidChannelId(channelId) === false) {
+      throw HTTPError(400, 'Invalid channelId');
+    }
+    if (!userIsAuthorised(tokenId.uId, channelId)) {
+      throw HTTPError(403, 'user has not joined the channel');
+    }
+  } else {
+    throw HTTPError(400, 'neither channelId nor dmId are -1');
+  }
+
+  const ogMessage = findMessageStr(ogMessageId);
+  if (ogMessage === undefined) {
+    throw HTTPError(400, 'ogMessageId is Invalid');
+  }
+  // ogMessageId does not refer to a valid message within a channel/DM that the authorised user has joined
+  if (channelId === -1) {
+    console.log(userIsAuthorisedInDm(tokenId.uId, ogMessage.Id));
+    if (!userIsAuthorisedInDm(tokenId.uId, ogMessage.Id)) {
+      throw HTTPError(400, 'user share message from Dm they are not authorised');
+    }
+  }
+  if (dmId === -1) {
+    if (!userIsAuthorised(tokenId.uId, ogMessage.Id)) {
+      throw HTTPError(400, 'user share message from channel they are not authorised');
+    }
+  }
+  // create newMessage with both string concat together
+  const data = getData();
+  const newmessage: Message = {
+    messageId: (data.lastMessageId + 1) as number,
+    uId: tokenId.uId,
+    message: ogMessage.message + message,
+    timeSent: Math.round(Date.now() / 1000),
+    reacts: [],
+    isPinned: false,
+  };
+
+  if (channelId === -1) {
+    for (const dm of data.dms) {
+      if (dm.dmId === dmId) {
+        dm.messages.unshift(newmessage);
+      }
+    }
+  } else {
+    for (const channel of data.channels) {
+      if (channel.channelId === channelId) {
+        channel.messages.unshift(newmessage);
+      }
+    }
+  }
+  data.lastMessageId++;
+  setData(data);
+  return { sharedMessageId: newmessage.messageId };
+}
+
 /**
  * Given a query string, return a collection of messages in all of the channels/DMs
  * that the user has joined that contain the query (case-insensitive). \
@@ -405,6 +495,7 @@ function messagesSearch(token: string, queryStr: string) {
 }
 
 /*
+master
  * Send a message from the authorised user to the channel specified by channelId
  * automatically at a specified time in the future. The returned messageId will only
  * be considered valid for other actions (editing/deleting/reacting/etc)
@@ -833,6 +924,7 @@ function getNotification(token: string) {
 }
 
 /************************************************************************
+>>>>>>> master
 /**
  * Helper function
  * return false if channelId is not valid
@@ -947,4 +1039,31 @@ function userIsAuthorisedInDm(uId: number, dmId: number) {
     }
   }
   return false;
+}
+
+// return message string from channel or Dm
+function findMessageStr(messageId: number) {
+  const data = getData();
+  let i;
+  for (i = 0; i < data.channels.length; i++) {
+    for (const message of data.channels[i].messages) {
+      if (messageId === message.messageId) {
+        return {
+          message: message.message,
+          Id: data.channels[i].channelId,
+        };
+      }
+    }
+  }// let j = 0; j < data.channels[i].messages.length; i++
+  for (i = 0; i < data.dms.length; i++) {
+    for (const message of data.dms[i].messages) {
+      if (messageId === message.messageId) {
+        return {
+          message: message.message,
+          Id: data.dms[i].dmId,
+        };
+      }
+    }
+  }
+  return undefined;
 }

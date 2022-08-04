@@ -1,10 +1,13 @@
-import { reqDmListV3, reqDmRemoveV3, reqDmLeaveV3, reqDmDetails, reqDmCreate, requestClear, requestAuthRegister } from './requests';
+import {
+  reqDmListV3, reqDmRemoveV3, reqDmLeaveV3, reqDmDetails,
+  reqDmCreate, requestClear, requestAuthRegister, reqGetNotification
+} from './requests';
 
 beforeEach(() => {
   requestClear();
 });
 
-afterEach(() => {
+afterAll(() => {
   requestClear();
 });
 
@@ -27,6 +30,49 @@ describe('dm/create/v1', () => {
     const user2 = requestAuthRegister('alex@gmail.com', 'samplePass', 'Alex', 'Avery');
     const uIds = [user1.authUserId, user2.authUserId];
     const dm = reqDmCreate(user.token, uIds);
+    const user3 = requestAuthRegister('bill@gmail.com', 'samplePass', 'Bill', 'Benkins');
+    const uIds2 = [user1.authUserId];
+    const dm2 = reqDmCreate(user3.token, uIds2);
+    expect(reqDmListV3(user1.token)).toMatchObject({
+      dms: [
+        {
+          dmId: dm.dmId,
+          name: 'alexavery, jakerenzella, theoang',
+        },
+        {
+          dmId: dm2.dmId,
+          name: 'billbenkins, theoang',
+        },
+      ]
+    });
+    expect(reqGetNotification(user1.token)).toStrictEqual({
+      notifications: [
+        {
+          channelId: -1,
+          dmId: 2,
+          notificationMessage: 'billbenkins added you to billbenkins, theoang',
+        },
+        {
+          channelId: -1,
+          dmId: 1,
+          notificationMessage: 'jakerenzella added you to alexavery, jakerenzella, theoang',
+        },
+      ],
+    });
+    expect(reqGetNotification(user2.token)).toStrictEqual({
+      notifications: [
+        {
+          channelId: -1,
+          dmId: 1,
+          notificationMessage: 'jakerenzella added you to alexavery, jakerenzella, theoang',
+        },
+      ],
+    });
+    for (let i = 0; i < 21; i++) {
+      reqDmCreate(user.token, uIds);
+    }
+    expect(reqGetNotification(user1.token).notifications.length).toStrictEqual(20);
+    expect(reqGetNotification(user2.token).notifications.length).toStrictEqual(20);
     expect(reqDmDetails(user2.token, dm.dmId)).toMatchObject({
       name: 'alexavery, jakerenzella, theoang',
       members: [
@@ -52,22 +98,6 @@ describe('dm/create/v1', () => {
           uId: user.authUserId,
         },
       ],
-    });
-
-    const user3 = requestAuthRegister('bill@gmail.com', 'samplePass', 'Bill', 'Benkins');
-    const uIds2 = [user1.authUserId];
-    const dm2 = reqDmCreate(user3.token, uIds2);
-    expect(reqDmListV3(user1.token)).toMatchObject({
-      dms: [
-        {
-          dmId: dm.dmId,
-          name: 'alexavery, jakerenzella, theoang',
-        },
-        {
-          dmId: dm2.dmId,
-          name: 'billbenkins, theoang',
-        },
-      ]
     });
   });
 });

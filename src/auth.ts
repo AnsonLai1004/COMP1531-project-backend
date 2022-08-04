@@ -101,6 +101,7 @@ interface authRegisterV1Return {
  * @returns {{authUserId: number}}
  */
 export function authRegisterV1(email: string, password: string, nameFirst: string, nameLast: string): authRegisterV1Return {
+  const registerTime = Math.floor((Date.now() / 1000));
   if (!isEmail(email)) {
     throw HTTPError(400, 'Invalid email!');
   }
@@ -140,6 +141,11 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
     handleStr: handle,
     isGlobalOwner: isGlobalOwner,
     notification: [],
+    stats: {
+      channelsJoined: [{ numChannelsJoined: 0, timeStamp: registerTime }],
+      dmsJoined: [{ numDmsJoined: 0, timeStamp: registerTime }],
+      messagesSent: [{ numMessagesSent: 0, timeStamp: registerTime }],
+    }
   };
 
   data.users.push(newUser);

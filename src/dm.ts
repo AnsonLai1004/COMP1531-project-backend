@@ -1,10 +1,13 @@
-import { getData, setData } from './data';
-import { Message } from './interfaces';
+import { getData, setData, updateStatsUserDm, updateStatsWorkplaceDms, updateStatsWorkplaceMessages } from './data';
+import { Message, Notif } from './interfaces';
 import { tokenToUId, membersobjCreate, isValidUserId } from './channel';
 import HTTPError from 'http-errors';
+import { userProfileV3 } from './users';
+
 export { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV2, dmDetailsV2 };
 
 function dmCreateV2(token: string, uIds: number[]) {
+  const timeCreate = Math.floor((new Date()).getTime() / 1000);
   // any invalid uId in uIds
   for (const id of uIds) {
     if (!isValidUserId(id)) {
@@ -47,8 +50,34 @@ function dmCreateV2(token: string, uIds: number[]) {
     uIds: uIds,
     messages: [] as Message[],
   };
+
+  const getUserInfo = userProfileV3(token, tokenId.uId);
+  const getHandle = getUserInfo.user.handleStr;
+  const newNotif: Notif = {
+    channelId: -1,
+    dmId: dm.dmId,
+    notificationMessage: `${getHandle} added you to ${dm.name}`
+  };
+  for (const id of uIds) {
+    // get user of message.uId then unshift newNotif
+    const getUidMessage = data.users.filter(el => el.uId === id);
+    const exactUser = getUidMessage[0];
+    if (exactUser.notification.length === 20) {
+      // pop then add
+      exactUser.notification.pop();
+      exactUser.notification.unshift(newNotif);
+    } else {
+      exactUser.notification.unshift(newNotif);
+    }
+  }
   data.dms.push(dm);
   setData(data);
+
+  for (const id of arrAll) {
+    updateStatsUserDm(id, timeCreate, 'add');
+  }
+  updateStatsWorkplaceDms(timeCreate, 'add');
+
   return { dmId: dm.dmId };
 }
 
@@ -101,6 +130,7 @@ function dmListV1(token: string) {
 }
 
 function dmRemoveV1(token: string, dmId: number) {
+  const timeRemove = Math.floor((new Date()).getTime() / 1000);
   // check if token passed in is valid
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -123,13 +153,29 @@ function dmRemoveV1(token: string, dmId: number) {
   }
 
   const data = getData();
+  const toRemoveDm = data.dms.filter((dm) => dm.dmId === dmId)[0];
+
+  // remove dm from dataStore
   data.dms = data.dms.filter((dm) => dm.dmId !== dmId);
   setData(data);
+
+  // update stats
+  updateStatsUserDm(toRemoveDm.ownerId, timeRemove, 'remove');
+  for (const uId of toRemoveDm.uIds) {
+    updateStatsUserDm(uId, timeRemove, 'remove');
+  }
+  const numDmMessages = toRemoveDm.messages.length;
+  for (let i = 0; i < numDmMessages; i++) {
+    updateStatsWorkplaceMessages(timeRemove, 'remove');
+  }
+
+  updateStatsWorkplaceDms(timeRemove, 'remove');
 
   return {};
 }
 
 function dmLeaveV1(token: string, dmId: number) {
+  const timeLeave = Math.floor((new Date()).getTime() / 1000);
   // check if token passed in is valid
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
@@ -160,6 +206,9 @@ function dmLeaveV1(token: string, dmId: number) {
   }
 
   setData(data);
+
+  updateStatsUserDm(tokenId.uId, timeLeave, 'remove');
+
   return {};
 }
 

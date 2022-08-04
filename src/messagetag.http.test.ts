@@ -33,6 +33,19 @@ describe('invalid tags', () => {
       ]
     });
   });
+  test('not in channel or dm', () => {
+    const user1 = requestAuthRegister('email@email.com', 'password', 'Sherlock', 'Holmes');
+    const user2 = requestAuthRegister('diff@email.com', 'password', 'John', 'Watson');
+    const user3 = requestAuthRegister('mail@email.com', 'password', 'Harry', 'Potter');
+    const channel = requestChannelsCreateV3(user1.token, '221B Baker St', true);
+    reqChannelInvite(user1.token, channel.channelId, user2.authUserId);
+    const dm = reqDmCreate(user1.token, [user2.authUserId]);
+    reqMessageSend(user1.token, channel.channelId, '@harrypotter');
+    reqSendMessageDm(user1.token, dm.dmId, '@harrypotter');
+    expect(reqGetNotification(user3.token)).toEqual({
+      notifications: []
+    });
+  });
 });
 
 describe('valid single tagging', () => {

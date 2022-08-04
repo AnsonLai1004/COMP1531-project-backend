@@ -1078,7 +1078,7 @@ function pushTagsChannel(message: string, channelId: number, channelName: string
   // check for tags for notifications
   for (const user of datastore.users) {
     const regex = new RegExp('@' + user.handleStr + '\\b');
-    if (regex.test(message)) {
+    if (regex.test(message) && userIsAuthorised(user.uId, channelId)) {
       const notificationMessage = `${senderName} tagged you in ${channelName}: ${message.slice(0, 20)}`;
       const newNotif: Notif = {
         channelId: channelId,
@@ -1111,7 +1111,7 @@ function pushTagsDm(message: string, dmId: number, dmName: string, senderId: num
   // check for tags for notifications
   for (const user of datastore.users) {
     const regex = new RegExp('@' + user.handleStr + '\\b');
-    if (regex.test(message)) {
+    if (regex.test(message) && userIsAuthorisedInDm(user.uId, dmId)) {
       const notificationMessage = `${senderName} tagged you in ${dmName}: ${message.slice(0, 20)}`;
       const newNotif: Notif = {
         channelId: -1,

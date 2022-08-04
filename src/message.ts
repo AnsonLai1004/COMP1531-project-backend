@@ -59,37 +59,9 @@ function messageSendV2(token: string, channelId: number, message: string) {
     }
   }
   datastore.lastMessageId++;
-  
-  let senderName = '';
-  // get handle of user who sent
-  for (const user of datastore.users) {
-    if (tokenId.uId === user.uId) {
-      senderName = user.handleStr;
-    }
-  }
-
-  // check for tags for notifications
-  for (const user of datastore.users) {
-    const regex = new RegExp('/@' + user.handleStr + '\b');
-    if (regex.test(message)) {
-      const notificationMessage = `${senderName} tagged you in ${channelName}: ${message.slice(0, 20)}`;
-      const newNotif: Notif = {
-        channelId: channelId,
-        dmId: -1,
-        notificationMessage: notificationMessage
-      };
-      if (user.notification.length === 20) {
-        // pop then add
-        user.notification.pop();
-        user.notification.unshift(newNotif);
-      } else {
-        user.notification.unshift(newNotif);
-      }
-    }
-    
-  }
 
   setData(datastore);
+  pushTagsChannel(message, channelId, channelName, tokenId.uId);
 
   updateStatsUserMessage(tokenId.uId, timeSent);
   updateStatsWorkplaceMessages(timeSent, 'add');
@@ -166,6 +138,15 @@ function messageEditV2(token: string, messageId: number, message: string) {
     chosenMessage.message = message;
     setData(datastore);
   }
+
+  // check for tags
+  if (chosenChannel != null) {
+    pushTagsChannel(message, chosenChannel.channelId, chosenChannel.name, tokenId.uId);
+  }
+  if (chosenDm != null) {
+    pushTagsDm(message, chosenDm.dmId, chosenDm.name, tokenId.uId);
+  }
+
   return {};
 }
 
@@ -290,13 +271,17 @@ function messageSendDmV2(token: string, dmId: number, message: string) {
     reacts: [],
     isPinned: false
   };
+  let dmName = '';
   for (const dm of datastore.dms) {
     if (dm.dmId === dmId) {
       dm.messages.unshift(newmessage);
+      dmName = dm.name;
     }
   }
   datastore.lastMessageId++;
+
   setData(datastore);
+  pushTagsDm(message, dmId, dmName, tokenId.uId);
 
   updateStatsUserMessage(tokenId.uId, timeSent);
   updateStatsWorkplaceMessages(timeSent, 'add');
@@ -440,17 +425,22 @@ function messageShareV1(token: string, ogMessageId: number, message: string, cha
     for (const dm of data.dms) {
       if (dm.dmId === dmId) {
         dm.messages.unshift(newmessage);
+        data.lastMessageId++;
+        setData(data);
+        // check for new tags only in the optional extra message
+        pushTagsDm(message, dmId, dm.name, tokenId.uId);
       }
     }
   } else {
     for (const channel of data.channels) {
       if (channel.channelId === channelId) {
         channel.messages.unshift(newmessage);
+        data.lastMessageId++;
+        setData(data);
+        pushTagsChannel(message, channelId, channel.name, tokenId.uId);
       }
     }
   }
-  data.lastMessageId++;
-  setData(data);
   return { sharedMessageId: newmessage.messageId };
 }
 
@@ -545,13 +535,16 @@ function messageSendLater(token: string, channelId: number, message: string, tim
       reacts: [],
       isPinned: false
     };
+    let channelName = '';
     for (const channel of datastore.channels) {
       if (channel.channelId === channelId) {
         channel.messages.unshift(newmessage);
+        channelName = channel.name;
       }
     }
     datastore.lastMessageId++;
     setData(datastore);
+    pushTagsChannel(message, channelId, channelName, tokenId.uId);
   }, (timeSent - curTime) * 1000, futureMessageId, tokenId, channelId, message, timeSent);
 
   return { messageId: futureMessageId };
@@ -609,13 +602,16 @@ function messageSendLaterDM(token: string, dmId: number, message: string, timeSe
         reacts: [],
         isPinned: false
       };
+      let dmName = '';
       for (const dm of datastore.dms) {
         if (dm.dmId === dmId) {
           dm.messages.unshift(newmessage);
+          dmName = dm.name;
         }
       }
       datastore.lastMessageId++;
       setData(datastore);
+      pushTagsDm(message, dmId, dmName, tokenId.uId);
     }
   }, (timeSent - curTime) * 1000, futureMessageId, tokenId, dmId, message, timeSent);
 
@@ -1066,4 +1062,70 @@ function findMessageStr(messageId: number) {
     }
   }
   return undefined;
+}
+
+// helper function, check for tags and push to notifications array for channels
+function pushTagsChannel(message: string, channelId: number, channelName: string, senderId: number) {
+  const datastore = getData();
+  let senderName = '';
+  // get handle of user who sent
+  for (const user of datastore.users) {
+    if (senderId === user.uId) {
+      senderName = user.handleStr;
+    }
+  }
+
+  // check for tags for notifications
+  for (const user of datastore.users) {
+    const regex = new RegExp('@' + user.handleStr + '\\b');
+    if (regex.test(message)) {
+      const notificationMessage = `${senderName} tagged you in ${channelName}: ${message.slice(0, 20)}`;
+      const newNotif: Notif = {
+        channelId: channelId,
+        dmId: -1,
+        notificationMessage: notificationMessage
+      };
+      if (user.notification.length === 20) {
+        // pop then add
+        user.notification.pop();
+        user.notification.unshift(newNotif);
+      } else {
+        user.notification.unshift(newNotif);
+      }
+    }
+  }
+  setData(datastore);
+}
+
+// helper function, check for tags and push to notifications array for dms
+function pushTagsDm(message: string, dmId: number, dmName: string, senderId: number) {
+  const datastore = getData();
+  let senderName = '';
+  // get handle of user who sent
+  for (const user of datastore.users) {
+    if (senderId === user.uId) {
+      senderName = user.handleStr;
+    }
+  }
+
+  // check for tags for notifications
+  for (const user of datastore.users) {
+    const regex = new RegExp('@' + user.handleStr + '\\b');
+    if (regex.test(message)) {
+      const notificationMessage = `${senderName} tagged you in ${dmName}: ${message.slice(0, 20)}`;
+      const newNotif: Notif = {
+        channelId: -1,
+        dmId: dmId,
+        notificationMessage: notificationMessage
+      };
+      if (user.notification.length === 20) {
+        // pop then add
+        user.notification.pop();
+        user.notification.unshift(newNotif);
+      } else {
+        user.notification.unshift(newNotif);
+      }
+    }
+  }
+  setData(datastore);
 }

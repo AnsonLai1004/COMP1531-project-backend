@@ -8,6 +8,7 @@ interface authRegisterRet {
 
 /// /////////////// TESTING //////////////////////////////////
 beforeEach(() => requestClear());
+afterAll(() => requestClear());
 
 describe('Channels Functions Errors', () => {
   test('error channelsCreate', () => {

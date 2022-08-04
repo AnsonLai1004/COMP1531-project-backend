@@ -3,30 +3,12 @@
  * storing data in dataStore.ts and accessed by other files.
  */
 
-<<<<<<< HEAD
 export interface Notif {
     channelId: number;
     dmId: number;
     notificationMessage: string;
 }
 
-/**
- * User object: contains uId, nameFirst, nameLast, email,
- * password, handleStr, isGlobalOwner
- */
-export interface User {
-    uId: number;
-    nameFirst: string;
-    nameLast: string;
-    email: string;
-    passwordHash: string;
-    handleStr: string;
-    isGlobalOwner: boolean;
-    notification: Notif[];
-}
-
-=======
->>>>>>> origin/master
 export interface Reacts {
     reactId: number;
     uIds: number[];
@@ -122,5 +104,6 @@ export interface User {
     passwordHash: string;
     handleStr: string;
     isGlobalOwner: boolean;
+    notification: Notif[];
     stats: UserStats;
 }

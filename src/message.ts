@@ -7,7 +7,7 @@ export {
   messageSendV2, messageRemoveV2, messageEditV2, messageSendDmV2,
   dmMessagesV2, messagesSearch, messagePin, messageUnpin, messageReact,
   messageUnreact, messageSendLater, messageSendLaterDM, getNotification
-  ,messageShareV1
+  , messageShareV1
 };
 
 /**

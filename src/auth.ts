@@ -140,15 +140,12 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
     passwordHash: passwordHash,
     handleStr: handle,
     isGlobalOwner: isGlobalOwner,
-<<<<<<< HEAD
     notification: [],
-=======
     stats: {
       channelsJoined: [{ numChannelsJoined: 0, timeStamp: registerTime }],
       dmsJoined: [{ numDmsJoined: 0, timeStamp: registerTime }],
       messagesSent: [{ numMessagesSent: 0, timeStamp: registerTime }],
     }
->>>>>>> origin/master
   };
 
   data.users.push(newUser);

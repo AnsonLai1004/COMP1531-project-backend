@@ -7,6 +7,7 @@ import { checkUserData } from './users';
 import isEmail from 'validator/lib/isEmail.js';
 import HTTPError from 'http-errors';
 import crypto from 'crypto';
+import config from './config.json';
 
 /**
  * Wrapper function which calls authRegisterV1 and generates a token
@@ -131,7 +132,8 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
     // the first user who signs up
     isGlobalOwner = true;
   }
-
+  const PORT: number = parseInt(process.env.PORT || config.port);
+  const HOST: string = process.env.IP || 'localhost';
   const newUser = {
     uId: newId,
     nameFirst: nameFirst,
@@ -146,7 +148,7 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
       dmsJoined: [{ numDmsJoined: 0, timeStamp: registerTime }],
       messagesSent: [{ numMessagesSent: 0, timeStamp: registerTime }],
     },
-    profileImgUrl: 'http://localhost:34054/img/default.jpg',
+    profileImgUrl: `http://${HOST}:${PORT}/img/default.jpg`,
   };
 
   data.users.push(newUser);

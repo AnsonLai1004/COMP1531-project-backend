@@ -193,7 +193,7 @@ export function usersStatsV1(token: string) {
 }
 
 /**
- * Given a URL of an image on the internet, crop the image within bounds 
+ * Given a URL of an image on the internet, crop the image within bounds
  * (xStart, yStart) and (xEnd, yEnd). Position (0,0) is the top left.
  * @param { imgUrl, xStart, yStart, xEnd, yEnd }
  * @returns {}
@@ -204,22 +204,22 @@ export function userUploadPhoto(token: string, imgUrl: string, xStart: number, y
   if ('error' in tokenId) {
     throw HTTPError(403, 'Invalid token!');
   }
-  if(!checkURL(imgUrl)) {
-    throw HTTPError(400, "imgUrl not a jpg")
+  if (!checkURL(imgUrl)) {
+    throw HTTPError(400, 'imgUrl not a jpg');
   }
   // make request
   let res;
-  try{
+  try {
     res = request(
       'GET',
       imgUrl
     );
-  } catch(err){
+  } catch (err) {
     throw HTTPError(400, 'Error getting image');
   }
   // save image locally
   const body = res.body;
-  const imgPath = `img/${tokenId.uId}.jpg`
+  const imgPath = `img/${tokenId.uId}.jpg`;
   fs.writeFileSync(imgPath, body, { flag: 'w' });
   // get dimensions
   const dimensions = sizeOf(imgPath);
@@ -227,28 +227,27 @@ export function userUploadPhoto(token: string, imgUrl: string, xStart: number, y
   const y = dimensions.height;
   // dimension errors
   if (xEnd > x || xStart < 0 || yEnd > y || yStart < 0 || xStart >= xEnd || yStart >= yEnd) {
-    console.log(dimensions, x, y, xEnd, yEnd, xStart, yStart)
+    console.log(dimensions, x, y, xEnd, yEnd, xStart, yStart);
     throw HTTPError(400, 'Illegal dimensions');
   }
   // crop image - NOT WORKING
-  const cropImage = `img/crop_${tokenId.uId}.jpg`
+  const cropImage = `img/crop_${tokenId.uId}.jpg`;
   sharp(imgPath).extract({ width: xEnd - xStart, height: yEnd - yStart, left: 0, top: 0 }).toFile(cropImage)
-  .then(function(success) {
-    console.log("Image cropped and saved");
-  })
-  
-  //fs.writeFileSync(imgPath, cropImage, { flag: 'w' });
+    .then(function(success) {
+      console.log('Image cropped and saved');
+    });
+
   // set users profile img url
   const PORT: number = parseInt(process.env.PORT || config.port);
   const HOST: string = process.env.IP || 'localhost';
-  const data = getData()
+  const data = getData();
   for (const user of data.users) {
     if (user.uId === tokenId.uId) {
-      user.profileImgUrl = `http://${HOST}:${PORT}/${cropImage}`
-      console.log(user)
+      user.profileImgUrl = `http://${HOST}:${PORT}/${cropImage}`;
+      console.log(user);
     }
   }
-  setData(data)
+  setData(data);
   return {};
 }
 
@@ -302,5 +301,5 @@ export function checkUserData(toCheck: string | number, field: keyof User, exclu
 }
 
 function checkURL(url) {
-  return(url.match(/\.(jpg|jpeg)$/) != null);
+  return (url.match(/\.(jpg|jpeg)$/) != null);
 }

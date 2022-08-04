@@ -76,7 +76,7 @@ describe('Testing users/all/v1 valid cases', () => {
         nameFirst: 'Harry',
         nameLast: 'Potter',
         handleStr: 'harrypotter',
-        profileImgUrl: "http://localhost:34054/img/default.jpg",
+        profileImgUrl: 'http://localhost:34054/img/default.jpg',
       }]
     });
   });
@@ -94,7 +94,7 @@ describe('Testing users/all/v1 valid cases', () => {
           nameFirst: 'Harry',
           nameLast: 'Potter',
           handleStr: 'harrypotter',
-          profileImgUrl: "http://localhost:34054/img/default.jpg",
+          profileImgUrl: 'http://localhost:34054/img/default.jpg',
         },
         {
           uId: registered2.authUserId,
@@ -102,7 +102,7 @@ describe('Testing users/all/v1 valid cases', () => {
           nameFirst: 'Hermione',
           nameLast: 'Granger',
           handleStr: 'hermionegranger',
-          profileImgUrl: "http://localhost:34054/img/default.jpg",
+          profileImgUrl: 'http://localhost:34054/img/default.jpg',
         },
         {
           uId: registered3.authUserId,
@@ -110,7 +110,7 @@ describe('Testing users/all/v1 valid cases', () => {
           nameFirst: 'Ron',
           nameLast: 'Weasley',
           handleStr: 'ronweasley',
-          profileImgUrl: "http://localhost:34054/img/default.jpg",
+          profileImgUrl: 'http://localhost:34054/img/default.jpg',
         }
       ])
     });
@@ -181,7 +181,7 @@ describe('Testing user/profile/set**/v1 valid cases', () => {
         nameFirst: 'First',
         nameLast: 'Last',
         handleStr: 'harrypotter',
-        profileImgUrl: "http://localhost:34054/img/default.jpg"
+        profileImgUrl: 'http://localhost:34054/img/default.jpg'
       }
     });
     expect(requestUserSetEmail(registered.token, 'new-email@gmail.com')).toStrictEqual({});
@@ -192,7 +192,7 @@ describe('Testing user/profile/set**/v1 valid cases', () => {
         nameFirst: 'First',
         nameLast: 'Last',
         handleStr: 'harrypotter',
-        profileImgUrl: "http://localhost:34054/img/default.jpg",
+        profileImgUrl: 'http://localhost:34054/img/default.jpg',
       }
     });
     expect(requestUserSetHandle(registered.token, 'newhandle')).toStrictEqual({});
@@ -203,7 +203,7 @@ describe('Testing user/profile/set**/v1 valid cases', () => {
         nameFirst: 'First',
         nameLast: 'Last',
         handleStr: 'newhandle',
-        profileImgUrl: "http://localhost:34054/img/default.jpg",
+        profileImgUrl: 'http://localhost:34054/img/default.jpg',
       }
     });
   });
@@ -223,9 +223,7 @@ describe('upload photo', () => {
     expect(reqUserUploadPhoto(user.token, 'http://www.randomaddress.com/any.png', -1, 1, 2, 2)).toStrictEqual(400);
   });
   test('Correct', () => {
-    const user = requestAuthRegister('testemail@gmail.com', 'TestPassword', 'Test', 'User');
     const user2 = requestAuthRegister('testemail2@gmail.com', 'TestPassword', 'Test', 'User2');
     expect(reqUserUploadPhoto(user2.token, 'http://www.gstatic.com/webp/gallery/4.sm.jpg', 100, 100, 320, 240)).toStrictEqual({});
   });
 });
-

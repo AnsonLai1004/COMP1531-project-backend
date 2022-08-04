@@ -371,7 +371,7 @@ app.post('/user/profile/uploadphoto/v1', (req, res, next) => {
   } catch (err) {
     next(err);
   }
-})
+});
 
 // search route
 app.get('/search/v1', (req, res, next) => {

@@ -63,7 +63,6 @@ export function usersAllV2(token: string) {
         nameLast: user.nameLast,
         handleStr: user.handleStr,
         profileImgUrl: user.profileImgUrl,
-        notification: [],
       });
     }
   }
@@ -205,13 +204,17 @@ export function userUploadPhoto(token: string, imgUrl: string, xStart: number, y
   if ('error' in tokenId) {
     throw HTTPError(403, 'Invalid token!');
   }
+  if(!checkURL(imgUrl)) {
+    throw HTTPError(400, "imgUrl not a jpg")
+  }
   // make request
-  const res = request(
-    'GET',
-    imgUrl
-  );
-  // check if request to get image failes
-  if (res.statusCode !== 200) {
+  let res;
+  try{
+    res = request(
+      'GET',
+      imgUrl
+    );
+  } catch(err){
     throw HTTPError(400, 'Error getting image');
   }
   // save image locally
@@ -228,20 +231,20 @@ export function userUploadPhoto(token: string, imgUrl: string, xStart: number, y
     throw HTTPError(400, 'Illegal dimensions');
   }
   // crop image - NOT WORKING
-  sharp(imgPath).extract({ width: xEnd - xStart, height: yEnd - yStart, left: xStart, top: yStart }).toFile(imgPath)
+  const cropImage = `img/crop_${tokenId.uId}.jpg`
+  sharp(imgPath).extract({ width: xEnd - xStart, height: yEnd - yStart, left: 0, top: 0 }).toFile(cropImage)
   .then(function(success) {
-      console.log("Image cropped and saved");
+    console.log("Image cropped and saved");
   })
-  .catch(function(err) {
-      console.log("An error occured");
-  });
+  
+  //fs.writeFileSync(imgPath, cropImage, { flag: 'w' });
   // set users profile img url
   const PORT: number = parseInt(process.env.PORT || config.port);
   const HOST: string = process.env.IP || 'localhost';
   const data = getData()
   for (const user of data.users) {
     if (user.uId === tokenId.uId) {
-      user.profileImgUrl = `http://${HOST}:${PORT}/${imgPath}`
+      user.profileImgUrl = `http://${HOST}:${PORT}/${cropImage}`
       console.log(user)
     }
   }
@@ -296,4 +299,8 @@ export function checkUserData(toCheck: string | number, field: keyof User, exclu
     }
   }
   return false;
+}
+
+function checkURL(url) {
+  return(url.match(/\.(jpg|jpeg)$/) != null);
 }

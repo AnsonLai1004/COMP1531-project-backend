@@ -121,7 +121,8 @@ describe('auth/logout/v1 function valid cases', () => {
       email: 'valid@gmail.com',
       nameFirst: 'Harry',
       nameLast: 'Potter',
-      handleStr: 'harrypotter'
+      handleStr: 'harrypotter',
+      profileImgUrl: "http://localhost:34054/img/default.jpg",
     };
     const login = requestAuthLogin('valid@gmail.com', 'password');
     expect(requestUserProfile(registered.token, registered.authUserId)).toEqual({ user: expectDetails });

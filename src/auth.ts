@@ -146,7 +146,7 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
       dmsJoined: [{ numDmsJoined: 0, timeStamp: registerTime }],
       messagesSent: [{ numMessagesSent: 0, timeStamp: registerTime }],
     },
-    profileImgUrl: 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg',
+    profileImgUrl: 'http://localhost:34054/img/default.jpg',
   };
 
   data.users.push(newUser);

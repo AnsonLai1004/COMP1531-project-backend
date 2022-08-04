@@ -5,7 +5,7 @@ function sleep(s: number) {
 }
 
 beforeEach(() => requestClear());
-afterEach(() => requestClear());
+afterAll(() => requestClear());
 
 describe('Channels Functions Errors', () => {
   test('error standup functions', async () => {

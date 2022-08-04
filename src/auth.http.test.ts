@@ -8,6 +8,10 @@ beforeEach(() => {
   requestClear();
 });
 
+afterAll(() => {
+  requestClear();
+});
+
 describe('auth/register/v2 error cases', () => {
   test('Invalid email', () => {
     const registered = requestAuthRegister('not-an-email', 'password', 'Harry', 'Potter');

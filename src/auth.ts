@@ -8,6 +8,7 @@ import { Notif } from './interfaces';
 import isEmail from 'validator/lib/isEmail.js';
 import HTTPError from 'http-errors';
 import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 
 const secret = 'COMP1531W14BHASHASHAHSHAHSA(*%&&%&*&&FKUYSCWLCW';
 
@@ -144,6 +145,7 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
     handleStr: handle,
     isGlobalOwner: isGlobalOwner,
     notification: [] as Notif[],
+    resetCodes: [] as string[],
     stats: {
       channelsJoined: [{ numChannelsJoined: 0, timeStamp: registerTime }],
       dmsJoined: [{ numDmsJoined: 0, timeStamp: registerTime }],
@@ -156,6 +158,48 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
   return {
     authUserId: newId
   };
+}
+
+/**
+ * Given a valid email of a user, emails them with a reset code allowing 
+ * the password to be reset when passed to reset route.
+ * Logs user out of all sessions
+ * Return object always empty, does not throw errors
+ * @param email 
+ */
+export function authPasswordResetRequest(email: string) {
+  const data = getData();
+  let resetUser;
+  for (const user of data.users) {
+    if (user.email === email) {
+      resetUser = user;
+    }
+  }
+  if (resetUser === undefined) {
+    return {};
+  }
+  const resetCode = crypto.randomUUID();
+  const transport = nodemailer.createTransport({
+    host: "smtp.mailtrap.io",
+    port: 2525,
+    auth: {
+      user: "0132b007a74eae",
+      pass: "f111d5fc0e1c90"
+    }
+  });
+  const mailContent = {
+    from: 'microsoft-treats-w14b-boost@server.com',
+    to: email,
+    subject: 'Password Reset Request',
+    text: `Enter this code "${resetCode}" to reset your password. \nYou have been logged out of all user sessions.`
+  }
+  transport.sendMail(mailContent);
+
+  // logout all sessions
+  data.tokens = data.tokens.filter(pair => pair.uId !== resetUser.uId);
+  setData(data);
+
+  return {};
 }
 
 /// //////////////////////// Helper Functions ////////////////////////////////

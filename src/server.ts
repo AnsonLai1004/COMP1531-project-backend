@@ -6,7 +6,7 @@ import cors from 'cors';
 import errorHandler from 'middleware-http-errors';
 
 import { channelInviteV3, channelMessagesV3, channelDetailsV3, channelJoinV3, channelLeaveV2, channelAddownerV2, channelRemoveownerV2 } from './channel';
-import { authRegisterV3, authLoginV3, authLogoutV2 } from './auth';
+import { authRegisterV3, authLoginV3, authLogoutV2, authPasswordResetRequest } from './auth';
 import { channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
 import {
   messageUnpin, messagePin, messagesSearch, messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2,
@@ -452,7 +452,7 @@ app.delete('/clear/v1', (req, res) => {
 
 app.post('/auth/passwordreset/request/v1', (req, res, next) => {
   const { email } = req.body;
-  res.json({ error: email });
+  res.json(authPasswordResetRequest(email));
 });
 
 // handles errors nicely

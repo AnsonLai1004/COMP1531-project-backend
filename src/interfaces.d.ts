@@ -105,5 +105,6 @@ export interface User {
     handleStr: string;
     isGlobalOwner: boolean;
     notification: Notif[];
+    resetCodes: string[];
     stats: UserStats;
 }

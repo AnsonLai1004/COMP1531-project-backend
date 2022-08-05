@@ -1,7 +1,6 @@
 /**
  * Test file for auth routes endpoints and status codes.
  */
-import { execPath } from 'process';
 import {
   reqGetNotification,
   reqChannelInvite, reqChannelDetails, reqChannelJoin, reqChannelLeave, reqChannelAddowner, reqChannelRemoveowner,
@@ -219,7 +218,7 @@ describe('/channel/messages/v3 and dm/messages/v3', () => {
     const el2 = reqChannelMessages(aMember.token, newchannel.channelId, 50);
     expect(reqChannelMessages(aMember.token, newchannel.channelId, 0)).toStrictEqual({ messages: el.messages, start: 0, end: 50 });
     expect(reqChannelMessages(aMember.token, newchannel.channelId, 50)).toStrictEqual({ messages: el2.messages, start: 50, end: -1 });
-  
+
     expect(reqGetNotification(aMember.token).notifications.length).toEqual(20);
   });
 
@@ -238,7 +237,7 @@ describe('/channel/messages/v3 and dm/messages/v3', () => {
     const el2 = reqDmMessages(user.token, dm.dmId, 50);
     expect(reqDmMessages(user.token, dm.dmId, 0)).toStrictEqual({ messages: el.messages, start: 0, end: 50 });
     expect(reqDmMessages(user.token, dm.dmId, 50)).toStrictEqual({ messages: el2.messages, start: 50, end: -1 });
-  
+
     expect(reqGetNotification(user.token).notifications.length).toEqual(20);
   });
 });

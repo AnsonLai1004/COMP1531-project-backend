@@ -136,7 +136,7 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
   }
   const PORT: number = parseInt(process.env.PORT || config.port);
   const HOST: string = process.env.IP || 'localhost';
-  const testFolder = './img/';
+  const testFolder = 'img';
   const fs = require('fs');
   let found = 0;
   fs.readdirSync(testFolder).forEach(function checkfile(file: string) {

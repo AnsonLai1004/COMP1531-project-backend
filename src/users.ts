@@ -235,7 +235,6 @@ export function userUploadPhoto(token: string, imgUrl: string, xStart: number, y
   // save image locally
   const body = res.body;
   const imgPath = `img/${tokenId.uId}.jpg`;
-  const testFolder = './img';
   const cropImage = `img/crop_${tokenId.uId}.jpg`;
   fs.writeFileSync(imgPath, body, { flag: 'w' });
   // get dimensions
@@ -244,11 +243,6 @@ export function userUploadPhoto(token: string, imgUrl: string, xStart: number, y
   const y = dimensions.height;
   // dimension errors
   if (xEnd > x || xStart < 0 || yEnd > y || yStart < 0 || xStart >= xEnd || yStart >= yEnd) {
-    fs.readdirSync(testFolder).forEach(file => {
-      if (file === `${tokenId.uId}.jpg`) {
-        fs.rmSync(`${testFolder}/${file}`);
-      }
-    });
     throw HTTPError(400, 'Illegal dimensions');
   }
   // crop image

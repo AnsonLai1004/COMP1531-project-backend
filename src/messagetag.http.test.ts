@@ -81,6 +81,33 @@ describe('valid single tagging', () => {
       ]
     });
   });
+  test('tags with numbers in them', () => {
+    const user1 = requestAuthRegister('mail@email.com', 'password', 'Harry', 'Potter');
+    const user2 = requestAuthRegister('another@email.com', 'password', 'Harry', 'Potter');
+    const user3 = requestAuthRegister('again@email.com', 'password', '12345', '67890');
+    const channel = requestChannelsCreateV3(user1.token, 'Gryffindor Common', true);
+    reqChannelJoin(user2.token, channel.channelId);
+    reqChannelJoin(user3.token, channel.channelId);
+
+    // should NOT tag original 'harrypotter' only the other
+    reqMessageSend(user1.token, channel.channelId, '@harrypotter0');
+    reqMessageSend(user1.token, channel.channelId, '@1234567890');
+    reqMessageSend(user1.token, channel.channelId, '@12345678901234567890');
+
+    expect(reqGetNotification(user1.token)).toEqual({
+      notifications: []
+    });
+    expect(reqGetNotification(user2.token)).toEqual({
+      notifications: [
+        { channelId: channel.channelId, dmId: -1, notificationMessage: `harrypotter tagged you in Gryffindor Common: @harrypotter0` },
+      ]
+    });
+    expect(reqGetNotification(user3.token)).toEqual({
+      notifications: [
+        { channelId: channel.channelId, dmId: -1, notificationMessage: `harrypotter tagged you in Gryffindor Common: @1234567890` },
+      ]
+    });
+  });  
   test('can tag self', () => {
     const user1 = requestAuthRegister('email@email.com', 'password', 'Sherlock', 'Holmes');
     const user2 = requestAuthRegister('diff@email.com', 'password', 'John', 'Watson');

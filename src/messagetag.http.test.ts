@@ -7,7 +7,8 @@ import {
   reqMessageEdit,
   reqMessageShare,
   reqMessageSendLater,
-  reqMessageSendLaterDM
+  reqMessageSendLaterDM,
+  reqChannelJoin
 } from './requests';
 
 function sleep(s: number) {
@@ -158,51 +159,96 @@ describe('valid single tagging', () => {
       ]
     });
   });
+});
 
+describe('test send later', () => {
   test('sendlater, does not immediately notif', async () => {
     const user1 = requestAuthRegister('email@email.com', 'password', 'Sherlock', 'Holmes');
     const user2 = requestAuthRegister('diff@email.com', 'password', 'John', 'Watson');
     const channel = requestChannelsCreateV3(user1.token, '221B Baker St', true);
     reqChannelInvite(user1.token, channel.channelId, user2.authUserId);
-    const dm = reqDmCreate(user1.token, [user2.authUserId]);
 
     const curTime1 = Math.floor((new Date()).getTime() / 1000);
-    reqMessageSendLater(user1.token, channel.channelId, '@johnwatson come at once if convenient', curTime1 + 1);
+    reqMessageSendLater(user1.token, channel.channelId, '@johnwatson come at once if convenient', curTime1 + 2);
     // not yet sent
     expect(reqGetNotification(user2.token)).toEqual({
       notifications: [
-        { channelId: -1, dmId: dm.dmId, notificationMessage: 'sherlockholmes added you to johnwatson, sherlockholmes' },
         { channelId: channel.channelId, dmId: -1, notificationMessage: 'sherlockholmes added you to 221B Baker St' },
       ]
     });
 
-    await sleep(1);
+    await sleep(2);
     expect(reqGetNotification(user2.token)).toEqual({
       notifications: [
         { channelId: channel.channelId, dmId: -1, notificationMessage: "sherlockholmes tagged you in 221B Baker St: @johnwatson come at " },
-        { channelId: -1, dmId: dm.dmId, notificationMessage: 'sherlockholmes added you to johnwatson, sherlockholmes' },
-        { channelId: channel.channelId, dmId: -1, notificationMessage: 'sherlockholmes added you to 221B Baker St' },
-      ]
-    });
-
-    const curTime2 = Math.floor((new Date()).getTime() / 1000);
-    reqMessageSendLaterDM(user1.token, dm.dmId, 'could be dangerous @johnwatson', curTime2 + 1)
-    expect(reqGetNotification(user2.token)).toEqual({
-      notifications: [
-        { channelId: channel.channelId, dmId: -1, notificationMessage: "sherlockholmes tagged you in 221B Baker St: @johnwatson come at " },
-        { channelId: -1, dmId: dm.dmId, notificationMessage: 'sherlockholmes added you to johnwatson, sherlockholmes' },
-        { channelId: channel.channelId, dmId: -1, notificationMessage: 'sherlockholmes added you to 221B Baker St' },
-      ]
-    });
-
-    await sleep(1);
-    expect(reqGetNotification(user2.token)).toEqual({
-      notifications: [
-        { channelId: -1, dmId: dm.dmId, notificationMessage: "sherlockholmes tagged you in johnwatson, sherlockholmes: could be dangerous @" },
-        { channelId: channel.channelId, dmId: -1, notificationMessage: "sherlockholmes tagged you in 221B Baker St: @johnwatson come at " },
-        { channelId: -1, dmId: dm.dmId, notificationMessage: 'sherlockholmes added you to johnwatson, sherlockholmes' },
         { channelId: channel.channelId, dmId: -1, notificationMessage: 'sherlockholmes added you to 221B Baker St' },
       ]
     });
   });
+  test('sendlaterDm, does not immediately notif', async () => {
+    const user1 = requestAuthRegister('email@email.com', 'password', 'Sherlock', 'Holmes');
+    const user2 = requestAuthRegister('diff@email.com', 'password', 'John', 'Watson');
+    const dm = reqDmCreate(user1.token, [user2.authUserId]);
+
+    const curTime2 = Math.floor((new Date()).getTime() / 1000);
+    reqMessageSendLaterDM(user1.token, dm.dmId, 'could be dangerous @johnwatson', curTime2 + 2);
+    expect(reqGetNotification(user2.token)).toEqual({
+      notifications: [
+        { channelId: -1, dmId: dm.dmId, notificationMessage: 'sherlockholmes added you to johnwatson, sherlockholmes' },
+      ]
+    });
+
+    await sleep(2);
+    expect(reqGetNotification(user2.token)).toEqual({
+      notifications: [
+        { channelId: -1, dmId: dm.dmId, notificationMessage: "sherlockholmes tagged you in johnwatson, sherlockholmes: could be dangerous @" },
+        { channelId: -1, dmId: dm.dmId, notificationMessage: 'sherlockholmes added you to johnwatson, sherlockholmes' },
+      ]
+    });
+  });
+});
+
+test('multi tagging', () => {
+  const user1 = requestAuthRegister('email@email.com', 'password', 'Sherlock', 'Holmes');
+  const user2 = requestAuthRegister('diff@email.com', 'password', 'John', 'Watson');
+  const user3 = requestAuthRegister('other@email.com', 'password', 'Inspector', 'Lestrade');
+  const channel1 = requestChannelsCreateV3(user1.token, '221B Baker St', false);
+  const channel2 = requestChannelsCreateV3(user3.token, 'Scotland Yard', true);
+  reqChannelInvite(user1.token, channel1.channelId, user2.authUserId);
+  reqChannelJoin(user1.token, channel2.channelId);
+  reqChannelJoin(user2.token, channel2.channelId);
+
+  const message1 = reqMessageSend(user3.token, channel2.channelId, "@sherlockholmes who is @johnwatson");
+  reqMessageSend(user1.token, channel2.channelId, "@inspectorlestrade he's with me");
+
+  const dm = reqDmCreate(user2.token, [user3.authUserId]);
+  // should tag only from new portion of message
+  reqMessageShare(user2.token, message1.messageId, "i'm a doctor @inspectorlestrade", -1, dm.dmId);
+
+  reqMessageSend(user1.token, channel1.channelId, "@inspectorlestrade it's obvious even @johnwatson could figure it out");
+  reqMessageSend(user2.token, channel1.channelId, "wrong channel @sherlockholmes");
+  
+  expect(reqGetNotification(user1.token)).toEqual({
+    notifications: [
+      { channelId: channel1.channelId, dmId: -1, notificationMessage: "johnwatson tagged you in 221B Baker St: wrong channel @sherl" },
+      { channelId: channel2.channelId, dmId: -1, notificationMessage: "inspectorlestrade tagged you in Scotland Yard: @sherlockholmes who " },
+    ]
+  });
+
+  expect(reqGetNotification(user2.token)).toEqual({
+    notifications: [
+      { channelId: channel1.channelId, dmId: -1, notificationMessage: "sherlockholmes tagged you in 221B Baker St: @inspectorlestrade i" },
+      { channelId: channel2.channelId, dmId: -1, notificationMessage: "inspectorlestrade tagged you in Scotland Yard: @sherlockholmes who " },
+      { channelId: channel1.channelId, dmId: -1, notificationMessage: 'sherlockholmes added you to 221B Baker St' },
+    ]
+  });
+
+  expect(reqGetNotification(user3.token)).toEqual({
+    notifications: [
+      { channelId: -1, dmId: dm.dmId, notificationMessage: "johnwatson tagged you in inspectorlestrade, johnwatson: @sherlockholmes who " },
+      { channelId: -1, dmId: dm.dmId, notificationMessage: 'johnwatson added you to inspectorlestrade, johnwatson' },
+      { channelId: channel2.channelId, dmId: -1, notificationMessage: "sherlockholmes tagged you in Scotland Yard: @inspectorlestrade h" },
+    ]
+  });
+
 });

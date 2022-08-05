@@ -398,13 +398,13 @@ function messageShareV1(token: string, ogMessageId: number, message: string, cha
     throw HTTPError(400, 'ogMessageId is Invalid');
   }
   // ogMessageId does not refer to a valid message within a channel/DM that the authorised user has joined
-  if (channelId === -1) {
-    if (!userIsAuthorisedInDm(tokenId.uId, ogMessage.Id)) {
+  if (ogMessage.channelId === -1) {
+    if (!userIsAuthorisedInDm(tokenId.uId, ogMessage.dmId)) {
       throw HTTPError(400, 'user share message from Dm they are not authorised');
     }
   }
-  if (dmId === -1) {
-    if (!userIsAuthorised(tokenId.uId, ogMessage.Id)) {
+  if (ogMessage.dmId === -1) {
+    if (!userIsAuthorised(tokenId.uId, ogMessage.channelId)) {
       throw HTTPError(400, 'user share message from channel they are not authorised');
     }
   }
@@ -1043,7 +1043,8 @@ function findMessageStr(messageId: number) {
       if (messageId === message.messageId) {
         return {
           message: message.message,
-          Id: data.channels[i].channelId,
+          channelId: data.channels[i].channelId,
+          dmId: -1,
         };
       }
     }
@@ -1053,7 +1054,8 @@ function findMessageStr(messageId: number) {
       if (messageId === message.messageId) {
         return {
           message: message.message,
-          Id: data.dms[i].dmId,
+          dmId: data.dms[i].dmId,
+          channelId: -1
         };
       }
     }

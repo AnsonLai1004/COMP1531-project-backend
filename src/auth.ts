@@ -139,7 +139,7 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
   const testFolder = './img/';
   const fs = require('fs');
   let found = 0;
-  fs.readdirSync(testFolder).forEach(file => {
+  fs.readdirSync(testFolder).forEach(function checkfile(file: string) {
     if (file === 'default.jpg') {
       found = 1;
     }

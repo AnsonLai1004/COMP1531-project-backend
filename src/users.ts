@@ -252,10 +252,7 @@ export function userUploadPhoto(token: string, imgUrl: string, xStart: number, y
     throw HTTPError(400, 'Illegal dimensions');
   }
   // crop image
-  sharp(imgPath).extract({ width: xEnd - xStart, height: yEnd - yStart, left: 0, top: 0 }).toFile(cropImage)
-    .then(function(success) {
-      console.log();
-    });
+  sharp(imgPath).extract({ width: xEnd - xStart, height: yEnd - yStart, left: 0, top: 0 }).toFile(cropImage);
 
   // set users profile img url
   const data = getData();
@@ -317,6 +314,6 @@ export function checkUserData(toCheck: string | number, field: keyof User, exclu
   return false;
 }
 
-function checkURL(url) {
+function checkURL(url: string) {
   return (url.match(/\.(jpg|jpeg)$/) != null);
 }

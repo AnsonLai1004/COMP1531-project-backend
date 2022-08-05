@@ -136,23 +136,15 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
   }
   const PORT: number = parseInt(process.env.PORT || config.port);
   const HOST: string = process.env.IP || 'localhost';
-  const testFolder = 'img';
   const fs = require('fs');
-  let found = 0;
-  fs.readdirSync(testFolder).forEach(function checkfile(file: string) {
-    if (file === 'default.jpg') {
-      found = 1;
-    }
-  });
-  if (found === 0) {
-    const imageUrl = 'https://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg';
-    const res = request(
-      'GET',
-      imageUrl
-    );
-    const imgPath = 'img/default.jpg';
-    fs.writeFileSync(imgPath, res.body, { flag: 'w' });
-  }
+  const imageUrl = 'https://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg';
+  const res = request(
+    'GET',
+    imageUrl
+  );
+  const imgPath = 'img/default.jpg';
+  fs.writeFileSync(imgPath, res.body, { flag: 'w' });
+
   const newUser = {
     uId: newId,
     nameFirst: nameFirst,

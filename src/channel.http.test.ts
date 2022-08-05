@@ -212,12 +212,14 @@ describe('/channel/messages/v3 and dm/messages/v3', () => {
     const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
 
     for (let i = 0; i < 60; i++) {
-      reqMessageSend(aMember.token, newchannel.channelId, `hello ${i}`);
+      reqMessageSend(aMember.token, newchannel.channelId, `hello @jakerenzella ${i}`);
     }
     const el = reqChannelMessages(aMember.token, newchannel.channelId, 0);
     const el2 = reqChannelMessages(aMember.token, newchannel.channelId, 50);
     expect(reqChannelMessages(aMember.token, newchannel.channelId, 0)).toStrictEqual({ messages: el.messages, start: 0, end: 50 });
     expect(reqChannelMessages(aMember.token, newchannel.channelId, 50)).toStrictEqual({ messages: el2.messages, start: 50, end: -1 });
+
+    expect(reqGetNotification(aMember.token).notifications.length).toEqual(20);
   });
 
   // correct return for dmMessages length more than 50
@@ -229,12 +231,14 @@ describe('/channel/messages/v3 and dm/messages/v3', () => {
     const dm = reqDmCreate(user.token, uIds);
 
     for (let i = 0; i < 60; i++) {
-      reqSendMessageDm(user.token, dm.dmId, `hello ${i}`);
+      reqSendMessageDm(user.token, dm.dmId, `hello @jakerenzella ${i}`);
     }
     const el = reqDmMessages(user.token, dm.dmId, 0);
     const el2 = reqDmMessages(user.token, dm.dmId, 50);
     expect(reqDmMessages(user.token, dm.dmId, 0)).toStrictEqual({ messages: el.messages, start: 0, end: 50 });
     expect(reqDmMessages(user.token, dm.dmId, 50)).toStrictEqual({ messages: el2.messages, start: 50, end: -1 });
+
+    expect(reqGetNotification(user.token).notifications.length).toEqual(20);
   });
 });
 

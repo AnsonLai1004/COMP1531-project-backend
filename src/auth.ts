@@ -4,6 +4,7 @@
 **/
 import { getData, setData } from './data';
 import { checkUserData } from './users';
+import { Notif } from './interfaces';
 import isEmail from 'validator/lib/isEmail.js';
 import HTTPError from 'http-errors';
 import crypto from 'crypto';
@@ -160,7 +161,7 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
     passwordHash: passwordHash,
     handleStr: handle,
     isGlobalOwner: isGlobalOwner,
-    notification: [],
+    notification: [] as Notif[],
     stats: {
       channelsJoined: [{ numChannelsJoined: 0, timeStamp: registerTime }],
       dmsJoined: [{ numDmsJoined: 0, timeStamp: registerTime }],

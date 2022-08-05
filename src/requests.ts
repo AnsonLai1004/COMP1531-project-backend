@@ -831,7 +831,7 @@ export function reqAdminUPChange(token: string, uId: number, permissionId: numbe
   return res.statusCode;
 }
 
-export function reqMessageReact(token: string, messageId: number, reactId) {
+export function reqMessageReact(token: string, messageId: number, reactId: number) {
   const res = request(
     'POST',
     `${url}:${port}` + '/message/react/v1',
@@ -851,7 +851,7 @@ export function reqMessageReact(token: string, messageId: number, reactId) {
   return res.statusCode;
 }
 
-export function reqMessageUnreact(token: string, messageId: number, reactId) {
+export function reqMessageUnreact(token: string, messageId: number, reactId: number) {
   const res = request(
     'POST',
     `${url}:${port}` + '/message/unreact/v1',

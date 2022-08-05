@@ -27,7 +27,6 @@ function messageSendV2(token: string, channelId: number, message: string) {
   if (tokenId.error) {
     throw HTTPError(403, 'invalid tokenid');
   }
-  console.log(message);
   if (!isValidChannelId(channelId)) {
     throw HTTPError(400, 'ChannelId does not refer to a valid channel');
   }
@@ -61,7 +60,7 @@ function messageSendV2(token: string, channelId: number, message: string) {
   datastore.lastMessageId++;
 
   setData(datastore);
-  pushTagsChannel(message, channelId, channelName, tokenId.uId);
+  pushTagsChannel(message, message, channelId, channelName, tokenId.uId);
 
   updateStatsUserMessage(tokenId.uId, timeSent);
   updateStatsWorkplaceMessages(timeSent, 'add');
@@ -142,10 +141,10 @@ function messageEditV2(token: string, messageId: number, message: string) {
 
   // check for tags
   if (chosenChannel != null) {
-    pushTagsChannel(message, chosenChannel.channelId, chosenChannel.name, tokenId.uId, prevMessage);
+    pushTagsChannel(message, message, chosenChannel.channelId, chosenChannel.name, tokenId.uId, prevMessage);
   }
   if (chosenDm != null) {
-    pushTagsDm(message, chosenDm.dmId, chosenDm.name, tokenId.uId, prevMessage);
+    pushTagsDm(message, message, chosenDm.dmId, chosenDm.name, tokenId.uId, prevMessage);
   }
 
   return {};
@@ -282,7 +281,7 @@ function messageSendDmV2(token: string, dmId: number, message: string) {
   datastore.lastMessageId++;
 
   setData(datastore);
-  pushTagsDm(message, dmId, dmName, tokenId.uId);
+  pushTagsDm(message, message, dmId, dmName, tokenId.uId);
 
   updateStatsUserMessage(tokenId.uId, timeSent);
   updateStatsWorkplaceMessages(timeSent, 'add');
@@ -371,7 +370,6 @@ function messageShareV1(token: string, ogMessageId: number, message: string, cha
   if (tokenId.error) {
     throw HTTPError(403, 'Invalid token');
   }
-  console.log(message);
   if (message.length > 1000) {
     throw HTTPError(400, 'length of messages is greater than 1000');
   }
@@ -400,14 +398,13 @@ function messageShareV1(token: string, ogMessageId: number, message: string, cha
     throw HTTPError(400, 'ogMessageId is Invalid');
   }
   // ogMessageId does not refer to a valid message within a channel/DM that the authorised user has joined
-  if (channelId === -1) {
-    console.log(userIsAuthorisedInDm(tokenId.uId, ogMessage.Id));
-    if (!userIsAuthorisedInDm(tokenId.uId, ogMessage.Id)) {
+  if (ogMessage.channelId === -1) {
+    if (!userIsAuthorisedInDm(tokenId.uId, ogMessage.dmId)) {
       throw HTTPError(400, 'user share message from Dm they are not authorised');
     }
   }
-  if (dmId === -1) {
-    if (!userIsAuthorised(tokenId.uId, ogMessage.Id)) {
+  if (ogMessage.dmId === -1) {
+    if (!userIsAuthorised(tokenId.uId, ogMessage.channelId)) {
       throw HTTPError(400, 'user share message from channel they are not authorised');
     }
   }
@@ -428,8 +425,8 @@ function messageShareV1(token: string, ogMessageId: number, message: string, cha
         dm.messages.unshift(newmessage);
         data.lastMessageId++;
         setData(data);
-        // check for new tags only in the optional extra message
-        pushTagsDm(message, dmId, dm.name, tokenId.uId);
+        // check for new tags only in the optional extra message but put in notif body whole message
+        pushTagsDm(message, ogMessage.message + message, dmId, dm.name, tokenId.uId);
       }
     }
   } else {
@@ -438,7 +435,7 @@ function messageShareV1(token: string, ogMessageId: number, message: string, cha
         channel.messages.unshift(newmessage);
         data.lastMessageId++;
         setData(data);
-        pushTagsChannel(message, channelId, channel.name, tokenId.uId);
+        pushTagsChannel(message, ogMessage.message + message, channelId, channel.name, tokenId.uId);
       }
     }
   }
@@ -527,7 +524,6 @@ function messageSendLater(token: string, channelId: number, message: string, tim
   setTimeout((futureMessageId, tokenId, channelId, message, timeSent) => {
     // basically send message but with custom lastmessageid (futuremessageid)
     const datastore = getData();
-    console.log('IN TIMEOUT ADDING', futureMessageId, tokenId, channelId, message, timeSent);
     const newmessage: Message = {
       messageId: (futureMessageId) as number,
       uId: tokenId.uId,
@@ -545,7 +541,7 @@ function messageSendLater(token: string, channelId: number, message: string, tim
     }
     datastore.lastMessageId++;
     setData(datastore);
-    pushTagsChannel(message, channelId, channelName, tokenId.uId);
+    pushTagsChannel(message, message, channelId, channelName, tokenId.uId);
   }, (timeSent - curTime) * 1000, futureMessageId, tokenId, channelId, message, timeSent);
 
   return { messageId: futureMessageId };
@@ -612,7 +608,7 @@ function messageSendLaterDM(token: string, dmId: number, message: string, timeSe
       }
       datastore.lastMessageId++;
       setData(datastore);
-      pushTagsDm(message, dmId, dmName, tokenId.uId);
+      pushTagsDm(message, message, dmId, dmName, tokenId.uId);
     }
   }, (timeSent - curTime) * 1000, futureMessageId, tokenId, dmId, message, timeSent);
 
@@ -1047,7 +1043,8 @@ function findMessageStr(messageId: number) {
       if (messageId === message.messageId) {
         return {
           message: message.message,
-          Id: data.channels[i].channelId,
+          channelId: data.channels[i].channelId,
+          dmId: -1,
         };
       }
     }
@@ -1057,7 +1054,8 @@ function findMessageStr(messageId: number) {
       if (messageId === message.messageId) {
         return {
           message: message.message,
-          Id: data.dms[i].dmId,
+          dmId: data.dms[i].dmId,
+          channelId: -1
         };
       }
     }
@@ -1066,7 +1064,7 @@ function findMessageStr(messageId: number) {
 }
 
 // helper function, check for tags and push to notifications array for channels
-function pushTagsChannel(message: string, channelId: number, channelName: string, senderId: number, prevMessage?: string) {
+function pushTagsChannel(message: string, notifMessage: string, channelId: number, channelName: string, senderId: number, prevMessage?: string) {
   const datastore = getData();
   let senderName = '';
   // get handle of user who sent
@@ -1080,11 +1078,11 @@ function pushTagsChannel(message: string, channelId: number, channelName: string
   for (const user of datastore.users) {
     const regex = new RegExp('@' + user.handleStr + '\\b');
     if (prevMessage !== undefined && regex.test(prevMessage)) {
-      // already taggged in previous version of message
+      // already tagged in previous version of message
       continue;
     }
     if (regex.test(message) && userIsAuthorised(user.uId, channelId)) {
-      const notificationMessage = `${senderName} tagged you in ${channelName}: ${message.slice(0, 20)}`;
+      const notificationMessage = `${senderName} tagged you in ${channelName}: ${notifMessage.slice(0, 20)}`;
       const newNotif: Notif = {
         channelId: channelId,
         dmId: -1,
@@ -1103,7 +1101,7 @@ function pushTagsChannel(message: string, channelId: number, channelName: string
 }
 
 // helper function, check for tags and push to notifications array for dms
-function pushTagsDm(message: string, dmId: number, dmName: string, senderId: number, prevMessage ?: string) {
+function pushTagsDm(message: string, notifMessage: string, dmId: number, dmName: string, senderId: number, prevMessage ?: string) {
   const datastore = getData();
   let senderName = '';
   // get handle of user who sent
@@ -1121,7 +1119,7 @@ function pushTagsDm(message: string, dmId: number, dmName: string, senderId: num
       continue;
     }
     if (regex.test(message) && userIsAuthorisedInDm(user.uId, dmId)) {
-      const notificationMessage = `${senderName} tagged you in ${dmName}: ${message.slice(0, 20)}`;
+      const notificationMessage = `${senderName} tagged you in ${dmName}: ${notifMessage.slice(0, 20)}`;
       const newNotif: Notif = {
         channelId: -1,
         dmId: dmId,

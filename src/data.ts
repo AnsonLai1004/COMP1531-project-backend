@@ -200,6 +200,7 @@ export function getUserStats(uId: number) {
 }
 
 // Helper function to get the workplaceStats object ready for return
+// Assumption: numUsers will never be zero
 export function getWorkplaceStats() {
   const numUsers = data.users.length;
 
@@ -217,7 +218,7 @@ export function getWorkplaceStats() {
   }
 
   const numJoinedUsers = allJoinedUsers.size;
-  const utilizationRate = (numUsers !== 0) ? numJoinedUsers / numUsers : 0;
+  const utilizationRate = numJoinedUsers / numUsers;
 
   return {
     workplaceStats: {

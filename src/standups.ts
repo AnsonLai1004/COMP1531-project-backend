@@ -1,5 +1,5 @@
 import HTTPError from 'http-errors';
-import { getData, setData } from './data';
+import { getData, setData, updateStatsUserMessage, updateStatsWorkplaceMessages } from './data';
 import { userIsMember, isValidChannelId } from './channel';
 import { tokenToUId } from './auth';
 import { userProfileV3 } from './users';
@@ -46,6 +46,7 @@ export function standupStartV1(token: string, channelId: number, length: number)
 }
 
 function standupEnd(token: string, channelId: number) {
+  const time = Math.floor(Date.now() / 1000);
   const data = getData();
 
   for (const channel of data.channels) {
@@ -62,6 +63,9 @@ function standupEnd(token: string, channelId: number) {
   }
 
   setData(data);
+  updateStatsWorkplaceMessages(time, 'add');
+  const tokenId = tokenToUId(token);
+  updateStatsUserMessage(tokenId.uId, time);
 }
 
 export function standupSendV1(token: string, channelId: number, message: string) {

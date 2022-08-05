@@ -8,13 +8,12 @@ afterAll(() => {
   requestClear();
 });
 
-
 test('Test that user is logged out of all sessions when requesting reset', () => {
   const registered = requestAuthRegister('email@email.com', 'password', 'Harry', 'Potter');
   const login1 = requestAuthLogin('email@email.com', 'password');
   const login2 = requestAuthLogin('email@email.com', 'password');
   const login3 = requestAuthLogin('email@email.com', 'password');
-  
+
   const request = reqPasswordResetRequest('email@email.com');
   expect(request).toEqual({});
 

@@ -460,7 +460,6 @@ app.post('/auth/passwordreset/reset/v1', (req, res, next) => {
   res.json(authPasswordResetReset(resetCode, newPassword));
 });
 
-
 // handles errors nicely
 app.use(errorHandler());
 

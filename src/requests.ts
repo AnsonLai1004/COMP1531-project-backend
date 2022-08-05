@@ -863,7 +863,6 @@ export function reqGetNotification(token: string) {
   return res.statusCode;
 }
 
-
 export function reqPasswordResetRequest(email: string) {
   const res = request(
     'POST',

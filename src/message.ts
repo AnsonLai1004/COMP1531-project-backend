@@ -542,6 +542,8 @@ function messageSendLater(token: string, channelId: number, message: string, tim
     datastore.lastMessageId++;
     setData(datastore);
     pushTagsChannel(message, message, channelId, channelName, tokenId.uId);
+    updateStatsWorkplaceMessages(timeSent, 'add');
+    updateStatsUserMessage(tokenId.uId, timeSent);
   }, (timeSent - curTime) * 1000, futureMessageId, tokenId, channelId, message, timeSent);
 
   return { messageId: futureMessageId };
@@ -609,6 +611,8 @@ function messageSendLaterDM(token: string, dmId: number, message: string, timeSe
       datastore.lastMessageId++;
       setData(datastore);
       pushTagsDm(message, message, dmId, dmName, tokenId.uId);
+      updateStatsWorkplaceMessages(timeSent, 'add');
+      updateStatsUserMessage(tokenId.uId, timeSent);
     }
   }, (timeSent - curTime) * 1000, futureMessageId, tokenId, dmId, message, timeSent);
 

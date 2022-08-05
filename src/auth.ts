@@ -161,68 +161,66 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
 }
 
 /**
- * Given a valid email of a user, emails them with a reset code allowing 
+ * Given a valid email of a user, emails them with a reset code allowing
  * the password to be reset when passed to reset route.
  * Logs user out of all sessions
  * Return object always empty, does not throw errors
- * @param email 
+ * @param email
  */
 export function authPasswordResetRequest(email: string) {
   const data = getData();
-  let resetUser;
+
   for (const user of data.users) {
     if (user.email === email) {
-      resetUser = user;
+      const resetCode = crypto.randomUUID();
+      const transport = nodemailer.createTransport({
+        host: 'smtp.mailtrap.io',
+        port: 2525,
+        auth: {
+          user: '0132b007a74eae',
+          pass: 'f111d5fc0e1c90'
+        }
+      });
+      const mailContent = {
+        from: 'microsoft-treats-w14b-boost@server.com',
+        to: email,
+        subject: 'Password Reset Request',
+        text: `Enter this code "${resetCode}" to reset your password. \nYou have been logged out of all user sessions.`
+      };
+      transport.sendMail(mailContent);
+    
+      // logout all sessions
+      data.tokens = data.tokens.filter(pair => pair.uId !== user.uId);
+      user.resetCodes.push(resetCode);
+      setData(data);
     }
   }
-  if (resetUser === undefined) {
-    return {};
-  }
-  const resetCode = crypto.randomUUID();
-  const transport = nodemailer.createTransport({
-    host: "smtp.mailtrap.io",
-    port: 2525,
-    auth: {
-      user: "0132b007a74eae",
-      pass: "f111d5fc0e1c90"
-    }
-  });
-  const mailContent = {
-    from: 'microsoft-treats-w14b-boost@server.com',
-    to: email,
-    subject: 'Password Reset Request',
-    text: `Enter this code "${resetCode}" to reset your password. \nYou have been logged out of all user sessions.`
-  }
-  transport.sendMail(mailContent);
 
-  // logout all sessions
-  data.tokens = data.tokens.filter(pair => pair.uId !== resetUser.uId);
-  resetUser.resetCodes.push(resetCode);
-  setData(data);
+
 
   return {};
 }
 
 export function authPasswordResetReset(resetCode: string, newPassword: string) {
   if (newPassword.length < 6) {
-    throw HTTPError(400, "Password must be longer than 6 chars");
+    throw HTTPError(400, 'Password must be longer than 6 chars');
   }
   const data = getData();
-  let resetUser;
   for (const user of data.users) {
     for (const code of user.resetCodes) {
       if (code === resetCode) {
-        resetUser = user;
+        const passwordHash = crypto.createHash('sha256').update(newPassword + secret).digest('hex');
+        user.passwordHash = passwordHash;
+        setData(data);
+        return {};
       }
     }
     user.resetCodes = user.resetCodes.filter(code => code !== resetCode);
-  } 
-  if (resetUser === undefined) {
-    throw HTTPError(400, "Invalid reset code");
   }
-  resetUser.password = newPassword;
-  setData(data);
-  return {};
+
+    throw HTTPError(400, 'Invalid reset code');
+  
+
 }
 
 /// //////////////////////// Helper Functions ////////////////////////////////

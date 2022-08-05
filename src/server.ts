@@ -18,6 +18,7 @@ import { clearV1 } from './other';
 import { fileLoadData } from './data';
 import { adminUserRemoveV1, adminUserPermissionChangeV1 } from './admin';
 import { userProfileV3, usersAllV2, userSetNameV2, userSetEmailV2, userSetHandleV2, userStatsV1, usersStatsV1 } from './users';
+import { reqPasswordResetReset } from './requests';
 
 // Set up web app, use JSON
 const app = express();
@@ -450,10 +451,16 @@ app.delete('/clear/v1', (req, res) => {
   res.json({});
 });
 
-app.post('/auth/passwordreset/request/v1', (req, res, next) => {
+app.post('/auth/passwordreset/request/v1', (req, res) => {
   const { email } = req.body;
   res.json(authPasswordResetRequest(email));
 });
+
+app.post('/auth/passwordreset/reset/v1', (req, res) => {
+  const { resetCode, newPassword } = req.body;
+  res.json(reqPasswordResetReset(resetCode, newPassword));
+});
+
 
 // handles errors nicely
 app.use(errorHandler());

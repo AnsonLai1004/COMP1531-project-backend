@@ -876,3 +876,19 @@ export function reqPasswordResetRequest(email: string) {
   );
   return JSON.parse(res.getBody() as string);
 }
+
+export function reqPasswordResetReset(resetCode: string, password: string) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/auth/passwordreset/reset/v1',
+    {
+      json: {
+        resetCode, password
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}

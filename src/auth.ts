@@ -202,6 +202,27 @@ export function authPasswordResetRequest(email: string) {
   return {};
 }
 
+export function authPasswordResetReset(resetCode: string, newPassword: string) {
+  if (newPassword.length < 6) {
+    throw HTTPError(400, "Password must be longer than 6 chars");
+  }
+  const data = getData();
+  let resetUser;
+  for (const user of data.users) {
+    for (const code of user.resetCodes) {
+      if (code === resetCode) {
+        resetUser = user;
+      }
+    }
+    user.resetCodes = user.resetCodes.filter(code => code !== resetCode);
+  } 
+  if (resetUser === undefined) {
+    throw HTTPError(400, "Invalid reset code");
+  }
+  resetUser.password = newPassword;
+  return {};
+}
+
 /// //////////////////////// Helper Functions ////////////////////////////////
 
 /**

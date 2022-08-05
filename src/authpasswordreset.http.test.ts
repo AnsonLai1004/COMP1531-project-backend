@@ -1,4 +1,4 @@
-import { requestAuthRegister, requestAuthLogin, requestUserProfile, requestClear, reqPasswordResetRequest } from './requests';
+import { requestAuthRegister, requestAuthLogin, requestUserProfile, requestClear, reqPasswordResetRequest, reqPasswordResetReset } from './requests';
 
 beforeEach(() => {
   requestClear();
@@ -28,4 +28,10 @@ test('No error raised when requesting for invalid email', () => {
   requestAuthRegister('email@email.com', 'password', 'Harry', 'Potter');
   expect(reqPasswordResetRequest('not-even-email-format')).toEqual({});
   expect(reqPasswordResetRequest('harrypotter')).toEqual({});
+});
+
+test('400 error code is not valid', () => {
+  requestAuthRegister('email@email.com', 'password', 'Harry', 'Potter');
+  expect(reqPasswordResetReset('random string', 'newpassword')).toEqual(400);
+  expect(reqPasswordResetReset('random string', 'short')).toEqual(400);
 });

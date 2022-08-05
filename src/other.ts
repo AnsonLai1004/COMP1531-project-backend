@@ -22,7 +22,6 @@ function clearV1() {
       dmsExist: [{ numDmsExist: 0, timeStamp: timeStamp }],
       messagesExist: [{ numMessagesExist: 0, timeStamp: timeStamp }],
     },
-    secret: 'COMP1531W14BHASHASHAHSHAHSA(*%&&%&*&&FKUYSCWLCW',
   };
   setData(data);
 

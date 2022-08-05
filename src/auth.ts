@@ -9,6 +9,8 @@ import isEmail from 'validator/lib/isEmail.js';
 import HTTPError from 'http-errors';
 import crypto from 'crypto';
 
+const secret = 'COMP1531W14BHASHASHAHSHAHSA(*%&&%&*&&FKUYSCWLCW';
+
 /**
  * Wrapper function which calls authRegisterV1 and generates a token
  * for the return object if successful.
@@ -72,7 +74,7 @@ export function authLoginV1(email: string, password: string) {
   const data = getData();
   for (const user of data.users) {
     if (email === user.email) {
-      const inputHash = crypto.createHash('sha256').update(password + data.secret).digest('hex');
+      const inputHash = crypto.createHash('sha256').update(password + secret).digest('hex');
       if (inputHash === user.passwordHash) {
         return { authUserId: user.uId };
       }
@@ -126,7 +128,7 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
   const handle = generateHandle(nameFirst, nameLast);
   let isGlobalOwner = false;
 
-  const passwordHash = crypto.createHash('sha256').update(password + data.secret).digest('hex');
+  const passwordHash = crypto.createHash('sha256').update(password + secret).digest('hex');
 
   if (newId === 1) {
     // the first user who signs up
@@ -166,7 +168,7 @@ function generateToken(uId: number) {
   const data = getData();
   const tokenNum = data.lastToken + 1;
   const tokenStr = tokenNum.toString();
-  const hashedToken = crypto.createHash('sha256').update(tokenStr + data.secret).digest('hex');
+  const hashedToken = crypto.createHash('sha256').update(tokenStr + secret).digest('hex');
   data.lastToken = tokenNum;
   data.tokens.push({ token: hashedToken, uId: uId });
   setData(data);

@@ -862,3 +862,17 @@ export function reqGetNotification(token: string) {
   }
   return res.statusCode;
 }
+
+
+export function reqPasswordResetRequest(email: string) {
+  const res = request(
+    'POST',
+    `${url}:${port}` + '/auth/passwordreset/request/v1',
+    {
+      json: {
+        email
+      }
+    }
+  );
+  return JSON.parse(res.getBody() as string);
+}

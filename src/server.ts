@@ -443,10 +443,16 @@ app.get('/notifications/get/v1', (req, res, next) => {
     next(err);
   }
 });
+
 // other routes
 app.delete('/clear/v1', (req, res) => {
   clearV1();
   res.json({});
+});
+
+app.post('/auth/passwordreset/request/v1', (req, res, next) => {
+  const { email } = req.body;
+  res.json({ error: email });
 });
 
 // handles errors nicely

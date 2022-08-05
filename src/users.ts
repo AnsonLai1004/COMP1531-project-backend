@@ -199,6 +199,7 @@ export function usersStatsV1(token: string) {
  * @returns {}
  */
 export function userUploadPhoto(token: string, imgUrl: string, xStart: number, yStart: number, xEnd: number, yEnd: number) {
+  sharp.cache(false);
   const tokenId = tokenToUId(token);
   // check if token valid
   if ('error' in tokenId) {
@@ -208,18 +209,34 @@ export function userUploadPhoto(token: string, imgUrl: string, xStart: number, y
     throw HTTPError(400, 'imgUrl not a jpg');
   }
   // make request
+  const PORT: number = parseInt(process.env.PORT || config.port);
+  const HOST: string = process.env.IP || 'localhost';
   let res;
-  try {
-    res = request(
-      'GET',
-      imgUrl
-    );
-  } catch (err) {
-    throw HTTPError(400, 'Error getting image');
+  if (imgUrl !== `http://${HOST}:${PORT}/img/default.jpg`) {
+    try {
+      res = request(
+        'GET',
+        imgUrl
+      );
+    } catch (err) {
+      throw HTTPError(400, 'Error getting image');
+    }
+  } else {
+    const image = 'https://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg';
+    try {
+      res = request(
+        'GET',
+        image
+      );
+    } catch (err) {
+      throw HTTPError(400, 'Error getting image');
+    }
   }
   // save image locally
   const body = res.body;
   const imgPath = `img/${tokenId.uId}.jpg`;
+  const testFolder = './img';
+  const cropImage = `img/crop_${tokenId.uId}.jpg`;
   fs.writeFileSync(imgPath, body, { flag: 'w' });
   // get dimensions
   const dimensions = sizeOf(imgPath);
@@ -227,24 +244,24 @@ export function userUploadPhoto(token: string, imgUrl: string, xStart: number, y
   const y = dimensions.height;
   // dimension errors
   if (xEnd > x || xStart < 0 || yEnd > y || yStart < 0 || xStart >= xEnd || yStart >= yEnd) {
-    console.log(dimensions, x, y, xEnd, yEnd, xStart, yStart);
+    fs.readdirSync(testFolder).forEach(file => {
+      if (file === `${tokenId.uId}.jpg`) {
+        fs.rmSync(`${testFolder}/${file}`);
+      }
+    });
     throw HTTPError(400, 'Illegal dimensions');
   }
-  // crop image - NOT WORKING
-  const cropImage = `img/crop_${tokenId.uId}.jpg`;
+  // crop image
   sharp(imgPath).extract({ width: xEnd - xStart, height: yEnd - yStart, left: 0, top: 0 }).toFile(cropImage)
     .then(function(success) {
-      console.log('Image cropped and saved');
+      console.log();
     });
 
   // set users profile img url
-  const PORT: number = parseInt(process.env.PORT || config.port);
-  const HOST: string = process.env.IP || 'localhost';
   const data = getData();
   for (const user of data.users) {
     if (user.uId === tokenId.uId) {
       user.profileImgUrl = `http://${HOST}:${PORT}/${cropImage}`;
-      console.log(user);
     }
   }
   setData(data);

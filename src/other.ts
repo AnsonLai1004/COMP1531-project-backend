@@ -24,6 +24,10 @@ function clearV1() {
     },
     secret: 'COMP1531W14BHASHASHAHSHAHSA(*%&&%&*&&FKUYSCWLCW',
   };
+  const dir = './img/';
+  const { readdirSync, rmSync } = require('fs');
+  readdirSync(dir).forEach(f => rmSync(`${dir}/${f}`));
+
   setData(data);
 
   return {};

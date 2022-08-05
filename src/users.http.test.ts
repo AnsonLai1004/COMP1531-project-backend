@@ -1,5 +1,6 @@
 import { requestAuthRegister, requestUserProfile, requestUsersAll, requestClear } from './requests';
 import { requestUserSetEmail, requestUserSetHandle, requestUserSetName, reqUserUploadPhoto } from './requests';
+import config from './config.json';
 
 beforeEach(() => {
   requestClear();
@@ -223,7 +224,10 @@ describe('upload photo', () => {
     expect(reqUserUploadPhoto(user.token, 'http://www.randomaddress.com/any.png', -1, 1, 2, 2)).toStrictEqual(400);
   });
   test('Correct', () => {
+    const PORT: number = parseInt(process.env.PORT || config.port);
+    const HOST: string = process.env.IP || 'localhost';
     const user2 = requestAuthRegister('testemail2@gmail.com', 'TestPassword', 'Test', 'User2');
     expect(reqUserUploadPhoto(user2.token, 'http://www.gstatic.com/webp/gallery/4.sm.jpg', 100, 100, 320, 240)).toStrictEqual({});
+    expect(reqUserUploadPhoto(user2.token, `http://${HOST}:${PORT}/img/default.jpg`, 100, 100, 320, 240)).toStrictEqual({});
   });
 });

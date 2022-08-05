@@ -137,7 +137,7 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
   const PORT: number = parseInt(process.env.PORT || config.port);
   const HOST: string = process.env.IP || 'localhost';
   const fs = require('fs');
-  const imageUrl = 'https://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg';
+  const imageUrl = 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg';
   const res = request(
     'GET',
     imageUrl

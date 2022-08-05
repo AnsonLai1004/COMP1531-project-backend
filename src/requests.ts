@@ -729,6 +729,30 @@ export function reqUserStats(token: string) {
   return res.statusCode;
 }
 
+// upload photo
+export function reqUserUploadPhoto(token: string, imgUrl: string, xStart: number, yStart: number, xEnd: number, yEnd: number) {
+  const res = request(
+    'POST',
+      `${url}:${port}` + '/user/profile/uploadphoto/v1',
+      {
+        headers: {
+          token
+        },
+        json: {
+          imgUrl,
+          xStart,
+          xEnd,
+          yStart,
+          yEnd
+        }
+      }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
 export function reqWorkspaceStats(token: string) {
   const res = request(
     'GET',

@@ -106,4 +106,5 @@ export interface User {
     isGlobalOwner: boolean;
     notification: Notif[];
     stats: UserStats;
+    profileImgUrl: string;
 }

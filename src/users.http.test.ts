@@ -1,5 +1,6 @@
 import { requestAuthRegister, requestUserProfile, requestUsersAll, requestClear } from './requests';
-import { requestUserSetEmail, requestUserSetHandle, requestUserSetName } from './requests';
+import { requestUserSetEmail, requestUserSetHandle, requestUserSetName, reqUserUploadPhoto } from './requests';
+import config from './config.json';
 
 beforeEach(() => {
   requestClear();
@@ -75,7 +76,8 @@ describe('Testing users/all/v1 valid cases', () => {
         email: 'chosen-one@gmail.com',
         nameFirst: 'Harry',
         nameLast: 'Potter',
-        handleStr: 'harrypotter'
+        handleStr: 'harrypotter',
+        profileImgUrl: 'http://localhost:34054/img/default.jpg',
       }]
     });
   });
@@ -92,21 +94,24 @@ describe('Testing users/all/v1 valid cases', () => {
           email: 'chosen-one@gmail.com',
           nameFirst: 'Harry',
           nameLast: 'Potter',
-          handleStr: 'harrypotter'
+          handleStr: 'harrypotter',
+          profileImgUrl: 'http://localhost:34054/img/default.jpg',
         },
         {
           uId: registered2.authUserId,
           email: 'different@gmail.com',
           nameFirst: 'Hermione',
           nameLast: 'Granger',
-          handleStr: 'hermionegranger'
+          handleStr: 'hermionegranger',
+          profileImgUrl: 'http://localhost:34054/img/default.jpg',
         },
         {
           uId: registered3.authUserId,
           email: 'golden-trio@gmail.com',
           nameFirst: 'Ron',
           nameLast: 'Weasley',
-          handleStr: 'ronweasley'
+          handleStr: 'ronweasley',
+          profileImgUrl: 'http://localhost:34054/img/default.jpg',
         }
       ])
     });
@@ -176,7 +181,8 @@ describe('Testing user/profile/set**/v1 valid cases', () => {
         email: 'chosen-one@gmail.com',
         nameFirst: 'First',
         nameLast: 'Last',
-        handleStr: 'harrypotter'
+        handleStr: 'harrypotter',
+        profileImgUrl: 'http://localhost:34054/img/default.jpg'
       }
     });
     expect(requestUserSetEmail(registered.token, 'new-email@gmail.com')).toStrictEqual({});
@@ -186,7 +192,8 @@ describe('Testing user/profile/set**/v1 valid cases', () => {
         email: 'new-email@gmail.com',
         nameFirst: 'First',
         nameLast: 'Last',
-        handleStr: 'harrypotter'
+        handleStr: 'harrypotter',
+        profileImgUrl: 'http://localhost:34054/img/default.jpg',
       }
     });
     expect(requestUserSetHandle(registered.token, 'newhandle')).toStrictEqual({});
@@ -196,8 +203,31 @@ describe('Testing user/profile/set**/v1 valid cases', () => {
         email: 'new-email@gmail.com',
         nameFirst: 'First',
         nameLast: 'Last',
-        handleStr: 'newhandle'
+        handleStr: 'newhandle',
+        profileImgUrl: 'http://localhost:34054/img/default.jpg',
       }
     });
+  });
+});
+
+describe('upload photo', () => {
+  test('Error', () => {
+    const user = requestAuthRegister('testemail@gmail.com', 'TestPassword', 'Test', 'User');
+    expect(reqUserUploadPhoto('Invalid token', 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg', 1, 1, 2, 2)).toStrictEqual(403);
+    expect(reqUserUploadPhoto(user.token, 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg', -1, 1, 2, 2)).toStrictEqual(400);
+    expect(reqUserUploadPhoto(user.token, 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg', 1, -1, 2, 2)).toStrictEqual(400);
+    expect(reqUserUploadPhoto(user.token, 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg', 1, 1, 900, 2)).toStrictEqual(400);
+    expect(reqUserUploadPhoto(user.token, 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg', 1, 1, 2, 900)).toStrictEqual(400);
+    expect(reqUserUploadPhoto(user.token, 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg', 5, 1, 1, 2)).toStrictEqual(400);
+    expect(reqUserUploadPhoto(user.token, 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg', 500, 500, 620, 349)).toStrictEqual(400);
+    expect(reqUserUploadPhoto(user.token, 'http://www.randomaddress.com/any.jpg', -1, 1, 2, 2)).toStrictEqual(400);
+    expect(reqUserUploadPhoto(user.token, 'http://www.randomaddress.com/any.png', -1, 1, 2, 2)).toStrictEqual(400);
+  });
+  test('Correct', () => {
+    const PORT: number = parseInt(process.env.PORT || config.port);
+    const HOST: string = process.env.IP || 'localhost';
+    const user2 = requestAuthRegister('testemail2@gmail.com', 'TestPassword', 'Test', 'User2');
+    expect(reqUserUploadPhoto(user2.token, 'http://www.gstatic.com/webp/gallery/4.sm.jpg', 100, 100, 320, 240)).toStrictEqual({});
+    expect(reqUserUploadPhoto(user2.token, `http://${HOST}:${PORT}/img/default.jpg`, 100, 100, 320, 240)).toStrictEqual({});
   });
 });

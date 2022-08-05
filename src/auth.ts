@@ -8,6 +8,8 @@ import { Notif } from './interfaces';
 import isEmail from 'validator/lib/isEmail.js';
 import HTTPError from 'http-errors';
 import crypto from 'crypto';
+import config from './config.json';
+import request from 'sync-request';
 
 /**
  * Wrapper function which calls authRegisterV1 and generates a token
@@ -132,6 +134,16 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
     // the first user who signs up
     isGlobalOwner = true;
   }
+  const PORT: number = parseInt(process.env.PORT || config.port);
+  const HOST: string = process.env.IP || 'localhost';
+  const fs = require('fs');
+  const imageUrl = 'http://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg';
+  const res = request(
+    'GET',
+    imageUrl
+  );
+  const imgPath = 'img/default.jpg';
+  fs.writeFileSync(imgPath, res.body, { flag: 'w' });
 
   const newUser = {
     uId: newId,
@@ -146,7 +158,8 @@ export function authRegisterV1(email: string, password: string, nameFirst: strin
       channelsJoined: [{ numChannelsJoined: 0, timeStamp: registerTime }],
       dmsJoined: [{ numDmsJoined: 0, timeStamp: registerTime }],
       messagesSent: [{ numMessagesSent: 0, timeStamp: registerTime }],
-    }
+    },
+    profileImgUrl: `http://${HOST}:${PORT}/img/default.jpg`,
   };
 
   data.users.push(newUser);

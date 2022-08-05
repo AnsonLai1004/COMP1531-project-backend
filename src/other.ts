@@ -24,6 +24,7 @@ function clearV1() {
     },
     secret: 'COMP1531W14BHASHASHAHSHAHSA(*%&&%&*&&FKUYSCWLCW',
   };
+
   setData(data);
 
   return {};

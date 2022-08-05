@@ -7,6 +7,11 @@ import { getData, setData, getUserStats, getWorkplaceStats } from './data';
 import { tokenToUId } from './auth';
 import isEmail from 'validator/lib/isEmail.js';
 import HTTPError from 'http-errors';
+import request from 'sync-request';
+import fs from 'fs';
+import sizeOf from 'image-size';
+import sharp from 'sharp';
+import config from './config.json';
 
 interface userProfileV1Return {
   user?: {
@@ -14,7 +19,8 @@ interface userProfileV1Return {
     email: string,
     nameFirst: string,
     nameLast: string,
-    handleStr: string
+    handleStr: string,
+    profileImgUrl: string,
   };
   error?: string;
 }
@@ -56,6 +62,7 @@ export function usersAllV2(token: string) {
         nameFirst: user.nameFirst,
         nameLast: user.nameLast,
         handleStr: user.handleStr,
+        profileImgUrl: user.profileImgUrl,
       });
     }
   }
@@ -186,6 +193,73 @@ export function usersStatsV1(token: string) {
 }
 
 /**
+ * Given a URL of an image on the internet, crop the image within bounds
+ * (xStart, yStart) and (xEnd, yEnd). Position (0,0) is the top left.
+ * @param { imgUrl, xStart, yStart, xEnd, yEnd }
+ * @returns {}
+ */
+export function userUploadPhoto(token: string, imgUrl: string, xStart: number, yStart: number, xEnd: number, yEnd: number) {
+  sharp.cache(false);
+  const tokenId = tokenToUId(token);
+  // check if token valid
+  if ('error' in tokenId) {
+    throw HTTPError(403, 'Invalid token!');
+  }
+  if (!checkURL(imgUrl)) {
+    throw HTTPError(400, 'imgUrl not a jpg');
+  }
+  // make request
+  const PORT: number = parseInt(process.env.PORT || config.port);
+  const HOST: string = process.env.IP || 'localhost';
+  let res;
+  if (imgUrl !== `http://${HOST}:${PORT}/img/default.jpg`) {
+    try {
+      res = request(
+        'GET',
+        imgUrl
+      );
+    } catch (err) {
+      throw HTTPError(400, 'Error getting image');
+    }
+  } else {
+    const image = 'https://www.traveller.com.au/content/dam/images/h/1/p/q/1/k/image.related.articleLeadwide.620x349.h1pq27.png/1596176460724.jpg';
+    try {
+      res = request(
+        'GET',
+        image
+      );
+    } catch (err) {
+      throw HTTPError(400, 'Error getting image');
+    }
+  }
+  // save image locally
+  const body = res.body;
+  const imgPath = `img/${tokenId.uId}.jpg`;
+  const cropImage = `img/crop_${tokenId.uId}.jpg`;
+  fs.writeFileSync(imgPath, body, { flag: 'w' });
+  // get dimensions
+  const dimensions = sizeOf(imgPath);
+  const x = dimensions.width;
+  const y = dimensions.height;
+  // dimension errors
+  if (xEnd > x || xStart < 0 || yEnd > y || yStart < 0 || xStart >= xEnd || yStart >= yEnd) {
+    throw HTTPError(400, 'Illegal dimensions');
+  }
+  // crop image
+  sharp(imgPath).extract({ width: xEnd - xStart, height: yEnd - yStart, left: 0, top: 0 }).toFile(cropImage);
+
+  // set users profile img url
+  const data = getData();
+  for (const user of data.users) {
+    if (user.uId === tokenId.uId) {
+      user.profileImgUrl = `http://${HOST}:${PORT}/${cropImage}`;
+    }
+  }
+  setData(data);
+  return {};
+}
+
+/**
  * Function which returns the details of the user whose uId matches the argument uId
  * @param {number} authUserId
  * @param {number} uId
@@ -202,6 +276,7 @@ export function userProfileV1(uId: number): userProfileV1Return {
           nameFirst: user.nameFirst,
           nameLast: user.nameLast,
           handleStr: user.handleStr,
+          profileImgUrl: user.profileImgUrl,
         }
       };
     }
@@ -231,4 +306,8 @@ export function checkUserData(toCheck: string | number, field: keyof User, exclu
     }
   }
   return false;
+}
+
+function checkURL(url: string) {
+  return (url.match(/\.(jpg|jpeg)$/) != null);
 }

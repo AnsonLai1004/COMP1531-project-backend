@@ -105,6 +105,7 @@ export function standupActiveV1(token: string, channelId: number) {
   // check if token is valid
   const tokenId = tokenToUId(token);
   if (tokenId.error) {
+    console.log('token', tokenId.error);
     throw HTTPError(403, 'Invalid token');
   }
   // check if channelId is valid
@@ -113,6 +114,7 @@ export function standupActiveV1(token: string, channelId: number) {
   }
   // Check if user is member of channel
   if (!userIsMember(tokenId.uId, channelId)) {
+    console.log('channe; no');
     throw HTTPError(403, 'User not in channel');
   }
 

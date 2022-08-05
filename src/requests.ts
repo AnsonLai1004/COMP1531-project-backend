@@ -877,13 +877,13 @@ export function reqPasswordResetRequest(email: string) {
   return JSON.parse(res.getBody() as string);
 }
 
-export function reqPasswordResetReset(resetCode: string, password: string) {
+export function reqPasswordResetReset(resetCode: string, newPassword: string) {
   const res = request(
     'POST',
     `${url}:${port}` + '/auth/passwordreset/reset/v1',
     {
       json: {
-        resetCode, password
+        resetCode, newPassword
       }
     }
   );

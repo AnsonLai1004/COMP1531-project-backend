@@ -197,6 +197,7 @@ export function authPasswordResetRequest(email: string) {
 
   // logout all sessions
   data.tokens = data.tokens.filter(pair => pair.uId !== resetUser.uId);
+  resetUser.resetCodes.push(resetCode);
   setData(data);
 
   return {};
@@ -220,6 +221,7 @@ export function authPasswordResetReset(resetCode: string, newPassword: string) {
     throw HTTPError(400, "Invalid reset code");
   }
   resetUser.password = newPassword;
+  setData(data);
   return {};
 }
 

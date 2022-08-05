@@ -6,7 +6,7 @@ import cors from 'cors';
 import errorHandler from 'middleware-http-errors';
 
 import { channelInviteV3, channelMessagesV3, channelDetailsV3, channelJoinV3, channelLeaveV2, channelAddownerV2, channelRemoveownerV2 } from './channel';
-import { authRegisterV3, authLoginV3, authLogoutV2, authPasswordResetRequest } from './auth';
+import { authRegisterV3, authLoginV3, authLogoutV2, authPasswordResetRequest, authPasswordResetReset } from './auth';
 import { channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
 import {
   messageUnpin, messagePin, messagesSearch, messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2,
@@ -18,7 +18,6 @@ import { clearV1 } from './other';
 import { fileLoadData } from './data';
 import { adminUserRemoveV1, adminUserPermissionChangeV1 } from './admin';
 import { userProfileV3, usersAllV2, userSetNameV2, userSetEmailV2, userSetHandleV2, userStatsV1, usersStatsV1 } from './users';
-import { reqPasswordResetReset } from './requests';
 
 // Set up web app, use JSON
 const app = express();
@@ -451,14 +450,14 @@ app.delete('/clear/v1', (req, res) => {
   res.json({});
 });
 
-app.post('/auth/passwordreset/request/v1', (req, res) => {
+app.post('/auth/passwordreset/request/v1', (req, res, next) => {
   const { email } = req.body;
   res.json(authPasswordResetRequest(email));
 });
 
-app.post('/auth/passwordreset/reset/v1', (req, res) => {
+app.post('/auth/passwordreset/reset/v1', (req, res, next) => {
   const { resetCode, newPassword } = req.body;
-  res.json(reqPasswordResetReset(resetCode, newPassword));
+  res.json(authPasswordResetReset(resetCode, newPassword));
 });
 
 

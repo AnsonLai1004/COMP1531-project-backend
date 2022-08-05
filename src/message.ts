@@ -27,7 +27,6 @@ function messageSendV2(token: string, channelId: number, message: string) {
   if (tokenId.error) {
     throw HTTPError(403, 'invalid tokenid');
   }
-  console.log(message);
   if (!isValidChannelId(channelId)) {
     throw HTTPError(400, 'ChannelId does not refer to a valid channel');
   }
@@ -371,7 +370,6 @@ function messageShareV1(token: string, ogMessageId: number, message: string, cha
   if (tokenId.error) {
     throw HTTPError(403, 'Invalid token');
   }
-  console.log(message);
   if (message.length > 1000) {
     throw HTTPError(400, 'length of messages is greater than 1000');
   }
@@ -401,7 +399,6 @@ function messageShareV1(token: string, ogMessageId: number, message: string, cha
   }
   // ogMessageId does not refer to a valid message within a channel/DM that the authorised user has joined
   if (channelId === -1) {
-    console.log(userIsAuthorisedInDm(tokenId.uId, ogMessage.Id));
     if (!userIsAuthorisedInDm(tokenId.uId, ogMessage.Id)) {
       throw HTTPError(400, 'user share message from Dm they are not authorised');
     }
@@ -527,7 +524,6 @@ function messageSendLater(token: string, channelId: number, message: string, tim
   setTimeout((futureMessageId, tokenId, channelId, message, timeSent) => {
     // basically send message but with custom lastmessageid (futuremessageid)
     const datastore = getData();
-    console.log('IN TIMEOUT ADDING', futureMessageId, tokenId, channelId, message, timeSent);
     const newmessage: Message = {
       messageId: (futureMessageId) as number,
       uId: tokenId.uId,

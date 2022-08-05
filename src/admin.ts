@@ -98,7 +98,7 @@ export function adminUserPermissionChangeV1(token: string, uId: number, permissi
   return {};
 }
 
-function isOnlyGlobalOwner(uId) {
+function isOnlyGlobalOwner(uId: number) {
   const data = getData();
   let isGlobalOwner = false;
   let count = 0;

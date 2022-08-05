@@ -2,6 +2,7 @@
  * Test file for auth routes endpoints and status codes.
  */
 import {
+  reqGetNotification,
   reqChannelInvite, reqChannelDetails, reqChannelJoin, reqChannelLeave, reqChannelAddowner, reqChannelRemoveowner,
   requestClear, requestChannelsCreateV3, requestAuthRegister, reqChannelMessages, reqMessageSend, reqSendMessageDm, reqDmCreate, reqDmMessages
 } from './requests';
@@ -60,9 +61,49 @@ describe('/channel/invite/v3', () => {
     const owner = requestAuthRegister('validemail@gmail.com', '123abc!@#', 'Jake', 'Renzella');
     const notMember = requestAuthRegister('Bob@gmail.com', '123abc!@#', 'Bob', 'Renzella');
     const newchannel = requestChannelsCreateV3(owner.token, 'crush team', true);
+    const newchannel2 = requestChannelsCreateV3(owner.token, 'a team', true);
+    const newchannel3 = requestChannelsCreateV3(owner.token, 'b team', true);
+    const newchannel4 = requestChannelsCreateV3(owner.token, 'c team', true);
+    const newchannel5 = requestChannelsCreateV3(owner.token, 'd team', true);
+    const newchannel6 = requestChannelsCreateV3(owner.token, 'e team', true);
+    const newchannel7 = requestChannelsCreateV3(owner.token, 'f team', true);
+    const newchannel8 = requestChannelsCreateV3(owner.token, 'g team', true);
+    const newchannel9 = requestChannelsCreateV3(owner.token, 'h team', true);
+    const newchannel10 = requestChannelsCreateV3(owner.token, 'i team', true);
+    const newchannel11 = requestChannelsCreateV3(owner.token, 'j team', true);
+    const newchannel12 = requestChannelsCreateV3(owner.token, 'k team', true);
+    const newchannel13 = requestChannelsCreateV3(owner.token, 'l team', true);
+    const newchannel14 = requestChannelsCreateV3(owner.token, 'm team', true);
+    const newchannel15 = requestChannelsCreateV3(owner.token, 'n team', true);
+    const newchannel16 = requestChannelsCreateV3(owner.token, 'o team', true);
+    const newchannel17 = requestChannelsCreateV3(owner.token, 'p team', true);
+    const newchannel18 = requestChannelsCreateV3(owner.token, 'q team', true);
+    const newchannel19 = requestChannelsCreateV3(owner.token, 'r team', true);
+    const newchannel20 = requestChannelsCreateV3(owner.token, 's team', true);
+    const newchannel21 = requestChannelsCreateV3(owner.token, 'z team', true);
+
     // valid invite
     expect(reqChannelInvite(owner.token, newchannel.channelId, notMember.authUserId)).toStrictEqual({});
-
+    expect(reqChannelInvite(owner.token, newchannel2.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel3.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel4.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel5.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel6.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel7.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel8.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel9.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel10.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel11.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel12.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel13.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel14.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel15.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel16.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel17.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel18.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel19.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel20.channelId, notMember.authUserId)).toStrictEqual({});
+    expect(reqChannelInvite(owner.token, newchannel21.channelId, notMember.authUserId)).toStrictEqual({});
     expect(reqChannelDetails(owner.token, newchannel.channelId)).toMatchObject({
       name: 'crush team',
       isPublic: true,
@@ -92,6 +133,7 @@ describe('/channel/invite/v3', () => {
         }
       ],
     });
+    expect(reqGetNotification(notMember.token).notifications.length).toStrictEqual(20);
   });
 });
 
@@ -170,12 +212,14 @@ describe('/channel/messages/v3 and dm/messages/v3', () => {
     const newchannel = requestChannelsCreateV3(aMember.token, 'crush team', true);
 
     for (let i = 0; i < 60; i++) {
-      reqMessageSend(aMember.token, newchannel.channelId, `hello ${i}`);
+      reqMessageSend(aMember.token, newchannel.channelId, `hello @jakerenzella ${i}`);
     }
     const el = reqChannelMessages(aMember.token, newchannel.channelId, 0);
     const el2 = reqChannelMessages(aMember.token, newchannel.channelId, 50);
     expect(reqChannelMessages(aMember.token, newchannel.channelId, 0)).toStrictEqual({ messages: el.messages, start: 0, end: 50 });
     expect(reqChannelMessages(aMember.token, newchannel.channelId, 50)).toStrictEqual({ messages: el2.messages, start: 50, end: -1 });
+
+    expect(reqGetNotification(aMember.token).notifications.length).toEqual(20);
   });
 
   // correct return for dmMessages length more than 50
@@ -187,12 +231,14 @@ describe('/channel/messages/v3 and dm/messages/v3', () => {
     const dm = reqDmCreate(user.token, uIds);
 
     for (let i = 0; i < 60; i++) {
-      reqSendMessageDm(user.token, dm.dmId, `hello ${i}`);
+      reqSendMessageDm(user.token, dm.dmId, `hello @jakerenzella ${i}`);
     }
     const el = reqDmMessages(user.token, dm.dmId, 0);
     const el2 = reqDmMessages(user.token, dm.dmId, 50);
     expect(reqDmMessages(user.token, dm.dmId, 0)).toStrictEqual({ messages: el.messages, start: 0, end: 50 });
     expect(reqDmMessages(user.token, dm.dmId, 50)).toStrictEqual({ messages: el2.messages, start: 50, end: -1 });
+
+    expect(reqGetNotification(user.token).notifications.length).toEqual(20);
   });
 });
 

@@ -807,7 +807,7 @@ export function reqAdminUPChange(token: string, uId: number, permissionId: numbe
   return res.statusCode;
 }
 
-export function reqMessageReact(token: string, messageId: number, reactId) {
+export function reqMessageReact(token: string, messageId: number, reactId: number) {
   const res = request(
     'POST',
     `${url}:${port}` + '/message/react/v1',
@@ -827,7 +827,7 @@ export function reqMessageReact(token: string, messageId: number, reactId) {
   return res.statusCode;
 }
 
-export function reqMessageUnreact(token: string, messageId: number, reactId) {
+export function reqMessageUnreact(token: string, messageId: number, reactId: number) {
   const res = request(
     'POST',
     `${url}:${port}` + '/message/unreact/v1',
@@ -838,6 +838,22 @@ export function reqMessageUnreact(token: string, messageId: number, reactId) {
       },
       headers: {
         token: token
+      }
+    }
+  );
+  if (res.statusCode === 200) {
+    return JSON.parse(res.getBody() as string);
+  }
+  return res.statusCode;
+}
+
+export function reqGetNotification(token: string) {
+  const res = request(
+    'GET',
+    `${url}:${port}` + '/notifications/get/v1',
+    {
+      headers: {
+        token
       }
     }
   );

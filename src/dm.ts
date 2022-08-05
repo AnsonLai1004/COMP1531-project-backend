@@ -1,7 +1,9 @@
 import { getData, setData, updateStatsUserDm, updateStatsWorkplaceDms, updateStatsWorkplaceMessages } from './data';
-import { Message } from './interfaces';
+import { Message, Notif } from './interfaces';
 import { tokenToUId, membersobjCreate, isValidUserId } from './channel';
 import HTTPError from 'http-errors';
+import { userProfileV3 } from './users';
+
 export { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV2, dmDetailsV2 };
 
 function dmCreateV2(token: string, uIds: number[]) {
@@ -48,6 +50,26 @@ function dmCreateV2(token: string, uIds: number[]) {
     uIds: uIds,
     messages: [] as Message[],
   };
+
+  const getUserInfo = userProfileV3(token, tokenId.uId);
+  const getHandle = getUserInfo.user.handleStr;
+  const newNotif: Notif = {
+    channelId: -1,
+    dmId: dm.dmId,
+    notificationMessage: `${getHandle} added you to ${dm.name}`
+  };
+  for (const id of uIds) {
+    // get user of message.uId then unshift newNotif
+    const getUidMessage = data.users.filter(el => el.uId === id);
+    const exactUser = getUidMessage[0];
+    if (exactUser.notification.length === 20) {
+      // pop then add
+      exactUser.notification.pop();
+      exactUser.notification.unshift(newNotif);
+    } else {
+      exactUser.notification.unshift(newNotif);
+    }
+  }
   data.dms.push(dm);
   setData(data);
 

@@ -514,6 +514,10 @@ describe('message/share/v1', () => {
     expect(reqMessageShare(user.token, message.messageId, '7', channel2.channelId, -1)).toStrictEqual(403);
     expect(reqMessageShare('Invalid', message.messageId, '8', channel.channelId, -1)).toStrictEqual(403);
     expect(reqMessageShare(user2.token, message.messageId, '8', -1, dm.dmId)).toStrictEqual(403);
+
+    // user2 not in dm
+    const messageDm = reqSendMessageDm(user.token, dm.dmId, 'Hello DM!');
+    expect(reqMessageShare(user2.token, messageDm.messageId, '5', channel2.channelId, -1)).toStrictEqual(400);
   });
 
   test('share message to a channel', () => {

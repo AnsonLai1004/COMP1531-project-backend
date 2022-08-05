@@ -8,7 +8,10 @@ import errorHandler from 'middleware-http-errors';
 import { channelInviteV3, channelMessagesV3, channelDetailsV3, channelJoinV3, channelLeaveV2, channelAddownerV2, channelRemoveownerV2 } from './channel';
 import { authRegisterV3, authLoginV3, authLogoutV2 } from './auth';
 import { channelsCreateV3, channelsListallV3, channelsListV3 } from './channels';
-import { messageShareV1, messageUnpin, messagePin, messagesSearch, messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2, messageSendLater, messageSendLaterDM, messageReact, messageUnreact } from './message';
+import {
+  messageUnpin, messagePin, messagesSearch, messageSendV2, messageRemoveV2, messageEditV2, dmMessagesV2, messageSendDmV2,
+  messageSendLater, messageSendLaterDM, messageReact, messageUnreact, getNotification, messageShareV1
+} from './message';
 import { standupSendV1, standupActiveV1, standupStartV1 } from './standups';
 import { dmLeaveV1, dmRemoveV1, dmListV1, dmCreateV2, dmDetailsV2 } from './dm';
 import { clearV1 } from './other';
@@ -390,20 +393,11 @@ app.get('/users/stats/v1', (req, res) => {
   res.json(usersStatsV1(token));
 });
 
-app.post('/message/pin/v1', (req, res, next) => {
+app.post('/message/react/v1', (req, res, next) => {
   try {
-    const { messageId } = req.body;
+    const { messageId, reactId } = req.body;
     const token = req.headers.token as string;
-    res.json(messagePin(token, messageId));
-  } catch (err) {
-    next(err);
-  }
-});
-app.post('/message/unpin/v1', (req, res, next) => {
-  try {
-    const { messageId } = req.body;
-    const token = req.headers.token as string;
-    res.json(messageUnpin(token, messageId));
+    res.json(messageReact(token, messageId, reactId));
   } catch (err) {
     next(err);
   }
@@ -431,21 +425,20 @@ app.post('/admin/userpermission/change/v1', (req, res, next) => {
 });
 
 /// ///////////////////////////////////////////////////////////////////////
-app.post('/message/react/v1', (req, res, next) => {
-  try {
-    const { messageId, reactId } = req.body;
-    const token = req.headers.token as string;
-    res.json(messageReact(token, messageId, reactId));
-  } catch (err) {
-    next(err);
-  }
-});
-
 app.post('/message/unreact/v1', (req, res, next) => {
   try {
     const { messageId, reactId } = req.body;
     const token = req.headers.token as string;
     res.json(messageUnreact(token, messageId, reactId));
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.get('/notifications/get/v1', (req, res, next) => {
+  try {
+    const token = req.headers.token as string;
+    res.json(getNotification(token));
   } catch (err) {
     next(err);
   }

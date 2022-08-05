@@ -23,6 +23,7 @@ function clearV1() {
       messagesExist: [{ numMessagesExist: 0, timeStamp: timeStamp }],
     },
   };
+
   setData(data);
 
   return {};

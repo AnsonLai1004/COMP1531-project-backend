@@ -107,4 +107,5 @@ export interface User {
     notification: Notif[];
     resetCodes: string[];
     stats: UserStats;
+    profileImgUrl: string;
 }

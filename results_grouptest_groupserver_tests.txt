@@ -1,0 +1,219 @@
+npm verb cli /import/kamen/3/cs1531/.nvm/versions/node/v18.2.0/bin/node /import/kamen/3/cs1531/.nvm/versions/node/v18.2.0/bin/npm
+npm info using npm@8.9.0
+npm info using node@v18.2.0
+npm timing npm:load:whichnode Completed in 1ms
+npm timing config:load:defaults Completed in 4ms
+npm timing config:load:file:/import/kamen/3/cs1531/.nvm/versions/node/v18.2.0/lib/node_modules/npm/npmrc Completed in 1ms
+npm timing config:load:builtin Completed in 3ms
+npm timing config:load:cli Completed in 8ms
+npm timing config:load:env Completed in 1ms
+npm timing config:load:file:/import/kamen/3/cs1531/project-automarking/tempstore/.npmrc Completed in 0ms
+npm timing config:load:project Completed in 21ms
+npm timing config:load:file:/import/kamen/3/cs1531/.npmrc Completed in 0ms
+npm timing config:load:user Completed in 1ms
+npm timing config:load:file:/import/kamen/3/cs1531/.nvm/versions/node/v18.2.0/etc/npmrc Completed in 0ms
+npm timing config:load:global Completed in 0ms
+npm timing config:load:validate Completed in 1ms
+npm timing config:load:credentials Completed in 2ms
+npm timing config:load:setEnvs Completed in 2ms
+npm timing config:load Completed in 45ms
+npm timing npm:load:configload Completed in 45ms
+npm timing npm:load:mkdirpcache Completed in 3ms
+npm timing npm:load:mkdirplogs Completed in 1ms
+npm verb title npm run test **/?(*.)+(test).ts
+npm verb argv "run" "test" "--loglevel" "verbose" "--testMatch" "**/?(*.)+(test).ts"
+npm timing npm:load:setTitle Completed in 4ms
+npm timing config:load:flatten Completed in 8ms
+npm timing npm:load:display Completed in 15ms
+npm verb logfile logs-max:10 dir:/import/kamen/3/cs1531/.npm/_logs
+npm verb logfile /import/kamen/3/cs1531/.npm/_logs/2022-08-05T23_12_47_933Z-debug-0.log
+npm timing npm:load:logFile Completed in 13ms
+npm timing npm:load:timers Completed in 0ms
+npm timing npm:load:configScope Completed in 0ms
+npm timing npm:load Completed in 84ms
+
+> test
+> jest --coverage --collectCoverageFrom=src/*.ts "**/?(*.)+(test).ts"
+
+  Invalid testPattern **/?(*.)+(test).ts supplied. Running all tests instead.
+  Invalid testPattern **/?(*.)+(test).ts supplied. Running all tests instead.
+PASS src/message.http.test.ts (49.72 s)
+PASS src/dm.http.test.ts (7.49 s)
+PASS src/channel.http.test.ts (20.592 s)
+FAIL src/users.http.test.ts (6.231 s)
+  ● Testing users/all/v1 valid cases › Only one user
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -3,10 +3,10 @@
+          Object {
+            "email": "chosen-one@gmail.com",
+            "handleStr": "harrypotter",
+            "nameFirst": "Harry",
+            "nameLast": "Potter",
+    -       "profileImgUrl": "http://localhost:34054/img/default.jpg",
+    +       "profileImgUrl": "http://localhost:48237/img/default.jpg",
+            "uId": 1,
+          },
+        ],
+      }
+
+      71 |     const registered = requestAuthRegister('chosen-one@gmail.com', 'password', 'Harry', 'Potter');
+      72 |     const users = requestUsersAll(registered.token);
+    > 73 |     expect(users).toStrictEqual({
+         |                   ^
+      74 |       users: [{
+      75 |         uId: registered.authUserId,
+      76 |         email: 'chosen-one@gmail.com',
+
+      at Object.<anonymous> (src/users.http.test.ts:73:19)
+
+  ● Testing users/all/v1 valid cases › Multiple users information
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    - Expected  - 4
+    + Received  + 4
+
+      Object {
+    -   "users": ArrayContaining [
+    +   "users": Array [
+          Object {
+            "email": "chosen-one@gmail.com",
+            "handleStr": "harrypotter",
+            "nameFirst": "Harry",
+            "nameLast": "Potter",
+    -       "profileImgUrl": "http://localhost:34054/img/default.jpg",
+    +       "profileImgUrl": "http://localhost:48237/img/default.jpg",
+            "uId": 1,
+          },
+          Object {
+            "email": "different@gmail.com",
+            "handleStr": "hermionegranger",
+            "nameFirst": "Hermione",
+            "nameLast": "Granger",
+    -       "profileImgUrl": "http://localhost:34054/img/default.jpg",
+    +       "profileImgUrl": "http://localhost:48237/img/default.jpg",
+            "uId": 2,
+          },
+          Object {
+            "email": "golden-trio@gmail.com",
+            "handleStr": "ronweasley",
+            "nameFirst": "Ron",
+            "nameLast": "Weasley",
+    -       "profileImgUrl": "http://localhost:34054/img/default.jpg",
+    +       "profileImgUrl": "http://localhost:48237/img/default.jpg",
+            "uId": 3,
+          },
+        ],
+      }
+
+      88 |     const registered3 = requestAuthRegister('golden-trio@gmail.com', 'password', 'Ron', 'Weasley');
+      89 |     const users = requestUsersAll(registered1.token);
+    > 90 |     expect(users).toStrictEqual({
+         |                   ^
+      91 |       users: expect.arrayContaining([
+      92 |         {
+      93 |           uId: registered1.authUserId,
+
+      at Object.<anonymous> (src/users.http.test.ts:90:19)
+
+  ● Testing user/profile/set**/v1 valid cases › All changes
+
+    expect(received).toStrictEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -2,9 +2,9 @@
+        "user": Object {
+          "email": "chosen-one@gmail.com",
+          "handleStr": "harrypotter",
+          "nameFirst": "First",
+          "nameLast": "Last",
+    -     "profileImgUrl": "http://localhost:34054/img/default.jpg",
+    +     "profileImgUrl": "http://localhost:48237/img/default.jpg",
+          "uId": 2,
+        },
+      }
+
+      176 |     const registered = requestAuthRegister('chosen-one@gmail.com', 'password', 'Harry', 'Potter');
+      177 |     expect(requestUserSetName(registered.token, 'First', 'Last')).toStrictEqual({});
+    > 178 |     expect(requestUserProfile(registered.token, registered.authUserId)).toStrictEqual({
+          |                                                                         ^
+      179 |       user: {
+      180 |         uId: registered.authUserId,
+      181 |         email: 'chosen-one@gmail.com',
+
+      at Object.<anonymous> (src/users.http.test.ts:178:73)
+
+PASS src/admin.http.test.ts
+FAIL src/auth.http.test.ts
+  ● auth/logout/v1 function valid cases › Check with user/profile functionality
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 1
+
+    @@ -2,9 +2,9 @@
+        "user": Object {
+          "email": "valid@gmail.com",
+          "handleStr": "harrypotter",
+          "nameFirst": "Harry",
+          "nameLast": "Potter",
+    -     "profileImgUrl": "http://localhost:34054/img/default.jpg",
+    +     "profileImgUrl": "http://localhost:48237/img/default.jpg",
+          "uId": 1,
+        },
+      }
+
+      126 |     };
+      127 |     const login = requestAuthLogin('valid@gmail.com', 'password');
+    > 128 |     expect(requestUserProfile(registered.token, registered.authUserId)).toEqual({ user: expectDetails });
+          |                                                                         ^
+      129 |     expect(requestUserProfile(login.token, registered.authUserId)).toEqual({ user: expectDetails });
+      130 |
+      131 |     const logout1 = requestAuthLogout(login.token);
+
+      at Object.<anonymous> (src/auth.http.test.ts:128:73)
+
+PASS src/channels.http.test.ts
+PASS src/other.http.test.ts
+PASS src/echo.test.ts
+PASS src/messagetag.http.test.ts (14.238 s)
+PASS src/messagereact.http.test.ts (10.515 s)
+PASS src/stats.http.test.ts
+PASS src/standups.http.test.ts (6.717 s)
+-----------------|---------|----------|---------|---------|-------------------
+File             | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-----------------|---------|----------|---------|---------|-------------------
+All files        |   11.67 |      8.8 |   20.93 |   11.99 |                   
+ admin.ts        |       0 |        0 |       0 |       0 | 1-117             
+ auth.ts         |       0 |        0 |       0 |       0 | 5-231             
+ channel.ts      |       0 |        0 |       0 |       0 | 6-526             
+ channels.ts     |       0 |        0 |       0 |       0 | 1-130             
+ data.ts         |       0 |        0 |       0 |       0 | 8-223             
+ dm.ts           |       0 |        0 |       0 |       0 | 1-273             
+ echo.ts         |       0 |        0 |       0 |       0 | 1-13              
+ interfaces.d.ts |       0 |        0 |       0 |       0 |                   
+ message.ts      |       0 |        0 |       0 |       0 | 2-1137            
+ other.ts        |       0 |      100 |       0 |       0 | 5-33              
+ requests.ts     |   98.24 |    95.45 |   97.82 |   98.24 | 232-241,691,710   
+ server.ts       |       0 |        0 |       0 |       0 | 1-476             
+ standups.ts     |       0 |        0 |       0 |       0 | 1-125             
+ users.ts        |       0 |        0 |       0 |       0 | 6-312             
+-----------------|---------|----------|---------|---------|-------------------
+
+Test Suites: 2 failed, 11 passed, 13 total
+Tests:       4 failed, 212 passed, 216 total
+Snapshots:   0 total
+Time:        141.653 s
+Ran all test suites.
+npm timing command:run Completed in 143915ms
+npm verb exit 1
+npm timing npm Completed in 144021ms
+npm verb code 1

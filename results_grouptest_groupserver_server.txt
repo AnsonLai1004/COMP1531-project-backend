@@ -1,0 +1,2133 @@
+
+> ts-node-coverage
+> nyc --reporter=text --reporter=lcov ts-node src/server.ts
+
+⚡️ Server listening on port 48237 at localhost
+[0mDELETE /clear/v1 [32m200[0m 10.481 ms - 2[0m
+invalid tokenid
+[0mPOST /message/send/v2 [33m403[0m 7.089 ms - 39[0m
+[0mDELETE /clear/v1 [32m200[0m 2.842 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 327.727 ms - 91[0m
+ChannelId does not refer to a valid channel
+[0mPOST /message/send/v2 [33m400[0m 1.485 ms - 67[0m
+[0mDELETE /clear/v1 [32m200[0m 4.081 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 81.779 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.690 ms - 15[0m
+length of message less than 1 or greater than 1000
+[0mPOST /message/send/v2 [33m400[0m 1.497 ms - 74[0m
+length of message less than 1 or greater than 1000
+[0mPOST /message/send/v2 [33m400[0m 1.487 ms - 74[0m
+[0mDELETE /clear/v1 [32m200[0m 2.953 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 76.633 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.663 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 73.527 ms - 91[0m
+Authorized user not a member of channel
+[0mPOST /message/send/v2 [33m403[0m 1.643 ms - 63[0m
+[0mDELETE /clear/v1 [32m200[0m 3.239 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 72.962 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.731 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 10.531 ms - 15[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 2.001 ms - 133[0m
+[0mDELETE /clear/v1 [32m200[0m 3.059 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 71.001 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.903 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.246 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 9.375 ms - 15[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 0.731 ms - 133[0m
+[0mPOST /message/send/v2 [32m200[0m 8.783 ms - 15[0m
+[0mGET /channel/messages/v3?channelId=2&start=0 [32m200[0m 0.685 ms - 140[0m
+[0mPOST /message/send/v2 [32m200[0m 8.738 ms - 15[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 0.649 ms - 239[0m
+[0mPOST /message/send/v2 [32m200[0m 8.838 ms - 15[0m
+[0mGET /channel/messages/v3?channelId=2&start=0 [32m200[0m 0.665 ms - 247[0m
+[0mDELETE /clear/v1 [32m200[0m 3.281 ms - 2[0m
+Invalid TokenId
+[0mPUT /message/edit/v2 [33m403[0m 2.091 ms - 39[0m
+[0mDELETE /clear/v1 [32m200[0m 2.865 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 75.568 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.452 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.812 ms - 15[0m
+length of messages is greater than 1000
+[0mPUT /message/edit/v2 [33m400[0m 1.037 ms - 63[0m
+[0mDELETE /clear/v1 [32m200[0m 3.010 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 71.425 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.698 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 9.002 ms - 15[0m
+messageId does not refer to any message in channel
+[0mPUT /message/edit/v2 [33m400[0m 2.213 ms - 74[0m
+[0mDELETE /clear/v1 [32m200[0m 3.457 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 70.880 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.987 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 71.695 ms - 91[0m
+[0mPOST /channel/invite/v3 [32m200[0m 7.222 ms - 2[0m
+[0mPOST /message/send/v2 [32m200[0m 9.574 ms - 15[0m
+not owner in channel
+[0mPUT /message/edit/v2 [33m403[0m 1.642 ms - 44[0m
+[0mDELETE /clear/v1 [32m200[0m 3.048 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 74.360 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.457 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 71.902 ms - 91[0m
+[0mPOST /channel/invite/v3 [32m200[0m 4.831 ms - 2[0m
+[0mPOST /message/send/v2 [32m200[0m 9.229 ms - 15[0m
+message was not sent by current user who wants to edit
+[0mPUT /message/edit/v2 [33m403[0m 1.137 ms - 78[0m
+[0mDELETE /clear/v1 [32m200[0m 2.682 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 70.759 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 70.295 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.409 ms - 10[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.599 ms - 15[0m
+not member in channel
+[0mPUT /message/edit/v2 [33m403[0m 1.493 ms - 45[0m
+[0mDELETE /clear/v1 [32m200[0m 3.019 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 70.340 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.440 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.330 ms - 10[0m
+[0mPOST /message/senddm/v2 [32m200[0m 7.599 ms - 15[0m
+message was not sent by current user who wants to edit
+[0mPUT /message/edit/v2 [33m403[0m 1.158 ms - 78[0m
+[0mDELETE /clear/v1 [32m200[0m 3.163 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.201 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.469 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 9.246 ms - 15[0m
+[0mPUT /message/edit/v2 [32m200[0m 5.213 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 3.118 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.537 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.184 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 7.500 ms - 15[0m
+[0mPUT /message/edit/v2 [32m200[0m 7.872 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 3.236 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.398 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.992 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.303 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.168 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 9.195 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 7.961 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 7.694 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 7.557 ms - 15[0m
+[0mPUT /message/edit/v2 [32m200[0m 5.499 ms - 2[0m
+[0mPUT /message/edit/v2 [32m200[0m 5.108 ms - 2[0m
+[0mPUT /message/edit/v2 [32m200[0m 5.000 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 2.918 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.649 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.259 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.134 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.360 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.391 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 7.859 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.425 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.448 ms - 15[0m
+[0mPUT /message/edit/v2 [32m200[0m 6.935 ms - 2[0m
+[0mPUT /message/edit/v2 [32m200[0m 7.259 ms - 2[0m
+[0mPUT /message/edit/v2 [32m200[0m 6.797 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 3.174 ms - 2[0m
+Invalid tokenId
+[0mDELETE /message/remove/v2?messageId=1 [33m403[0m 1.283 ms - 39[0m
+[0mDELETE /clear/v1 [32m200[0m 2.918 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.076 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.103 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.753 ms - 15[0m
+message not found in dms or channels
+[0mDELETE /message/remove/v2?messageId=2 [33m400[0m 1.571 ms - 60[0m
+[0mDELETE /clear/v1 [32m200[0m 3.059 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.527 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.873 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.680 ms - 91[0m
+[0mPOST /channel/invite/v3 [32m200[0m 5.432 ms - 2[0m
+[0mPOST /message/send/v2 [32m200[0m 8.524 ms - 15[0m
+Uid not owner of channel
+[0mDELETE /message/remove/v2?messageId=1 [33m403[0m 1.264 ms - 48[0m
+[0mDELETE /clear/v1 [32m200[0m 2.887 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 69.427 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.663 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.718 ms - 91[0m
+[0mPOST /channel/invite/v3 [32m200[0m 5.557 ms - 2[0m
+[0mPOST /message/send/v2 [32m200[0m 8.332 ms - 15[0m
+message not send by uid
+[0mDELETE /message/remove/v2?messageId=1 [33m403[0m 1.110 ms - 47[0m
+[0mDELETE /clear/v1 [32m200[0m 3.076 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.791 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.894 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.144 ms - 10[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.224 ms - 15[0m
+Uid not owner of dm
+[0mDELETE /message/remove/v2?messageId=1 [33m403[0m 1.152 ms - 43[0m
+[0mDELETE /clear/v1 [32m200[0m 2.740 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.178 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.427 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.533 ms - 10[0m
+[0mPOST /message/senddm/v2 [32m200[0m 7.759 ms - 15[0m
+message not send by uid
+[0mDELETE /message/remove/v2?messageId=1 [33m403[0m 1.063 ms - 47[0m
+[0mDELETE /clear/v1 [32m200[0m 3.111 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.969 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.547 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.363 ms - 15[0m
+[0mDELETE /message/remove/v2?messageId=1 [32m200[0m 5.521 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 3.248 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.931 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.980 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.431 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.585 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.221 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 7.897 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.442 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.624 ms - 15[0m
+[0mDELETE /message/remove/v2?messageId=4 [32m200[0m 4.688 ms - 2[0m
+[0mDELETE /message/remove/v2?messageId=1 [32m200[0m 5.320 ms - 2[0m
+[0mDELETE /message/remove/v2?messageId=3 [32m200[0m 5.049 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 3.358 ms - 2[0m
+invalid Token
+[0mPOST /message/senddm/v2 [33m403[0m 0.990 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.949 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.986 ms - 91[0m
+dmId does not refer to valid dmId
+[0mPOST /message/senddm/v2 [33m400[0m 1.166 ms - 57[0m
+[0mDELETE /clear/v1 [32m200[0m 2.622 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 73.100 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.745 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.291 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.684 ms - 10[0m
+length of message is less than 1 or over 1000 characters
+[0mPOST /message/senddm/v2 [33m400[0m 1.167 ms - 80[0m
+length of message is less than 1 or over 1000 characters
+[0mPOST /message/senddm/v2 [33m400[0m 0.984 ms - 80[0m
+[0mDELETE /clear/v1 [32m200[0m 2.498 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 76.627 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.774 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.591 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.915 ms - 10[0m
+user is authorized but not in dm
+[0mPOST /message/senddm/v2 [33m403[0m 1.192 ms - 56[0m
+[0mDELETE /clear/v1 [32m200[0m 2.583 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.502 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.863 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 69.105 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 11.112 ms - 10[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.891 ms - 15[0m
+[0mGET /dm/messages/v2?dmId=1&start=0 [32m200[0m 1.823 ms - 133[0m
+[0mDELETE /clear/v1 [32m200[0m 3.246 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.765 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.230 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.365 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 11.153 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.840 ms - 10[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.928 ms - 15[0m
+[0mGET /dm/messages/v2?dmId=1&start=0 [32m200[0m 0.794 ms - 133[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.519 ms - 15[0m
+[0mGET /dm/messages/v2?dmId=1&start=0 [32m200[0m 0.705 ms - 240[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.468 ms - 15[0m
+[0mGET /dm/messages/v2?dmId=1&start=0 [32m200[0m 0.731 ms - 346[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.769 ms - 15[0m
+[0mGET /dm/messages/v2?dmId=1&start=0 [32m200[0m 0.679 ms - 453[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.854 ms - 15[0m
+[0mGET /dm/messages/v2?dmId=2&start=0 [32m200[0m 0.746 ms - 140[0m
+[0mDELETE /clear/v1 [32m200[0m 3.063 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 69.295 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.814 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.508 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 69.799 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.329 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.803 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 13.401 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.661 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 9.319 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 11.300 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 10.181 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 10.812 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 16.766 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.289 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.783 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.415 ms - 15[0m
+[0mPUT /message/edit/v2 [32m200[0m 6.684 ms - 2[0m
+[0mPUT /message/edit/v2 [32m200[0m 6.214 ms - 2[0m
+[0mPUT /message/edit/v2 [32m200[0m 6.130 ms - 2[0m
+[0mPUT /message/edit/v2 [32m200[0m 6.759 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 3.098 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.103 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.310 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.040 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 71.701 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 70.454 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 101.870 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.342 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.175 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.307 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 9.619 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 10.574 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 10.705 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 10.728 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.489 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.735 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.465 ms - 15[0m
+[0mPUT /message/edit/v2 [32m200[0m 8.801 ms - 2[0m
+[0mPUT /message/edit/v2 [32m200[0m 8.449 ms - 2[0m
+[0mPUT /message/edit/v2 [32m200[0m 8.231 ms - 2[0m
+[0mPUT /message/edit/v2 [32m200[0m 8.917 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 2.796 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.532 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.130 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.341 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.751 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.332 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.504 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 11.525 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.919 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.073 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 10.899 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 13.112 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 11.492 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 10.721 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.968 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.105 ms - 15[0m
+user is authorized but not in dm
+[0mPOST /message/senddm/v2 [33m403[0m 1.273 ms - 56[0m
+[0mDELETE /message/remove/v2?messageId=7 [32m200[0m 6.672 ms - 2[0m
+[0mDELETE /message/remove/v2?messageId=6 [32m200[0m 6.413 ms - 2[0m
+[0mDELETE /message/remove/v2?messageId=1 [32m200[0m 6.577 ms - 2[0m
+[0mDELETE /message/remove/v2?messageId=3 [32m200[0m 6.399 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 3.202 ms - 2[0m
+Invalid token
+[0mGET /search/v1?queryStr=any%20string [33m403[0m 1.753 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.804 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 69.024 ms - 91[0m
+
+[0mGET /search/v1?queryStr= [33m400[0m 1.486 ms - 24[0m
+DS3ho21uGIVZpqsCqDUv879zypAtNRC8gFrM7YecnTcdwqMCfzvUkyuxBu3zRYxhlRsMBPDJxzfUIh8bhp92owenjm8UXDPvUrI6U17qaZ3xc2MBMe2hvhYUbrI5CR6ylYdxGj6UikC9CpdD5CCNLGmqWigm2QkGXjLq3EcBi12nPSxuf7vGlhBWDKCwNjXBuo1KpFdogbdCwD8sEBgEQZs3Uw3vIhVOvYQzm6wkG7sU5BHjLTaXTeLIP19jAmWVFsVYG66Ztg4ZG1b2OScLJrg9ykkjmJf3bywy4YWmVqQihxasdyFL5WfEmTzrDw2SVGelnSfkNCUv9TwVrKmUzPWFR5JBNVGy71r528mDxRNwwJw1uSXhkmF39WuvlkuHHRZyUZweELBtlDKZqsG1CI4qj2M9BEKQo7OJE5ZNRtEoh2cHwzFcxgVEyiZ3QXnWviV5q2k6Uchm2X7iuYfC8eQNPXnx8SQzN1xkKV3GyukZPiA4szqbS0llk8q1EBKU4s3ENmroHquWeTfbplOHuRxdr9vPau9OV9Vu5sKWlqwfYQLVjaHvsTqPdMz8XKST2ick1MOtgNMn3vN0yUGJJzbc27gciQy6tK6PxCGZSRhR2TLHXeYHYfVarjGGWDQ3WvsTgBSIyEzcz8cjAcOSlMravYVQtqzQo5gWwJeqvEFXSnhG8n3hnLptr0qC47hsHxS8vFKjivtO3w52yXfaUVJxD48siNyWLZg9lzZ6Qubb6w6hqP3M9ePmtINh02L8UfFkeVMyuWjoWudLRMaEtmxERW3WJcnJv6AYvOwFCQkLtjKRiX4GZ67sM1LKjq66aNT7tC5MViUBai8uV7LDs9fxa864GoWrw9tJD95dauiN7BJyfQFmslS3C3WClToayaqGNZjA89GollAaEHxoQGG9b4jtnAsyctv4lNtWLf3WF6IiCSUKoiaduaRI1wxMS6Fqpih9qyHsKyr72jtS2ficEcTY6Fw3rU1n3a11sx6Ha
+[0mGET /search/v1?queryStr=DS3ho21uGIVZpqsCqDUv879zypAtNRC8gFrM7YecnTcdwqMCfzvUkyuxBu3zRYxhlRsMBPDJxzfUIh8bhp92owenjm8UXDPvUrI6U17qaZ3xc2MBMe2hvhYUbrI5CR6ylYdxGj6UikC9CpdD5CCNLGmqWigm2QkGXjLq3EcBi12nPSxuf7vGlhBWDKCwNjXBuo1KpFdogbdCwD8sEBgEQZs3Uw3vIhVOvYQzm6wkG7sU5BHjLTaXTeLIP19jAmWVFsVYG66Ztg4ZG1b2OScLJrg9ykkjmJf3bywy4YWmVqQihxasdyFL5WfEmTzrDw2SVGelnSfkNCUv9TwVrKmUzPWFR5JBNVGy71r528mDxRNwwJw1uSXhkmF39WuvlkuHHRZyUZweELBtlDKZqsG1CI4qj2M9BEKQo7OJE5ZNRtEoh2cHwzFcxgVEyiZ3QXnWviV5q2k6Uchm2X7iuYfC8eQNPXnx8SQzN1xkKV3GyukZPiA4szqbS0llk8q1EBKU4s3ENmroHquWeTfbplOHuRxdr9vPau9OV9Vu5sKWlqwfYQLVjaHvsTqPdMz8XKST2ick1MOtgNMn3vN0yUGJJzbc27gciQy6tK6PxCGZSRhR2TLHXeYHYfVarjGGWDQ3WvsTgBSIyEzcz8cjAcOSlMravYVQtqzQo5gWwJeqvEFXSnhG8n3hnLptr0qC47hsHxS8vFKjivtO3w52yXfaUVJxD48siNyWLZg9lzZ6Qubb6w6hqP3M9ePmtINh02L8UfFkeVMyuWjoWudLRMaEtmxERW3WJcnJv6AYvOwFCQkLtjKRiX4GZ67sM1LKjq66aNT7tC5MViUBai8uV7LDs9fxa864GoWrw9tJD95dauiN7BJyfQFmslS3C3WClToayaqGNZjA89GollAaEHxoQGG9b4jtnAsyctv4lNtWLf3WF6IiCSUKoiaduaRI1wxMS6Fqpih9qyHsKyr72jtS2ficEcTY6Fw3rU1n3a11sx6Ha [33m400[0m 1.066 ms - 1029[0m
+[0mDELETE /clear/v1 [32m200[0m 3.144 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 69.357 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.258 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.428 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.284 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.517 ms - 15[0m
+[0mGET /search/v1?queryStr=world [32m200[0m 0.865 ms - 114[0m
+[0mDELETE /clear/v1 [32m200[0m 2.889 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.529 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.092 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 7.416 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 7.970 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 7.556 ms - 15[0m
+[0mGET /search/v1?queryStr=world [32m200[0m 0.689 ms - 114[0m
+[0mPOST /auth/register/v3 [32m200[0m 72.979 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 74.636 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 109.438 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 11.352 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 13.492 ms - 10[0m
+[0mPOST /channels/create/v3 [32m200[0m 8.253 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.284 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.696 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.693 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 11.426 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.486 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.936 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 10.358 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.021 ms - 16[0m
+[0mGET /search/v1?queryStr=world [32m200[0m 0.763 ms - 416[0m
+[0mDELETE /clear/v1 [32m200[0m 2.926 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 70.383 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 71.758 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 70.361 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.602 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.116 ms - 15[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.910 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.916 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.770 ms - 15[0m
+Invalid channelId
+[0mPOST /message/share/v1 [33m400[0m 2.174 ms - 41[0m
+Invalid dmId
+[0mPOST /message/share/v1 [33m400[0m 0.895 ms - 36[0m
+neither channelId nor dmId are -1
+[0mPOST /message/share/v1 [33m400[0m 0.860 ms - 57[0m
+ogMessageId is Invalid
+[0mPOST /message/share/v1 [33m400[0m 1.374 ms - 46[0m
+user share message from channel they are not authorised
+[0mPOST /message/share/v1 [33m400[0m 0.997 ms - 79[0m
+user share message from channel they are not authorised
+[0mPOST /message/share/v1 [33m400[0m 0.946 ms - 79[0m
+length of messages is greater than 1000
+[0mPOST /message/share/v1 [33m400[0m 0.844 ms - 63[0m
+user has not joined the channel
+[0mPOST /message/share/v1 [33m403[0m 0.981 ms - 55[0m
+Invalid token
+[0mPOST /message/share/v1 [33m403[0m 0.929 ms - 37[0m
+user has not joined the channel
+[0mPOST /message/share/v1 [33m403[0m 0.998 ms - 55[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.279 ms - 15[0m
+user share message from Dm they are not authorised
+[0mPOST /message/share/v1 [33m400[0m 0.996 ms - 74[0m
+[0mDELETE /clear/v1 [32m200[0m 3.070 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.266 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.743 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.848 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.107 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.197 ms - 15[0m
+[0mPOST /channel/join/v3 [32m200[0m 6.461 ms - 2[0m
+[0mPOST /message/share/v1 [32m200[0m 4.831 ms - 21[0m
+[0mGET /channel/messages/v3?channelId=2&start=0 [32m200[0m 0.672 ms - 127[0m
+[0mDELETE /clear/v1 [32m200[0m 3.157 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 73.209 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 61.628 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.729 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.061 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.930 ms - 10[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.395 ms - 15[0m
+[0mPOST /message/share/v1 [32m200[0m 5.045 ms - 21[0m
+[0mGET /dm/messages/v2?dmId=2&start=0 [32m200[0m 0.670 ms - 127[0m
+[0mDELETE /clear/v1 [32m200[0m 2.951 ms - 2[0m
+Invalid token
+[0mPOST /message/sendlater/v1 [33m403[0m 1.716 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.673 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.170 ms - 91[0m
+Invalid channel
+[0mPOST /message/sendlater/v1 [33m400[0m 1.151 ms - 39[0m
+[0mDELETE /clear/v1 [32m200[0m 3.066 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.824 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.931 ms - 15[0m
+Message too long
+[0mPOST /message/sendlater/v1 [33m400[0m 1.077 ms - 40[0m
+Message too long
+[0mPOST /message/sendlater/v1 [33m400[0m 0.988 ms - 40[0m
+[0mDELETE /clear/v1 [32m200[0m 2.941 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.482 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 5.592 ms - 15[0m
+Time must be after current time
+[0mPOST /message/sendlater/v1 [33m400[0m 1.192 ms - 55[0m
+[0mDELETE /clear/v1 [32m200[0m 2.974 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.778 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.684 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.840 ms - 91[0m
+User not in channel
+[0mPOST /message/sendlater/v1 [33m403[0m 1.146 ms - 43[0m
+[0mDELETE /clear/v1 [32m200[0m 2.619 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.486 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.457 ms - 15[0m
+[0mPOST /message/sendlater/v1 [32m200[0m 3.410 ms - 15[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 0.671 ms - 34[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 0.622 ms - 133[0m
+[0mDELETE /clear/v1 [32m200[0m 3.044 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 71.198 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 5.112 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.682 ms - 15[0m
+[0mPOST /message/sendlater/v1 [32m200[0m 3.119 ms - 15[0m
+[0mPOST /message/sendlater/v1 [32m200[0m 2.887 ms - 15[0m
+[0mPOST /message/sendlater/v1 [32m200[0m 3.334 ms - 15[0m
+[0mPOST /message/sendlater/v1 [32m200[0m 3.205 ms - 15[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 0.719 ms - 240[0m
+[0mGET /channel/messages/v3?channelId=2&start=0 [32m200[0m 0.683 ms - 240[0m
+[0mDELETE /clear/v1 [32m200[0m 2.707 ms - 2[0m
+Invalid token
+[0mPOST /message/sendlaterdm/v1 [33m403[0m 1.642 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.779 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.941 ms - 91[0m
+Invalid dm
+[0mPOST /message/sendlaterdm/v1 [33m400[0m 1.209 ms - 34[0m
+[0mDELETE /clear/v1 [32m200[0m 3.921 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.507 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.441 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 61.185 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.546 ms - 10[0m
+Message too long
+[0mPOST /message/sendlaterdm/v1 [33m400[0m 1.115 ms - 40[0m
+Message too long
+[0mPOST /message/sendlaterdm/v1 [33m400[0m 0.887 ms - 40[0m
+[0mDELETE /clear/v1 [32m200[0m 3.086 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.667 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.813 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.909 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.708 ms - 10[0m
+Time must be after current time
+[0mPOST /message/sendlaterdm/v1 [33m400[0m 1.094 ms - 55[0m
+[0mDELETE /clear/v1 [32m200[0m 2.982 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.821 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.390 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.483 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.392 ms - 10[0m
+User not in dm
+[0mPOST /message/sendlaterdm/v1 [33m403[0m 1.137 ms - 38[0m
+[0mDELETE /clear/v1 [32m200[0m 2.868 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.980 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.923 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.999 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.170 ms - 10[0m
+[0mPOST /message/sendlaterdm/v1 [32m200[0m 3.327 ms - 15[0m
+[0mGET /dm/messages/v2?dmId=1&start=0 [32m200[0m 0.752 ms - 34[0m
+[0mGET /dm/messages/v2?dmId=1&start=0 [32m200[0m 0.758 ms - 133[0m
+[0mDELETE /clear/v1 [32m200[0m 2.922 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 84.939 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.841 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.162 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.488 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.013 ms - 10[0m
+[0mPOST /message/sendlaterdm/v1 [32m200[0m 3.284 ms - 15[0m
+[0mPOST /message/sendlaterdm/v1 [32m200[0m 3.204 ms - 15[0m
+[0mPOST /message/sendlaterdm/v1 [32m200[0m 3.239 ms - 15[0m
+[0mPOST /message/sendlaterdm/v1 [32m200[0m 3.255 ms - 15[0m
+[0mGET /dm/messages/v2?dmId=1&start=0 [32m200[0m 0.732 ms - 240[0m
+[0mGET /dm/messages/v2?dmId=2&start=0 [32m200[0m 1.203 ms - 240[0m
+[0mDELETE /clear/v1 [32m200[0m 2.805 ms - 2[0m
+Invalid token
+[0mPOST /message/pin/v1 [33m403[0m 1.817 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.544 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.374 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 8.507 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.510 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.343 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.996 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.136 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.019 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.036 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 10.004 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 14.166 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 11.160 ms - 15[0m
+[0mPOST /message/pin/v1 [32m200[0m 3.635 ms - 2[0m
+the message is already pinned
+[0mPOST /message/pin/v1 [33m400[0m 1.055 ms - 53[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.064 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.495 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.446 ms - 15[0m
+[0mPOST /message/pin/v1 [32m200[0m 3.533 ms - 2[0m
+the message is already pinned
+[0mPOST /message/pin/v1 [33m400[0m 0.970 ms - 53[0m
+[0mDELETE /clear/v1 [32m200[0m 2.671 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.600 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.384 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 14.544 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.461 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.242 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 137.426 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.909 ms - 10[0m
+[0mPOST /channel/invite/v3 [32m200[0m 4.655 ms - 2[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.030 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.932 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 10.214 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 11.147 ms - 15[0m
+No owner permissions in channel
+[0mPOST /message/pin/v1 [33m403[0m 0.924 ms - 55[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.349 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.642 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.193 ms - 15[0m
+No owner permissions in dm
+[0mPOST /message/pin/v1 [33m403[0m 0.916 ms - 50[0m
+[0mDELETE /clear/v1 [32m200[0m 2.982 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 57.004 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.434 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.873 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 60.266 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 60.449 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 55.555 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.763 ms - 10[0m
+[0mPOST /channel/invite/v3 [32m200[0m 4.877 ms - 2[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.006 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.572 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 11.187 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 11.067 ms - 15[0m
+messageId is not found in dms or channels
+[0mPOST /message/pin/v1 [33m400[0m 0.899 ms - 65[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.288 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.675 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.209 ms - 15[0m
+messageId is not found in dms or channels
+[0mPOST /message/pin/v1 [33m400[0m 0.872 ms - 65[0m
+[0mDELETE /clear/v1 [32m200[0m 2.810 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 57.701 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 5.566 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 5.763 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 56.214 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.788 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 56.361 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.883 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.537 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 11.108 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.137 ms - 15[0m
+[0mPOST /message/pin/v1 [32m200[0m 3.353 ms - 2[0m
+[0mPOST /message/pin/v1 [32m200[0m 3.601 ms - 2[0m
+[0mGET /search/v1?queryStr=World [32m200[0m 0.649 ms - 212[0m
+[0mDELETE /clear/v1 [32m200[0m 2.449 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 56.917 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.374 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.409 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 56.495 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.644 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 11.448 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 7.952 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 7.968 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.266 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.240 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.169 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 12.949 ms - 15[0m
+[0mPOST /message/pin/v1 [32m200[0m 3.765 ms - 2[0m
+[0mPOST /message/pin/v1 [32m200[0m 3.532 ms - 2[0m
+[0mGET /search/v1?queryStr=World [32m200[0m 0.646 ms - 514[0m
+[0mPOST /message/pin/v1 [32m200[0m 3.562 ms - 2[0m
+[0mPOST /message/pin/v1 [32m200[0m 3.504 ms - 2[0m
+[0mGET /search/v1?queryStr=World [32m200[0m 0.587 ms - 512[0m
+[0mDELETE /clear/v1 [32m200[0m 2.727 ms - 2[0m
+Invalid token
+[0mPOST /message/unpin/v1 [33m403[0m 1.679 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.593 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 57.806 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.148 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.039 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 55.121 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 56.654 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.301 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.007 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.075 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 7.937 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.893 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 10.252 ms - 15[0m
+the message is not pinned
+[0mPOST /message/unpin/v1 [33m400[0m 0.937 ms - 49[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.061 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.915 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.799 ms - 15[0m
+the message is not pinned
+[0mPOST /message/unpin/v1 [33m400[0m 0.828 ms - 49[0m
+[0mDELETE /clear/v1 [32m200[0m 2.584 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 55.852 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.037 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.014 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.412 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.268 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 55.576 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.305 ms - 10[0m
+[0mPOST /channel/invite/v3 [32m200[0m 4.850 ms - 2[0m
+[0mPOST /dm/create/v2 [32m200[0m 7.868 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.193 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 10.105 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 9.945 ms - 15[0m
+No owner permissions in channel
+[0mPOST /message/unpin/v1 [33m403[0m 1.014 ms - 55[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.980 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.116 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.247 ms - 15[0m
+No owner permissions in dm
+[0mPOST /message/unpin/v1 [33m403[0m 0.889 ms - 50[0m
+[0mDELETE /clear/v1 [32m200[0m 2.558 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 57.087 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.127 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.188 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 56.316 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 184.877 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.381 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.852 ms - 10[0m
+[0mPOST /channel/invite/v3 [32m200[0m 5.088 ms - 2[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.078 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.783 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 10.255 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 9.896 ms - 15[0m
+messageId is not found in dms or channels
+[0mPOST /message/unpin/v1 [33m400[0m 0.918 ms - 65[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.111 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.031 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.128 ms - 15[0m
+messageId is not found in dms or channels
+[0mPOST /message/unpin/v1 [33m400[0m 0.836 ms - 65[0m
+[0mDELETE /clear/v1 [32m200[0m 2.739 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 56.459 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.702 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.207 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.791 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.822 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.238 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.129 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.090 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.414 ms - 15[0m
+[0mPOST /message/pin/v1 [32m200[0m 3.305 ms - 2[0m
+[0mPOST /message/pin/v1 [32m200[0m 2.831 ms - 2[0m
+[0mGET /search/v1?queryStr=World [32m200[0m 1.208 ms - 212[0m
+[0mPOST /message/unpin/v1 [32m200[0m 3.846 ms - 2[0m
+[0mPOST /message/unpin/v1 [32m200[0m 3.312 ms - 2[0m
+[0mGET /search/v1?queryStr=World [32m200[0m 0.782 ms - 214[0m
+[0mDELETE /clear/v1 [32m200[0m 3.064 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 61.289 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.815 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.292 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.921 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.764 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.619 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 7.591 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.177 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 7.997 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.713 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 7.794 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.842 ms - 15[0m
+[0mPOST /message/pin/v1 [32m200[0m 3.273 ms - 2[0m
+[0mPOST /message/pin/v1 [32m200[0m 3.683 ms - 2[0m
+[0mGET /search/v1?queryStr=World [32m200[0m 0.678 ms - 514[0m
+[0mPOST /message/pin/v1 [32m200[0m 3.159 ms - 2[0m
+[0mPOST /message/pin/v1 [32m200[0m 3.524 ms - 2[0m
+[0mGET /search/v1?queryStr=World [32m200[0m 0.596 ms - 512[0m
+[0mPOST /message/unpin/v1 [32m200[0m 3.175 ms - 2[0m
+[0mPOST /message/unpin/v1 [32m200[0m 3.502 ms - 2[0m
+[0mPOST /message/unpin/v1 [32m200[0m 3.535 ms - 2[0m
+[0mPOST /message/unpin/v1 [32m200[0m 3.514 ms - 2[0m
+[0mGET /search/v1?queryStr=World [32m200[0m 0.618 ms - 516[0m
+[0mDELETE /clear/v1 [32m200[0m 2.376 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 3.051 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.257 ms - 91[0m
+Invalid uId
+[0mPOST /dm/create/v2 [33m403[0m 1.158 ms - 35[0m
+Invalid token
+[0mPOST /dm/create/v2 [33m400[0m 0.941 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.831 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.474 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.581 ms - 91[0m
+duplicate uId
+[0mPOST /dm/create/v2 [33m400[0m 1.212 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.813 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.663 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 61.743 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 61.926 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.180 ms - 10[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.705 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.275 ms - 10[0m
+[0mGET /dm/list/v2 [32m200[0m 1.188 ms - 103[0m
+[0mGET /notifications/get/v1 [32m200[0m 1.211 ms - 224[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.573 ms - 128[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.213 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 13.829 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 12.869 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 14.159 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 13.090 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 12.981 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 12.982 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 14.167 ms - 11[0m
+[0mPOST /dm/create/v2 [32m200[0m 13.504 ms - 11[0m
+[0mPOST /dm/create/v2 [32m200[0m 12.990 ms - 11[0m
+[0mPOST /dm/create/v2 [32m200[0m 15.469 ms - 11[0m
+[0mPOST /dm/create/v2 [32m200[0m 15.958 ms - 11[0m
+[0mPOST /dm/create/v2 [32m200[0m 16.360 ms - 11[0m
+[0mPOST /dm/create/v2 [32m200[0m 16.027 ms - 11[0m
+[0mPOST /dm/create/v2 [32m200[0m 15.717 ms - 11[0m
+[0mPOST /dm/create/v2 [32m200[0m 16.179 ms - 11[0m
+[0mPOST /dm/create/v2 [32m200[0m 15.121 ms - 11[0m
+[0mPOST /dm/create/v2 [32m200[0m 15.088 ms - 11[0m
+[0mPOST /dm/create/v2 [32m200[0m 17.982 ms - 11[0m
+[0mPOST /dm/create/v2 [32m200[0m 19.031 ms - 11[0m
+[0mPOST /dm/create/v2 [32m200[0m 18.623 ms - 11[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.743 ms - 2213[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.714 ms - 2213[0m
+[0mGET /dm/details/v2?dmId=1 [32m200[0m 1.776 ms - 361[0m
+[0mDELETE /clear/v1 [32m200[0m 3.047 ms - 2[0m
+Invalid token
+[0mGET /dm/details/v2?dmId=-999 [33m400[0m 0.954 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 3.095 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 61.887 ms - 91[0m
+Invalid DM
+[0mGET /dm/details/v2?dmId=-999 [33m400[0m 1.165 ms - 34[0m
+[0mDELETE /clear/v1 [32m200[0m 2.465 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.650 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 61.785 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.074 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.601 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.013 ms - 10[0m
+user not DM member
+[0mGET /dm/details/v2?dmId=1 [33m403[0m 0.990 ms - 42[0m
+Invalid token
+[0mGET /dm/details/v2?dmId=1 [33m400[0m 0.841 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 7.426 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 57.225 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.198 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 54.594 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.827 ms - 10[0m
+[0mGET /dm/details/v2?dmId=1 [32m200[0m 0.679 ms - 361[0m
+[0mDELETE /clear/v1 [32m200[0m 2.800 ms - 2[0m
+Invalid token
+[0mGET /dm/list/v2 [33m400[0m 0.927 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.615 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 56.832 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 57.805 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.392 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.300 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.925 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 6.121 ms - 10[0m
+[0mGET /dm/list/v2 [32m200[0m 0.505 ms - 62[0m
+[0mGET /dm/list/v2 [32m200[0m 0.547 ms - 90[0m
+[0mGET /dm/list/v2 [32m200[0m 0.479 ms - 62[0m
+[0mGET /dm/list/v2 [32m200[0m 0.463 ms - 10[0m
+[0mDELETE /clear/v1 [32m200[0m 2.702 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 57.631 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 6.438 ms - 10[0m
+Invalid token
+[0mDELETE /dm/remove/v2?dmId=1 [33m400[0m 1.639 ms - 37[0m
+Invalid dm
+[0mDELETE /dm/remove/v2?dmId=-1 [33m400[0m 0.818 ms - 34[0m
+[0mDELETE /clear/v1 [32m200[0m 2.699 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.001 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.744 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.831 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.223 ms - 10[0m
+User not in dm
+[0mDELETE /dm/remove/v2?dmId=1 [33m403[0m 0.954 ms - 38[0m
+User is not dm creator
+[0mDELETE /dm/remove/v2?dmId=1 [33m403[0m 1.108 ms - 46[0m
+[0mDELETE /clear/v1 [32m200[0m 2.573 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.200 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 60.863 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.215 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 7.340 ms - 10[0m
+[0mGET /dm/list/v2 [32m200[0m 0.635 ms - 51[0m
+[0mGET /dm/list/v2 [32m200[0m 0.587 ms - 79[0m
+[0mDELETE /dm/remove/v2?dmId=1 [32m200[0m 8.812 ms - 2[0m
+[0mGET /dm/list/v2 [32m200[0m 0.918 ms - 10[0m
+[0mGET /dm/list/v2 [32m200[0m 0.657 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 6.360 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 70.009 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 6.728 ms - 10[0m
+Invalid token
+[0mPOST /dm/leave/v2 [33m400[0m 1.630 ms - 37[0m
+Invalid dm
+[0mPOST /dm/leave/v2 [33m400[0m 0.953 ms - 34[0m
+Invalid token
+[0mPOST /dm/leave/v2 [33m400[0m 0.838 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.881 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.708 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.664 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.775 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.403 ms - 10[0m
+User is not dm member
+[0mPOST /dm/leave/v2 [33m403[0m 0.993 ms - 45[0m
+Invalid dm
+[0mPOST /dm/leave/v2 [33m400[0m 0.998 ms - 34[0m
+[0mDELETE /clear/v1 [32m200[0m 2.849 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 60.385 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 61.322 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.483 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.138 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 7.846 ms - 10[0m
+[0mGET /dm/list/v2 [32m200[0m 0.601 ms - 104[0m
+[0mGET /dm/list/v2 [32m200[0m 0.516 ms - 104[0m
+[0mGET /dm/list/v2 [32m200[0m 0.508 ms - 62[0m
+[0mPOST /dm/leave/v2 [32m200[0m 4.798 ms - 2[0m
+[0mPOST /dm/leave/v2 [32m200[0m 4.806 ms - 2[0m
+[0mGET /dm/list/v2 [32m200[0m 0.480 ms - 10[0m
+[0mGET /dm/list/v2 [32m200[0m 0.520 ms - 104[0m
+[0mGET /dm/list/v2 [32m200[0m 0.584 ms - 62[0m
+[0mDELETE /clear/v1 [32m200[0m 2.822 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 3.103 ms - 2[0m
+Invalid token
+[0mPOST /channel/invite/v3 [33m403[0m 1.044 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.871 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.211 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.227 ms - 91[0m
+ChannelId does not refer to a valid channel
+[0mPOST /channel/invite/v3 [33m400[0m 1.142 ms - 67[0m
+[0mDELETE /clear/v1 [32m200[0m 2.705 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.099 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.746 ms - 15[0m
+uId does not refer to a valid user
+[0mPOST /channel/invite/v3 [33m400[0m 1.179 ms - 58[0m
+[0mDELETE /clear/v1 [32m200[0m 3.014 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.010 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.364 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.871 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.026 ms - 15[0m
+uId refers to a user who is already a member of the channel
+[0mPOST /channel/invite/v3 [33m400[0m 1.181 ms - 83[0m
+authorised user is not a member of the channel
+[0mPOST /channel/invite/v3 [33m403[0m 1.088 ms - 70[0m
+[0mDELETE /clear/v1 [32m200[0m 3.135 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.592 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.439 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.608 ms - 15[0m
+authorised user is not a member of the channel
+[0mPOST /channel/invite/v3 [33m403[0m 1.228 ms - 70[0m
+[0mDELETE /clear/v1 [32m200[0m 3.057 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 78.119 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.358 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.605 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.725 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.730 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.542 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.602 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.219 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.848 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.799 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.605 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.997 ms - 16[0m
+[0mPOST /channels/create/v3 [32m200[0m 9.495 ms - 16[0m
+[0mPOST /channels/create/v3 [32m200[0m 8.837 ms - 16[0m
+[0mPOST /channels/create/v3 [32m200[0m 8.854 ms - 16[0m
+[0mPOST /channels/create/v3 [32m200[0m 8.871 ms - 16[0m
+[0mPOST /channels/create/v3 [32m200[0m 8.362 ms - 16[0m
+[0mPOST /channels/create/v3 [32m200[0m 8.884 ms - 16[0m
+[0mPOST /channels/create/v3 [32m200[0m 8.602 ms - 16[0m
+[0mPOST /channels/create/v3 [32m200[0m 8.977 ms - 16[0m
+[0mPOST /channels/create/v3 [32m200[0m 8.604 ms - 16[0m
+[0mPOST /channels/create/v3 [32m200[0m 8.609 ms - 16[0m
+[0mPOST /channels/create/v3 [32m200[0m 10.129 ms - 16[0m
+[0mPOST /channel/invite/v3 [32m200[0m 6.718 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 7.319 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 7.032 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 6.240 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 6.445 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 6.416 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 6.357 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 6.680 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 6.704 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 6.701 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 6.376 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 7.144 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 7.173 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 7.150 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 7.103 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 7.518 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 7.173 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 7.122 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 7.142 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 7.271 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 7.298 ms - 2[0m
+[0mGET /channel/details/v3?channelId=1 [32m200[0m 1.457 ms - 387[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.835 ms - 1691[0m
+[0mDELETE /clear/v1 [32m200[0m 2.794 ms - 2[0m
+Invalid token
+[0mGET /channel/messages/v3?channelId=1&start=0 [33m403[0m 1.147 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.802 ms - 2[0m
+Invalid token
+[0mGET /dm/messages/v2?dmId=1&start=0 [33m403[0m 0.926 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.635 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 60.874 ms - 91[0m
+channelId not found
+[0mGET /channel/messages/v3?channelId=-999&start=0 [33m400[0m 1.126 ms - 43[0m
+[0mDELETE /clear/v1 [32m200[0m 3.002 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.610 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.154 ms - 15[0m
+start greater than total number of messages in channel
+[0mGET /channel/messages/v3?channelId=1&start=51 [33m400[0m 1.222 ms - 78[0m
+[0mDELETE /clear/v1 [32m200[0m 2.830 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 61.392 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 61.852 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.552 ms - 15[0m
+authorised user is not a member of the channel
+[0mGET /channel/messages/v3?channelId=1&start=0 [33m403[0m 1.118 ms - 70[0m
+[0mDELETE /clear/v1 [32m200[0m 3.263 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.673 ms - 91[0m
+dmId not found
+[0mGET /dm/messages/v2?dmId=-999&start=0 [33m400[0m 1.150 ms - 38[0m
+[0mDELETE /clear/v1 [32m200[0m 3.137 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.802 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.783 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.487 ms - 10[0m
+start greater than total number of messages in channel
+[0mGET /dm/messages/v2?dmId=1&start=51 [33m400[0m 1.301 ms - 78[0m
+[0mDELETE /clear/v1 [32m200[0m 2.657 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.094 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.596 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.451 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.218 ms - 10[0m
+authorised user is not a member of the dm
+[0mGET /dm/messages/v2?dmId=1&start=0 [33m403[0m 1.155 ms - 65[0m
+[0mDELETE /clear/v1 [32m200[0m 2.487 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 61.642 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.234 ms - 15[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 0.776 ms - 34[0m
+[0mDELETE /clear/v1 [32m200[0m 2.765 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.800 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.106 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.091 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 9.364 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.341 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.912 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.487 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.402 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.417 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.282 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.084 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 10.146 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 10.585 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 9.917 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 10.180 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 10.206 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 9.779 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 9.967 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 9.978 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 10.485 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 10.319 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 10.450 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 10.313 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 10.143 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 10.597 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 11.430 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 11.260 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 12.100 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 12.103 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 13.417 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 12.152 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 13.503 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 12.799 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 12.553 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 12.087 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 12.646 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 12.927 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 13.371 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 13.643 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 13.220 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 13.158 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 13.270 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 13.319 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 13.710 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 12.094 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 13.872 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 14.056 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 14.350 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 14.732 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 14.502 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 14.824 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 15.229 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 15.149 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 14.674 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 15.115 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 14.747 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 14.694 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 14.197 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 14.274 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 13.700 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 13.719 ms - 16[0m
+[0mPOST /message/send/v2 [32m200[0m 13.664 ms - 16[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 1.583 ms - 6674[0m
+[0mGET /channel/messages/v3?channelId=1&start=50 [32m200[0m 1.083 ms - 6675[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 0.823 ms - 6674[0m
+[0mGET /channel/messages/v3?channelId=1&start=50 [32m200[0m 0.783 ms - 6675[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.642 ms - 2219[0m
+[0mDELETE /clear/v1 [32m200[0m 3.163 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 61.264 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.518 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.968 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.509 ms - 10[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.043 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.420 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 7.479 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 7.736 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.686 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.941 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.500 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.676 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.370 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.984 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.722 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.815 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.073 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.150 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.352 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.869 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.397 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 12.664 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 12.862 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 12.674 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 13.346 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 13.199 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 12.878 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 12.671 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 12.873 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 10.061 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.037 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.623 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 13.154 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 13.438 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 13.960 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 12.985 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 12.937 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 12.857 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 13.339 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 15.724 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 15.633 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.040 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.351 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 12.588 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 15.153 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 15.097 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 14.773 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 14.744 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 14.882 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 15.254 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 14.661 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 14.645 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 14.476 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 14.595 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 14.608 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 14.701 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 14.601 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 14.248 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 14.338 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 16.610 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 17.001 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 16.413 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 16.286 ms - 16[0m
+[0mPOST /message/senddm/v2 [32m200[0m 15.956 ms - 16[0m
+[0mGET /dm/messages/v2?dmId=1&start=0 [32m200[0m 1.026 ms - 6674[0m
+[0mGET /dm/messages/v2?dmId=1&start=50 [32m200[0m 0.884 ms - 6675[0m
+[0mGET /dm/messages/v2?dmId=1&start=0 [32m200[0m 0.822 ms - 6674[0m
+[0mGET /dm/messages/v2?dmId=1&start=50 [32m200[0m 0.865 ms - 6675[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.752 ms - 2659[0m
+[0mDELETE /clear/v1 [32m200[0m 2.756 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 79.007 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.181 ms - 15[0m
+Invalid token
+[0mGET /channel/details/v3?channelId=1 [33m403[0m 1.035 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.867 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 60.997 ms - 91[0m
+Invalid channelId
+[0mGET /channel/details/v3?channelId=-999 [33m400[0m 1.193 ms - 41[0m
+[0mDELETE /clear/v1 [32m200[0m 2.745 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.300 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.334 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.547 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.715 ms - 15[0m
+uId refers to a user who is already a member of the channel
+[0mPOST /channel/invite/v3 [33m400[0m 1.231 ms - 83[0m
+authorised user is not a member of the channel
+[0mPOST /channel/invite/v3 [33m403[0m 1.043 ms - 70[0m
+[0mDELETE /clear/v1 [32m200[0m 2.672 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 60.836 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.391 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.543 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.292 ms - 15[0m
+user not a member
+[0mGET /channel/details/v3?channelId=1 [33m403[0m 1.026 ms - 41[0m
+user not a member
+[0mGET /channel/details/v3?channelId=2 [33m403[0m 0.874 ms - 41[0m
+[0mDELETE /clear/v1 [32m200[0m 2.862 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.839 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.456 ms - 15[0m
+[0mGET /channel/details/v3?channelId=1 [32m200[0m 1.235 ms - 268[0m
+[0mDELETE /clear/v1 [32m200[0m 2.676 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.935 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.919 ms - 15[0m
+Invalid token
+[0mPOST /channel/join/v3 [33m403[0m 1.022 ms - 37[0m
+Invalid channelId
+[0mPOST /channel/join/v3 [33m400[0m 0.858 ms - 41[0m
+[0mDELETE /clear/v1 [32m200[0m 2.333 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.331 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.775 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.188 ms - 15[0m
+[0mPOST /channel/join/v3 [32m200[0m 4.215 ms - 2[0m
+already a member
+[0mPOST /channel/join/v3 [33m400[0m 1.044 ms - 40[0m
+[0mPOST /channels/create/v3 [32m200[0m 5.755 ms - 15[0m
+channel is private, user not a member or global owner
+[0mPOST /channel/join/v3 [33m403[0m 0.994 ms - 77[0m
+[0mDELETE /clear/v1 [32m200[0m 3.901 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 73.156 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.766 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.770 ms - 15[0m
+[0mPOST /channel/join/v3 [32m200[0m 5.019 ms - 2[0m
+[0mGET /channel/details/v3?channelId=1 [32m200[0m 0.866 ms - 382[0m
+[0mDELETE /clear/v1 [32m200[0m 6.435 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.454 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.406 ms - 15[0m
+Invalid token
+[0mPOST /channel/leave/v2 [33m403[0m 1.652 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.884 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.851 ms - 91[0m
+Invalid channel
+[0mPOST /channel/leave/v2 [33m400[0m 1.092 ms - 39[0m
+[0mDELETE /clear/v1 [32m200[0m 2.698 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.623 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.362 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.582 ms - 15[0m
+Invalid channel
+[0mPOST /channel/leave/v2 [33m400[0m 1.097 ms - 39[0m
+[0mDELETE /clear/v1 [32m200[0m 2.726 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 70.033 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 74.372 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.576 ms - 15[0m
+[0mPOST /channel/join/v3 [32m200[0m 4.648 ms - 2[0m
+[0mPOST /channel/leave/v2 [32m200[0m 4.884 ms - 2[0m
+[0mGET /channel/details/v3?channelId=1 [32m200[0m 0.701 ms - 282[0m
+[0mPOST /channel/leave/v2 [32m200[0m 4.561 ms - 2[0m
+user not a member
+[0mGET /channel/details/v3?channelId=1 [33m403[0m 1.152 ms - 41[0m
+[0mDELETE /clear/v1 [32m200[0m 2.828 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.333 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.549 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.882 ms - 15[0m
+Invalid token
+[0mPOST /channel/addowner/v2 [33m403[0m 1.848 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.876 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.300 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.586 ms - 91[0m
+Invalid channel
+[0mPOST /channel/addowner/v2 [33m400[0m 1.052 ms - 39[0m
+[0mDELETE /clear/v1 [32m200[0m 3.095 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.448 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.285 ms - 15[0m
+Invalid uId
+[0mPOST /channel/addowner/v2 [33m400[0m 1.522 ms - 35[0m
+[0mDELETE /clear/v1 [32m200[0m 2.601 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.973 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.455 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.545 ms - 15[0m
+uId not member
+[0mPOST /channel/addowner/v2 [33m400[0m 1.423 ms - 38[0m
+[0mDELETE /clear/v1 [32m200[0m 3.055 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.253 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 74.867 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.162 ms - 15[0m
+[0mPOST /channel/join/v3 [32m200[0m 4.784 ms - 2[0m
+[0mPOST /channel/addowner/v2 [32m200[0m 0.648 ms - 2[0m
+uId already an owner
+[0mPOST /channel/addowner/v2 [33m400[0m 0.999 ms - 44[0m
+[0mDELETE /clear/v1 [32m200[0m 2.681 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.488 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.355 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.708 ms - 15[0m
+[0mPOST /channel/join/v3 [32m200[0m 4.706 ms - 2[0m
+user not an owner
+[0mPOST /channel/addowner/v2 [33m403[0m 0.999 ms - 41[0m
+[0mDELETE /clear/v1 [32m200[0m 2.721 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.857 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.530 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.731 ms - 15[0m
+[0mPOST /channel/join/v3 [32m200[0m 5.107 ms - 2[0m
+[0mPOST /channel/addowner/v2 [32m200[0m 0.661 ms - 2[0m
+[0mGET /channel/details/v3?channelId=1 [32m200[0m 0.797 ms - 482[0m
+[0mDELETE /clear/v1 [32m200[0m 2.904 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.349 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.870 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.269 ms - 15[0m
+Invalid token
+[0mPOST /channel/removeowner/v2 [33m403[0m 1.869 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.903 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.968 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.754 ms - 91[0m
+Invalid channel
+[0mPOST /channel/removeowner/v2 [33m400[0m 1.109 ms - 39[0m
+[0mDELETE /clear/v1 [32m200[0m 2.845 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.909 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.331 ms - 15[0m
+Invalid uId
+[0mPOST /channel/removeowner/v2 [33m400[0m 1.469 ms - 35[0m
+[0mDELETE /clear/v1 [32m200[0m 2.838 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.345 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.356 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.573 ms - 15[0m
+[0mPOST /channel/join/v3 [32m200[0m 5.137 ms - 2[0m
+uId not an owner
+[0mPOST /channel/removeowner/v2 [33m400[0m 1.227 ms - 40[0m
+[0mDELETE /clear/v1 [32m200[0m 2.737 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.420 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.607 ms - 15[0m
+uId is the only owner
+[0mPOST /channel/removeowner/v2 [33m400[0m 1.169 ms - 45[0m
+[0mDELETE /clear/v1 [32m200[0m 2.761 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.208 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 69.364 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.477 ms - 15[0m
+[0mPOST /channel/join/v3 [32m200[0m 5.048 ms - 2[0m
+user not an owner
+[0mPOST /channel/removeowner/v2 [33m400[0m 1.145 ms - 41[0m
+[0mDELETE /clear/v1 [32m200[0m 2.892 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.680 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.883 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.761 ms - 15[0m
+[0mPOST /channel/join/v3 [32m200[0m 4.668 ms - 2[0m
+[0mPOST /channel/addowner/v2 [32m200[0m 0.584 ms - 2[0m
+[0mPOST /channel/removeowner/v2 [32m200[0m 0.639 ms - 2[0m
+[0mGET /channel/details/v3?channelId=1 [32m200[0m 0.722 ms - 382[0m
+[0mDELETE /clear/v1 [32m200[0m 3.033 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 2.848 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.988 ms - 91[0m
+Invalid userId!
+[0mGET /user/profile/v3?uId=100 [33m400[0m 1.492 ms - 39[0m
+[0mDELETE /clear/v1 [32m200[0m 2.998 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.229 ms - 91[0m
+Invalid token!
+[0mGET /user/profile/v3?uId=1 [33m403[0m 1.232 ms - 38[0m
+[0mDELETE /clear/v1 [32m200[0m 3.757 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 69.574 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.197 ms - 91[0m
+[0mGET /user/profile/v3?uId=2 [32m200[0m 0.674 ms - 179[0m
+[0mDELETE /clear/v1 [32m200[0m 2.731 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.613 ms - 91[0m
+[0mGET /user/profile/v3?uId=1 [32m200[0m 0.714 ms - 172[0m
+[0mDELETE /clear/v1 [32m200[0m 2.953 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.213 ms - 91[0m
+Invalid token!
+[0mGET /users/all/v2 [33m403[0m 1.545 ms - 38[0m
+[0mDELETE /clear/v1 [32m200[0m 2.968 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.722 ms - 91[0m
+[0mGET /users/all/v2 [32m200[0m 0.801 ms - 175[0m
+[0mDELETE /clear/v1 [32m200[0m 2.801 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.301 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.020 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.949 ms - 91[0m
+[0mGET /users/all/v2 [32m200[0m 0.802 ms - 509[0m
+[0mDELETE /clear/v1 [32m200[0m 2.683 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.409 ms - 91[0m
+Invalid token!
+[0mPUT /user/profile/setname/v2 [33m403[0m 1.755 ms - 38[0m
+Invalid token!
+[0mPUT /user/profile/setemail/v2 [33m403[0m 1.405 ms - 38[0m
+Invalid token!
+[0mPUT /user/profile/sethandle/v2 [33m403[0m 1.584 ms - 38[0m
+[0mDELETE /clear/v1 [32m200[0m 2.935 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.866 ms - 91[0m
+First name is not between 1 and 50 characters inclusive!
+[0mPUT /user/profile/setname/v2 [33m400[0m 1.060 ms - 80[0m
+Last name is not between 1 and 50 characters inclusive!
+[0mPUT /user/profile/setname/v2 [33m400[0m 0.851 ms - 79[0m
+[0mDELETE /clear/v1 [32m200[0m 2.930 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.897 ms - 91[0m
+First name is not between 1 and 50 characters inclusive!
+[0mPUT /user/profile/setname/v2 [33m400[0m 1.060 ms - 80[0m
+Last name is not between 1 and 50 characters inclusive!
+[0mPUT /user/profile/setname/v2 [33m400[0m 0.829 ms - 79[0m
+[0mDELETE /clear/v1 [32m200[0m 4.500 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.485 ms - 91[0m
+Invalid email!
+[0mPUT /user/profile/setemail/v2 [33m400[0m 1.250 ms - 38[0m
+[0mDELETE /clear/v1 [32m200[0m 2.980 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.310 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.019 ms - 91[0m
+Email already in use!
+[0mPUT /user/profile/setemail/v2 [33m400[0m 1.243 ms - 45[0m
+[0mDELETE /clear/v1 [32m200[0m 2.905 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.862 ms - 91[0m
+Handle is not between 3 and 20 characters inclusive!
+[0mPUT /user/profile/sethandle/v2 [33m400[0m 1.334 ms - 76[0m
+Handle is not between 3 and 20 characters inclusive!
+[0mPUT /user/profile/sethandle/v2 [33m400[0m 1.132 ms - 76[0m
+[0mDELETE /clear/v1 [32m200[0m 2.762 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.187 ms - 91[0m
+Handle cannot contain non alphanumeric characters!
+[0mPUT /user/profile/sethandle/v2 [33m400[0m 1.122 ms - 74[0m
+Handle cannot contain non alphanumeric characters!
+[0mPUT /user/profile/sethandle/v2 [33m400[0m 0.851 ms - 74[0m
+[0mDELETE /clear/v1 [32m200[0m 2.942 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.203 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.018 ms - 91[0m
+Handle already in use!
+[0mPUT /user/profile/sethandle/v2 [33m400[0m 1.124 ms - 46[0m
+[0mDELETE /clear/v1 [32m200[0m 2.425 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.001 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.480 ms - 91[0m
+[0mPUT /user/profile/setname/v2 [32m200[0m 2.976 ms - 2[0m
+[0mGET /user/profile/v3?uId=2 [32m200[0m 0.617 ms - 170[0m
+[0mDELETE /clear/v1 [32m200[0m 2.551 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.859 ms - 91[0m
+Invalid token!
+[0mPOST /user/profile/uploadphoto/v1 [33m403[0m 2.659 ms - 38[0m
+Illegal dimensions
+[0mPOST /user/profile/uploadphoto/v1 [33m400[0m 63.118 ms - 42[0m
+Illegal dimensions
+[0mPOST /user/profile/uploadphoto/v1 [33m400[0m 56.641 ms - 42[0m
+Illegal dimensions
+[0mPOST /user/profile/uploadphoto/v1 [33m400[0m 59.964 ms - 42[0m
+Illegal dimensions
+[0mPOST /user/profile/uploadphoto/v1 [33m400[0m 59.220 ms - 42[0m
+Illegal dimensions
+[0mPOST /user/profile/uploadphoto/v1 [33m400[0m 60.403 ms - 42[0m
+Illegal dimensions
+[0mPOST /user/profile/uploadphoto/v1 [33m400[0m 56.373 ms - 42[0m
+Error getting image
+[0mPOST /user/profile/uploadphoto/v1 [33m400[0m 35.248 ms - 43[0m
+imgUrl not a jpg
+[0mPOST /user/profile/uploadphoto/v1 [33m400[0m 0.996 ms - 40[0m
+[0mDELETE /clear/v1 [32m200[0m 2.692 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.716 ms - 91[0m
+[0mPOST /user/profile/uploadphoto/v1 [32m200[0m 154.156 ms - 2[0m
+[0mPOST /user/profile/uploadphoto/v1 [32m200[0m 65.975 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 2.668 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 3.024 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.034 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 57.468 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.333 ms - 91[0m
+Invalid token
+[0mDELETE /admin/user/remove/v1?uId=3 [33m403[0m 2.211 ms - 37[0m
+auth user not a global owner
+[0mDELETE /admin/user/remove/v1?uId=3 [33m403[0m 1.421 ms - 52[0m
+Invalid uId
+[0mDELETE /admin/user/remove/v1?uId=-999 [33m400[0m 0.967 ms - 35[0m
+only global owner
+[0mDELETE /admin/user/remove/v1?uId=1 [33m400[0m 0.982 ms - 41[0m
+[0mDELETE /clear/v1 [32m200[0m 2.806 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.923 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 60.223 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.030 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.837 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.828 ms - 15[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.497 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.979 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.959 ms - 10[0m
+[0mPOST /channel/join/v3 [32m200[0m 5.137 ms - 2[0m
+[0mPOST /channel/join/v3 [32m200[0m 5.242 ms - 2[0m
+[0mGET /user/stats/v1 [32m200[0m 1.452 ms - 439[0m
+[0mDELETE /admin/user/remove/v1?uId=3 [32m200[0m 3.558 ms - 2[0m
+[0mGET /user/stats/v1 [32m200[0m 0.615 ms - 439[0m
+[0mGET /users/all/v2 [32m200[0m 0.563 ms - 336[0m
+[0mPOST /auth/register/v3 [32m200[0m 60.650 ms - 91[0m
+[0mPOST /admin/userpermission/change/v1 [32m200[0m 4.976 ms - 2[0m
+[0mDELETE /admin/user/remove/v1?uId=1 [32m200[0m 4.247 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 3.245 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.254 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.833 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 61.936 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 5.719 ms - 15[0m
+[0mPOST /channel/join/v3 [32m200[0m 5.212 ms - 2[0m
+[0mPOST /message/send/v2 [32m200[0m 8.534 ms - 15[0m
+[0mDELETE /admin/user/remove/v1?uId=3 [32m200[0m 3.183 ms - 2[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 0.538 ms - 133[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.816 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.515 ms - 10[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.026 ms - 15[0m
+[0mDELETE /admin/user/remove/v1?uId=4 [32m200[0m 3.244 ms - 2[0m
+[0mGET /dm/messages/v2?dmId=1&start=0 [32m200[0m 0.563 ms - 133[0m
+[0mDELETE /clear/v1 [32m200[0m 2.703 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 56.783 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.996 ms - 91[0m
+[0mDELETE /admin/user/remove/v1?uId=2 [32m200[0m 2.874 ms - 2[0m
+[0mGET /user/profile/v3?uId=2 [32m200[0m 0.582 ms - 173[0m
+[0mDELETE /clear/v1 [32m200[0m 2.526 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 61.946 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.863 ms - 91[0m
+Invalid token
+[0mPOST /admin/userpermission/change/v1 [33m403[0m 1.131 ms - 37[0m
+Invalid uId
+[0mPOST /admin/userpermission/change/v1 [33m400[0m 1.012 ms - 35[0m
+only global owner cannot demote to user
+[0mPOST /admin/userpermission/change/v1 [33m400[0m 1.005 ms - 63[0m
+Invalid permissionId
+[0mPOST /admin/userpermission/change/v1 [33m400[0m 0.889 ms - 44[0m
+user already has the permissions level
+[0mPOST /admin/userpermission/change/v1 [33m400[0m 0.898 ms - 62[0m
+only global owner cannot demote to user
+[0mPOST /admin/userpermission/change/v1 [33m400[0m 0.834 ms - 63[0m
+auth user not a global owner
+[0mPOST /admin/userpermission/change/v1 [33m403[0m 0.797 ms - 52[0m
+user already has the permissions level
+[0mPOST /admin/userpermission/change/v1 [33m400[0m 0.842 ms - 62[0m
+[0mDELETE /clear/v1 [32m200[0m 2.894 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.878 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 56.218 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.030 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.912 ms - 15[0m
+[0mPOST /channel/join/v3 [32m200[0m 4.991 ms - 2[0m
+channel is private, user not a member or global owner
+[0mPOST /channel/join/v3 [33m403[0m 1.042 ms - 77[0m
+[0mPOST /admin/userpermission/change/v1 [32m200[0m 2.968 ms - 2[0m
+[0mPOST /channel/join/v3 [32m200[0m 5.005 ms - 2[0m
+[0mPOST /admin/userpermission/change/v1 [32m200[0m 3.085 ms - 2[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.327 ms - 15[0m
+channel is private, user not a member or global owner
+[0mPOST /channel/join/v3 [33m403[0m 1.021 ms - 77[0m
+[0mDELETE /clear/v1 [32m200[0m 2.901 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 2.990 ms - 2[0m
+Invalid email!
+[0mPOST /auth/register/v3 [33m400[0m 1.057 ms - 38[0m
+[0mDELETE /clear/v1 [32m200[0m 2.841 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.430 ms - 91[0m
+Email is already in use!
+[0mPOST /auth/register/v3 [33m400[0m 1.273 ms - 48[0m
+[0mDELETE /clear/v1 [32m200[0m 2.618 ms - 2[0m
+Password is less than 6 characters!
+[0mPOST /auth/register/v3 [33m400[0m 1.086 ms - 59[0m
+[0mDELETE /clear/v1 [32m200[0m 3.140 ms - 2[0m
+First name is not between 1 and 50 characters inclusive!
+[0mPOST /auth/register/v3 [33m400[0m 1.031 ms - 80[0m
+[0mDELETE /clear/v1 [32m200[0m 2.541 ms - 2[0m
+Last name is not between 1 and 50 characters inclusive!
+[0mPOST /auth/register/v3 [33m400[0m 1.074 ms - 79[0m
+[0mDELETE /clear/v1 [32m200[0m 2.915 ms - 2[0m
+First name is not between 1 and 50 characters inclusive!
+[0mPOST /auth/register/v3 [33m400[0m 0.999 ms - 80[0m
+[0mDELETE /clear/v1 [32m200[0m 2.697 ms - 2[0m
+Last name is not between 1 and 50 characters inclusive!
+[0mPOST /auth/register/v3 [33m400[0m 1.187 ms - 79[0m
+[0mDELETE /clear/v1 [32m200[0m 2.861 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.767 ms - 91[0m
+[0mDELETE /clear/v1 [32m200[0m 3.967 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.096 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 60.313 ms - 91[0m
+[0mDELETE /clear/v1 [32m200[0m 2.950 ms - 2[0m
+User not found!
+[0mPOST /auth/login/v3 [33m400[0m 1.745 ms - 39[0m
+[0mDELETE /clear/v1 [32m200[0m 2.623 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.048 ms - 91[0m
+User not found!
+[0mPOST /auth/login/v3 [33m400[0m 1.190 ms - 39[0m
+[0mDELETE /clear/v1 [32m200[0m 3.145 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.899 ms - 91[0m
+[0mPOST /auth/login/v3 [32m200[0m 3.024 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.301 ms - 91[0m
+[0mPOST /auth/login/v3 [32m200[0m 3.460 ms - 91[0m
+[0mDELETE /clear/v1 [32m200[0m 2.620 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.251 ms - 91[0m
+[0mPOST /auth/login/v3 [32m200[0m 3.227 ms - 91[0m
+[0mPOST /auth/login/v3 [32m200[0m 2.491 ms - 91[0m
+[0mDELETE /clear/v1 [32m200[0m 2.878 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.332 ms - 91[0m
+[0mPOST /auth/login/v3 [32m200[0m 3.293 ms - 91[0m
+[0mGET /user/profile/v3?uId=1 [32m200[0m 0.738 ms - 167[0m
+[0mDELETE /clear/v1 [32m200[0m 2.922 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.526 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.885 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.229 ms - 91[0m
+[0mGET /user/profile/v3?uId=1 [32m200[0m 0.757 ms - 167[0m
+[0mGET /user/profile/v3?uId=2 [32m200[0m 0.564 ms - 176[0m
+[0mGET /user/profile/v3?uId=3 [32m200[0m 0.542 ms - 178[0m
+[0mDELETE /clear/v1 [32m200[0m 2.947 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 60.845 ms - 91[0m
+[0mGET /user/profile/v3?uId=1 [32m200[0m 0.691 ms - 167[0m
+[0mDELETE /clear/v1 [32m200[0m 3.038 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.861 ms - 91[0m
+[0mGET /user/profile/v3?uId=1 [32m200[0m 0.725 ms - 178[0m
+[0mDELETE /clear/v1 [32m200[0m 2.893 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.021 ms - 91[0m
+[0mGET /user/profile/v3?uId=1 [32m200[0m 0.720 ms - 179[0m
+[0mDELETE /clear/v1 [32m200[0m 2.963 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.048 ms - 91[0m
+[0mGET /user/profile/v3?uId=1 [32m200[0m 0.689 ms - 186[0m
+[0mDELETE /clear/v1 [32m200[0m 3.093 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.036 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.332 ms - 91[0m
+[0mGET /user/profile/v3?uId=1 [32m200[0m 0.716 ms - 186[0m
+[0mGET /user/profile/v3?uId=2 [32m200[0m 0.643 ms - 195[0m
+[0mDELETE /clear/v1 [32m200[0m 2.696 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 2.810 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.901 ms - 91[0m
+Invalid channel name
+[0mPOST /channels/create/v3 [33m400[0m 0.966 ms - 44[0m
+Invalid channel name
+[0mPOST /channels/create/v3 [33m400[0m 0.738 ms - 44[0m
+Invalid token
+[0mPOST /channels/create/v3 [33m403[0m 0.810 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.921 ms - 2[0m
+Invalid token
+[0mGET /channels/list/v3 [33m403[0m 1.563 ms - 37[0m
+Invalid token
+[0mGET /channels/listall/v3 [33m403[0m 1.315 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 3.165 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.183 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.220 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.189 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.746 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.153 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.863 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.511 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.028 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.617 ms - 15[0m
+[0mGET /channels/list/v3 [32m200[0m 0.723 ms - 75[0m
+[0mGET /channels/list/v3 [32m200[0m 0.633 ms - 48[0m
+[0mGET /channels/list/v3 [32m200[0m 0.621 ms - 44[0m
+[0mGET /channels/list/v3 [32m200[0m 0.625 ms - 15[0m
+[0mGET /channels/list/v3 [32m200[0m 0.972 ms - 15[0m
+[0mDELETE /clear/v1 [32m200[0m 2.895 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.602 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.085 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.757 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.329 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.434 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.416 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.320 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.359 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.624 ms - 15[0m
+[0mGET /channels/listall/v3 [32m200[0m 0.701 ms - 139[0m
+[0mGET /channels/listall/v3 [32m200[0m 0.507 ms - 139[0m
+[0mGET /channels/listall/v3 [32m200[0m 0.574 ms - 139[0m
+[0mGET /channels/listall/v3 [32m200[0m 0.544 ms - 139[0m
+[0mGET /channels/listall/v3 [32m200[0m 0.497 ms - 139[0m
+[0mDELETE /clear/v1 [32m200[0m 2.865 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 3.039 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.782 ms - 91[0m
+Email is already in use!
+[0mPOST /auth/register/v3 [33m400[0m 1.178 ms - 48[0m
+[0mDELETE /clear/v1 [32m200[0m 2.782 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.211 ms - 91[0m
+[0mDELETE /clear/v1 [32m200[0m 2.998 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.839 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.621 ms - 15[0m
+[0mGET /user/profile/v3?uId=1 [32m200[0m 0.641 ms - 171[0m
+[0mGET /channels/list/v3 [32m200[0m 0.704 ms - 45[0m
+[0mDELETE /clear/v1 [32m200[0m 2.974 ms - 2[0m
+Invalid token!
+[0mGET /user/profile/v3?uId=1 [33m403[0m 1.059 ms - 38[0m
+Invalid token
+[0mGET /channels/list/v3 [33m403[0m 0.931 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.821 ms - 2[0m
+Cannot echo "echo"
+[0mDELETE /clear/v1 [32m200[0m 6.153 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 79.231 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.198 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.783 ms - 15[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.657 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.698 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.218 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.646 ms - 125[0m
+[0mDELETE /clear/v1 [32m200[0m 2.791 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.721 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.023 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.203 ms - 15[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.601 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.683 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.500 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.612 ms - 125[0m
+[0mDELETE /clear/v1 [32m200[0m 2.832 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.293 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 71.162 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 15.892 ms - 15[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.292 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.389 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.454 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.624 ms - 125[0m
+[0mDELETE /clear/v1 [32m200[0m 2.863 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.511 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 71.341 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.961 ms - 15[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.721 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 9.710 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.776 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.769 ms - 125[0m
+[0mDELETE /clear/v1 [32m200[0m 2.879 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.891 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.103 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.822 ms - 15[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.812 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 9.051 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 14.134 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.708 ms - 125[0m
+[0mDELETE /clear/v1 [32m200[0m 3.147 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.576 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.431 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.663 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.250 ms - 15[0m
+[0mPOST /channel/invite/v3 [32m200[0m 4.396 ms - 2[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.223 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.115 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.420 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.627 ms - 20[0m
+[0mDELETE /clear/v1 [32m200[0m 2.630 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.299 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.092 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.104 ms - 15[0m
+[0mPOST /channel/invite/v3 [32m200[0m 4.447 ms - 2[0m
+[0mPOST /dm/create/v2 [32m200[0m 7.626 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 7.947 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.026 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.599 ms - 453[0m
+[0mDELETE /clear/v1 [32m200[0m 2.603 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 60.915 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 60.336 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.250 ms - 15[0m
+[0mPOST /channel/invite/v3 [32m200[0m 4.900 ms - 2[0m
+[0mPOST /dm/create/v2 [32m200[0m 7.807 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 7.706 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 7.675 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.507 ms - 469[0m
+[0mDELETE /clear/v1 [32m200[0m 2.415 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.255 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 59.491 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.308 ms - 15[0m
+[0mPOST /channel/invite/v3 [32m200[0m 4.614 ms - 2[0m
+[0mPOST /dm/create/v2 [32m200[0m 7.903 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 7.741 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 7.471 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.552 ms - 461[0m
+[0mDELETE /clear/v1 [32m200[0m 2.566 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.847 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 63.708 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 5.710 ms - 15[0m
+[0mPOST /channel/invite/v3 [32m200[0m 4.697 ms - 2[0m
+[0mPOST /dm/create/v2 [32m200[0m 7.793 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 7.948 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.019 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.545 ms - 469[0m
+[0mDELETE /clear/v1 [32m200[0m 2.688 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 60.335 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 61.976 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.301 ms - 15[0m
+[0mPOST /channel/invite/v3 [32m200[0m 4.578 ms - 2[0m
+[0mPOST /dm/create/v2 [32m200[0m 7.826 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 7.479 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 7.604 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.551 ms - 469[0m
+[0mDELETE /clear/v1 [32m200[0m 2.459 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.047 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 58.976 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.840 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 5.973 ms - 15[0m
+[0mPOST /channel/join/v3 [32m200[0m 4.802 ms - 2[0m
+[0mPOST /channel/join/v3 [32m200[0m 4.995 ms - 2[0m
+[0mPOST /message/send/v2 [32m200[0m 8.304 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 27.426 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.827 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.585 ms - 20[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.572 ms - 128[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.524 ms - 126[0m
+[0mDELETE /clear/v1 [32m200[0m 6.590 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.212 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.416 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.691 ms - 15[0m
+[0mPOST /channel/invite/v3 [32m200[0m 5.043 ms - 2[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.732 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.559 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.755 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.632 ms - 252[0m
+[0mDELETE /clear/v1 [32m200[0m 2.833 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.176 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.487 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.399 ms - 15[0m
+[0mPOST /channel/invite/v3 [32m200[0m 4.822 ms - 2[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.697 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.010 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.344 ms - 15[0m
+[0mPUT /message/edit/v2 [32m200[0m 5.183 ms - 2[0m
+[0mPUT /message/edit/v2 [32m200[0m 4.916 ms - 2[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.617 ms - 459[0m
+[0mPUT /message/edit/v2 [32m200[0m 5.261 ms - 2[0m
+[0mPUT /message/edit/v2 [32m200[0m 4.878 ms - 2[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.600 ms - 459[0m
+[0mDELETE /clear/v1 [32m200[0m 2.954 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.892 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.972 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.692 ms - 15[0m
+[0mPOST /channel/invite/v3 [32m200[0m 5.541 ms - 2[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.370 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.621 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.446 ms - 15[0m
+[0mPOST /message/share/v1 [32m200[0m 6.449 ms - 21[0m
+[0mPOST /message/share/v1 [32m200[0m 5.726 ms - 21[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.708 ms - 574[0m
+[0mPOST /message/share/v1 [32m200[0m 5.179 ms - 21[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.733 ms - 130[0m
+[0mDELETE /clear/v1 [32m200[0m 2.952 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.009 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.564 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.158 ms - 15[0m
+[0mPOST /channel/invite/v3 [32m200[0m 4.743 ms - 2[0m
+[0mPOST /message/sendlater/v1 [32m200[0m 3.878 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.621 ms - 111[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.712 ms - 226[0m
+[0mDELETE /clear/v1 [32m200[0m 2.723 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.567 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.762 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.842 ms - 10[0m
+[0mPOST /message/sendlaterdm/v1 [32m200[0m 3.829 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.580 ms - 124[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.603 ms - 252[0m
+[0mDELETE /clear/v1 [32m200[0m 2.556 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.880 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.110 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.679 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.079 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.197 ms - 15[0m
+[0mPOST /channel/invite/v3 [32m200[0m 5.288 ms - 2[0m
+[0mPOST /channel/join/v3 [32m200[0m 5.365 ms - 2[0m
+[0mPOST /channel/join/v3 [32m200[0m 4.963 ms - 2[0m
+[0mPOST /message/send/v2 [32m200[0m 9.713 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 9.521 ms - 15[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.188 ms - 10[0m
+[0mPOST /message/share/v1 [32m200[0m 5.798 ms - 21[0m
+[0mPOST /message/send/v2 [32m200[0m 10.999 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 11.159 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.587 ms - 248[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.557 ms - 344[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.525 ms - 365[0m
+[0mDELETE /clear/v1 [32m200[0m 2.727 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 3.019 ms - 2[0m
+Invalid token
+[0mPOST /message/react/v1 [33m403[0m 2.128 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.877 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.639 ms - 91[0m
+Invalid reactId
+[0mPOST /message/react/v1 [33m400[0m 1.251 ms - 39[0m
+[0mDELETE /clear/v1 [32m200[0m 2.828 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.296 ms - 91[0m
+messageId is not found in dms or channels
+[0mPOST /message/react/v1 [33m400[0m 1.160 ms - 65[0m
+[0mDELETE /clear/v1 [32m200[0m 2.954 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.412 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.605 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 69.674 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.947 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.590 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 8.904 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.032 ms - 15[0m
+[0mPOST /message/react/v1 [32m200[0m 4.628 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.136 ms - 2[0m
+the message already contains a react with ID reactId from the authorised user
+[0mPOST /message/react/v1 [33m400[0m 1.106 ms - 101[0m
+the message already contains a react with ID reactId from the authorised user
+[0mPOST /message/react/v1 [33m400[0m 0.916 ms - 101[0m
+[0mDELETE /clear/v1 [32m200[0m 3.110 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.806 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.591 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.015 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 62.653 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.038 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 11.352 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.124 ms - 10[0m
+[0mPOST /channel/invite/v3 [32m200[0m 5.625 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 5.535 ms - 2[0m
+[0mPOST /message/send/v2 [32m200[0m 8.769 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.714 ms - 15[0m
+[0mPOST /message/react/v1 [32m200[0m 3.531 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 4.157 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 4.238 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.863 ms - 2[0m
+[0mGET /search/v1?queryStr=World [32m200[0m 0.719 ms - 318[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 0.723 ms - 184[0m
+[0mGET /dm/messages/v2?dmId=1&start=0 [32m200[0m 0.748 ms - 184[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 0.655 ms - 185[0m
+[0mGET /dm/messages/v2?dmId=1&start=0 [32m200[0m 0.714 ms - 185[0m
+[0mDELETE /clear/v1 [32m200[0m 2.951 ms - 2[0m
+Invalid token
+[0mPOST /message/unreact/v1 [33m403[0m 2.158 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.944 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.052 ms - 91[0m
+Invalid reactId
+[0mPOST /message/unreact/v1 [33m400[0m 1.118 ms - 39[0m
+[0mDELETE /clear/v1 [32m200[0m 2.811 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 72.485 ms - 91[0m
+messageId is not found in dms or channels
+[0mPOST /message/unreact/v1 [33m400[0m 1.125 ms - 65[0m
+[0mDELETE /clear/v1 [32m200[0m 3.183 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.446 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.371 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.024 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.964 ms - 91[0m
+[0mPOST /channel/invite/v3 [32m200[0m 5.091 ms - 2[0m
+[0mPOST /dm/create/v2 [32m200[0m 9.226 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 7.772 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 7.897 ms - 15[0m
+react dont exist
+[0mPOST /message/unreact/v1 [33m400[0m 0.840 ms - 40[0m
+reactId is not valid reactId
+[0mPOST /message/unreact/v1 [33m400[0m 0.712 ms - 52[0m
+[0mPOST /message/react/v1 [32m200[0m 3.039 ms - 2[0m
+authorised user not in react uids
+[0mPOST /message/unreact/v1 [33m400[0m 0.970 ms - 57[0m
+[0mPOST /message/react/v1 [32m200[0m 3.128 ms - 2[0m
+authorised user not in react uids
+[0mPOST /message/unreact/v1 [33m400[0m 0.933 ms - 57[0m
+[0mDELETE /clear/v1 [32m200[0m 3.076 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.193 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.502 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.183 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 72.367 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.874 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.598 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.448 ms - 10[0m
+[0mPOST /channel/invite/v3 [32m200[0m 5.197 ms - 2[0m
+[0mPOST /message/send/v2 [32m200[0m 8.940 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.462 ms - 15[0m
+[0mPOST /message/react/v1 [32m200[0m 3.345 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.310 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.872 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.676 ms - 2[0m
+[0mGET /search/v1?queryStr=World [32m200[0m 0.739 ms - 318[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.818 ms - 2[0m
+[0mGET /dm/messages/v2?dmId=1&start=0 [32m200[0m 0.660 ms - 183[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.852 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.896 ms - 2[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 0.633 ms - 183[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.135 ms - 2[0m
+[0mGET /search/v1?queryStr=World [32m200[0m 0.658 ms - 214[0m
+[0mDELETE /clear/v1 [32m200[0m 3.127 ms - 2[0m
+Invalid token
+[0mGET /notifications/get/v1 [33m403[0m 1.171 ms - 37[0m
+[0mDELETE /clear/v1 [32m200[0m 2.904 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 69.291 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.530 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.370 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.225 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.882 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.706 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.856 ms - 10[0m
+[0mPOST /channel/invite/v3 [32m200[0m 5.526 ms - 2[0m
+[0mPOST /channel/invite/v3 [32m200[0m 5.210 ms - 2[0m
+[0mPOST /message/send/v2 [32m200[0m 8.940 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.649 ms - 15[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.623 ms - 20[0m
+[0mPOST /message/react/v1 [32m200[0m 3.261 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 4.389 ms - 2[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.603 ms - 338[0m
+[0mPOST /message/react/v1 [32m200[0m 4.008 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.833 ms - 2[0m
+[0mGET /search/v1?queryStr=World [32m200[0m 0.691 ms - 318[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 0.615 ms - 184[0m
+[0mGET /dm/messages/v2?dmId=1&start=0 [32m200[0m 0.695 ms - 184[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 0.559 ms - 185[0m
+[0mGET /dm/messages/v2?dmId=1&start=0 [32m200[0m 0.582 ms - 185[0m
+[0mPOST /message/react/v1 [32m200[0m 3.923 ms - 2[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.663 ms - 115[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.571 ms - 458[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.906 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.771 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.665 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.881 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.706 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.700 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.816 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.970 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.960 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.510 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.629 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 4.024 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.905 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.998 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.934 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.856 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.917 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.706 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.760 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.668 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.692 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.805 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.714 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.651 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.671 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.554 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.603 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 4.356 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 4.471 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.749 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.742 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.997 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.714 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 4.007 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 4.082 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.918 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 11.465 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 4.207 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 4.046 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.954 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.452 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.681 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.709 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.709 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.667 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.753 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.595 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.982 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.639 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.738 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.694 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 4.413 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.852 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.877 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.689 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.699 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.646 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.426 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.595 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.761 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.748 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.969 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.855 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.611 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.720 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.749 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.478 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.714 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.601 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.868 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 4.028 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.898 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.560 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.935 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.727 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 4.121 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.947 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 3.826 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 3.733 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 4.237 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 4.387 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 4.276 ms - 2[0m
+[0mPOST /message/unreact/v1 [32m200[0m 4.351 ms - 2[0m
+[0mPOST /message/react/v1 [32m200[0m 4.360 ms - 2[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.513 ms - 2419[0m
+[0mGET /notifications/get/v1 [32m200[0m 0.495 ms - 1939[0m
+[0mDELETE /clear/v1 [32m200[0m 2.713 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 2.899 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.545 ms - 91[0m
+Invalid token!
+[0mGET /user/stats/v1 [33m403[0m 1.016 ms - 38[0m
+[0mDELETE /clear/v1 [32m200[0m 2.542 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.083 ms - 91[0m
+[0mGET /user/stats/v1 [32m200[0m 0.744 ms - 219[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.123 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.354 ms - 15[0m
+[0mGET /user/stats/v1 [32m200[0m 0.637 ms - 311[0m
+[0mPOST /auth/register/v3 [32m200[0m 69.427 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.831 ms - 10[0m
+[0mPOST /message/senddm/v2 [32m200[0m 9.079 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.546 ms - 15[0m
+[0mGET /user/stats/v1 [32m200[0m 0.710 ms - 400[0m
+[0mGET /user/stats/v1 [32m200[0m 0.572 ms - 308[0m
+[0mDELETE /clear/v1 [32m200[0m 2.726 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.117 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.500 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.238 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.341 ms - 15[0m
+[0mDELETE /message/remove/v2?messageId=1 [32m200[0m 5.314 ms - 2[0m
+[0mDELETE /message/remove/v2?messageId=2 [32m200[0m 4.530 ms - 2[0m
+[0mPOST /message/send/v2 [32m200[0m 7.965 ms - 15[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.782 ms - 91[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.737 ms - 10[0m
+[0mPOST /message/senddm/v2 [32m200[0m 8.475 ms - 15[0m
+message not found in dms or channels
+[0mDELETE /message/remove/v2?messageId%5BmessageId%5D=4 [33m400[0m 1.251 ms - 60[0m
+[0mPOST /channel/leave/v2 [32m200[0m 5.172 ms - 2[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.662 ms - 15[0m
+[0mPOST /channel/join/v3 [32m200[0m 6.032 ms - 2[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.937 ms - 15[0m
+[0mPOST /channel/invite/v3 [32m200[0m 5.410 ms - 2[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.611 ms - 10[0m
+[0mPOST /dm/leave/v2 [32m200[0m 5.299 ms - 2[0m
+[0mDELETE /dm/remove/v2?dmId=2 [32m200[0m 12.614 ms - 2[0m
+[0mGET /user/stats/v1 [32m200[0m 0.670 ms - 755[0m
+[0mDELETE /clear/v1 [32m200[0m 2.614 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.475 ms - 91[0m
+Invalid token!
+[0mGET /users/stats/v1 [33m403[0m 1.546 ms - 38[0m
+[0mDELETE /clear/v1 [32m200[0m 2.832 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 66.752 ms - 91[0m
+[0mGET /users/stats/v1 [32m200[0m 1.285 ms - 222[0m
+[0mDELETE /clear/v1 [32m200[0m 2.692 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.598 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.578 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.966 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 8.660 ms - 15[0m
+[0mPOST /dm/create/v2 [32m200[0m 8.499 ms - 10[0m
+[0mGET /users/stats/v1 [32m200[0m 0.702 ms - 355[0m
+[0mDELETE /clear/v1 [32m200[0m 3.133 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 67.462 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 64.897 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.214 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 65.970 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.827 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.426 ms - 15[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.760 ms - 15[0m
+[0mPOST /dm/create/v2 [32m200[0m 10.880 ms - 10[0m
+[0mPOST /dm/create/v2 [32m200[0m 14.528 ms - 10[0m
+[0mPOST /message/send/v2 [32m200[0m 12.458 ms - 15[0m
+[0mPOST /message/send/v2 [32m200[0m 11.877 ms - 15[0m
+[0mDELETE /message/remove/v2?messageId=1 [32m200[0m 6.496 ms - 2[0m
+[0mDELETE /message/remove/v2?messageId=2 [32m200[0m 6.550 ms - 2[0m
+[0mPOST /message/send/v2 [32m200[0m 11.761 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 11.422 ms - 15[0m
+[0mPOST /message/senddm/v2 [32m200[0m 13.257 ms - 15[0m
+[0mPOST /dm/leave/v2 [32m200[0m 6.718 ms - 2[0m
+[0mDELETE /dm/remove/v2?dmId=2 [32m200[0m 15.863 ms - 2[0m
+[0mGET /users/stats/v1 [32m200[0m 0.738 ms - 853[0m
+[0mDELETE /clear/v1 [32m200[0m 3.026 ms - 2[0m
+[0mDELETE /clear/v1 [32m200[0m 2.767 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 70.589 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.238 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 7.183 ms - 15[0m
+ForbiddenError: Invalid token
+    at standupStartV1 (/import/kamen/3/cs1531/project-automarking/tempstore/src/standups.ts:3:190)
+    at /import/kamen/3/cs1531/project-automarking/tempstore/src/server.ts:3:29
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at next (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/route.js:144:13)
+    at Route.dispatch (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/route.js:114:3)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at /import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/index.js:346:12)
+    at next (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/index.js:280:10)
+    at logger (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/morgan/index.js:144:5)
+Invalid token
+[0mPOST /standup/start/v1 [33m403[0m 22.140 ms - 37[0m
+BadRequestError: Invalid channel
+    at standupStartV1 (/import/kamen/3/cs1531/project-automarking/tempstore/src/standups.ts:4:152)
+    at /import/kamen/3/cs1531/project-automarking/tempstore/src/server.ts:3:29
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at next (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/route.js:144:13)
+    at Route.dispatch (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/route.js:114:3)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at /import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/index.js:346:12)
+    at next (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/index.js:280:10)
+    at logger (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/morgan/index.js:144:5)
+Invalid channel
+[0mPOST /standup/start/v1 [33m400[0m 2.663 ms - 39[0m
+ForbiddenError: User not in channel
+    at standupStartV1 (/import/kamen/3/cs1531/project-automarking/tempstore/src/standups.ts:5:160)
+    at /import/kamen/3/cs1531/project-automarking/tempstore/src/server.ts:3:29
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at next (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/route.js:144:13)
+    at Route.dispatch (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/route.js:114:3)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at /import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/index.js:346:12)
+    at next (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/index.js:280:10)
+    at logger (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/morgan/index.js:144:5)
+User not in channel
+[0mPOST /standup/start/v1 [33m403[0m 2.324 ms - 43[0m
+BadRequestError: Standup length invalid
+    at standupStartV1 (/import/kamen/3/cs1531/project-automarking/tempstore/src/standups.ts:6:118)
+    at /import/kamen/3/cs1531/project-automarking/tempstore/src/server.ts:3:29
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at next (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/route.js:144:13)
+    at Route.dispatch (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/route.js:114:3)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at /import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/index.js:346:12)
+    at next (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/index.js:280:10)
+    at logger (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/morgan/index.js:144:5)
+Standup length invalid
+[0mPOST /standup/start/v1 [33m400[0m 2.308 ms - 46[0m
+[0mPOST /standup/start/v1 [32m200[0m 3.546 ms - 25[0m
+BadRequestError: Standup already active in current channel
+    at standupStartV1 (/import/kamen/3/cs1531/project-automarking/tempstore/src/standups.ts:1:37)
+    at /import/kamen/3/cs1531/project-automarking/tempstore/src/server.ts:3:29
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at next (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/route.js:144:13)
+    at Route.dispatch (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/route.js:114:3)
+    at Layer.handle [as handle_request] (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/layer.js:95:5)
+    at /import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/index.js:284:15
+    at Function.process_params (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/index.js:346:12)
+    at next (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/express/lib/router/index.js:280:10)
+    at logger (/import/kamen/3/cs1531/project-automarking/tempstore/node_modules/morgan/index.js:144:5)
+Standup already active in current channel
+[0mPOST /standup/start/v1 [33m400[0m 2.957 ms - 65[0m
+token error
+Invalid token
+[0mGET /standup/active/v1?channelId=1 [33m403[0m 1.192 ms - 37[0m
+Invalid channel
+[0mGET /standup/active/v1?channelId=-1 [33m400[0m 0.839 ms - 39[0m
+channe; no
+User not in channel
+[0mGET /standup/active/v1?channelId=1 [33m403[0m 0.939 ms - 43[0m
+Invalid token
+[0mPOST /standup/send/v1 [33m403[0m 1.468 ms - 37[0m
+Invalid channel
+[0mPOST /standup/send/v1 [33m400[0m 0.871 ms - 39[0m
+User not in channel
+[0mPOST /standup/send/v1 [33m403[0m 0.913 ms - 43[0m
+Message too long
+[0mPOST /standup/send/v1 [33m400[0m 0.999 ms - 40[0m
+No standup active in current channel
+[0mPOST /standup/send/v1 [33m400[0m 0.951 ms - 60[0m
+[0mDELETE /clear/v1 [32m200[0m 2.690 ms - 2[0m
+[0mPOST /auth/register/v3 [32m200[0m 68.203 ms - 91[0m
+[0mPOST /auth/register/v3 [32m200[0m 75.468 ms - 91[0m
+[0mPOST /channels/create/v3 [32m200[0m 6.841 ms - 15[0m
+[0mPOST /channel/invite/v3 [32m200[0m 4.897 ms - 2[0m
+[0mPOST /standup/start/v1 [32m200[0m 3.253 ms - 25[0m
+[0mGET /standup/active/v1?channelId=1 [32m200[0m 0.613 ms - 41[0m
+[0mPOST /standup/send/v1 [32m200[0m 3.028 ms - 2[0m
+[0mPOST /standup/send/v1 [32m200[0m 2.873 ms - 2[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 0.633 ms - 154[0m
+[0mGET /channel/messages/v3?channelId=1&start=0 [32m200[0m 0.684 ms - 154[0m
+[0mDELETE /clear/v1 [32m200[0m 2.947 ms - 2[0m
+Shutting down server gracefully.
+-------------|---------|----------|---------|---------|-------------------------------------
+File         | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                   
+-------------|---------|----------|---------|---------|-------------------------------------
+All files    |   98.76 |    95.64 |   98.22 |   98.84 |                                     
+ admin.ts    |     100 |    97.91 |     100 |     100 | 40                                  
+ auth.ts     |   94.38 |      100 |   77.77 |   95.12 | 55-58                               
+ channel.ts  |     100 |    95.19 |     100 |     100 | 329,379,418,497,518                 
+ channels.ts |     100 |      100 |     100 |     100 |                                     
+ data.ts     |     100 |      100 |     100 |     100 |                                     
+ dm.ts       |     100 |    98.14 |     100 |     100 | 97                                  
+ echo.ts     |     100 |      100 |     100 |     100 |                                     
+ message.ts  |     100 |     96.1 |     100 |     100 | 591,766-792,814-822,864-882,893-898 
+ other.ts    |     100 |      100 |     100 |     100 |                                     
+ server.ts   |   99.38 |      100 |      98 |   99.28 | 332-333                             
+ standups.ts |     100 |    88.88 |     100 |     100 | 36-52,95,124                        
+ users.ts    |   87.16 |    90.27 |     100 |   89.76 | 123-128,158-163,232                 
+-------------|---------|----------|---------|---------|-------------------------------------
